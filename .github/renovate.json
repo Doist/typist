@@ -5,6 +5,5 @@
             "matchPackagePatterns": ["^@tiptap/"],
             "groupName": "tiptap packages"
         }
-    ],
-    "npmrc": "@doist:registry=https://npm.pkg.github.com/\nalways-auth=true\nengine-strict=true"
+    ]
 }
