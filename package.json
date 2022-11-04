@@ -4,7 +4,7 @@
     "version": "0.0.0-development",
     "license": "MIT",
     "homepage": "https://typist.doist.dev/",
-    "repository": "https://github.com/Doist/typist-playground",
+    "repository": "https://github.com/Doist/typist",
     "prettier": "@doist/prettier-config",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
