@@ -1,0 +1,19 @@
+# Project cache
+.cache/
+
+# Visual Studio Code
+.vscode/
+
+# Project output
+dist/
+storybook-static/
+
+# Project dependencies
+node_modules/
+
+# macOS
+.DS_Store
+
+# Log files
+*.log
+npm-debug.log*

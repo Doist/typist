@@ -1,0 +1,35 @@
+.toolbarContainer {
+    box-shadow: var(--typist-editor-decorator-default-shadow);
+    border: solid 1px var(--storybook-theme-appBorderColor);
+    border-bottom: 0;
+    border-radius: var(--storybook-theme-appBorderRadius) var(--storybook-theme-appBorderRadius) 0 0;
+    gap: var(--reactist-spacing-xsmall);
+}
+
+.toolbarContainer button[aria-disabled] {
+    position: relative;
+    width: 26px;
+    height: 26px;
+}
+
+.toolbarContainer button[aria-disabled].withLeftDivider {
+    margin-left: calc(var(--reactist-spacing-xsmall) * 2 + 1px);
+}
+
+.toolbarContainer button[aria-disabled].withLeftDivider::before {
+    content: '';
+    background-color: var(--storybook-theme-appBorderColor);
+    position: absolute;
+    left: calc(var(--reactist-spacing-xsmall) * -2);
+    width: 1px;
+    height: 100%;
+}
+
+.toolbarContainer button[aria-pressed='true'] {
+    background-color: var(--reactist-btn-hover-fill);
+}
+
+.toolbarContainer button[aria-disabled] > svg {
+    width: 16px;
+    height: 16px;
+}

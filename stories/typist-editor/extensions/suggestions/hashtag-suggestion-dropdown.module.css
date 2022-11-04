@@ -1,0 +1,4 @@
+.hashtagSuggestionItem {
+    flex-wrap: nowrap;
+    overflow-x: hidden;
+}

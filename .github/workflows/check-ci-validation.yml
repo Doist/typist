@@ -1,0 +1,155 @@
+name: CI Validation
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        types:
+            - opened
+            - synchronize
+
+env:
+    GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+
+concurrency:
+    group: check-ci-validation-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    prepare-workflow:
+        name: Prepare Workflow
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v3
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              uses: actions/cache@v3
+              id: node-modules-cache
+              with:
+                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+    static-code-analysis:
+        name: Static Code Analysis
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+
+        needs:
+            - prepare-workflow
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v3
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              uses: actions/cache@v3
+              id: node-modules-cache
+              with:
+                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+            - name: Analyse code style with Prettier
+              run: |
+                  npm run prettier:check
+
+            - name: Analyse code quality with ESLint
+              run: |
+                  npm run eslint:check
+
+            - name: Perform type checking with TypeScript
+              run: |
+                  npm run typescript:check
+
+    unit-testing:
+        name: Unit Testing
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+
+        needs:
+            - prepare-workflow
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v3
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              uses: actions/cache@v3
+              id: node-modules-cache
+              with:
+                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+            - name: Test codebase correctnesss
+              run: |
+                  npm run test
+
+    build-package:
+        name: Build Package
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+
+        needs:
+            - prepare-workflow
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v3
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              uses: actions/cache@v3
+              id: node-modules-cache
+              with:
+                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+            - name: Build `@doist/typist` package
+              run: |
+                  npm run build

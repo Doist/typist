@@ -1,0 +1,35 @@
+name: License Copyright Year
+
+on:
+    schedule:
+        - cron: '0 7 1 1 *'
+
+jobs:
+    update-license-year:
+        name: Update License Year
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  token: ${{ secrets.GH_REPO_TOKEN }}
+
+            - name: Update copyright year in LICENSE.md
+              uses: FantasticFiasco/action-update-license-year@v2
+              with:
+                  token: ${{ secrets.GH_REPO_TOKEN }}
+                  commitTitle: 'docs(LICENSE): Update copyright year(s)'
+                  prTitle: 'docs(LICENSE): Update copyright year(s)'
+                  prBody: |
+                      It's that time of the year, let's update the `LICENSE.md` copyright year.
+
+                      Oh, and while I'm here, Happy New Year 🥳
+                  labels: documentation
+
+            - name: Merge pull request
+              run: |
+                  gh pr merge --auto --squash --delete-branch
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

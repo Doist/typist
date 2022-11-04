@@ -1,0 +1,101 @@
+name: Typist Package Release
+
+on:
+    workflow_dispatch:
+
+jobs:
+    prepare-workflow:
+        name: Prepare Workflow
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+
+        if: github.ref == 'refs/heads/main'
+
+        outputs:
+            main-ci-validation-status: ${{ steps.gh-run-list.outputs.main-ci-validation-status }}
+            main-ci-validation-conclusion: ${{ steps.gh-run-list.outputs.main-ci-validation-conclusion }}
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  token: ${{ secrets.GH_REPO_TOKEN }}
+
+            - name: Get latest 'CI Validation' workflow run status for `main` branch
+              id: gh-run-list
+              run: |
+                  LATEST_WORKFLOW_RUN=$(gh run list --branch main --workflow check-ci-validation.yml --limit 1)
+                  echo "main-ci-validation-status=$(echo $LATEST_WORKFLOW_RUN | awk '{print $1}')" >> $GITHUB_OUTPUT
+                  echo "main-ci-validation-conclusion=$(echo $LATEST_WORKFLOW_RUN | awk '{print $2}')" >> $GITHUB_OUTPUT
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    release-and-publish:
+        name: Release & Publish
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+
+        needs:
+            - prepare-workflow
+
+        if: |
+            needs.prepare-workflow.outputs.main-ci-validation-status == 'completed' &&
+            needs.prepare-workflow.outputs.main-ci-validation-conclusion == 'success'
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  token: ${{ secrets.GH_REPO_TOKEN }}
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v3
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              uses: actions/cache@v3
+              id: node-modules-cache
+              with:
+                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+            - name: Build package
+              run: |
+                  npm run build
+
+            - name: Run automated package publishing
+              run: |
+                  npx semantic-release
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+                  GIT_AUTHOR_EMAIL: doistbot@users.noreply.github.com
+                  GIT_AUTHOR_NAME: Doist Bot
+                  GIT_COMMITTER_EMAIL: doistbot@users.noreply.github.com
+                  GIT_COMMITTER_NAME: Doist Bot
+
+    validation-failure:
+        name: Validation Failure
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+
+        needs:
+            - prepare-workflow
+
+        if: |
+            needs.prepare-workflow.outputs.main-ci-validation-status != 'completed' ||
+            needs.prepare-workflow.outputs.main-ci-validation-conclusion != 'success'
+
+        steps:
+            - name: Log error message and set failing exit code
+              uses: actions/github-script@v6
+              with:
+                  script: |
+                      core.setFailed("Latest 'CI Validation' workflow for the `main` branch is still running or some checks were not successful.")

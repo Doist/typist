@@ -1,0 +1,56 @@
+:root {
+    /*
+     * Storybook theme as CSS variables to be used by stories.
+     * (should match values in `preview.style.css`)
+     */
+    --storybook-theme-appBg: #f5f4f2;
+    --storybook-theme-appContentBg: #ffffff;
+    --storybook-theme-appBorderColor: #dfded9;
+    --storybook-theme-appBorderRadius: 5px;
+    --storybook-theme-colorPrimary: #e34432;
+    --storybook-theme-colorSecondary: #6b8767;
+    --storybook-theme-fontBase: 'Open Sans', sans-serif;
+    --storybook-theme-fontCode: 'Fira Code', monospace;
+    --storybook-theme-textColor: #2a1d30;
+    --storybook-theme-barBg: #f6f7f3;
+    --storybook-theme-barTextColor: #9ba399;
+
+    /*
+     * Overwritten Reactist CSS variables to match the Storybook theme.
+     */
+    --reactist-actionable-secondary-idle-tint: #706e67;
+    --reactist-actionable-secondary-idle-fill: #f1f0ee;
+    --reactist-actionable-secondary-hover-tint: #706e67;
+    --reactist-actionable-secondary-hover-fill: #eaeae5;
+    --reactist-actionable-quaternary-idle-tint: #706e67;
+    --reactist-actionable-quaternary-hover-fill: #eaeae5;
+    --reactist-actionable-quaternary-disabled-tint: #c6c6b8;
+}
+
+html {
+    font-family: var(--storybook-theme-fontBase);
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+/*
+ * Remove all dark mode images not supported by the Storybook theme.
+ */
+
+img[src$='#gh-dark-mode-only'] {
+    display: none;
+}

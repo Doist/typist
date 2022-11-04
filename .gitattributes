@@ -1,0 +1,2 @@
+# Automatic end-of-line normalization for all text files
+* text=auto eol=lf

@@ -1,0 +1,18 @@
+.richTextImageWrapper {
+    display: inline-grid;
+    width: fit-content;
+}
+
+.richTextImageWrapper .imageAttachment,
+.richTextImageWrapper .progressOverlay {
+    grid-area: 1 / 1;
+}
+
+.richTextImageWrapper .progressOverlay {
+    background-color: var(--storybook-theme-appBg);
+    border-radius: calc(var(--storybook-theme-appBorderRadius) / 2);
+    place-self: end center;
+    width: 100%;
+    height: var(--image-upload-progress);
+    opacity: 0.75;
+}

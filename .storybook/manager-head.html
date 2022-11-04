@@ -1,0 +1,76 @@
+<!-- Load Inter family font from Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans&Fira+Code&display=swap"
+    rel="stylesheet"
+/>
+
+<!-- Standard favicon for Storybook UI branding -->
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<!--
+    Custom theming for Storybook UI and Docs components. It's important to note that these use
+    undocumented CSS classes and attributes, and styling might break with future versions.
+-->
+<style type="text/css">
+    @namespace xlink 'http://www.w3.org/1999/xlink';
+
+    .sidebar-item[data-nodetype]:hover {
+        background-color: #e3e9e2;
+    }
+
+    .search-result-item svg,
+    .sidebar-item[data-nodetype] svg {
+        width: 14px;
+        height: 14px;
+        margin-top: 2px;
+    }
+
+    .sidebar-item[data-nodetype='document'] svg {
+        color: #cc8311;
+    }
+
+    .search-result-item svg use[xlink|href*='bookmarkhollow'],
+    .sidebar-item[data-nodetype='story'] svg {
+        color: #c3a60b;
+    }
+
+    .sidebar-item[data-nodetype='group'] svg {
+        color: #962d21;
+    }
+
+    button[title='Reset controls'] {
+        background-color: #f1f0ee;
+    }
+
+    button[title='Reset controls']:hover {
+        background-color: #eaeae5;
+    }
+</style>
+
+<!--
+    Workaround to set a different initial sidebar width.
+-->
+<script>
+    const SIDEBAR_INITIAL_WIDTH = 320
+
+    let storybookConfig = JSON.parse(localStorage.getItem('storybook-layout'))
+
+    if (
+        typeof storybookConfig === 'object' &&
+        storybookConfig !== null &&
+        storybookConfig.resizerNav.x < SIDEBAR_INITIAL_WIDTH
+    ) {
+        storybookConfig.resizerNav.x = SIDEBAR_INITIAL_WIDTH
+        localStorage.setItem('storybook-layout', JSON.stringify(storybookConfig))
+        document.location.reload()
+    } else if (storybookConfig === null) {
+        storybookConfig = {
+            resizerNav: { x: SIDEBAR_INITIAL_WIDTH, y: 0 },
+            resizerPanel: { x: 0, y: 710 },
+        }
+        localStorage.setItem('storybook-layout', JSON.stringify(storybookConfig))
+        document.location.reload()
+    }
+</script>

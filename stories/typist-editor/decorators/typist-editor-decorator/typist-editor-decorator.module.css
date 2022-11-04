@@ -1,0 +1,209 @@
+:root {
+    --reactist-content-primary: var(--storybook-theme-textColor);
+    --typist-editor-decorator-default-shadow: 1px 1px 2px 0 #f3f3f1;
+}
+
+.topContainer {
+    color: var(--storybook-theme-textColor);
+    flex-grow: 1;
+}
+
+.topContainer > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.topContainer > div > h3 {
+    margin: var(--reactist-spacing-large) 0 var(--reactist-spacing-medium)
+        var(--reactist-spacing-large);
+    opacity: 0.85;
+}
+
+.topContainer > :first-of-type {
+    border-right: 1px solid var(--storybook-theme-appBorderColor);
+}
+
+.editorContainer {
+    box-shadow: var(--typist-editor-decorator-default-shadow);
+    border: solid 1px var(--storybook-theme-appBorderColor);
+    border-radius: var(--storybook-theme-appBorderRadius);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+div + .editorContainer {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.editorContainer > div {
+    width: 100%;
+    flex-grow: 1;
+}
+
+.editorContainer:has([data-typist-editor][aria-multiline='false']) {
+    flex-grow: 0;
+}
+
+.outputContainer {
+    font-size: 0.8125rem;
+    box-shadow: var(--typist-editor-decorator-default-shadow);
+    border: solid 1px var(--storybook-theme-appBorderColor);
+    border-radius: var(--storybook-theme-appBorderRadius);
+    flex-grow: 1;
+    padding: var(--reactist-spacing-medium);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+}
+
+.outputContainer pre {
+    margin: 0;
+    opacity: 0.9;
+    white-space: break-spaces;
+}
+
+.bottomFunctionsContainer {
+    background-color: var(--storybook-theme-appContentBg);
+    border-top: solid 1px var(--storybook-theme-appBorderColor);
+    position: sticky;
+    bottom: 0;
+    padding: var(--reactist-spacing-medium);
+    gap: var(--reactist-spacing-xsmall);
+}
+
+.bottomFunctionsContainer button[aria-disabled] {
+    font-family: var(--storybook-theme-fontCode);
+    font-weight: normal;
+    font-size: 0.75rem;
+}
+
+/*
+ * Global custom styles for the Typist editor component.
+ */
+
+:global(div[data-typist-editor]) {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+    height: 100%;
+    padding: var(--reactist-spacing-medium);
+    outline: none;
+}
+
+:global(div[data-typist-editor] > *:first-child) {
+    margin-top: 0;
+}
+
+:global(div[data-typist-editor] > *:last-child) {
+    margin-bottom: 0;
+}
+
+:global(div[data-typist-editor] > p.is-editor-empty:first-child::before) {
+    content: attr(data-placeholder);
+    pointer-events: none;
+    opacity: 0.3;
+    float: left;
+    height: 0;
+}
+
+:global(div[data-typist-editor] :is(ul, ol) li p) {
+    display: inline;
+    margin: 0;
+}
+
+:global(div[data-typist-editor] :is(pre, code)) {
+    font-family: var(--storybook-theme-fontCode);
+}
+
+:global(div[data-typist-editor] img) {
+    border-radius: calc(var(--storybook-theme-appBorderRadius) / 2);
+}
+
+:global(div[data-typist-editor] img.ProseMirror-selectednode) {
+    outline: 2px solid var(--storybook-theme-colorSecondary);
+}
+
+:global(div[data-typist-editor] > img),
+:global(div[data-typist-editor] > p > img),
+:global(div[data-typist-editor] > .Typist-image),
+:global(div[data-typist-editor] > p > .Typist-image) {
+    max-width: 480px;
+}
+
+:global(div[data-typist-editor] > img),
+:global(div[data-typist-editor] > .Typist-image) {
+    margin-bottom: 1rem;
+}
+
+:global(div[data-typist-editor] > p > img),
+:global(div[data-typist-editor] > p > .Typist-image) {
+    vertical-align: bottom;
+}
+
+:global(div[data-typist-editor] > .Typist-image) {
+    display: flex;
+}
+
+:global(div[data-typist-editor] > p > .Typist-image) {
+    display: inline-flex;
+}
+
+:global(div[data-typist-editor] :is(span[data-mention], span[data-hashtag])) {
+    box-decoration-break: clone;
+    background: hsl(187, 15%, 90%);
+    color: hsl(193, 6%, 35%);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 2px 4px;
+}
+
+:global(div[data-typist-editor][data-plain-text] > p) {
+    margin: 0;
+}
+
+/* DropCursor (used when a node/file is dragged over the editor) */
+:global(.ProseMirror-dropcursor) {
+    color: var(--storybook-theme-colorSecondary);
+    border-radius: 1px;
+    height: 2px !important;
+}
+
+/*
+ * Global custom styles for the `CurvenoteCodemark` extension.
+ */
+
+@keyframes fakeCursorBlink {
+    49% {
+        border-color: unset;
+    }
+    50% {
+        border-color: transparent;
+    }
+    99% {
+        border-color: transparent;
+    }
+}
+
+:global(div[data-typist-editor].no-cursor) {
+    caret-color: transparent;
+}
+
+:global(div[data-typist-editor]:focus .fake-cursor) {
+    border-left-width: 1px;
+    border-left-style: solid;
+    animation: fakeCursorBlink 1s infinite;
+    position: relative;
+    margin-left: -1px;
+    z-index: 1;
+}
+
+:global(div[data-typist-editor]:focus :not(pre) > code + .fake-cursor) {
+    margin-left: unset;
+    margin-right: -1px;
+}
