@@ -1,8 +1,5 @@
 {
-    "extends": [
-        "github>doist/renovate-config:frontend-base",
-        "github>doist/renovate-config-internal:npm-registry-token"
-    ],
+    "extends": ["github>doist/renovate-config:frontend-base"],
     "packageRules": [
         {
             "matchPackagePatterns": ["^@tiptap/"],
