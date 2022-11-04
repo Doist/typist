@@ -64,7 +64,7 @@ After cloning Typist and installing all dependencies, several commands are at yo
 
 ### Release Process (core team only)
 
-The release process for Typist is almost fully automated with [`semantic-release`](https://github.com/semantic-release/semantic-release), only requiring a core team member to trigger [this workflow](https://github.com/Doist/typist-playground/actions/workflows/publish-typist-package-release.yml) manually whenever a new release needs to be published.
+The release process for Typist is almost fully automated with [`semantic-release`](https://github.com/semantic-release/semantic-release), only requiring a core team member to trigger [this workflow](https://github.com/Doist/typist/actions/workflows/publish-typist-package-release.yml) manually whenever a new release needs to be published.
 
 ### Visual Studio Code
 
