@@ -1,7 +1,9 @@
 <div align="center">
     <h1>
-        <img src="https://github.com/Doist/typist/blob/main/.github/assets/logo-light.png?raw=true#gh-light-mode-only" />
-        <img src="https://github.com/Doist/typist/blob/main/.github/assets/logo-dark.png?raw=true#gh-dark-mode-only" />
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcSet="https://github.com/Doist/typist/blob/main/.github/assets/logo-dark.png?raw=true" />
+            <img src="https://github.com/Doist/typist/blob/main/.github/assets/logo-light.png?raw=true" />
+        </picture>
     </h1>
 </div>
 

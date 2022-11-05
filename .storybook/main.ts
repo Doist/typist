@@ -32,6 +32,7 @@ module.exports = {
         '@storybook/addon-a11y',
         'storybook-css-modules',
         './addons/expand-sidebar/register.js',
+        './addons/hide-dark-logo/register.js',
     ],
     staticDirs: ['./public'],
     async viteFinal(config: UserConfig) {

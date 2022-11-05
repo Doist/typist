@@ -46,11 +46,3 @@ body,
 *:after {
     box-sizing: inherit;
 }
-
-/*
- * Remove all dark mode images not supported by the Storybook theme.
- */
-
-img[src$='#gh-dark-mode-only'] {
-    display: none;
-}
