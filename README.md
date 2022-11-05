@@ -15,10 +15,10 @@ Typist is the mighty [Tiptap](https://tiptap.dev/)-based rich-text editor that p
 
 <div align="center">
 
-![GitHub: CI Validation](https://github.com/Doist/typist/actions/workflows/check-ci-validation.yml/badge.svg?branch=main)
-![npm Version](https://img.shields.io/npm/v/@doist/typist)
-![npm Bundle Size (minified)](https://img.shields.io/bundlephobia/min/@doist/typist)
-![npm Downloads (monthly)](https://img.shields.io/npm/dm/@doist/typist?color=blue)
+[![GitHub: CI Validation](https://github.com/Doist/typist/actions/workflows/check-ci-validation.yml/badge.svg?branch=main)](https://github.com/Doist/typist/actions/workflows/check-ci-validation.yml?query=branch%3Amain)
+[![npm Version](https://img.shields.io/npm/v/@doist/typist)](https://www.npmjs.com/package/@doist/typist)
+[![npm Bundle Size (minified)](https://img.shields.io/bundlephobia/min/@doist/typist)](https://bundlephobia.com/package/@doist/typist)
+[![npm Downloads (monthly)](https://img.shields.io/npm/dm/@doist/typist?color=blue)](https://npmtrends.com/@doist/typist)
 
 [![semantic-release: Conventional Commits](https://img.shields.io/badge/semantic--release-Conventional%20Commits-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
