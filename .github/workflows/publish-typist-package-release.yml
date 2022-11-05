@@ -81,6 +81,24 @@ jobs:
                   GIT_COMMITTER_EMAIL: doistbot@users.noreply.github.com
                   GIT_COMMITTER_NAME: Doist Bot
 
+            - name: Remove Doist registry configuration from `.npmrc`
+              run: |
+                  npm config delete @doist:registry --location=project
+
+            - name: Prepare Node.js environment for GitHub Packages
+              uses: actions/setup-node@v3
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@doist'
+
+            - name: Publish package to GitHub Packages
+              run: |
+                  npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     validation-failure:
         name: Validation Failure
         runs-on: ubuntu-latest
