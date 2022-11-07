@@ -9,7 +9,7 @@ import type { LinkOptions } from '@tiptap/extension-link'
  *
  * @see https://stephenweiss.dev/regex-markdown-link
  */
-const inputRegex = /(?:^|\s)\[([^\]]*)?\]\(([A-Za-z0-9:/. -]+)(?:["“](.+)["”])?\)$/
+const inputRegex = /(?:^|\s)\[([^\]]*)?\]\(([A-Za-z0-9:/.-?]+)(?: ["“](.+)["”])?\)$/
 
 /**
  * The paste regex for Markdown links with title support, and multiple quotation marks (required
@@ -17,7 +17,7 @@ const inputRegex = /(?:^|\s)\[([^\]]*)?\]\(([A-Za-z0-9:/. -]+)(?:["“](.+)["”
  *
  * @see https://stephenweiss.dev/regex-markdown-link
  */
-const pasteRegex = /(?:^|\s)\[([^\]]*)?\]\(([A-Za-z0-9:/. -]+)(?:["“](.+)["”])?\)/g
+const pasteRegex = /(?:^|\s)\[([^\]]*)?\]\(([A-Za-z0-9:/.-?]+)(?: ["“](.+)["”])?\)/g
 
 /**
  * Input rule built specifically for the `Link` extension, which ignores the auto-linked URL in
