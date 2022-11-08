@@ -10,6 +10,6 @@ addons.register('hide-dark-logo', () => {
             .querySelector('#storybook-preview-iframe')
             .contentWindow.document.querySelector('source[srcset*="logo-dark"]')
 
-        darkLogoElement.parentNode.removeChild(darkLogoElement)
+        darkLogoElement?.parentNode.removeChild(darkLogoElement)
     })
 })

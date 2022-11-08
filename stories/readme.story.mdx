@@ -1,6 +1,8 @@
 import { Meta } from '@storybook/addon-docs'
 
-import Readme from '../README.md'
+import rawReadme from '../README.md?raw'
+
+import { MarkdownRenderer } from './components/markdown-renderer.tsx'
 
 <Meta
     title="README"
@@ -12,4 +14,4 @@ import Readme from '../README.md'
     }}
 />
 
-<Readme />
+<MarkdownRenderer markdown={rawReadme} />
