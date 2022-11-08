@@ -1,6 +1,9 @@
 import { ArgsTable, Description, Meta, Title } from '@storybook/addon-docs'
 
 import { TypistEditor } from '../../../../src'
+import { MarkdownRenderer } from '../../../components/markdown-renderer.tsx'
+
+import rawTypistEditor from './typist-editor.md?raw'
 
 <Meta
     title="Documentation/Reference/Components/TypistEditor"
@@ -12,10 +15,6 @@ import { TypistEditor } from '../../../../src'
     }}
 />
 
-<Title />
-
-<Description of={TypistEditor} />
-
-## Properties
+<MarkdownRenderer markdown={rawTypistEditor} />
 
 <ArgsTable of={TypistEditor} />

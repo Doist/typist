@@ -46,3 +46,21 @@ body,
 *:after {
     box-sizing: inherit;
 }
+
+/*
+ * Overwrite `github-markdown-css` style with custom styles.
+ */
+
+#docs-root .markdown-body {
+    font-size: 0.875rem;
+    line-height: 1.65;
+}
+
+#docs-root .markdown-body :is(code, pre, tt) {
+    font-family: var(--storybook-theme-fontCode);
+    font-size: 0.8125rem;
+}
+
+#docs-root .sbdocs.sbdocs-wrapper {
+    padding: 3rem;
+}
