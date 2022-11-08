@@ -39,6 +39,7 @@ module.exports = {
         return mergeConfig(config, {
             build: {
                 assetsDir: '.',
+                sourcemap: false,
             },
         })
     },
