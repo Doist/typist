@@ -47,6 +47,11 @@ body,
     box-sizing: inherit;
 }
 
+.netlify-badge {
+    text-align: center;
+    margin-top: 3rem;
+}
+
 /*
  * Overwrite `github-markdown-css` style with custom styles.
  */
