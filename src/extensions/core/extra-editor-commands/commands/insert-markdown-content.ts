@@ -2,7 +2,6 @@ import { RawCommands } from '@tiptap/core'
 import { DOMParser } from 'prosemirror-model'
 
 import { parseHtmlToElement } from '../../../../helpers/dom'
-import { isPlainTextDocument } from '../../../../helpers/schema'
 import { createHTMLSerializer } from '../../../../serializers/html/html'
 
 import type { ParseOptions } from 'prosemirror-model'
@@ -39,9 +38,7 @@ function insertMarkdownContent(
         // Check if the transaction should be dispatched
         // ref: https://tiptap.dev/api/commands#dry-run-for-commands
         if (dispatch) {
-            const htmlContent = !isPlainTextDocument(editor.schema)
-                ? createHTMLSerializer(editor.schema).serialize(markdown)
-                : markdown
+            const htmlContent = createHTMLSerializer(editor.schema).serialize(markdown)
 
             // Inserts the HTML content into the editor while preserving the current selection
             tr.replaceSelection(
