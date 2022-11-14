@@ -17,7 +17,7 @@ jobs:
                   token: ${{ secrets.GH_REPO_TOKEN }}
 
             - name: Update copyright year in LICENSE.md
-              uses: FantasticFiasco/action-update-license-year@v2
+              uses: FantasticFiasco/action-update-license-year@f3d1911d2a05b8a69fee1de4033b2847c347d911
               with:
                   token: ${{ secrets.GH_REPO_TOKEN }}
                   commitTitle: 'docs(LICENSE): Update copyright year(s)'
