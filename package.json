@@ -77,7 +77,7 @@
         "prosemirror-codemark": "0.4.1",
         "prosemirror-model": "1.18.2",
         "prosemirror-state": "1.4.2",
-        "prosemirror-view": "1.29.0"
+        "prosemirror-view": "1.29.1"
     },
     "devDependencies": {
         "@doist/eslint-config": "8.0.1",
