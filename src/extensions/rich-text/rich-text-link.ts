@@ -66,7 +66,9 @@ function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
  * adds support for the `title` attribute.
  */
 const RichTextLink = Link.extend({
-    inclusive: false,
+    inclusive() {
+        return this.options.autolink
+    },
     addAttributes() {
         return {
             ...this.parent?.(),
