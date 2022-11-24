@@ -107,7 +107,7 @@
         "classnames": "2.3.2",
         "conventional-changelog-conventionalcommits": "5.0.0",
         "emoji-regex": "10.2.1",
-        "eslint": "8.27.0",
+        "eslint": "8.28.0",
         "eslint-formatter-codeframe": "7.32.1",
         "eslint-import-resolver-typescript": "3.5.2",
         "eslint-plugin-jest": "27.1.5",
