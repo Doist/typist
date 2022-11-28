@@ -74,7 +74,7 @@
         "@tiptap/extension-typography": "2.0.0-beta.202",
         "@tiptap/react": "2.0.0-beta.202",
         "@tiptap/suggestion": "2.0.0-beta.202",
-        "prosemirror-codemark": "0.4.1",
+        "prosemirror-codemark": "0.4.2",
         "prosemirror-model": "1.18.3",
         "prosemirror-state": "1.4.2",
         "prosemirror-view": "1.29.1"
