@@ -24,6 +24,13 @@
         ],
         "@semantic-release/npm",
         "@semantic-release/git",
-        "@semantic-release/github"
+        "@semantic-release/github",
+        [
+            "@semantic-release/exec",
+            {
+                "verifyConditionsCmd": "echo \"package-published=false\" >> $GITHUB_OUTPUT",
+                "successCmd": "echo \"package-published=true\" >> $GITHUB_OUTPUT"
+            }
+        ]
     ]
 }
