@@ -36,6 +36,17 @@ function paragraph(imageNode?: NodeType): marked.MarkedExtension {
                     return renderedElement.outerHTML
                 }
 
+                // Extract the direct child element HTML contained within the rendered element
+                const { firstElementChild: innerRenderedElement } = parseHtmlToElement(
+                    renderedElement.innerHTML,
+                )
+
+                // Return a `<video>` HTML element if the child element is a supported video
+                if (innerRenderedElement?.tagName === 'VIDEO') {
+                    return innerRenderedElement.outerHTML
+                }
+
+                // Extract all direct image child nodes contained within the rendered element
                 const imageChildNodes = Array.from(renderedElement.childNodes).filter(
                     (childNode) => childNode.nodeName === 'IMG',
                 )

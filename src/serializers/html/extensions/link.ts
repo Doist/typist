@@ -29,6 +29,12 @@ function link(suggestionNodes: NodeType[]): marked.MarkedExtension {
                     }
                 }
 
+                // Return a `<video>` element for a link that is meant to be rendered by the
+                // `RichTextVideo` extension (this will be parsed by the `paragraph` rule next)
+                if (href?.includes('commondatastorage.googleapis.com') && /\.(mp4|mov)$/) {
+                    return `<video src="${href}"></video>`
+                }
+
                 return markedRenderer.link.apply(this, [href, title, text])
             },
         },
