@@ -1,46 +1,30 @@
 name: Typist Package Release
 
 on:
-    workflow_dispatch:
+    workflow_run:
+        workflows:
+            - CI Validation
+        branches:
+            - main
+        types:
+            - completed
+
+# The release workflow involves many crucial steps that once triggered it shouldn't be cancelled
+# until it's finished, otherwise we might end up in an inconsistent state (e.g., a new release
+# published to npm but not GitHub Packages). To prevent this, concurrency is disabled with
+# `cancel-in-progress: false`, and new workflow runs will be queued to be started only when the
+# previous one has completely finished.
+concurrency:
+    group: typist-package-release
+    cancel-in-progress: false
 
 jobs:
-    prepare-workflow:
-        name: Prepare Workflow
-        runs-on: ubuntu-latest
-        timeout-minutes: 5
-
-        if: github.ref == 'refs/heads/main'
-
-        outputs:
-            main-ci-validation-status: ${{ steps.gh-run-list.outputs.main-ci-validation-status }}
-            main-ci-validation-conclusion: ${{ steps.gh-run-list.outputs.main-ci-validation-conclusion }}
-
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
-              with:
-                  token: ${{ secrets.GH_REPO_TOKEN }}
-
-            - name: Get latest 'CI Validation' workflow run status for `main` branch
-              id: gh-run-list
-              run: |
-                  LATEST_WORKFLOW_RUN=$(gh run list --branch main --workflow check-ci-validation.yml --limit 1)
-                  echo "main-ci-validation-status=$(echo $LATEST_WORKFLOW_RUN | awk '{print $1}')" >> $GITHUB_OUTPUT
-                  echo "main-ci-validation-conclusion=$(echo $LATEST_WORKFLOW_RUN | awk '{print $2}')" >> $GITHUB_OUTPUT
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     release-and-publish:
         name: Release & Publish
         runs-on: ubuntu-latest
         timeout-minutes: 60
 
-        needs:
-            - prepare-workflow
-
-        if: |
-            needs.prepare-workflow.outputs.main-ci-validation-status == 'completed' &&
-            needs.prepare-workflow.outputs.main-ci-validation-conclusion == 'success'
+        if: github.event.workflow_run.conclusion == 'success'
 
         steps:
             - name: Checkout repository
@@ -71,6 +55,7 @@ jobs:
                   npm run build
 
             - name: Run automated package publishing
+              id: semantic-release
               run: |
                   npx semantic-release
               env:
@@ -82,11 +67,13 @@ jobs:
                   GIT_COMMITTER_NAME: Doist Bot
 
             - name: Remove Doist registry configuration from `.npmrc`
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               run: |
                   npm config delete @doist:registry --location=project
 
             - name: Prepare Node.js environment for GitHub Packages
               uses: actions/setup-node@v3
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               with:
                   cache: npm
                   node-version-file: .node-version
@@ -94,26 +81,8 @@ jobs:
                   scope: '@doist'
 
             - name: Publish package to GitHub Packages
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               run: |
                   npm publish
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    validation-failure:
-        name: Validation Failure
-        runs-on: ubuntu-latest
-        timeout-minutes: 5
-
-        needs:
-            - prepare-workflow
-
-        if: |
-            needs.prepare-workflow.outputs.main-ci-validation-status != 'completed' ||
-            needs.prepare-workflow.outputs.main-ci-validation-conclusion != 'success'
-
-        steps:
-            - name: Log error message and set failing exit code
-              uses: actions/github-script@v6
-              with:
-                  script: |
-                      core.setFailed("Latest 'CI Validation' workflow for the `main` branch is still running or some checks were not successful.")
