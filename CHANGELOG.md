@@ -1,3 +1,9 @@
+## [1.0.3](https://github.com/Doist/typist/compare/v1.0.2...v1.0.3) (2022-12-08)
+
+### Bug Fixes
+
+-   **docs:** correct the render function name ([#50](https://github.com/Doist/typist/issues/50)) ([45dd681](https://github.com/Doist/typist/commit/45dd681c761c1189df740f118d4293d30807a2f7))
+
 ## [1.0.2](https://github.com/Doist/typist/compare/v1.0.1...v1.0.2) (2022-12-02)
 
 ### Bug Fixes
