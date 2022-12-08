@@ -35,7 +35,7 @@ function TypistEditorContainer({ content }) {
             renderAriaLabel({ label }) {
                 return `Name: ${label}`
             },
-            popupRenderFn() {
+            dropdownRenderFn() {
                 return {
                     onStart(props) {},
                     onUpdate(props) {},
