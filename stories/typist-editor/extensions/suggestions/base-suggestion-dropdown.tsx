@@ -15,7 +15,7 @@ type BaseSuggestionDropdownProps<TItem> = {
     onItemSelect: (item: TItem) => void
 }
 
-function BaseSuggestionDropdown<TItem>({
+function BaseSuggestionDropdown<TItem extends object>({
     forwardedRef,
     items,
     itemSize = 6,
