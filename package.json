@@ -144,7 +144,6 @@
         "react": "^17.0.0 || ^18.0.0",
         "react-dom": "^17.0.0 || ^18.0.0",
         "react-use-event-hook": "^0.9.3",
-        "tippy.js": "^6.3.7",
         "turndown": "^7.1.1"
     }
 }
