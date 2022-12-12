@@ -1,3 +1,9 @@
+## [1.0.5](https://github.com/Doist/typist/compare/v1.0.4...v1.0.5) (2022-12-12)
+
+### Bug Fixes
+
+-   Remove unused Tippy.js peer dependency ([#56](https://github.com/Doist/typist/issues/56)) ([85f87a5](https://github.com/Doist/typist/commit/85f87a554db37e331797563c3795180e5e11ddf7))
+
 ## [1.0.4](https://github.com/Doist/typist/compare/v1.0.3...v1.0.4) (2022-12-12)
 
 ### Bug Fixes
