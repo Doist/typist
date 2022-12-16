@@ -18,7 +18,7 @@ type SuggestionAttributes = {
     /**
      * The suggestion node unique identifier to be rendered by the editor as a `data-id` attribute.
      */
-    id: string
+    id: number | string
 
     /**
      * The suggestion node label to be rendered by the editor as a `data-label` attribute and the

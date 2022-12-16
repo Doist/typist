@@ -9,11 +9,11 @@ import { BaseSuggestionDropdown } from './base-suggestion-dropdown'
 import styles from './hashtag-suggestion-dropdown.module.css'
 
 import type { SuggestionRendererProps, SuggestionRendererRef } from '../../../../src'
-import type { SuggestionItem } from '../../constants/suggestions'
+import type { HashtagSuggestionItem } from '../../constants/suggestions'
 
 const HashtagSuggestionDropdown = forwardRef<
     SuggestionRendererRef,
-    SuggestionRendererProps<SuggestionItem>
+    SuggestionRendererProps<HashtagSuggestionItem>
 >(function HashtagSuggestionDropdown({ items, command }, ref) {
     return (
         <BaseSuggestionDropdown
