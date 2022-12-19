@@ -1,3 +1,9 @@
+## [1.0.8](https://github.com/Doist/typist/compare/v1.0.7...v1.0.8) (2022-12-19)
+
+### Bug Fixes
+
+-   **factories:** Allow alphanumeric IDs for suggestion nodes in `createSuggestionExtension` ([#66](https://github.com/Doist/typist/issues/66)) ([a1726a6](https://github.com/Doist/typist/commit/a1726a6be089e3e1452def641dfcfc622ac3e942))
+
 ## [1.0.7](https://github.com/Doist/typist/compare/v1.0.6...v1.0.7) (2022-12-14)
 
 ### Bug Fixes
