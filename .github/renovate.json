@@ -4,6 +4,10 @@
         {
             "matchPackagePatterns": ["^@tiptap/"],
             "groupName": "tiptap packages"
+        },
+        {
+            "matchPackagePatterns": ["^prosemirror"],
+            "enabled": false
         }
     ]
 }
