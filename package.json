@@ -112,7 +112,7 @@
         "eslint-import-resolver-typescript": "3.5.2",
         "eslint-plugin-jest": "27.1.6",
         "eslint-plugin-simple-import-sort": "8.0.0",
-        "eslint-plugin-unicorn": "45.0.1",
+        "eslint-plugin-unicorn": "45.0.2",
         "github-markdown-css": "5.1.0",
         "husky": "8.0.2",
         "ignore-sync": "6.0.2",
