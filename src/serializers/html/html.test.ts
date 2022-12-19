@@ -565,6 +565,19 @@ Answer: [Doist Frontend](channel://190200)`),
         })
 
         describe('with custom `*Suggestion` extensions', () => {
+            test('suggestion extensions support alphanumeric IDs', () => {
+                const customSerializer = createHTMLSerializer(
+                    getSchema([RichTextKit, createSuggestionExtension('mention')]),
+                )
+
+                expect(
+                    customSerializer.serialize(`Question: Who's the head of the Frontend team?
+Answer: [Henning M](mention://user:190200@doist.dev)`),
+                ).toBe(
+                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="user:190200@doist.dev" data-label="Henning M"></span></p>',
+                )
+            })
+
             test('mention suggestions HTML output is correct', () => {
                 const customSerializer = createHTMLSerializer(
                     getSchema([RichTextKit, createSuggestionExtension('mention')]),

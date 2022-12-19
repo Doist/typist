@@ -22,7 +22,7 @@ function link(suggestionNodes: NodeType[]): marked.MarkedExtension {
         renderer: {
             link(href, title, text) {
                 if (href && linkSchemaRegex.test(href)) {
-                    const [, schema, id] = /^([a-z-]+):\/\/(\d+)$/i.exec(href) || []
+                    const [, schema, id] = /^([a-z-]+):\/\/(\S+)$/i.exec(href) || []
 
                     if (schema && id && text) {
                         return `<span data-${schema} data-id="${id}" data-label="${text}"></span>`

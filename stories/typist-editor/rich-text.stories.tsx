@@ -29,7 +29,7 @@ export default {
     },
 } as ComponentMeta<typeof TypistEditor>
 
-const COMMON_STORY_EXTENSIONS: Extensions = [MentionSuggestion, HashtagSuggestion]
+const COMMON_STORY_EXTENSIONS: Extensions = [HashtagSuggestion, MentionSuggestion]
 
 export const Default: ComponentStoryObj<typeof TypistEditor> = {
     args: {

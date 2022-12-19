@@ -9,15 +9,19 @@ import { HashtagSuggestionDropdown } from './suggestions/hashtag-suggestion-drop
 
 import type { Instance as TippyInstace, Props as TippyProps } from 'tippy.js'
 import type { SuggestionExtensionResult, SuggestionRendererRef } from '../../../src'
-import type { SuggestionItem } from '../constants/suggestions'
+import type { HashtagSuggestionItem } from '../constants/suggestions'
 
 const HASHTAG_SUGGESTION_TYPE = 'hashtag'
 const HASHTAG_SUGGESTION_NODE_TYPE = `${HASHTAG_SUGGESTION_TYPE}Suggestion`
 
-const HashtagSuggestion: SuggestionExtensionResult<SuggestionItem> =
-    createSuggestionExtension<SuggestionItem>(HASHTAG_SUGGESTION_TYPE, HASHTAG_SUGGESTION_ITEMS, {
-        label: 'name',
-    }).configure({
+const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
+    createSuggestionExtension<HashtagSuggestionItem>(
+        HASHTAG_SUGGESTION_TYPE,
+        HASHTAG_SUGGESTION_ITEMS,
+        {
+            label: 'name',
+        },
+    ).configure({
         triggerChar: '#',
         renderAriaLabel({ label }) {
             return `Hashtag: #${label}`

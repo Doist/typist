@@ -8,15 +8,20 @@ import { MentionSuggestionDropdown } from './suggestions/mention-suggestion-drop
 
 import type { Instance as TippyInstace, Props as TippyProps } from 'tippy.js'
 import type { SuggestionExtensionResult, SuggestionRendererRef } from '../../../src'
-import type { SuggestionItem } from '../constants/suggestions'
+import type { MentionSuggestionItem } from '../constants/suggestions'
 
 const MENTION_SUGGESTION_TYPE = 'mention'
 const MENTION_SUGGESTION_NODE_TYPE = `${MENTION_SUGGESTION_TYPE}Suggestion`
 
-const MentionSuggestion: SuggestionExtensionResult<SuggestionItem> =
-    createSuggestionExtension<SuggestionItem>(MENTION_SUGGESTION_TYPE, MENTION_SUGGESTION_ITEMS, {
-        label: 'name',
-    }).configure({
+const MentionSuggestion: SuggestionExtensionResult<MentionSuggestionItem> =
+    createSuggestionExtension<MentionSuggestionItem>(
+        MENTION_SUGGESTION_TYPE,
+        MENTION_SUGGESTION_ITEMS,
+        {
+            id: 'uid',
+            label: 'name',
+        },
+    ).configure({
         triggerChar: '@',
         renderAriaLabel({ label }) {
             return `Name: ${label}`

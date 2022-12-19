@@ -13,18 +13,25 @@ To help typing a TypeScript code base, you may find the `SuggestionRendererProps
 ```tsx
 import { createSuggestionExtension, TypistEditor, RichTextKit } from '@doist/typist'
 
+import type { SuggestionExtensionResult } from '@doist/typist'
+
+type MentionUser = {
+    id: string
+    name: string
+}
+
 function TypistEditorContainer({ content }) {
     const MENTION_USERS: MentionUser[] = [
-        { id: 7582311426, name: 'Amy Adams' },
-        { id: 4759170383, name: 'Brad Pitt' },
-        { id: 2860927956, name: 'Christian Bale' },
-        { id: 6191245793, name: 'Emily Blunt' },
-        { id: 1244620246, name: 'Heath Ledger' },
-        { id: 6912657435, name: 'Kate Winslet' },
-        { id: 6023459994, name: 'Robert Downey Jr.' },
-        { id: 2500654397, name: 'Sandra Bullock' },
-        { id: 9072641833, name: 'Viola Davis' },
-        { id: 6606640946, name: 'Willem Dafoe' },
+        { id: '7582311426', name: 'Amy Adams' },
+        { id: '4759170383', name: 'Brad Pitt' },
+        { id: '2860927956', name: 'Christian Bale' },
+        { id: '6191245793', name: 'Emily Blunt' },
+        { id: '1244620246', name: 'Heath Ledger' },
+        { id: '6912657435', name: 'Kate Winslet' },
+        { id: '6023459994', name: 'Robert Downey Jr.' },
+        { id: '2500654397', name: 'Sandra Bullock' },
+        { id: '9072641833', name: 'Viola Davis' },
+        { id: '6606640946', name: 'Willem Dafoe' },
     ]
 
     const MentionExtension: SuggestionExtensionResult<MentionUser> =

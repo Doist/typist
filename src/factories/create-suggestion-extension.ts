@@ -18,7 +18,7 @@ type SuggestionAttributes = {
     /**
      * The suggestion node unique identifier to be rendered by the editor as a `data-id` attribute.
      */
-    id: number
+    id: number | string
 
     /**
      * The suggestion node label to be rendered by the editor as a `data-label` attribute and the
@@ -110,7 +110,7 @@ type SuggestionStorage<SuggestionItemType> = Readonly<{
     /**
      * A collection of suggestion items indexed by the item id.
      */
-    itemsById: { readonly [id: number]: SuggestionItemType | undefined }
+    itemsById: { readonly [id: SuggestionAttributes['id']]: SuggestionItemType | undefined }
 }>
 
 /**
@@ -136,7 +136,7 @@ type SuggestionExtensionResult<SuggestionItemType> = Node<SuggestionOptions<Sugg
  * @returns A new suggestion extension tailored to a specific use case.
  */
 function createSuggestionExtension<
-    SuggestionItemType extends { [id: string]: unknown } = SuggestionAttributes,
+    SuggestionItemType extends { [id: SuggestionAttributes['id']]: unknown } = SuggestionAttributes,
 >(
     type: string,
     items: SuggestionItemType[] = [],
@@ -148,8 +148,8 @@ function createSuggestionExtension<
         ? []
         : [
               RequireAtLeastOne<{
-                  id: ConditionalKeys<SuggestionItemType, number>
-                  label: ConditionalKeys<SuggestionItemType, string>
+                  id: ConditionalKeys<SuggestionItemType, SuggestionAttributes['id']>
+                  label: ConditionalKeys<SuggestionItemType, SuggestionAttributes['label']>
               }>,
           ]
 ): SuggestionExtensionResult<SuggestionItemType> {
@@ -200,13 +200,13 @@ function createSuggestionExtension<
                     default: null,
                     parseHTML: (element) => element.getAttribute('data-id'),
                     renderHTML: (attributes) => ({
-                        'data-id': Number(attributes[idAttribute]),
+                        'data-id': String(attributes[idAttribute]),
                     }),
                 },
                 [labelAttribute]: {
                     default: null,
                     parseHTML: (element: Element) => {
-                        const id = Number(element.getAttribute('data-id'))
+                        const id = String(element.getAttribute('data-id'))
                         const item = this.storage.itemsById[id]
 
                         // Read the latest item label from the storage, if available, otherwise
@@ -229,7 +229,7 @@ function createSuggestionExtension<
                     {
                         [`data-${attributeType}`]: '',
                         'aria-label': this.options.renderAriaLabel?.({
-                            id: Number(node.attrs[idAttribute]),
+                            id: String(node.attrs[idAttribute]),
                             label: String(node.attrs[labelAttribute]),
                         }),
                     },
