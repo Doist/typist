@@ -1,3 +1,9 @@
+## [1.0.9](https://github.com/Doist/typist/compare/v1.0.8...v1.0.9) (2022-12-19)
+
+### Bug Fixes
+
+-   **rich-text-link:** More lenient regex for input/paste rule ([#72](https://github.com/Doist/typist/issues/72)) ([98e363f](https://github.com/Doist/typist/commit/98e363f27e6e403a775ca8fe729ce17dbdf721df))
+
 ## [1.0.8](https://github.com/Doist/typist/compare/v1.0.7...v1.0.8) (2022-12-19)
 
 ### Bug Fixes
