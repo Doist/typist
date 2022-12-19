@@ -6,18 +6,14 @@ import type { LinkOptions } from '@tiptap/extension-link'
 /**
  * The input regex for Markdown links with title support, and multiple quotation marks (required
  * in case the `Typography` extension is being included).
- *
- * @see https://stephenweiss.dev/regex-markdown-link
  */
-const inputRegex = /(?:^|\s)\[([^\]]*)?\]\(([A-Za-z0-9:/.-?]+)(?: ["“](.+)["”])?\)$/
+const inputRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)$/i
 
 /**
  * The paste regex for Markdown links with title support, and multiple quotation marks (required
  * in case the `Typography` extension is being included).
- *
- * @see https://stephenweiss.dev/regex-markdown-link
  */
-const pasteRegex = /(?:^|\s)\[([^\]]*)?\]\(([A-Za-z0-9:/.-?]+)(?: ["“](.+)["”])?\)/g
+const pasteRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)/gi
 
 /**
  * Input rule built specifically for the `Link` extension, which ignores the auto-linked URL in
@@ -30,7 +26,7 @@ function linkInputRule(config: Parameters<typeof markInputRule>[0]) {
 
     return new InputRule({
         find: config.find,
-        handler: (props) => {
+        handler(props) {
             const { tr } = props.state
 
             defaultMarkInputRule.handler(props)
@@ -51,7 +47,7 @@ function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
 
     return new PasteRule({
         find: config.find,
-        handler: (props) => {
+        handler(props) {
             const { tr } = props.state
 
             defaultMarkInputRule.handler(props)
