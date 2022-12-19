@@ -1,3 +1,9 @@
+## [1.0.10](https://github.com/Doist/typist/compare/v1.0.9...v1.0.10) (2022-12-19)
+
+### Bug Fixes
+
+-   Add required ProseMirror dependencies to package ([#73](https://github.com/Doist/typist/issues/73)) ([cd605c0](https://github.com/Doist/typist/commit/cd605c0606a980516e586f3a6d0915f2c13704a9))
+
 ## [1.0.9](https://github.com/Doist/typist/compare/v1.0.8...v1.0.9) (2022-12-19)
 
 ### Bug Fixes
