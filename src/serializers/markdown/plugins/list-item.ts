@@ -18,13 +18,13 @@ function listItem(nodeType: NodeType): Turndown.Plugin {
 
     return (turndown: Turndown) => {
         turndown.addRule(nodeType.name, {
-            filter: (node) => {
+            filter(node) {
                 return (
                     tags.some((tag) => tag.toUpperCase() === node.nodeName) &&
                     node.getAttribute('data-type') !== 'taskItem'
                 )
             },
-            replacement: function (content, node) {
+            replacement(content, node) {
                 const parentNode = node.parentNode as HTMLElement
                 let listItemMarker = `${BULLET_LIST_MARKER} `
 

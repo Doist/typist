@@ -16,10 +16,10 @@ function strikethrough(markType: MarkType): Turndown.Plugin {
 
     return (turndown: Turndown) => {
         turndown.addRule(markType.name, {
-            filter: (node) => {
+            filter(node) {
                 return tags.some((tag) => tag.toUpperCase() === node.nodeName)
             },
-            replacement: (content) => {
+            replacement(content) {
                 return `~~${content}~~`
             },
         })

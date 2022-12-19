@@ -14,8 +14,10 @@ function suggestion(nodeType: NodeType): Turndown.Plugin {
 
     return (turndown: Turndown) => {
         turndown.addRule(nodeType.name, {
-            filter: (node: Element) => node.hasAttribute(`data-${attributeType}`),
-            replacement: (_, node) => {
+            filter(node: Element) {
+                return node.hasAttribute(`data-${attributeType}`)
+            },
+            replacement(_, node) {
                 const label = String((node as Element).getAttribute('data-label'))
                 const id = String((node as Element).getAttribute('data-id'))
 
