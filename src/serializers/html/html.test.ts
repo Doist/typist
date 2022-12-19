@@ -604,5 +604,29 @@ Answer: [Doist Frontend](channel://190200)`),
                 )
             })
         })
+
+        describe('with custom extensions overriding built-in ones', () => {
+            let htmlSerializer: HTMLSerializerReturnType
+
+            beforeEach(() => {
+                htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
+            })
+
+            test('paragraphs Markdown output is correct', () => {
+                let count = 1
+
+                htmlSerializer.use({
+                    renderer: {
+                        paragraph(text) {
+                            return `<p data-id="${count++}">${text}</p>`
+                        },
+                    },
+                })
+
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_PARAGRAPHS)).toBe(
+                    '<p data-id="1">I really like using Markdown.</p><p data-id="2">I think I&#39;ll use it to format all of my documents from now on.</p>',
+                )
+            })
+        })
     })
 })

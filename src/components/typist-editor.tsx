@@ -16,6 +16,8 @@ import { getAllNodesAttributesByType, resolveContentSelection } from './typist-e
 
 import type { Editor as CoreEditor, EditorEvents, Extensions } from '@tiptap/core'
 import type { Plugin, Selection } from 'prosemirror-state'
+import type { HTMLSerializerReturnType } from '../serializers/html/html'
+import type { MarkdownSerializerReturnType } from '../serializers/markdown/markdown'
 
 /**
  * The forwarded ref that describes the helper methods that the `TypistEditor` parent component
@@ -116,6 +118,20 @@ type TypistEditorProps = {
      * You may consider wrapping this prop with `useMemo` to prevent unnecessary re-renders.
      */
     extensions: Extensions
+
+    /**
+     * Custom extensions for the HTML serializer based on the Marked library.
+     *
+     * @see https://marked.js.org/using_pro#extensions
+     */
+    htmlSerializerExtensions?: Parameters<HTMLSerializerReturnType['use']>[0]
+
+    /**
+     * Custom plugins for the Markdown serializer based on the Turndown library.
+     *
+     * @see https://github.com/mixmark-io/turndown#extending-with-rules
+     */
+    markdownSerializerPlugins?: Parameters<MarkdownSerializerReturnType['use']>[0]
 
     /**
      * A short hint that gives users an idea what can be entered in the editor.
@@ -222,6 +238,8 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         contentSelection,
         editable = true,
         extensions,
+        htmlSerializerExtensions,
+        markdownSerializerPlugins,
         placeholder,
         onBeforeCreate,
         onCreate,
@@ -272,15 +290,28 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
 
     const htmlSerializer = useMemo(
         function initializeHTMLSerializer() {
-            return createHTMLSerializer(schema)
+            const serializer = createHTMLSerializer(schema)
+
+            if (htmlSerializerExtensions) {
+                serializer.use(htmlSerializerExtensions)
+            }
+
+            return serializer
         },
-        [schema],
+        [htmlSerializerExtensions, schema],
     )
+
     const markdownSerializer = useMemo(
         function initializeMarkdownSerializer() {
-            return createMarkdownSerializer(schema)
+            const serializer = createMarkdownSerializer(schema)
+
+            if (markdownSerializerPlugins) {
+                serializer.use(markdownSerializerPlugins)
+            }
+
+            return serializer
         },
-        [schema],
+        [markdownSerializerPlugins, schema],
     )
 
     const htmlContent = useMemo(

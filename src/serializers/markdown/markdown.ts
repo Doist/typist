@@ -33,6 +33,16 @@ type MarkdownSerializerReturnType = {
      * @returns The serialized Markdown.
      */
     serialize: (html: string) => string
+
+    /**
+     * Use a specific Turndown plugin or list of plugins.
+     *
+     * Be advised that these plugins will take precedence over core plugins built-in into the
+     * Markdown serializer.
+     *
+     * @param plugins The Turndown plugin or list of plugins.
+     */
+    use: (plugins: Turndown.Plugin | Turndown.Plugin[]) => void
 }
 
 /**
@@ -91,7 +101,7 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
  *
  * @param schema The editor schema to be used for nodes and marks detection.
  *
- * @returns A normalized `serialize` function.
+ * @returns A normalized object for the Markdown serializer.
  */
 function createMarkdownSerializer(
     schema: Schema,
@@ -143,13 +153,12 @@ function createMarkdownSerializer(
             turndown.use(suggestion(suggestionNode))
         })
 
-    // Return a normalized `serialize` function
     return {
         serialize(html: string) {
             let markdownResult = html
 
-            // Turndown was built to convert HTML into Markdown, expecting the input to be
-            // standard-compliant HTML. As such, it collapses all whitespace by default, and there's
+            // Turndown was built to convert HTML into Markdown, expecting the input to be standards
+            // compliant HTML. As such, it collapses all whitespace by default, and there's
             // currently no way to opt-out of this behavior. However, for plain-text editors, we
             // need to preserve Markdown whitespace (otherwise we lose syntax like nested lists) by
             // replacing all instances of the space character (but only if it's preceded by another
@@ -171,6 +180,9 @@ function createMarkdownSerializer(
             // Return the serialized Markdown parsed with Turndown, and with trailing space
             // characters removed
             return markdownResult.replace(/ +$/gm, '')
+        },
+        use(plugins: Turndown.Plugin | Turndown.Plugin[]) {
+            turndown.use(plugins)
         },
     }
 }

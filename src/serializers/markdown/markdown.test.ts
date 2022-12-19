@@ -8,6 +8,7 @@ import { createSuggestionExtension } from '../../factories/create-suggestion-ext
 
 import { createMarkdownSerializer } from './markdown'
 
+import type Turndown from 'turndown'
 import type { MarkdownSerializerReturnType } from './markdown'
 
 const HTML_INPUT_HEADINGS = `<h1>Heading level 1</h1>
@@ -395,6 +396,23 @@ Answer: [Henning M](mention://963827)`)
 Answer: [Doist Frontend](channel://190200)`)
             })
         })
+
+        describe('with custom plugins overriding built-in ones', () => {
+            test('paragraphs Markdown output is correct', () => {
+                markdownSerializer.use((turndown: Turndown) => {
+                    turndown.addRule('pargraph', {
+                        filter: 'p',
+                        replacement(content) {
+                            return `[NL]${content}[NL]`
+                        },
+                    })
+                })
+
+                expect(markdownSerializer.serialize(HTML_INPUT_PARAGRAPHS)).toBe(
+                    "[NL]I really like using Markdown.[NL][NL]I think I'll use it to format all of my documents from now on.[NL]",
+                )
+            })
+        })
     })
 
     describe('Rich-text Document', () => {
@@ -763,6 +781,23 @@ Answer: [Henning M](mention://963827)`)
                     ),
                 ).toBe(`Question: What's the best channel on Twist?
 Answer: [Doist Frontend](channel://190200)`)
+            })
+        })
+
+        describe('with custom plugins overriding built-in ones', () => {
+            test('paragraphs Markdown output is correct', () => {
+                markdownSerializer.use((turndown: Turndown) => {
+                    turndown.addRule('pargraph', {
+                        filter: 'p',
+                        replacement(content) {
+                            return `[NL][NL]${content}[NL][NL]`
+                        },
+                    })
+                })
+
+                expect(markdownSerializer.serialize(HTML_INPUT_PARAGRAPHS)).toBe(
+                    "[NL][NL]I really like using Markdown.[NL][NL][NL][NL]I think I'll use it to format all of my documents from now on.[NL][NL]",
+                )
             })
         })
     })
