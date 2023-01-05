@@ -89,6 +89,10 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
  * a plain-text editor. The editor schema is used to detect which nodes and marks are available in
  * the editor, and only parses the input with the minimal required rules.
  *
+ * **Note:** Unlike the HTML serializer, built-in rules that are not supported by the schema are not
+ * disabled because if the schema does not support certain nodes/marks, the parsing rules don't have
+ * valid HTML elements to match in the editor HTML output.
+ *
  * @param schema The editor schema to be used for nodes and marks detection.
  *
  * @returns A normalized object for the Markdown serializer.

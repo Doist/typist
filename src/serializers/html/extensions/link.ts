@@ -1,7 +1,4 @@
-import { kebabCase } from 'lodash-es'
 import { marked } from 'marked'
-
-import type { NodeType } from 'prosemirror-model'
 
 const markedRenderer = new marked.Renderer()
 
@@ -9,19 +6,14 @@ const markedRenderer = new marked.Renderer()
  * A Marked extension which tweaks the `link` renderer to add support for suggestion nodes, while
  * preserving the original renderer for standard links.
  *
- * @param suggestionNodes An array of the suggestion nodes to serialize.
+ * @param suggestionSchemaRegex A regular expression with valid URL schemas for the available
+ * suggestion nodes.
  */
-function link(suggestionNodes: NodeType[]): marked.MarkedExtension {
-    const linkSchemaRegex = new RegExp(
-        `^(?:${suggestionNodes
-            .map((suggestionNode) => kebabCase(suggestionNode.name.replace(/Suggestion$/, '')))
-            .join('|')})://`,
-    )
-
+function link(suggestionSchemaRegex: RegExp): marked.MarkedExtension {
     return {
         renderer: {
             link(href, title, text) {
-                if (href && linkSchemaRegex.test(href)) {
+                if (href && suggestionSchemaRegex?.test(href)) {
                     const [, schema, id] = /^([a-z-]+):\/\/(\S+)$/i.exec(href) || []
 
                     if (schema && id && text) {

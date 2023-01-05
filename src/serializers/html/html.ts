@@ -3,9 +3,11 @@ import { marked } from 'marked'
 
 import { REGEX_LINE_BREAKS } from '../../constants/regular-expressions'
 import { isPlainTextDocument } from '../../helpers/schema'
+import { buildSuggestionSchemaPartialRegex } from '../../helpers/serializer'
 
 import { checkbox } from './extensions/checkbox'
 import { code } from './extensions/code'
+import { disabled } from './extensions/disabled'
 import { html } from './extensions/html'
 import { link } from './extensions/link'
 import { paragraph } from './extensions/paragraph'
@@ -33,6 +35,7 @@ type HTMLSerializerReturnType = {
  * @see https://marked.js.org/using_advanced#options
  */
 const INITIAL_MARKED_OPTIONS: marked.MarkedOptions = {
+    ...marked.getDefaults(),
     breaks: true,
     gfm: true,
     headerIds: false,
@@ -87,40 +90,11 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
         return createHTMLSerializerForPlainTextEditor(schema)
     }
 
-    // Reset Marked to the defaults and set custom options
-    marked.setOptions({
-        ...marked.getDefaults(),
-        ...INITIAL_MARKED_OPTIONS,
-    })
+    // Reset Marked instance to the initial options
+    marked.setOptions(INITIAL_MARKED_OPTIONS)
 
-    // Disable built-in rules that the editor does not yet support
-    marked.use({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore: Returning `undefined` is acceptable to disable tokens
-        tokenizer: {
-            ...(!schema.marks.strike
-                ? {
-                      del() {
-                          /* noop: disables tokenizer */
-                      },
-                  }
-                : {}),
-            ...(!schema.nodes.heading
-                ? {
-                      heading() {
-                          /* noop: disables tokenizer */
-                      },
-                  }
-                : {}),
-            ...(!schema.nodes.table
-                ? {
-                      table() {
-                          /* noop: disables tokenizer */
-                      },
-                  }
-                : {}),
-        },
-    })
+    // Disable built-in rules that are not supported by the schema
+    marked.use(disabled(schema))
 
     // Overwrite some built-in rules for handling of special behaviours
     // (see documentation for each extension for more details)
@@ -136,14 +110,12 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
         marked.use(taskList)
     }
 
-    // Get all the available suggestion nodes from the schema
-    const suggestionNodes = Object.values(schema.nodes).filter((node) =>
-        node.name.endsWith('Suggestion'),
-    )
+    // Build a regular expression with all the available suggestion nodes from the schema
+    const suggestionSchemaPartialRegex = buildSuggestionSchemaPartialRegex(schema)
 
     // Overwrite the built-in link rule if any suggestion node exists in the schema
-    if (suggestionNodes.length > 0) {
-        marked.use(link(suggestionNodes))
+    if (suggestionSchemaPartialRegex) {
+        marked.use(link(new RegExp(`^${suggestionSchemaPartialRegex}`)))
     }
 
     return {
@@ -163,6 +135,6 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     }
 }
 
-export { createHTMLSerializer }
+export { createHTMLSerializer, INITIAL_MARKED_OPTIONS }
 
 export type { HTMLSerializerReturnType }
