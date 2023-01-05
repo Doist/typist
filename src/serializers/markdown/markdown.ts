@@ -115,19 +115,18 @@ function createMarkdownSerializer(
         turndown.escape = (str) => str
     }
 
+    // Overwrite some built-in rules for handling of special behaviours
+    // (see documentation for each extension for more details)
+    turndown.use(paragraph(schema.nodes.paragraph, isPlainTextDocument(schema)))
+
     // Overwrite the built-in `image` rule if the corresponding node exists in the schema
     if (schema.nodes.image) {
         turndown.use(image(schema.nodes.image))
     }
 
     // Overwrite the built-in `listItem` rule if the corresponding node exists in the schema
-    if (schema.nodes.listItem) {
+    if ((schema.nodes.bulletList || schema.nodes.orderedList) && schema.nodes.listItem) {
         turndown.use(listItem(schema.nodes.listItem))
-    }
-
-    // Overwrite the built-in `paragraph` rule if the corresponding node exists in the schema
-    if (schema.nodes.paragraph) {
-        turndown.use(paragraph(schema.nodes.paragraph, isPlainTextDocument(schema)))
     }
 
     // Add a rule for `strikethrough` if the corresponding node exists in the schema

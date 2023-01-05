@@ -1,6 +1,7 @@
 import { getSchema } from '@tiptap/core'
 import { TaskItem } from '@tiptap/extension-task-item'
 import { TaskList } from '@tiptap/extension-task-list'
+import Turndown from 'turndown'
 
 import { PlainTextKit } from '../../extensions/plain-text/plain-text-kit'
 import { RichTextKit } from '../../extensions/rich-text/rich-text-kit'
@@ -206,25 +207,29 @@ before _ after<br>
 99. after<br>`
 
     describe('Plain-text Document', () => {
-        let markdownSerializer: MarkdownSerializerReturnType
+        describe('with default extensions', () => {
+            let markdownSerializer: MarkdownSerializerReturnType
 
-        beforeEach(() => {
-            markdownSerializer = createMarkdownSerializer(getSchema([PlainTextKit]))
-        })
+            const useMock = jest.spyOn(Turndown.prototype, 'use')
+            const addRuleMock = jest.spyOn(Turndown.prototype, 'addRule')
 
-        test('special HTML entities are converted to ASCII characters', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_HTML_CHARS))
-                .toBe(`Ambition & Balance
+            beforeEach(() => {
+                markdownSerializer = createMarkdownSerializer(getSchema([PlainTextKit]))
+            })
+
+            test('special HTML entities are converted to ASCII characters', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_HTML_CHARS))
+                    .toBe(`Ambition & Balance
 <doist>
 </doist>
 <doist></doist>
 "Doist"
 'Doist'`)
-        })
+            })
 
-        test('special Markdown characters are NOT escaped', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_MARKDOWN_CHARS))
-                .toBe(`before \\ after
+            test('special Markdown characters are NOT escaped', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_MARKDOWN_CHARS))
+                    .toBe(`before \\ after
 before * after
 - after
 + after
@@ -238,144 +243,33 @@ before ] after
 before _ after
 1. after
 99. after`)
-        })
+            })
 
-        test('paragraphs Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_PARAGRAPHS)).toBe(
-                `I really like using Markdown.
+            test('paragraphs Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_PARAGRAPHS)).toBe(
+                    `I really like using Markdown.
 I think I'll use it to format all of my documents from now on.`,
-            )
-        })
-
-        describe('without `listItem` extension', () => {
-            test('ordered lists Markdown output is correct', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_ORDERED_LISTS)).toBe(
-                    `1.  First item
-2.  Second item
-3.  Third item
-4.  Fourth item
-
----
-
-5.  First item
-6.  Second item
-7.  Third item
-8.  Fourth item
-
----
-
-1.  First item
-2.  Second item
-3.  Third item
-    1.  Indented item
-    2.  Indented item
-4.  Fourth item`,
                 )
             })
 
-            test('unordered lists Markdown output is correct', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_UNORDERED_LISTS)).toBe(
-                    `-   First item
--   Second item
--   Third item
--   Fourth item
-
----
-
--   First item
--   Second item
--   Third item
-    -   Indented item
-    -   Indented item
--   Fourth item
-
----
-
--   1968. A great year!
--   I think 1969 was second best.
-
----
-
--   This is the first list item.
--   Here's the second list item.
-      I need to add another paragraph below the second list item.
--   And here's the third list item.`,
-                )
-            })
-        })
-
-        describe('without `strike` extension', () => {
-            test('strikethrough Markdown output is correct', () => {
-                const customSerializer = createMarkdownSerializer(
-                    getSchema([
-                        RichTextKit.configure({
-                            strike: false,
-                        }),
-                    ]),
-                )
-
-                expect(
-                    customSerializer.serialize(
-                        '<p>Strikethrough uses two tildes: <del>scratch this</del></p>',
-                    ),
-                ).toBe('Strikethrough uses two tildes: scratch this')
-            })
-        })
-
-        describe('without custom `taskList` extension', () => {
-            test('task lists syntax is ignored', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_TASK_LISTS)).toBe(
-                    `-   First item
--   Second item
--   Third item
--   Fourth item
-
----
-
--   First item
--   Second item
--   Third item
--   Fourth item
-
----
-
--   First item
--   Second item
--   Third item
--   Fourth item
-
----
-
--   First item
--   Second item
--   Third item
-    -   Indented item
-    -   Indented item
--   Fourth item
-
----
-
--   1968. A great year!
--   I think 1969 was second best.
-
----
-
--   This is the first list item.
--   Here's the second list item.
-      I need to add another paragraph below the second list item.
--   And here's the third list item.`,
-                )
+            test('only the paragraph rule is overwritten', () => {
+                expect(useMock).toHaveBeenCalledTimes(1)
+                expect(addRuleMock).toHaveBeenLastCalledWith('paragraph', {
+                    filter: 'p',
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    replacement: expect.any(Function),
+                })
             })
         })
 
         describe('with custom `*Suggestion` extensions', () => {
             test('mention suggestion Markdown output is correct', () => {
-                const customSerializer = createMarkdownSerializer(
+                const markdownSerializer = createMarkdownSerializer(
                     getSchema([RichTextKit, createSuggestionExtension('mention')]),
                 )
 
                 expect(
-                    customSerializer.serialize(
+                    markdownSerializer.serialize(
                         `<p>Question: Who&#39;s the head of the Frontend team?<br>Answer: <span data-mention data-id="963827" data-label="Henning M">@Henning M</span></p>`,
                     ),
                 ).toBe(`Question: Who's the head of the Frontend team?
@@ -383,12 +277,12 @@ Answer: [Henning M](mention://963827)`)
             })
 
             test('channel suggestions Markdown output is correct', () => {
-                const customSerializer = createMarkdownSerializer(
+                const markdownSerializer = createMarkdownSerializer(
                     getSchema([RichTextKit, createSuggestionExtension('channel')]),
                 )
 
                 expect(
-                    customSerializer.serialize(
+                    markdownSerializer.serialize(
                         `<p>Question: What&#39;s the best channel on Twist?<br>Answer: <span data-channel data-id="190200" data-label="Doist Frontend">#Doist Frontend</span></p>`,
                     ),
                 ).toBe(`Question: What's the best channel on Twist?
@@ -398,25 +292,26 @@ Answer: [Doist Frontend](channel://190200)`)
     })
 
     describe('Rich-text Document', () => {
-        let markdownSerializer: MarkdownSerializerReturnType
+        describe('without default extensions', () => {
+            let markdownSerializer: MarkdownSerializerReturnType
 
-        beforeEach(() => {
-            markdownSerializer = createMarkdownSerializer(getSchema([RichTextKit]))
-        })
+            beforeEach(() => {
+                markdownSerializer = createMarkdownSerializer(getSchema([RichTextKit]))
+            })
 
-        test('special HTML entities are converted to ASCII characters', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_HTML_CHARS))
-                .toBe(`Ambition & Balance
+            test('special HTML entities are converted to ASCII characters', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_HTML_CHARS))
+                    .toBe(`Ambition & Balance
 <doist>
 </doist>
 <doist></doist>
 "Doist"
 'Doist'`)
-        })
+            })
 
-        test('special Markdown characters are escaped', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_MARKDOWN_CHARS))
-                .toBe(`before \\\\ after
+            test('special Markdown characters are escaped', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_MARKDOWN_CHARS))
+                    .toBe(`before \\\\ after
 before \\* after
 \\- after
 \\+ after
@@ -430,31 +325,31 @@ before \\] after
 before \\_ after
 1\\. after
 99\\. after`)
-        })
+            })
 
-        test('headings Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_HEADINGS)).toBe(
-                '# Heading level 1\n\n## Heading level 2\n\n### Heading level 3\n\n#### Heading level 4\n\n##### Heading level 5\n\n###### Heading level 6',
-            )
-        })
+            test('headings Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_HEADINGS)).toBe(
+                    '# Heading level 1\n\n## Heading level 2\n\n### Heading level 3\n\n#### Heading level 4\n\n##### Heading level 5\n\n###### Heading level 6',
+                )
+            })
 
-        test('paragraphs Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_PARAGRAPHS)).toBe(
-                `I really like using Markdown.
+            test('paragraphs Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_PARAGRAPHS)).toBe(
+                    `I really like using Markdown.
 
 I think I'll use it to format all of my documents from now on.`,
-            )
-        })
+                )
+            })
 
-        test('line breaks Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_LINE_BREAKS))
-                .toBe(`This is the first line.
+            test('line breaks Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_LINE_BREAKS))
+                    .toBe(`This is the first line.
 And this is the second line.`)
-        })
+            })
 
-        test('styled text Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_STYLED_TEXT)).toBe(
-                `I just love **bold text**.
+            test('styled text Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_STYLED_TEXT)).toBe(
+                    `I just love **bold text**.
 I just love **bold text**.
 
 Italicized text is the _cat's meow_.
@@ -467,12 +362,12 @@ This text is **_really important_**.
 This is really _**very**_ important text.
 
 Strikethrough uses two tildes: ~~scratch this~~`,
-            )
-        })
+                )
+            })
 
-        test('blockquotes Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_BLOCKQUOTES)).toBe(
-                `> Dorothy followed her through many of the beautiful rooms in her castle.
+            test('blockquotes Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_BLOCKQUOTES)).toBe(
+                    `> Dorothy followed her through many of the beautiful rooms in her castle.
 
 > Dorothy followed her through many of the beautiful rooms in her castle.
 >
@@ -488,11 +383,11 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 > - Profits were higher than ever.
 >
 > _Everything_ is going according to **plan**.`,
-            )
-        })
+                )
+            })
 
-        test('ordered lists Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_ORDERED_LISTS)).toBe(`1. First item
+            test('ordered lists Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_ORDERED_LISTS)).toBe(`1. First item
 2. Second item
 3. Third item
 4. Fourth item
@@ -512,11 +407,11 @@ Strikethrough uses two tildes: ~~scratch this~~`,
     1. Indented item
     2. Indented item
 4. Fourth item`)
-        })
+            })
 
-        test('unordered lists Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_UNORDERED_LISTS)).toBe(
-                `- First item
+            test('unordered lists Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_UNORDERED_LISTS)).toBe(
+                    `- First item
 - Second item
 - Third item
 - Fourth item
@@ -541,12 +436,12 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 - Here's the second list item.
     I need to add another paragraph below the second list item.
 - And here's the third list item.`,
-            )
-        })
+                )
+            })
 
-        test('task lists syntax is ignored (unsupported by default)', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_TASK_LISTS)).toBe(
-                `-   First item
+            test('task lists syntax is ignored (unsupported by default)', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_TASK_LISTS)).toBe(
+                    `-   First item
 -   Second item
 -   Third item
 -   Fourth item
@@ -585,40 +480,40 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 -   Here's the second list item.
     I need to add another paragraph below the second list item.
 -   And here's the third list item.`,
-            )
-        })
+                )
+            })
 
-        test('images Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_IMAGES)).toBe(
-                `![Tux, the Linux mascot](/assets/images/tux.png) ![Tux, the Linux mascot](/assets/images/tux.png "The Linux mascot") ![](data:image/gif;base64,NOT_SUPPORTED)
+            test('images Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_IMAGES)).toBe(
+                    `![Tux, the Linux mascot](/assets/images/tux.png) ![Tux, the Linux mascot](/assets/images/tux.png "The Linux mascot") ![](data:image/gif;base64,NOT_SUPPORTED)
 
 [![Tux, the Linux mascot](/assets/images/tux.png "The Linux mascot")](https://d33wubrfki0l68.cloudfront.net/e7ed9fe4bafe46e275c807d63591f85f9ab246ba/e2d28/assets/images/tux.png)`,
-            )
-        })
+                )
+            })
 
-        test('code Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_CODE)).toBe(
-                `At the command prompt, type \`nano\`.
+            test('code Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_CODE)).toBe(
+                    `At the command prompt, type \`nano\`.
 
 \`\`Use \`code\` in your Markdown file.\`\``,
-            )
-        })
+                )
+            })
 
-        test('code block Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_CODE_BLOCK)).toBe(
-                `\`\`\`
+            test('code block Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_CODE_BLOCK)).toBe(
+                    `\`\`\`
 <html>
   <head>
     <title>Test</title>
   </head>
 </html>
 \`\`\``,
-            )
-        })
+                )
+            })
 
-        test('block elements Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_INDENTED_BLOCK_ELEMENTS))
-                .toBe(`1. Blockquote:
+            test('block elements Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_INDENTED_BLOCK_ELEMENTS))
+                    .toBe(`1. Blockquote:
 
     > Dorothy followed her through many of the beautiful rooms in her castle.
 2. Image:
@@ -632,69 +527,135 @@ Strikethrough uses two tildes: ~~scratch this~~`,
       </head>
     </html>
     \`\`\``)
-        })
+            })
 
-        test('line rules Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_LINE_RULES)).toBe(
-                `---
+            test('horizontal rules Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_LINE_RULES)).toBe(
+                    `---
 
 ---
 
 ---`,
-            )
-        })
+                )
+            })
 
-        test('links Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_LINKS)).toBe(
-                `My favorite search engine is [Duck Duck Go](https://duckduckgo.com).
+            test('links Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_LINKS)).toBe(
+                    `My favorite search engine is [Duck Duck Go](https://duckduckgo.com).
 My favorite search engine is [Duck Duck Go](https://duckduckgo.com "The best search engine for privacy").`,
-            )
-        })
+                )
+            })
 
-        test('styled links Markdown output is correct', () => {
-            expect(markdownSerializer.serialize(HTML_INPUT_STYLED_LINKS)).toBe(
-                `I love supporting the **[EFF](https://eff.org)**.
+            test('styled links Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_STYLED_LINKS)).toBe(
+                    `I love supporting the **[EFF](https://eff.org)**.
 This is the _[Markdown Guide](https://www.markdownguide.org)_.
 See the section on [\`code\`](#code).`,
-            )
-        })
-
-        test('special Markdown characters are NOT escaped if `escape` is disabled', () => {
-            const customSerializer = createMarkdownSerializer(getSchema([RichTextKit]), {
-                escape: false,
-            })
-            expect(
-                customSerializer.serialize(
-                    `<p><strong>Wrapped markdown</strong> **still markdown**</p>`,
-                ),
-            ).toBe(`**Wrapped markdown** **still markdown**`)
-        })
-
-        describe('without `strike` extension', () => {
-            test('strikethrough Markdown output is correct', () => {
-                const customSerializer = createMarkdownSerializer(
-                    getSchema([
-                        RichTextKit.configure({
-                            strike: false,
-                        }),
-                    ]),
                 )
+            })
 
+            test('special Markdown characters are NOT escaped if `escape` is disabled', () => {
+                const customSerializer = createMarkdownSerializer(getSchema([RichTextKit]), {
+                    escape: false,
+                })
                 expect(
                     customSerializer.serialize(
+                        `<p><strong>Wrapped markdown</strong> **still markdown**</p>`,
+                    ),
+                ).toBe(`**Wrapped markdown** **still markdown**`)
+            })
+        })
+
+        describe('without custom extensions', () => {
+            const markdownSerializer = createMarkdownSerializer(
+                getSchema([
+                    RichTextKit.configure({
+                        bulletList: false,
+                        image: false,
+                        listItem: false,
+                        orderedList: false,
+                        strike: false,
+                    }),
+                ]),
+            )
+
+            test('ordered lists Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_ORDERED_LISTS)).toBe(`1.  First item
+2.  Second item
+3.  Third item
+4.  Fourth item
+
+---
+
+5.  First item
+6.  Second item
+7.  Third item
+8.  Fourth item
+
+---
+
+1.  First item
+2.  Second item
+3.  Third item
+    1.  Indented item
+    2.  Indented item
+4.  Fourth item`)
+            })
+
+            test('unordered lists Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_UNORDERED_LISTS)).toBe(
+                    `-   First item
+-   Second item
+-   Third item
+-   Fourth item
+
+---
+
+-   First item
+-   Second item
+-   Third item
+    -   Indented item
+    -   Indented item
+-   Fourth item
+
+---
+
+-   1968\\. A great year!
+-   I think 1969 was second best.
+
+---
+
+-   This is the first list item.
+-   Here's the second list item.
+    I need to add another paragraph below the second list item.
+-   And here's the third list item.`,
+                )
+            })
+
+            test('images Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_IMAGES)).toBe(
+                    `![Tux, the Linux mascot](/assets/images/tux.png) ![Tux, the Linux mascot](/assets/images/tux.png "The Linux mascot") ![](data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=)
+
+[![Tux, the Linux mascot](/assets/images/tux.png "The Linux mascot")](https://d33wubrfki0l68.cloudfront.net/e7ed9fe4bafe46e275c807d63591f85f9ab246ba/e2d28/assets/images/tux.png)`,
+                )
+            })
+
+            test('strikethrough Markdown output is ignored', () => {
+                expect(
+                    markdownSerializer.serialize(
                         '<p>Strikethrough uses two tildes: <del>scratch this</del></p>',
                     ),
                 ).toBe('Strikethrough uses two tildes: scratch this')
             })
         })
 
-        describe('with custom `taskList` extension', () => {
-            test('task lists HTML output is correct', () => {
-                const customSerializer = createMarkdownSerializer(
+        describe('with official `taskList`/`taskItem` extensions', () => {
+            test('task lists Markdown output is correct', () => {
+                const markdownSerializer = createMarkdownSerializer(
                     getSchema([RichTextKit, TaskList, TaskItem]),
                 )
 
-                expect(customSerializer.serialize(HTML_INPUT_TASK_LISTS)).toBe(
+                expect(markdownSerializer.serialize(HTML_INPUT_TASK_LISTS)).toBe(
                     `- [ ] First item
 - [x] Second item
 - [x] Third item
@@ -740,12 +701,12 @@ See the section on [\`code\`](#code).`,
 
         describe('with custom `*Suggestion` extensions', () => {
             test('mention suggestion Markdown output is correct', () => {
-                const customSerializer = createMarkdownSerializer(
+                const markdownSerializer = createMarkdownSerializer(
                     getSchema([RichTextKit, createSuggestionExtension('mention')]),
                 )
 
                 expect(
-                    customSerializer.serialize(
+                    markdownSerializer.serialize(
                         `<p>Question: Who&#39;s the head of the Frontend team?<br>Answer: <span data-mention data-id="963827" data-label="Henning M">@Henning M</span></p>`,
                     ),
                 ).toBe(`Question: Who's the head of the Frontend team?
@@ -753,12 +714,12 @@ Answer: [Henning M](mention://963827)`)
             })
 
             test('channel suggestions Markdown output is correct', () => {
-                const customSerializer = createMarkdownSerializer(
+                const markdownSerializer = createMarkdownSerializer(
                     getSchema([RichTextKit, createSuggestionExtension('channel')]),
                 )
 
                 expect(
-                    customSerializer.serialize(
+                    markdownSerializer.serialize(
                         `<p>Question: What&#39;s the best channel on Twist?<br>Answer: <span data-channel data-id="190200" data-label="Doist Frontend">#Doist Frontend</span></p>`,
                     ),
                 ).toBe(`Question: What's the best channel on Twist?
