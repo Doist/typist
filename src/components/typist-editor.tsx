@@ -5,11 +5,12 @@ import { Placeholder } from '@tiptap/extension-placeholder'
 import { EditorContent } from '@tiptap/react'
 
 import { ExtraEditorCommands } from '../extensions/core/extra-editor-commands/extra-editor-commands'
+import { InternalEditorData } from '../extensions/core/internal-editor-data'
 import { ViewEventHandlers, ViewEventHandlersOptions } from '../extensions/core/view-event-handlers'
 import { isMultilineDocument, isPlainTextDocument } from '../helpers/schema'
 import { useEditor } from '../hooks/use-editor'
-import { createHTMLSerializer } from '../serializers/html/html'
-import { createMarkdownSerializer } from '../serializers/markdown/markdown'
+import { getHTMLSerializerInstance } from '../serializers/html/html'
+import { getMarkdownSerializerInstance } from '../serializers/markdown/markdown'
 
 import { getAllNodesAttributesByType, resolveContentSelection } from './typist-editor.helper'
 
@@ -117,6 +118,11 @@ type TypistEditorProps = {
     extensions: Extensions
 
     /**
+     * [[DESCRIPTION]]
+     */
+    id?: NonEmptyString
+
+    /**
      * A short hint that gives users an idea what can be entered in the editor.
      */
     placeholder?: string
@@ -221,6 +227,7 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         contentSelection,
         editable = true,
         extensions,
+        id = 'default',
         placeholder,
         onBeforeCreate,
         onCreate,
@@ -242,6 +249,9 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         function initializeExtensions() {
             return [
                 // Custom core extensions
+                InternalEditorData.configure({
+                    id,
+                }),
                 ...(placeholder
                     ? [
                           Placeholder.configure({
@@ -259,7 +269,7 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
                 ...extensions,
             ]
         },
-        [extensions, onClick, onKeyDown, placeholder],
+        [extensions, id, onClick, onKeyDown, placeholder],
     )
 
     const schema = useMemo(
@@ -271,15 +281,15 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
 
     const htmlSerializer = useMemo(
         function initializeHTMLSerializer() {
-            return createHTMLSerializer(schema)
+            return getHTMLSerializerInstance(id, schema)
         },
-        [schema],
+        [id, schema],
     )
     const markdownSerializer = useMemo(
         function initializeMarkdownSerializer() {
-            return createMarkdownSerializer(schema)
+            return getMarkdownSerializerInstance(id, schema)
         },
-        [schema],
+        [id, schema],
     )
 
     const htmlContent = useMemo(

@@ -29,8 +29,11 @@ export type {
 } from './factories/create-suggestion-extension'
 export { createSuggestionExtension } from './factories/create-suggestion-extension'
 export { isMultilineDocument, isPlainTextDocument } from './helpers/schema'
-export { createHTMLSerializer } from './serializers/html/html'
-export { createMarkdownSerializer } from './serializers/markdown/markdown'
+export { createHTMLSerializer, getHTMLSerializerInstance } from './serializers/html/html'
+export {
+    createMarkdownSerializer,
+    getMarkdownSerializerInstance,
+} from './serializers/markdown/markdown'
 export { canInsertNodeAt } from './utilities/can-insert-node-at'
 export { canInsertSuggestion } from './utilities/can-insert-suggestion'
 export type { AnyConfig, Editor as CoreEditor, EditorEvents, MarkRange, Range } from '@tiptap/core'

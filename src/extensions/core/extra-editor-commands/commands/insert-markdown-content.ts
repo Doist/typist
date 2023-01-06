@@ -2,9 +2,10 @@ import { RawCommands } from '@tiptap/core'
 import { DOMParser } from 'prosemirror-model'
 
 import { parseHtmlToElement } from '../../../../helpers/dom'
-import { createHTMLSerializer } from '../../../../serializers/html/html'
+import { getHTMLSerializerInstance } from '../../../../serializers/html/html'
 
 import type { ParseOptions } from 'prosemirror-model'
+import type { InternalEditorDataStorage } from '../../internal-editor-data'
 
 /**
  * Augment the official `@tiptap/core` module with extra commands so that the compiler knows about
@@ -38,7 +39,10 @@ function insertMarkdownContent(
         // Check if the transaction should be dispatched
         // ref: https://tiptap.dev/api/commands#dry-run-for-commands
         if (dispatch) {
-            const htmlContent = createHTMLSerializer(editor.schema).serialize(markdown)
+            const htmlContent = getHTMLSerializerInstance(
+                (editor.storage.internalEditorData as InternalEditorDataStorage).id,
+                editor.schema,
+            ).serialize(markdown)
 
             // Inserts the HTML content into the editor while preserving the current selection
             tr.replaceSelection(

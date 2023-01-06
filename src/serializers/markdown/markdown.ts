@@ -13,6 +13,13 @@ import { taskItem } from './plugins/task-item'
 import type { Schema } from 'prosemirror-model'
 
 /**
+ * [[DESCRIPTION]]
+ */
+type MarkdownSerializerInstanceById = {
+    [id: NonEmptyString]: MarkdownSerializerReturnType
+}
+
+/**
  * The return type for the `createMarkdownSerializer` function.
  */
 type MarkdownSerializerReturnType = {
@@ -187,6 +194,28 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
     }
 }
 
-export { BULLET_LIST_MARKER, createMarkdownSerializer }
+/**
+ * [[DESCRIPTION]]
+ */
+const markdownSerializerInstanceById: MarkdownSerializerInstanceById = {}
+
+/**
+ * [[DESCRIPTION]]
+ *
+ * @param id [[DESCRIPTION]]
+ * @param schema [[DESCRIPTION]]
+ *
+ * @returns [[DESCRIPTION]]
+ */
+// TODO: Needs unit tests!
+function getMarkdownSerializerInstance(id: NonEmptyString, schema: Schema) {
+    if (!markdownSerializerInstanceById[id]) {
+        markdownSerializerInstanceById[id] = createMarkdownSerializer(schema)
+    }
+
+    return markdownSerializerInstanceById[id]
+}
+
+export { BULLET_LIST_MARKER, createMarkdownSerializer, getMarkdownSerializerInstance }
 
 export type { MarkdownSerializerReturnType }
