@@ -1,3 +1,9 @@
+## [1.0.12](https://github.com/Doist/typist/compare/v1.0.11...v1.0.12) (2023-01-06)
+
+### Bug Fixes
+
+-   **html-serializer:** Disables tokenizers if marks/nodes are not found in the editor schema ([#86](https://github.com/Doist/typist/issues/86)) ([0ed4a9b](https://github.com/Doist/typist/commit/0ed4a9b694d2b7dcfadce0c5aa3fdefec6d492c5))
+
 ## [1.0.11](https://github.com/Doist/typist/compare/v1.0.10...v1.0.11) (2022-12-21)
 
 ### Bug Fixes
