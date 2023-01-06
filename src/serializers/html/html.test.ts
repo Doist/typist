@@ -60,7 +60,7 @@ const MARKDOWN_INPUT_BLOCKQUOTES = `> Dorothy followed her through many of the b
 > - Revenue was off the chart.
 > - Profits were higher than ever.
 >
-> *Everything* is going according to **plan**.`
+> _Everything_ is going according to **plan**.`
 
 const MARKDOWN_INPUT_ORDERED_LISTS = `1. First item
 2. Second item
@@ -222,6 +222,25 @@ const MARKDOWN_INPUT_STYLED_LINKS = `I love supporting the **[EFF](https://eff.o
 This is the *[Markdown Guide](https://www.markdownguide.org)*.
 See the section on [\`code\`](#code).`
 
+const MARKDOWN_INPUT_TABLES = `| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
+
+---
+
+| Syntax | Description |
+| --- | ----------- |
+| Header | Title |
+| Paragraph | Text |
+
+---
+
+| Syntax      | Description | Test Text     |
+| :---        |    :----:   |          ---: |
+| Header      | Title       | Here's this   |
+| Paragraph   | Text        | And more      |`
+
 describe('HTML Serializer', () => {
     describe('Plain-text Document', () => {
         describe('with default extensions', () => {
@@ -263,7 +282,7 @@ describe('HTML Serializer', () => {
 
             test('blockquotes syntax is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_BLOCKQUOTES)).toBe(
-                    '<p>&gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p></p><p>&gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p>&gt;</p><p>&gt; The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.</p><p></p><p>&gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p>&gt;</p><p>&gt; &gt; The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.</p><p></p><p>&gt; #### The quarterly results look great!</p><p>&gt;</p><p>&gt; - Revenue was off the chart.</p><p>&gt; - Profits were higher than ever.</p><p>&gt;</p><p>&gt; *Everything* is going according to **plan**.</p>',
+                    '<p>&gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p></p><p>&gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p>&gt;</p><p>&gt; The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.</p><p></p><p>&gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p>&gt;</p><p>&gt; &gt; The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.</p><p></p><p>&gt; #### The quarterly results look great!</p><p>&gt;</p><p>&gt; - Revenue was off the chart.</p><p>&gt; - Profits were higher than ever.</p><p>&gt;</p><p>&gt; _Everything_ is going according to **plan**.</p>',
                 )
             })
 
@@ -309,7 +328,7 @@ describe('HTML Serializer', () => {
                 )
             })
 
-            test('line rules syntax is preserved', () => {
+            test('horizontal rules syntax is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_LINE_RULES)).toBe(
                     '<p>***</p><p></p><p>_________________</p><p></p><p>---</p>',
                 )
@@ -413,12 +432,6 @@ Answer: [Doist Frontend](channel://190200)`),
                 )
             })
 
-            test('task lists syntax is preserved (unsupported by default)', () => {
-                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TASK_LISTS)).toBe(
-                    '<ul><li>[ ] First item</li><li>[x] Second item</li><li>[x] Third item</li><li>[ ] Fourth item</li></ul><hr><ul><li>[x] First item</li><li>[ ] Second item</li><li>[ ] Third item</li><li>[x] Fourth item</li></ul><hr><ul><li>[x] First item</li><li>[ ] Second item</li><li>[x] Third item</li><li>[ ] Fourth item</li></ul><hr><ul><li>First item</li><li>Second item</li><li>Third item<ul><li>[ ] Indented item</li><li>[ ] Indented item</li></ul></li><li>Fourth item</li></ul><hr><ul><li>[ ] 1968. A great year!</li><li>[x] I think 1969 was second best.</li></ul><hr><ul><li>[ ] This is the first list item.</li><li>[ ] Here&#39;s the second list item.<br>  I need to add another paragraph below the second list item.</li><li>[ ] And here&#39;s the third list item.</li></ul>',
-                )
-            })
-
             test('images HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
                     '<img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"><p><a href="https://octodex.github.com/octobiwan/"><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></a></p><p>Octobi Wan Catnobi: </p><p>Octobi Wan Catnobi:  - These are not the droids you\'re looking for!</p><p> - These are not the droids you\'re looking for!</p>',
@@ -449,7 +462,7 @@ Answer: [Doist Frontend](channel://190200)`),
 &lt;/html&gt;</code></pre></li></ol>`)
             })
 
-            test('line rules HTML output is correct', () => {
+            test('horizontal rules HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_LINE_RULES)).toBe('<hr><hr><hr>')
             })
 
@@ -466,77 +479,176 @@ Answer: [Doist Frontend](channel://190200)`),
             })
         })
 
-        describe('without `heading` extension', () => {
-            test("HTML output doesn't have heading elements", () => {
-                const customSerializer = createHTMLSerializer(
+        describe('without non-essential extensions', () => {
+            let htmlSerializer: HTMLSerializerReturnType
+
+            beforeEach(() => {
+                htmlSerializer = createHTMLSerializer(
                     getSchema([
+                        // Although we can disable pretty much any extension in the `RichTextKit`,
+                        // only non-essential nodes/marks extensions are disabled (these are the
+                        // only ones that have an effect on the serializer output)
                         RichTextKit.configure({
+                            blockquote: false,
+                            bold: false,
+                            bulletList: false,
+                            code: false,
+                            codeBlock: false,
+                            hardBreak: false,
                             heading: false,
-                        }),
-                    ]),
-                )
-
-                expect(customSerializer.serialize(MARKDOWN_INPUT_HEADINGS)).toBe(
-                    '<p># Heading level 1</p><p>## Heading level 2</p><p>### Heading level 3</p><p>#### Heading level 4</p><p>##### Heading level 5</p><p>###### Heading level 6</p>',
-                )
-            })
-        })
-
-        describe('without `strike` extension', () => {
-            test("HTML output doesn't have `del` elements", () => {
-                const customSerializer = createHTMLSerializer(
-                    getSchema([
-                        RichTextKit.configure({
+                            horizontalRule: false,
+                            image: false,
+                            italic: false,
+                            link: false,
+                            orderedList: false,
                             strike: false,
                         }),
                     ]),
                 )
+            })
 
-                expect(customSerializer.serialize(MARKDOWN_INPUT_STYLED_TEXT)).toBe(
-                    "<p>I just love <strong>bold text</strong>.<br>I just love <strong>bold text</strong>.</p><p>Italicized text is the <em>cat's meow</em>.<br>Italicized text is the <em>cat's meow</em>.</p><p>This text is <em><strong>really important</strong></em>.<br>This text is <em><strong>really important</strong></em>.<br>This text is <strong><em>really important</em></strong>.<br>This text is <strong><em>really important</em></strong>.<br>This is really <em><strong>very</strong></em> important text.</p><p>Strikethrough uses two tildes: ~~scratch this~~</p>",
+            test('headings HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_HEADINGS)).toBe(
+                    '<p># Heading level 1</p><p>## Heading level 2</p><p>### Heading level 3</p><p>#### Heading level 4</p><p>##### Heading level 5</p><p>###### Heading level 6</p>',
                 )
             })
-        })
 
-        describe('without `codeblock` extension', () => {
-            test('code block HTML output is correct', () => {
-                const customSerializer = createHTMLSerializer(
-                    getSchema([
-                        RichTextKit.configure({
-                            codeBlock: false,
-                        }),
-                    ]),
+            test('paragraphs HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_PARAGRAPHS)).toBe(
+                    "<p>I really like using Markdown.</p><p>I think I'll use it to format all of my documents from now on.</p>",
                 )
+            })
 
-                expect(customSerializer.serialize(MARKDOWN_INPUT_CODE_BLOCK))
-                    .toBe(`<pre><code>&lt;html&gt;
+            test('line breaks HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_LINE_BREAKS)).toBe(
+                    `<p>This is the first line.
+And this is the second line.</p>`,
+                )
+            })
+
+            test('styled text HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_TEXT))
+                    .toBe(`<p>I just love **bold text**.
+I just love __bold text__.</p><p>Italicized text is the *cat's meow*.
+Italicized text is the _cat's meow_.</p><p>This text is ***really important***.
+This text is ___really important___.
+This text is __*really important*__.
+This text is **_really important_**.
+This is really ***very*** important text.</p><p>Strikethrough uses two tildes: ~~scratch this~~</p>`)
+            })
+
+            test('blockquotes HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_BLOCKQUOTES)).toBe(
+                    '<p>&gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p>&gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p>&gt;</p><p>&gt; The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.</p><p>&gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p>&gt;</p><p>&gt; &gt; The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.</p><p>&gt; #### The quarterly results look great!</p><p>&gt;</p><p>&gt; - Revenue was off the chart.</p><p>&gt; - Profits were higher than ever.</p><p>&gt;</p><p>&gt; _Everything_ is going according to **plan**.</p>',
+                )
+            })
+
+            test('ordered lists HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_ORDERED_LISTS))
+                    .toBe(`<p>1. First item
+2. Second item
+3. Third item
+4. Fourth item</p><p>---</p><p>1. First item</p><p>1. Second item</p><p>1. Third item</p><p>1. Fourth item</p><p>---</p><p>1. First item
+8. Second item
+3. Third item
+5. Fourth item</p><p>---</p><p>1. First item
+2. Second item
+3. Third item
+    1. Indented item
+    2. Indented item
+4. Fourth item</p>`)
+            })
+
+            test('unordered lists HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_UNORDERED_LISTS))
+                    .toBe(`<p>- First item</p><p>- Second item</p><p>- Third item</p><p>- Fourth item</p><p>---</p><p>* First item</p><p>* Second item</p><p>* Third item</p><p>* Fourth item</p><p>---</p><p>+ First item</p><p>+ Second item</p><p>+ Third item</p><p>+ Fourth item</p><p>---</p><p>- First item</p><p>- Second item</p><p>- Third item
+    - Indented item
+    - Indented item</p><p>- Fourth item</p><p>---</p><p>- 1968. A great year!</p><p>- I think 1969 was second best.</p><p>---</p><p>* This is the first list item.</p><p>* Here's the second list item.
+    I need to add another paragraph below the second list item.</p><p>* And here's the third list item.</p>`)
+            })
+
+            test('images HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
+                    '<p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)</p><p>![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)</p><p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")</p><p>[![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")](https://octodex.github.com/octobiwan/)</p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)</p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you\'re looking for!</p><p>![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you\'re looking for!</p>',
+                )
+            })
+
+            test('code HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_CODE)).toBe(
+                    '<p>At the command prompt, type `nano`.</p><p>``Use `code` in your Markdown file.``</p>',
+                )
+            })
+
+            test('code block HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_CODE_BLOCK)).toBe(
+                    `<p>\`\`\`</p>&lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;Test&lt;/title&gt;
   &lt;/head&gt;
 &lt;/html&gt;
-</code></pre>`)
+\`\`\``,
+                )
+            })
+
+            test('block elements HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_INDENTED_BLOCK_ELEMENTS))
+                    .toBe(`<p>1. Blockquote:
+    &gt; Dorothy followed her through many of the beautiful rooms in her castle.
+2. Image:
+    ![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)
+3. Codeblock:
+    \`\`\`
+    &lt;html&gt;
+      &lt;head&gt;
+        &lt;title&gt;Test&lt;/title&gt;
+      &lt;/head&gt;
+    &lt;/html&gt;
+    \`\`\`</p>`)
+            })
+
+            test('horizontal rules HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_LINE_RULES)).toBe(
+                    '<p>***</p><p>_________________</p><p>---</p>',
+                )
+            })
+
+            test('links HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_LINKS))
+                    .toBe(`<p>My favorite search engine is [Duck Duck Go](https://duckduckgo.com).
+My favorite search engine is [Duck Duck Go](https://duckduckgo.com "The best search engine for privacy").</p>`)
+            })
+
+            test('styled links HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_LINKS))
+                    .toBe(`<p>I love supporting the **[EFF](https://eff.org)**.
+This is the *[Markdown Guide](https://www.markdownguide.org)*.
+See the section on [\`code\`](#code).</p>`)
             })
         })
 
-        describe('without `image` extension', () => {
-            test('images HTML output is correct', () => {
-                const customSerializer = createHTMLSerializer(
-                    getSchema([
-                        RichTextKit.configure({
-                            image: false,
-                        }),
-                    ]),
-                )
+        describe('without support for certain extensions', () => {
+            let htmlSerializer: HTMLSerializerReturnType
 
-                expect(customSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
-                    '<img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"><p><a href="https://octodex.github.com/octobiwan/"><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></a></p><p>Octobi Wan Catnobi: </p><p>Octobi Wan Catnobi:  - These are not the droids you\'re looking for!</p><p> - These are not the droids you\'re looking for!</p>',
+            beforeEach(() => {
+                htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
+            })
+
+            test('task lists syntax is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TASK_LISTS)).toBe(
+                    '<ul><li>[ ] First item</li><li>[x] Second item</li><li>[x] Third item</li><li>[ ] Fourth item</li></ul><hr><ul><li>[x] First item</li><li>[ ] Second item</li><li>[ ] Third item</li><li>[x] Fourth item</li></ul><hr><ul><li>[x] First item</li><li>[ ] Second item</li><li>[x] Third item</li><li>[ ] Fourth item</li></ul><hr><ul><li>First item</li><li>Second item</li><li>Third item<ul><li>[ ] Indented item</li><li>[ ] Indented item</li></ul></li><li>Fourth item</li></ul><hr><ul><li>[ ] 1968. A great year!</li><li>[x] I think 1969 was second best.</li></ul><hr><ul><li>[ ] This is the first list item.</li><li>[ ] Here&#39;s the second list item.<br>  I need to add another paragraph below the second list item.</li><li>[ ] And here&#39;s the third list item.</li></ul>',
+                )
+            })
+
+            test('tables syntax is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES)).toBe(
+                    "<p>| Syntax      | Description |<br>| ----------- | ----------- |<br>| Header      | Title       |<br>| Paragraph   | Text        |</p><hr><p>| Syntax | Description |<br>| --- | ----------- |<br>| Header | Title |<br>| Paragraph | Text |</p><hr><p>| Syntax      | Description | Test Text     |<br>| :---        |    :----:   |          ---: |<br>| Header      | Title       | Here's this   |<br>| Paragraph   | Text        | And more      |</p>",
                 )
             })
         })
 
-        describe('with `image` extension (inline)', () => {
+        describe('with `image` extension (inline node rendering)', () => {
             test('images HTML output is correct', () => {
-                const customSerializer = createHTMLSerializer(
+                const htmlSerializer = createHTMLSerializer(
                     getSchema([
                         RichTextKit.configure({
                             image: {
@@ -546,19 +658,19 @@ Answer: [Doist Frontend](channel://190200)`),
                     ]),
                 )
 
-                expect(customSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
                     '<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></p><p><a href="https://octodex.github.com/octobiwan/"><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></a></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p>',
                 )
             })
         })
 
-        describe('with custom `taskList` extension', () => {
+        describe('with official `taskList`/`taskItem` extensions', () => {
             test('task lists HTML output is correct', () => {
-                const customSerializer = createHTMLSerializer(
+                const htmlSerializer = createHTMLSerializer(
                     getSchema([RichTextKit, TaskList, TaskItem]),
                 )
 
-                expect(customSerializer.serialize(MARKDOWN_INPUT_TASK_LISTS)).toBe(
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TASK_LISTS)).toBe(
                     '<ul data-type="taskList"><li data-type="taskItem" data-checked="false">First item</li><li data-type="taskItem" data-checked="true">Second item</li><li data-type="taskItem" data-checked="true">Third item</li><li data-type="taskItem" data-checked="false">Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="true">First item</li><li data-type="taskItem" data-checked="false">Second item</li><li data-type="taskItem" data-checked="false">Third item</li><li data-type="taskItem" data-checked="true">Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="true">First item</li><li data-type="taskItem" data-checked="false">Second item</li><li data-type="taskItem" data-checked="true">Third item</li><li data-type="taskItem" data-checked="false">Fourth item</li></ul><hr><ul data-type="taskList"><li>First item</li><li>Second item</li><li>Third item<ul data-type="taskList"><li data-type="taskItem" data-checked="false">Indented item</li><li data-type="taskItem" data-checked="false">Indented item</li></ul></li><li>Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="false">1968. A great year!</li><li data-type="taskItem" data-checked="true">I think 1969 was second best.</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="false">This is the first list item.</li><li data-type="taskItem" data-checked="false">Here&#39;s the second list item.<br>  I need to add another paragraph below the second list item.</li><li data-type="taskItem" data-checked="false">And here&#39;s the third list item.</li></ul>',
                 )
             })
@@ -566,42 +678,82 @@ Answer: [Doist Frontend](channel://190200)`),
 
         describe('with custom `*Suggestion` extensions', () => {
             test('suggestion extensions support alphanumeric IDs', () => {
-                const customSerializer = createHTMLSerializer(
+                const htmlSerializer = createHTMLSerializer(
                     getSchema([RichTextKit, createSuggestionExtension('mention')]),
                 )
 
                 expect(
-                    customSerializer.serialize(`Question: Who's the head of the Frontend team?
+                    htmlSerializer.serialize(`Question: Who's the head of the Frontend team?
 Answer: [Henning M](mention://user:190200@doist.dev)`),
                 ).toBe(
                     '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="user:190200@doist.dev" data-label="Henning M"></span></p>',
                 )
             })
 
-            test('mention suggestions HTML output is correct', () => {
-                const customSerializer = createHTMLSerializer(
-                    getSchema([RichTextKit, createSuggestionExtension('mention')]),
-                )
+            describe('with the `Link` extension enabled', () => {
+                let htmlSerializer: HTMLSerializerReturnType
 
-                expect(
-                    customSerializer.serialize(`Question: Who's the head of the Frontend team?
+                beforeEach(() => {
+                    htmlSerializer = createHTMLSerializer(
+                        getSchema([
+                            RichTextKit,
+                            createSuggestionExtension('mention'),
+                            createSuggestionExtension('channel'),
+                        ]),
+                    )
+                })
+
+                test('mention suggestions HTML output is correct', () => {
+                    expect(
+                        htmlSerializer.serialize(`Question: Who's the head of the Frontend team?
 Answer: [Henning M](mention://963827)`),
-                ).toBe(
-                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="963827" data-label="Henning M"></span></p>',
-                )
+                    ).toBe(
+                        '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="963827" data-label="Henning M"></span></p>',
+                    )
+                })
+
+                test('channel suggestions HTML output is correct', () => {
+                    expect(
+                        htmlSerializer.serialize(`Question: What's the best channel on Twist?
+Answer: [Doist Frontend](channel://190200)`),
+                    ).toBe(
+                        '<p>Question: What\'s the best channel on Twist?<br>Answer: <span data-channel="" data-id="190200" data-label="Doist Frontend"></span></p>',
+                    )
+                })
             })
 
-            test('channel suggestions HTML output is correct', () => {
-                const customSerializer = createHTMLSerializer(
-                    getSchema([RichTextKit, createSuggestionExtension('channel')]),
-                )
+            describe('with the `Link` extension disabled', () => {
+                let htmlSerializer: HTMLSerializerReturnType
 
-                expect(
-                    customSerializer.serialize(`Question: What's the best channel on Twist?
+                beforeEach(() => {
+                    htmlSerializer = createHTMLSerializer(
+                        getSchema([
+                            RichTextKit.configure({
+                                link: false,
+                            }),
+                            createSuggestionExtension('mention'),
+                            createSuggestionExtension('channel'),
+                        ]),
+                    )
+                })
+
+                test('mention suggestions HTML output is correct', () => {
+                    expect(
+                        htmlSerializer.serialize(`Question: Who's the head of the Frontend team?
+Answer: [Henning M](mention://963827)`),
+                    ).toBe(
+                        '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="963827" data-label="Henning M"></span></p>',
+                    )
+                })
+
+                test('channel suggestions HTML output is correct', () => {
+                    expect(
+                        htmlSerializer.serialize(`Question: What's the best channel on Twist?
 Answer: [Doist Frontend](channel://190200)`),
-                ).toBe(
-                    '<p>Question: What\'s the best channel on Twist?<br>Answer: <span data-channel="" data-id="190200" data-label="Doist Frontend"></span></p>',
-                )
+                    ).toBe(
+                        '<p>Question: What\'s the best channel on Twist?<br>Answer: <span data-channel="" data-id="190200" data-label="Doist Frontend"></span></p>',
+                    )
+                })
             })
         })
     })

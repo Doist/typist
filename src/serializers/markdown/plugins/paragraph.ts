@@ -12,7 +12,7 @@ function paragraph(nodeType: NodeType, isPlainText: boolean): Turndown.Plugin {
     return (turndown: Turndown) => {
         turndown.addRule(nodeType.name, {
             filter: 'p',
-            replacement: function (content) {
+            replacement(content) {
                 return isPlainText ? `\n${content}\n` : `\n\n${content}\n\n`
             },
         })

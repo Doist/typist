@@ -89,9 +89,13 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
  * a plain-text editor. The editor schema is used to detect which nodes and marks are available in
  * the editor, and only parses the input with the minimal required rules.
  *
+ * **Note:** Unlike the HTML serializer, built-in rules that are not supported by the schema are not
+ * disabled because if the schema does not support certain nodes/marks, the parsing rules don't have
+ * valid HTML elements to match in the editor HTML output.
+ *
  * @param schema The editor schema to be used for nodes and marks detection.
  *
- * @returns A normalized `serialize` function.
+ * @returns A normalized object for the Markdown serializer.
  */
 function createMarkdownSerializer(
     schema: Schema,
@@ -100,16 +104,20 @@ function createMarkdownSerializer(
     // Initialize Turndown with custom options
     const turndown = new Turndown(INITIAL_TURNDOWN_OPTIONS)
 
-    // Turndown ensures Markdown characters are escaped (i.e. `\`) by default, so they are not
-    // interpreted as Markdown when the output is compiled back to HTML. For example, the contents
-    // of `<h1>1. Hello world</h1>` need to be escaped to `1\. Hello world`, otherwise it will be
-    // interpreted as a list item rather than a heading. However, if the schema represents a
-    // plain-text document, we need to override the escape function to return the input as-is, so
-    // that Markdown characters are interpreted as Markdown.
-    // ref: https://github.com/mixmark-io/turndown#escaping-markdown-characters
+    // Turndown was built to convert HTML into Markdown, expecting the input to be standards
+    // compliant HTML. As such, it collapses all whitespace by default, and there's
+    // currently no way to opt-out of this behavior. However, for plain-text editors, we
+    // need to preserve Markdown whitespace (otherwise we lose syntax like nested lists) by
+    // replacing all instances of the space character (but only if it's preceded by another
+    // space character) by the non-breaking space character, and after processing the input
+    // with Turndown, we restore the original space character.
     if (isPlainTextDocument(schema) || options?.escape === false) {
         turndown.escape = (str) => str
     }
+
+    // Overwrite some built-in rules for handling of special behaviours
+    // (see documentation for each extension for more details)
+    turndown.use(paragraph(schema.nodes.paragraph, isPlainTextDocument(schema)))
 
     // Overwrite the built-in `image` rule if the corresponding node exists in the schema
     if (schema.nodes.image) {
@@ -117,13 +125,8 @@ function createMarkdownSerializer(
     }
 
     // Overwrite the built-in `listItem` rule if the corresponding node exists in the schema
-    if (schema.nodes.listItem) {
+    if ((schema.nodes.bulletList || schema.nodes.orderedList) && schema.nodes.listItem) {
         turndown.use(listItem(schema.nodes.listItem))
-    }
-
-    // Overwrite the built-in `paragraph` rule if the corresponding node exists in the schema
-    if (schema.nodes.paragraph) {
-        turndown.use(paragraph(schema.nodes.paragraph, isPlainTextDocument(schema)))
     }
 
     // Add a rule for `strikethrough` if the corresponding node exists in the schema
