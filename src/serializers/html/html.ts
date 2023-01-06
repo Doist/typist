@@ -30,6 +30,13 @@ type HTMLSerializerReturnType = {
 }
 
 /**
+ * [[DESCRIPTION]]
+ */
+type HTMLSerializerInstanceById = {
+    [id: NonEmptyString]: HTMLSerializerReturnType
+}
+
+/**
  * Sensible default options to initialize the Marked parser with.
  *
  * @see https://marked.js.org/using_advanced#options
@@ -135,6 +142,28 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     }
 }
 
-export { createHTMLSerializer, INITIAL_MARKED_OPTIONS }
+/**
+ * [[DESCRIPTION]]
+ */
+const htmlSerializerInstanceById: HTMLSerializerInstanceById = {}
+
+/**
+ * [[DESCRIPTION]]
+ *
+ * @param id [[DESCRIPTION]]
+ * @param schema [[DESCRIPTION]]
+ *
+ * @returns [[DESCRIPTION]]
+ */
+// TODO: Needs unit tests!
+function getHTMLSerializerInstance(id: NonEmptyString, schema: Schema) {
+    if (!htmlSerializerInstanceById[id]) {
+        htmlSerializerInstanceById[id] = createHTMLSerializer(schema)
+    }
+
+    return htmlSerializerInstanceById[id]
+}
+
+export { createHTMLSerializer, getHTMLSerializerInstance, INITIAL_MARKED_OPTIONS }
 
 export type { HTMLSerializerReturnType }
