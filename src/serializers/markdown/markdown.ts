@@ -22,6 +22,13 @@ type MarkdownSerializerOptions = {
 }
 
 /**
+ * [[DESCRIPTION]]
+ */
+type MarkdownSerializerInstanceById = {
+    [id: NonEmptyString]: MarkdownSerializerReturnType
+}
+
+/**
  * The return type for the `createMarkdownSerializer` function.
  */
 type MarkdownSerializerReturnType = {
@@ -178,6 +185,32 @@ function createMarkdownSerializer(
     }
 }
 
-export { BULLET_LIST_MARKER, createMarkdownSerializer }
+/**
+ * [[DESCRIPTION]]
+ */
+const markdownSerializerInstanceById: MarkdownSerializerInstanceById = {}
+
+/**
+ * [[DESCRIPTION]]
+ *
+ * @param id [[DESCRIPTION]]
+ * @param schema [[DESCRIPTION]]
+ *
+ * @returns [[DESCRIPTION]]
+ */
+// TODO: Needs unit tests!
+function getMarkdownSerializerInstance(
+    id: NonEmptyString,
+    schema: Schema,
+    options?: MarkdownSerializerOptions,
+) {
+    if (!markdownSerializerInstanceById[id]) {
+        markdownSerializerInstanceById[id] = createMarkdownSerializer(schema, options)
+    }
+
+    return markdownSerializerInstanceById[id]
+}
+
+export { BULLET_LIST_MARKER, createMarkdownSerializer, getMarkdownSerializerInstance }
 
 export type { MarkdownSerializerReturnType }
