@@ -125,7 +125,7 @@
         "eslint": "8.31.0",
         "eslint-formatter-codeframe": "7.32.1",
         "eslint-import-resolver-typescript": "3.5.2",
-        "eslint-plugin-jest": "27.2.0",
+        "eslint-plugin-jest": "27.2.1",
         "eslint-plugin-simple-import-sort": "8.0.0",
         "eslint-plugin-unicorn": "45.0.2",
         "github-markdown-css": "5.1.0",
