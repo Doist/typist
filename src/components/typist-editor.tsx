@@ -1,5 +1,4 @@
-import { forwardRef, useImperativeHandle, useMemo } from 'react'
-import { useEvent } from 'react-use-event-hook'
+import { forwardRef, useCallback, useImperativeHandle, useMemo } from 'react'
 
 import { getSchema } from '@tiptap/core'
 import { Placeholder } from '@tiptap/extension-placeholder'
@@ -303,45 +302,48 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         [ariaDescribedBy, ariaLabel, ariaLabelledBy, editable, schema],
     )
 
-    const handleCreate = useEvent(function handleCreate(props: CreateProps) {
-        const { view } = props.editor
+    const handleCreate = useCallback(
+        function handleCreate(props: CreateProps) {
+            const { view } = props.editor
 
-        // Apply a selection to the document if one was given and `autoFocus` is `true`
-        if (autoFocus && contentSelection) {
-            view.dispatch(
-                view.state.tr
-                    .setSelection(resolveContentSelection(view.state.doc, contentSelection))
-                    .scrollIntoView(),
-            )
-        }
+            // Apply a selection to the document if one was given and `autoFocus` is `true`
+            if (autoFocus && contentSelection) {
+                view.dispatch(
+                    view.state.tr
+                        .setSelection(resolveContentSelection(view.state.doc, contentSelection))
+                        .scrollIntoView(),
+                )
+            }
 
-        // Move the suggestion plugins to the top of the plugins list so they have a higher priority
-        // than all input rules (such as the ones used for Markdown shortcuts)
-        // ref: https://github.com/ueberdosis/tiptap/issues/2570
-        if (view.state.plugins.length > 0) {
-            const restOfPlugins: Plugin[] = []
-            const suggestionPlugins: Plugin[] = []
+            // Move the suggestion plugins to the top of the plugins list so they have a higher priority
+            // than all input rules (such as the ones used for Markdown shortcuts)
+            // ref: https://github.com/ueberdosis/tiptap/issues/2570
+            if (view.state.plugins.length > 0) {
+                const restOfPlugins: Plugin[] = []
+                const suggestionPlugins: Plugin[] = []
 
-            view.state.plugins.forEach((plugin) => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore: The `Plugin` type does not include `key`
-                if ((plugin.key as string).includes('Suggestion')) {
-                    suggestionPlugins.push(plugin)
-                } else {
-                    restOfPlugins.push(plugin)
-                }
-            })
+                view.state.plugins.forEach((plugin) => {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore: The `Plugin` type does not include `key`
+                    if ((plugin.key as string).includes('Suggestion')) {
+                        suggestionPlugins.push(plugin)
+                    } else {
+                        restOfPlugins.push(plugin)
+                    }
+                })
 
-            view.updateState(
-                view.state.reconfigure({
-                    plugins: [...suggestionPlugins, ...restOfPlugins],
-                }),
-            )
-        }
+                view.updateState(
+                    view.state.reconfigure({
+                        plugins: [...suggestionPlugins, ...restOfPlugins],
+                    }),
+                )
+            }
 
-        // Invoke the user `onCreate` handle after all internal initializations
-        onCreate?.(props)
-    })
+            // Invoke the user `onCreate` handle after all internal initializations
+            onCreate?.(props)
+        },
+        [autoFocus, contentSelection, onCreate],
+    )
 
     const editor = useEditor(
         {
