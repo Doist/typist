@@ -2,7 +2,7 @@ import { escape, kebabCase } from 'lodash-es'
 import { marked } from 'marked'
 
 import { REGEX_LINE_BREAKS } from '../../constants/regular-expressions'
-import { isPlainTextDocument } from '../../helpers/schema'
+import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
 import { buildSuggestionSchemaPartialRegex } from '../../helpers/serializer'
 
 import { checkbox } from './extensions/checkbox'
@@ -33,7 +33,7 @@ type HTMLSerializerReturnType = {
  * [[DESCRIPTION]]
  */
 type HTMLSerializerInstanceById = {
-    [id: NonEmptyString]: HTMLSerializerReturnType
+    [id: string]: HTMLSerializerReturnType
 }
 
 /**
@@ -150,13 +150,14 @@ const htmlSerializerInstanceById: HTMLSerializerInstanceById = {}
 /**
  * [[DESCRIPTION]]
  *
- * @param id [[DESCRIPTION]]
  * @param schema [[DESCRIPTION]]
  *
  * @returns [[DESCRIPTION]]
  */
 // TODO: Needs unit tests!
-function getHTMLSerializerInstance(id: NonEmptyString, schema: Schema) {
+function getHTMLSerializerInstance(schema: Schema) {
+    const id = computeSchemaId(schema)
+
     if (!htmlSerializerInstanceById[id]) {
         htmlSerializerInstanceById[id] = createHTMLSerializer(schema)
     }

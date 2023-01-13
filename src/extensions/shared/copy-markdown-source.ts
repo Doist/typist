@@ -2,8 +2,6 @@ import { Extension, getHTMLFromFragment } from '@tiptap/core'
 
 import { getMarkdownSerializerInstance } from '../../serializers/markdown/markdown'
 
-import type { InternalEditorDataStorage } from '../core/internal-editor-data'
-
 /**
  * The options available to customize the `CopyMarkdownSource` extension.
  */
@@ -37,10 +35,9 @@ const CopyMarkdownSource = Extension.create<CopyMarkdownSourceOptions>({
                 )
 
                 // Serialize the selected content HTML to Markdown
-                const markdownContent = getMarkdownSerializerInstance(
-                    (editor.storage.internalEditorData as InternalEditorDataStorage).id,
-                    editor.schema,
-                ).serialize(getHTMLFromFragment(nodeSelection.content, editor.schema))
+                const markdownContent = getMarkdownSerializerInstance(editor.schema).serialize(
+                    getHTMLFromFragment(nodeSelection.content, editor.schema),
+                )
 
                 // Writes the selected Markdown content to the system clipboard
                 navigator?.clipboard

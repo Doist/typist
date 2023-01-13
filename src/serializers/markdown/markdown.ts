@@ -1,7 +1,7 @@
 import Turndown from 'turndown'
 
 import { REGEX_PUNCTUATION } from '../../constants/regular-expressions'
-import { isPlainTextDocument } from '../../helpers/schema'
+import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
 
 import { image } from './plugins/image'
 import { listItem } from './plugins/list-item'
@@ -16,7 +16,7 @@ import type { Schema } from 'prosemirror-model'
  * [[DESCRIPTION]]
  */
 type MarkdownSerializerInstanceById = {
-    [id: NonEmptyString]: MarkdownSerializerReturnType
+    [id: string]: MarkdownSerializerReturnType
 }
 
 /**
@@ -92,6 +92,7 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
  * valid HTML elements to match in the editor HTML output.
  *
  * @param schema The editor schema to be used for nodes and marks detection.
+ * @param options [[DESCRIPTION]]
  *
  * @returns A normalized object for the Markdown serializer.
  */
@@ -202,13 +203,15 @@ const markdownSerializerInstanceById: MarkdownSerializerInstanceById = {}
 /**
  * [[DESCRIPTION]]
  *
- * @param id [[DESCRIPTION]]
  * @param schema [[DESCRIPTION]]
+ * @param options [[DESCRIPTION]]
  *
  * @returns [[DESCRIPTION]]
  */
 // TODO: Needs unit tests!
-function getMarkdownSerializerInstance(id: NonEmptyString, schema: Schema) {
+function getMarkdownSerializerInstance(schema: Schema) {
+    const id = computeSchemaId(schema)
+
     if (!markdownSerializerInstanceById[id]) {
         markdownSerializerInstanceById[id] = createMarkdownSerializer(schema)
     }
