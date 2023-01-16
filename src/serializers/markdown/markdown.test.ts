@@ -11,6 +11,13 @@ import { createMarkdownSerializer } from './markdown'
 
 import type { MarkdownSerializerReturnType } from './markdown'
 
+const HTML_INPUT_SPECIAL_HTML_CHARS = `Ambition &amp; Balance<br>
+&lt;doist&gt;<br>
+&lt;/doist&gt;<br>
+&lt;doist&gt;&lt;/doist&gt;<br>
+&quot;Doist&quot;<br>
+&#39;Doist&#39;`
+
 const HTML_INPUT_HEADINGS = `<h1>Heading level 1</h1>
 <h2>Heading level 2</h2>
 <h3>Heading level 3</h3>
@@ -94,11 +101,6 @@ const HTML_INPUT_UNORDERED_LISTS = `<ul>
 </ul>
 <hr>
 <ul>
-<li>1968. A great year!</li>
-<li>I think 1969 was second best.</li>
-</ul>
-<hr>
-<ul>
 <li>This is the first list item.</li>
 <li>Here&#39;s the second list item.<br>  I need to add another paragraph below the second list item.</li>
 <li>And here&#39;s the third list item.</li>
@@ -134,11 +136,6 @@ const HTML_INPUT_TASK_LISTS = `<ul data-type="taskList">
 </ul>
 </li>
 <li>Fourth item</li>
-</ul>
-<hr>
-<ul data-type="taskList">
-<li data-type="taskItem" data-checked="false">1968. A great year!</li>
-<li data-type="taskItem" data-checked="true">I think 1969 was second best.</li>
 </ul>
 <hr>
 <ul data-type="taskList">
@@ -183,29 +180,40 @@ const HTML_INPUT_LINKS = `<p>My favorite search engine is <a href="https://duckd
 
 const HTML_INPUT_STYLED_LINKS = `<p>I love supporting the <strong><a href="https://eff.org">EFF</a></strong>.<br>This is the <em><a href="https://www.markdownguide.org">Markdown Guide</a></em>.<br>See the section on <a href="#code"><code>code</code></a>.</p>`
 
+const HTML_INPUT_PONCTUATION_CHARACTERS = `<p>\\' text \\'</p>
+<p>\\! text \\!</p>
+<p>\\" text \\"</p>
+<p>\\# text \\#</p>
+<p>\\$ text \\$</p>
+<p>\\% text \\%</p>
+<p>\\&amp; text \\&amp;</p>
+<p>\\( text \\(</p>
+<p>\\) text \\)</p>
+<p>\\* text \\*</p>
+<p>\\+ text \\+</p>
+<p>\\, text \\,</p>
+<p>\\\\ text \\\\</p>
+<p>\\- text \\-</p>
+<p>\\. text \\.</p>
+<p>\\/ text \\/</p>
+<p>\\: text \\:</p>
+<p>\\; text \\;</p>
+<p>\\&lt; text \\&lt;</p>
+<p>\\= text \\=</p>
+<p>\\&gt; text \\&gt;</p>
+<p>\\? text \\?</p>
+<p>\\@ text \\@</p>
+<p>\\[ text \\[</p>
+<p>\\] text \\]</p>
+<p>\\^ text \\^</p>
+<p>\\_ text \\_</p>
+<p>\\\` text \\\`</p>
+<p>\\{ text \\{</p>
+<p>\\| text \\|</p>
+<p>\\} text \\}</p>
+<p>\\~ text \\~</p>`
+
 describe('Markdown Serializer', () => {
-    const HTML_INPUT_SPECIAL_HTML_CHARS = `Ambition &amp; Balance<br>
-&lt;doist&gt;<br>
-&lt;/doist&gt;<br>
-&lt;doist&gt;&lt;/doist&gt;<br>
-&quot;Doist&quot;<br>
-&#39;Doist&#39;`
-
-    const HTML_INPUT_SPECIAL_MARKDOWN_CHARS = `before \\ after<br>
-before * after<br>
-- after<br>
-+ after<br>
-= after<br>
-=== after<br>
-\` after <br>
-~~~ after<br>
-before [ after<br>
-before ] after<br>
-> after<br>
-before _ after<br>
-1. after<br>
-99. after<br>`
-
     describe('Plain-text Document', () => {
         describe('with default extensions', () => {
             let markdownSerializer: MarkdownSerializerReturnType
@@ -227,24 +235,6 @@ before _ after<br>
 'Doist'`)
             })
 
-            test('special Markdown characters are NOT escaped', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_MARKDOWN_CHARS))
-                    .toBe(`before \\ after
-before * after
-- after
-+ after
-= after
-=== after
-\` after
-~~~ after
-before [ after
-before ] after
-> after
-before _ after
-1. after
-99. after`)
-            })
-
             test('paragraphs Markdown output is correct', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_PARAGRAPHS)).toBe(
                     `I really like using Markdown.
@@ -258,6 +248,49 @@ I think I'll use it to format all of my documents from now on.`,
                     filter: 'p',
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     replacement: expect.any(Function),
+                })
+            })
+
+            describe('with overridden `escape` function', () => {
+                test('return the input as-is (escaping behaviour disabled)', () => {
+                    expect(
+                        markdownSerializer.serialize(`<p>- 1968. A great year!</p>
+<p>- I think 1969 was second best.</p>`),
+                    ).toBe(`- 1968. A great year!
+- I think 1969 was second best.`)
+                    expect(markdownSerializer.serialize(HTML_INPUT_PONCTUATION_CHARACTERS))
+                        .toBe(`\\' text \\'
+\\! text \\!
+\\" text \\"
+\\# text \\#
+\\$ text \\$
+\\% text \\%
+\\& text \\&
+\\( text \\(
+\\) text \\)
+\\* text \\*
+\\+ text \\+
+\\, text \\,
+\\\\ text \\\\
+\\- text \\-
+\\. text \\.
+\\/ text \\/
+\\: text \\:
+\\; text \\;
+\\< text \\<
+\\= text \\=
+\\> text \\>
+\\? text \\?
+\\@ text \\@
+\\[ text \\[
+\\] text \\]
+\\^ text \\^
+\\_ text \\_
+\\\` text \\\`
+\\{ text \\{
+\\| text \\|
+\\} text \\}
+\\~ text \\~`)
                 })
             })
         })
@@ -292,7 +325,7 @@ Answer: [Doist Frontend](channel://190200)`)
     })
 
     describe('Rich-text Document', () => {
-        describe('without default extensions', () => {
+        describe('with default extensions', () => {
             let markdownSerializer: MarkdownSerializerReturnType
 
             beforeEach(() => {
@@ -307,24 +340,6 @@ Answer: [Doist Frontend](channel://190200)`)
 <doist></doist>
 "Doist"
 'Doist'`)
-            })
-
-            test('special Markdown characters are escaped', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_MARKDOWN_CHARS))
-                    .toBe(`before \\\\ after
-before \\* after
-\\- after
-\\+ after
-\\= after
-\\=== after
-\\\` after
-\\~~~ after
-before \\[ after
-before \\] after
-\\> after
-before \\_ after
-1\\. after
-99\\. after`)
             })
 
             test('headings Markdown output is correct', () => {
@@ -427,11 +442,6 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 
 ---
 
-- 1968\\. A great year!
-- I think 1969 was second best.
-
----
-
 - This is the first list item.
 - Here's the second list item.
     I need to add another paragraph below the second list item.
@@ -468,11 +478,6 @@ Strikethrough uses two tildes: ~~scratch this~~`,
     -   Indented item
     -   Indented item
 - Fourth item
-
----
-
--   1968\\. A great year!
--   I think 1969 was second best.
 
 ---
 
@@ -554,15 +559,83 @@ See the section on [\`code\`](#code).`,
                 )
             })
 
-            test('special Markdown characters are NOT escaped if `escape` is disabled', () => {
-                const customSerializer = createMarkdownSerializer(getSchema([RichTextKit]), {
-                    escape: false,
+            describe('with overridden `escape` function', () => {
+                test('backslash characters preceding punctuation characters are escaped correctly', () => {
+                    expect(markdownSerializer.serialize(HTML_INPUT_PONCTUATION_CHARACTERS))
+                        .toBe(`\\\\' text \\\\'
+
+\\\\! text \\\\!
+
+\\\\" text \\\\"
+
+\\\\# text \\\\#
+
+\\\\$ text \\\\$
+
+\\\\% text \\\\%
+
+\\\\& text \\\\&
+
+\\\\( text \\\\(
+
+\\\\) text \\\\)
+
+\\\\* text \\\\*
+
+\\\\+ text \\\\+
+
+\\\\, text \\\\,
+
+\\\\\\ text \\\\\\
+
+\\\\- text \\\\-
+
+\\\\. text \\\\.
+
+\\\\/ text \\\\/
+
+\\\\: text \\\\:
+
+\\\\; text \\\\;
+
+\\\\< text \\\\<
+
+\\\\= text \\\\=
+
+\\\\> text \\\\>
+
+\\\\? text \\\\?
+
+\\\\@ text \\\\@
+
+\\\\[ text \\\\[
+
+\\\\] text \\\\]
+
+\\\\^ text \\\\^
+
+\\\\_ text \\\\_
+
+\\\\\` text \\\\\`
+
+\\\\{ text \\\\{
+
+\\\\| text \\\\|
+
+\\\\} text \\\\}
+
+\\\\~ text \\\\~`)
                 })
-                expect(
-                    customSerializer.serialize(
-                        `<p><strong>Wrapped markdown</strong> **still markdown**</p>`,
-                    ),
-                ).toBe(`**Wrapped markdown** **still markdown**`)
+
+                test('text content that matches the ordered list syntax is escaped correctly', () => {
+                    expect(
+                        markdownSerializer.serialize(`<ul>
+<li>1968. A great year!</li>
+<li>I think 1969 was second best.</li>
+</ul>`),
+                    ).toBe(`- 1968\\. A great year!
+- I think 1969 was second best.`)
+                })
             })
         })
 
@@ -617,11 +690,6 @@ See the section on [\`code\`](#code).`,
     -   Indented item
     -   Indented item
 -   Fourth item
-
----
-
--   1968\\. A great year!
--   I think 1969 was second best.
 
 ---
 
@@ -683,11 +751,6 @@ See the section on [\`code\`](#code).`,
     - [ ] Indented item
     - [ ] Indented item
 - Fourth item
-
----
-
-- [ ] 1968\\. A great year!
-- [x] I think 1969 was second best.
 
 ---
 
