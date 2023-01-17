@@ -145,7 +145,7 @@
         "rimraf": "3.0.2",
         "semantic-release": "19.0.5",
         "storybook-css-modules": "1.0.8",
-        "ts-jest": "29.0.3",
+        "ts-jest": "29.0.4",
         "ts-node": "10.9.1",
         "type-fest": "3.5.1",
         "typescript": "4.9.4",
