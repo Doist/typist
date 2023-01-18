@@ -33,7 +33,7 @@ export const Commands: ComponentStoryObj<typeof TypistEditor> = {
                 typistEditorRef.current?.getEditor().chain().focus().extendWordRange().run()
             })
 
-            const handleInsertMarkdownContent = useEvent(() => {
+            const handleInsertMarkdownContentClick = useEvent(() => {
                 typistEditorRef.current
                     ?.getEditor()
                     .chain()
@@ -53,7 +53,10 @@ export const Commands: ComponentStoryObj<typeof TypistEditor> = {
                                 <Button variant="secondary" onClick={handleExtendWordRangeClick}>
                                     extendWordRange
                                 </Button>
-                                <Button variant="secondary" onClick={handleInsertMarkdownContent}>
+                                <Button
+                                    variant="secondary"
+                                    onClick={handleInsertMarkdownContentClick}
+                                >
                                     insertMarkdownContent
                                 </Button>
                             </>
