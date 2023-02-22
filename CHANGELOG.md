@@ -1,3 +1,9 @@
+## [1.0.16](https://github.com/Doist/typist/compare/v1.0.15...v1.0.16) (2023-02-22)
+
+### Bug Fixes
+
+-   Replace usage of useEvent with useCallback ([#98](https://github.com/Doist/typist/issues/98)) ([3b175f7](https://github.com/Doist/typist/commit/3b175f77cf0fa638a8ad267959ab720d24815fdd))
+
 ## [1.0.15](https://github.com/Doist/typist/compare/v1.0.14...v1.0.15) (2023-02-14)
 
 ### Bug Fixes
