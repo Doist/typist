@@ -1,3 +1,9 @@
+## [1.0.18](https://github.com/Doist/typist/compare/v1.0.17...v1.0.18) (2023-02-23)
+
+### Bug Fixes
+
+-   **deps:** Migrate ProseMirror dependencies to `@tiptap/pm` package ([#151](https://github.com/Doist/typist/issues/151)) ([d2a8eae](https://github.com/Doist/typist/commit/d2a8eaefa0dc57579aa97f170e37dae17c77590d))
+
 ## [1.0.17](https://github.com/Doist/typist/compare/v1.0.16...v1.0.17) (2023-02-23)
 
 ### Bug Fixes
