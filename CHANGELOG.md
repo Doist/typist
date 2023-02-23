@@ -1,3 +1,9 @@
+## [1.0.17](https://github.com/Doist/typist/compare/v1.0.16...v1.0.17) (2023-02-23)
+
+### Bug Fixes
+
+-   **markdown-serializer:** Override Turndown escaping behaviour with custom rules ([#102](https://github.com/Doist/typist/issues/102)) ([6950afb](https://github.com/Doist/typist/commit/6950afb61bd22a3b029e7f688f5e704402290e5a))
+
 ## [1.0.16](https://github.com/Doist/typist/compare/v1.0.15...v1.0.16) (2023-02-22)
 
 ### Bug Fixes
