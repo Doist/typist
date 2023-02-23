@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useEvent } from 'react-use-event-hook'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Box, Column, Columns } from '@doist/reactist'
 
@@ -39,9 +38,9 @@ function TypistEditorDecorator({
 
     const shouldRenderToolbar = typistEditor && withToolbar
 
-    const handleUpdate = useEvent((props: UpdateProps) => {
+    const handleUpdate = useCallback((props: UpdateProps) => {
         setMarkdownOutput(props.getMarkdown())
-    })
+    }, [])
 
     useEffect(
         function updateMarkdownOutputOnContentControlChange() {

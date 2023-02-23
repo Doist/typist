@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useEvent } from 'react-use-event-hook'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { action } from '@storybook/addon-actions'
 import { clamp, random } from 'lodash-es'
@@ -87,7 +86,7 @@ export const Default: ComponentStoryObj<typeof TypistEditor> = {
                 [imageAttachmentsProgress],
             )
 
-            const handleImageFilePaste = useEvent((file: File) => {
+            const handleImageFilePaste = useCallback((file: File) => {
                 const attachmentId = Math.random().toString(16).slice(2, 10)
 
                 setImageAttachmentsProgress((prevState) => ({ ...prevState, [attachmentId]: 0 }))
@@ -107,7 +106,7 @@ export const Default: ComponentStoryObj<typeof TypistEditor> = {
                 }
 
                 fileReader.readAsDataURL(file)
-            })
+            }, [])
 
             const extensions = useMemo(
                 function configureExtensions() {
@@ -162,7 +161,7 @@ export const Singleline: ComponentStoryObj<typeof TypistEditor> = {
     },
     decorators: [
         (Story, context) => {
-            const handleKeyDown = useEvent((event: KeyboardEvent, view: EditorView) => {
+            const handleKeyDown = useCallback((event: KeyboardEvent, view: EditorView) => {
                 if (event.key === 'Enter') {
                     action('onEnterPressed')({
                         event,
@@ -170,7 +169,7 @@ export const Singleline: ComponentStoryObj<typeof TypistEditor> = {
                     })
                     return true
                 }
-            })
+            }, [])
 
             return (
                 <TypistEditorDecorator

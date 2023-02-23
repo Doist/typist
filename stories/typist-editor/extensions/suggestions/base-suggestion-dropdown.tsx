@@ -1,5 +1,4 @@
-import { useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { useEvent } from 'react-use-event-hook'
+import { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import { Box, Inline, Text } from '@doist/reactist'
 
@@ -32,13 +31,16 @@ function BaseSuggestionDropdown<TItem extends object>({
     const areSuggestionsLoading = items.length === 1 && 'isLoading' in items[0]
     const areSuggestionsEmpty = items.length === 0
 
-    const handleItemSelect = useEvent((index: number) => {
-        const item = items[index]
+    const handleItemSelect = useCallback(
+        (index: number) => {
+            const item = items[index]
 
-        if (item) {
-            onItemSelect(item)
-        }
-    })
+            if (item) {
+                onItemSelect(item)
+            }
+        },
+        [items, onItemSelect],
+    )
 
     useEffect(
         function scrollSelectedItemIntoView() {

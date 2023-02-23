@@ -35,5 +35,3 @@ function PlainTextEditorContainer({ content }) {
     return <TypistEditor content={content} extensions={extensions} />
 }
 ```
-
-The same is true for event handler properties, such as the `onUpdate`, `onTransaction`, and all others. For these, you may consider wrapping them with `useEvent` from the third-party [`react-use-event-hook`](https://github.com/scottrippey/react-use-event-hook) package, which keeps the callback reference more stable than `useCallback` while invoking the callback with always up-to-date properties and state. Please refer to [Usage → Helpers](/?path=/docs/documentation-usage-helpers--page) for a `useEvent` example.
