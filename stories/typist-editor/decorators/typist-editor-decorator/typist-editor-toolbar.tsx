@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import {
     RiArrowGoBackLine,
     RiArrowGoForwardLine,
@@ -25,7 +25,6 @@ import {
     RiStrikethrough,
     RiTextWrap,
 } from 'react-icons/ri'
-import { useEvent } from 'react-use-event-hook'
 
 import { Box, Button } from '@doist/reactist'
 
@@ -61,7 +60,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
         [editor, forceRerender],
     )
 
-    const handleLinkButtonClick = useEvent(() => {
+    const handleLinkButtonClick = useCallback(() => {
         const previousUrl = String(editor.getAttributes('link').href || '')
         const newUrl = window.prompt('Link URL', previousUrl)
 
@@ -71,9 +70,9 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
         }
 
         editor.chain().focus().extendMarkRange('link').setLink({ href: newUrl }).run()
-    })
+    }, [editor])
 
-    const handleImageButtonClick = useEvent(() => {
+    const handleImageButtonClick = useCallback(() => {
         const newUrl = window.prompt('Image URL')
 
         if (newUrl === null) {
@@ -82,7 +81,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
         }
 
         editor.chain().focus().insertImage({ src: newUrl }).run()
-    })
+    }, [editor])
 
     return (
         <Box

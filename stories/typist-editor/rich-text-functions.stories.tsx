@@ -1,5 +1,4 @@
-import { useRef } from 'react'
-import { useEvent } from 'react-use-event-hook'
+import { useCallback, useRef } from 'react'
 
 import { Button } from '@doist/reactist'
 
@@ -29,18 +28,18 @@ export const Commands: ComponentStoryObj<typeof TypistEditor> = {
         (Story, context) => {
             const typistEditorRef = useRef<TypistEditorRef>(null)
 
-            const handleExtendWordRangeClick = useEvent(() => {
+            const handleExtendWordRangeClick = useCallback(() => {
                 typistEditorRef.current?.getEditor().chain().focus().extendWordRange().run()
-            })
+            }, [])
 
-            const handleInsertMarkdownContentClick = useEvent(() => {
+            const handleInsertMarkdownContentClick = useCallback(() => {
                 typistEditorRef.current
                     ?.getEditor()
                     .chain()
                     .focus()
                     .insertMarkdownContent(MARKDOWN_PLACEHOLDER)
                     .run()
-            })
+            }, [])
 
             return (
                 <TypistEditorDecorator
@@ -74,19 +73,19 @@ export const Helpers: ComponentStoryObj<typeof TypistEditor> = {
         (Story, context) => {
             const typistEditorRef = useRef<TypistEditorRef>(null)
 
-            const handleGetEditorClick = useEvent(() => {
+            const handleGetEditorClick = useCallback(() => {
                 action('getEditor')(typistEditorRef.current?.getEditor())
-            })
+            }, [])
 
-            const handleGetMarkdownClick = useEvent(() => {
+            const handleGetMarkdownClick = useCallback(() => {
                 action('getMarkdown')(typistEditorRef.current?.getMarkdown() || '<empty>')
-            })
+            }, [])
 
-            const handleGetAllNodesAttributesByTypeClick = useEvent(() => {
+            const handleGetAllNodesAttributesByTypeClick = useCallback(() => {
                 action('getAllNodesAttributesByType')(
                     typistEditorRef.current?.getAllNodesAttributesByType('mentionSuggestion'),
                 )
-            })
+            }, [])
 
             return (
                 <TypistEditorDecorator

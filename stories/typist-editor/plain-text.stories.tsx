@@ -1,4 +1,4 @@
-import { useEvent } from 'react-use-event-hook'
+import { useCallback } from 'react'
 
 import { action } from '@storybook/addon-actions'
 
@@ -57,7 +57,7 @@ export const Singleline: ComponentStoryObj<typeof TypistEditor> = {
     },
     decorators: [
         (Story, context) => {
-            const handleKeyDown = useEvent((event: KeyboardEvent, view: EditorView) => {
+            const handleKeyDown = useCallback((event: KeyboardEvent, view: EditorView) => {
                 if (event.key === 'Enter') {
                     action('onEnterPressed')({
                         event,
@@ -65,7 +65,7 @@ export const Singleline: ComponentStoryObj<typeof TypistEditor> = {
                     })
                     return true
                 }
-            })
+            }, [])
 
             return (
                 <TypistEditorDecorator
