@@ -4,6 +4,8 @@ import { camelCase, kebabCase } from 'lodash-es'
 import { PluginKey } from 'prosemirror-state'
 
 import { SUGGESTION_EXTENSION_PRIORITY } from '../constants/extension-priorities'
+import { canInsertNodeAt } from '../utilities/can-insert-node-at'
+import { canInsertSuggestion } from '../utilities/can-insert-suggestion'
 
 import type {
     SuggestionKeyDownProps as CoreSuggestionKeyDownProps,
@@ -268,10 +270,11 @@ function createSuggestionExtension<
                             ) || []
                         )
                     },
-                    allow({ editor, range }) {
-                        return editor.can().insertContentAt(range, {
-                            type: nodeType,
-                        })
+                    allow({ editor, range, state }) {
+                        return (
+                            canInsertNodeAt({ editor, nodeType, range }) &&
+                            canInsertSuggestion({ editor, state })
+                        )
                     },
                     command({ editor, range, props }) {
                         const nodeAfter = editor.view.state.selection.$to.nodeAfter
