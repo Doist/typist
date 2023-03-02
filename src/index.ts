@@ -31,6 +31,8 @@ export { createSuggestionExtension } from './factories/create-suggestion-extensi
 export { isMultilineDocument, isPlainTextDocument } from './helpers/schema'
 export { createHTMLSerializer } from './serializers/html/html'
 export { createMarkdownSerializer } from './serializers/markdown/markdown'
+export { canInsertNodeAt } from './utilities/can-insert-node-at'
+export { canInsertSuggestion } from './utilities/can-insert-suggestion'
 export type { AnyConfig, Editor as CoreEditor, EditorEvents, MarkRange, Range } from '@tiptap/core'
 export {
     combineTransactionSteps,
