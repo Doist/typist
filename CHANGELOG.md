@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/Doist/typist/compare/v1.0.19...v1.1.0) (2023-03-02)
+
+### Features
+
+-   Disallow suggestions inside inline code marks and code blocks ([#154](https://github.com/Doist/typist/issues/154)) ([7d75314](https://github.com/Doist/typist/commit/7d75314b80ef66383c24b06022c47e25d01425f6))
+
 ## [1.0.19](https://github.com/Doist/typist/compare/v1.0.18...v1.0.19) (2023-02-23)
 
 ### Bug Fixes
