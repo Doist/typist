@@ -1,4 +1,4 @@
-import { Editor, Range } from '@tiptap/core'
+import type { Editor, Range } from '@tiptap/core'
 
 /**
  * Check if a node of a specific type can be inserted at a specific position in the editor.
