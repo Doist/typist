@@ -13,13 +13,6 @@ import { taskItem } from './plugins/task-item'
 import type { Schema } from 'prosemirror-model'
 
 /**
- * [[DESCRIPTION]]
- */
-type MarkdownSerializerInstanceById = {
-    [id: string]: MarkdownSerializerReturnType
-}
-
-/**
  * The return type for the `createMarkdownSerializer` function.
  */
 type MarkdownSerializerReturnType = {
@@ -31,6 +24,13 @@ type MarkdownSerializerReturnType = {
      * @returns The serialized Markdown.
      */
     serialize: (html: string) => string
+}
+
+/**
+ * The type for the object that holds multiple Markdown serializer instances.
+ */
+type MarkdownSerializerInstanceById = {
+    [id: string]: MarkdownSerializerReturnType
 }
 
 /**
@@ -92,7 +92,6 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
  * valid HTML elements to match in the editor HTML output.
  *
  * @param schema The editor schema to be used for nodes and marks detection.
- * @param options [[DESCRIPTION]]
  *
  * @returns A normalized object for the Markdown serializer.
  */
@@ -196,19 +195,17 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
 }
 
 /**
- * [[DESCRIPTION]]
+ * Object that holds multiple Markdown serializer instances based on a given ID.
  */
 const markdownSerializerInstanceById: MarkdownSerializerInstanceById = {}
 
 /**
- * [[DESCRIPTION]]
+ * Returns a singleton instance of a Markdown serializer based on the provided editor schema.
  *
- * @param schema [[DESCRIPTION]]
- * @param options [[DESCRIPTION]]
+ * @param schema The editor schema connected to the Markdown serializer instance.
  *
- * @returns [[DESCRIPTION]]
+ * @returns The Markdown serializer instance for the given editor schema.
  */
-// TODO: Needs unit tests!
 function getMarkdownSerializerInstance(schema: Schema) {
     const id = computeSchemaId(schema)
 

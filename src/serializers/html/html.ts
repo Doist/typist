@@ -30,7 +30,7 @@ type HTMLSerializerReturnType = {
 }
 
 /**
- * [[DESCRIPTION]]
+ * The type for the object that holds multiple HTML serializer instances.
  */
 type HTMLSerializerInstanceById = {
     [id: string]: HTMLSerializerReturnType
@@ -143,18 +143,17 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
 }
 
 /**
- * [[DESCRIPTION]]
+ * Object that holds multiple HTML serializer instances based on a given ID.
  */
 const htmlSerializerInstanceById: HTMLSerializerInstanceById = {}
 
 /**
- * [[DESCRIPTION]]
+ * Returns a singleton instance of a HTML serializer based on the provided editor schema.
  *
- * @param schema [[DESCRIPTION]]
+ * @param schema The editor schema connected to the HTML serializer instance.
  *
- * @returns [[DESCRIPTION]]
+ * @returns The HTML serializer instance for the given editor schema.
  */
-// TODO: Needs unit tests!
 function getHTMLSerializerInstance(schema: Schema) {
     const id = computeSchemaId(schema)
 
