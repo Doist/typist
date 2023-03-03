@@ -7,7 +7,7 @@ import { PlainTextKit } from '../../extensions/plain-text/plain-text-kit'
 import { RichTextKit } from '../../extensions/rich-text/rich-text-kit'
 import { createSuggestionExtension } from '../../factories/create-suggestion-extension'
 
-import { createMarkdownSerializer } from './markdown'
+import { createMarkdownSerializer, getMarkdownSerializerInstance } from './markdown'
 
 import type { MarkdownSerializerReturnType } from './markdown'
 
@@ -214,6 +214,26 @@ const HTML_INPUT_PONCTUATION_CHARACTERS = `<p>\\' text \\'</p>
 <p>\\~ text \\~</p>`
 
 describe('Markdown Serializer', () => {
+    describe('Singleton Instances', () => {
+        describe('when the editor schema for two Markdown serializers are the same', () => {
+            test('`getMarkdownSerializerInstance` returns the same instance', () => {
+                const markdownSerializerA = getMarkdownSerializerInstance(getSchema([PlainTextKit]))
+                const markdownSerializerB = getMarkdownSerializerInstance(getSchema([PlainTextKit]))
+
+                expect(markdownSerializerA).toBe(markdownSerializerB)
+            })
+        })
+
+        describe('when the editor schema for two Markdown serializers are NOT the same', () => {
+            test('`getMarkdownSerializerInstance` returns different instances', () => {
+                const markdownSerializerA = getMarkdownSerializerInstance(getSchema([PlainTextKit]))
+                const markdownSerializerB = getMarkdownSerializerInstance(getSchema([RichTextKit]))
+
+                expect(markdownSerializerA).not.toBe(markdownSerializerB)
+            })
+        })
+    })
+
     describe('Plain-text Document', () => {
         describe('with default extensions', () => {
             let markdownSerializer: MarkdownSerializerReturnType
@@ -640,17 +660,21 @@ See the section on [\`code\`](#code).`,
         })
 
         describe('without custom extensions', () => {
-            const markdownSerializer = createMarkdownSerializer(
-                getSchema([
-                    RichTextKit.configure({
-                        bulletList: false,
-                        image: false,
-                        listItem: false,
-                        orderedList: false,
-                        strike: false,
-                    }),
-                ]),
-            )
+            let markdownSerializer: MarkdownSerializerReturnType
+
+            beforeEach(() => {
+                markdownSerializer = createMarkdownSerializer(
+                    getSchema([
+                        RichTextKit.configure({
+                            bulletList: false,
+                            image: false,
+                            listItem: false,
+                            orderedList: false,
+                            strike: false,
+                        }),
+                    ]),
+                )
+            })
 
             test('ordered lists Markdown output is correct', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_ORDERED_LISTS)).toBe(`1.  First item
