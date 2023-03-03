@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/Doist/typist/compare/v1.1.0...v1.1.1) (2023-03-03)
+
+### Bug Fixes
+
+-   Invalid `hasCodeMarkBefore` check in `canInsertSuggestion` utility function ([#156](https://github.com/Doist/typist/issues/156)) ([21826c5](https://github.com/Doist/typist/commit/21826c58f763d020d3810fe373ab2524e0f0448e))
+
 ## [1.1.0](https://github.com/Doist/typist/compare/v1.0.19...v1.1.0) (2023-03-02)
 
 ### Features
