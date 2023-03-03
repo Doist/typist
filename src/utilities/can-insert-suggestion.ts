@@ -1,5 +1,5 @@
-import { Editor } from '@tiptap/core'
-import { EditorState } from '@tiptap/pm/state'
+import type { Editor } from '@tiptap/core'
+import type { EditorState } from '@tiptap/pm/state'
 
 /**
  * Check if a suggestion can be inserted within the current editor selection.
@@ -13,13 +13,15 @@ function canInsertSuggestion({ editor, state }: { editor: Editor; state: EditorS
 
     const isInsideCodeBlockNode = selection.$from.parent.type.name === 'codeBlock'
 
-    const hasCodeMarkBefore = state.doc
-        .nodeAt(selection.$from.parentOffset - 1)
-        ?.marks.some((mark) => mark.type.name === 'code')
+    const wordsBeforeSelection = (selection.$from.nodeBefore?.text ?? '').split(' ')
 
-    const isComposingInlineCode = selection.$from.nodeBefore?.text
-        ?.split(' ')
-        .some((word) => word.startsWith('`'))
+    const hasCodeMarkBefore =
+        (selection.$from.parent.cut(
+            selection.$from.parentOffset - wordsBeforeSelection.slice(-1)[0].length - 1,
+            selection.$from.parentOffset - 1,
+        ).content.firstChild?.marks.length ?? 0) > 0
+
+    const isComposingInlineCode = wordsBeforeSelection.some((word) => word.startsWith('`'))
 
     return (
         !isInsideCodeMark && !isInsideCodeBlockNode && !hasCodeMarkBefore && !isComposingInlineCode
