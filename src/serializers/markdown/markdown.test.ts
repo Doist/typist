@@ -636,6 +636,45 @@ See the section on [\`code\`](#code).`,
                     ).toBe(`- 1968\\. A great year!
 - I think 1969 was second best.`)
                 })
+
+                test('horizontal rules syntax (with uncompletable tasks support) is escaped correctly', () => {
+                    expect(
+                        markdownSerializer.serialize(`<p>***</p>
+<p>* ***</p>
+<p>*********</p>
+<p>* *********</p>
+<p>---</p>
+<p>* ---</p>
+<p>---------</p>
+<p>* ---------</p>
+<p>___</p>
+<p>* ___</p>
+<p>_________</p>
+<p>* _________</p>`),
+                    ).toBe(`\\***
+
+* \\***
+
+\\*********
+
+* \\*********
+
+\\---
+
+* \\---
+
+\\---------
+
+* \\---------
+
+\\___
+
+* \\___
+
+\\_________
+
+* \\_________`)
+                })
             })
         })
 

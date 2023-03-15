@@ -120,6 +120,13 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
                     // make sure that text context that matches the ordered list syntax is
                     // correctly escaped in order to be interpreted as text.
                     .replace(/^(\d+)\.(\s.+|$)/, '$1\\.$2')
+
+                    // When an editor is configured without support for horizontal rules, we need to
+                    // make sure that all horizontal rule patterns in the CommonMark specification
+                    // are properly escaped so that it's interpreted as text and not Markdown. This
+                    // regular expression includes additional support for the uncompletable tasks
+                    // syntax in Todoist (such tasks start with `*<space>`).
+                    .replace(/(^|^\*\s)(\*{3,}|-{3,}|_{3,})/, '$1\\$2')
             )
         }
     }
