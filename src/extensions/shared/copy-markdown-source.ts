@@ -1,6 +1,6 @@
 import { Extension, getHTMLFromFragment } from '@tiptap/core'
 
-import { createMarkdownSerializer } from '../../serializers/markdown/markdown'
+import { getMarkdownSerializerInstance } from '../../serializers/markdown/markdown'
 
 /**
  * The options available to customize the `CopyMarkdownSource` extension.
@@ -35,7 +35,7 @@ const CopyMarkdownSource = Extension.create<CopyMarkdownSourceOptions>({
                 )
 
                 // Serialize the selected content HTML to Markdown
-                const markdownContent = createMarkdownSerializer(editor.schema).serialize(
+                const markdownContent = getMarkdownSerializerInstance(editor.schema).serialize(
                     getHTMLFromFragment(nodeSelection.content, editor.schema),
                 )
 

@@ -8,8 +8,8 @@ import { ExtraEditorCommands } from '../extensions/core/extra-editor-commands/ex
 import { ViewEventHandlers, ViewEventHandlersOptions } from '../extensions/core/view-event-handlers'
 import { isMultilineDocument, isPlainTextDocument } from '../helpers/schema'
 import { useEditor } from '../hooks/use-editor'
-import { createHTMLSerializer } from '../serializers/html/html'
-import { createMarkdownSerializer } from '../serializers/markdown/markdown'
+import { getHTMLSerializerInstance } from '../serializers/html/html'
+import { getMarkdownSerializerInstance } from '../serializers/markdown/markdown'
 
 import { getAllNodesAttributesByType, resolveContentSelection } from './typist-editor.helper'
 
@@ -241,7 +241,6 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
     const allExtensions = useMemo(
         function initializeExtensions() {
             return [
-                // Custom core extensions
                 ...(placeholder
                     ? [
                           Placeholder.configure({
@@ -271,13 +270,13 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
 
     const htmlSerializer = useMemo(
         function initializeHTMLSerializer() {
-            return createHTMLSerializer(schema)
+            return getHTMLSerializerInstance(schema)
         },
         [schema],
     )
     const markdownSerializer = useMemo(
         function initializeMarkdownSerializer() {
-            return createMarkdownSerializer(schema)
+            return getMarkdownSerializerInstance(schema)
         },
         [schema],
     )

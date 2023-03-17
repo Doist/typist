@@ -6,7 +6,7 @@ import { PlainTextKit } from '../../extensions/plain-text/plain-text-kit'
 import { RichTextKit } from '../../extensions/rich-text/rich-text-kit'
 import { createSuggestionExtension } from '../../factories/create-suggestion-extension'
 
-import { createHTMLSerializer } from './html'
+import { createHTMLSerializer, getHTMLSerializerInstance } from './html'
 
 import type { HTMLSerializerReturnType } from './html'
 
@@ -242,6 +242,26 @@ const MARKDOWN_INPUT_TABLES = `| Syntax      | Description |
 | Paragraph   | Text        | And more      |`
 
 describe('HTML Serializer', () => {
+    describe('Singleton Instances', () => {
+        describe('when the editor schema for two HTML serializers are the same', () => {
+            test('`getHTMLSerializerInstance` returns the same instance', () => {
+                const htmlSerializerA = getHTMLSerializerInstance(getSchema([PlainTextKit]))
+                const htmlSerializerB = getHTMLSerializerInstance(getSchema([PlainTextKit]))
+
+                expect(htmlSerializerA).toBe(htmlSerializerB)
+            })
+        })
+
+        describe('when the editor schema for two HTML serializers are NOT the same', () => {
+            test('`getHTMLSerializerInstance` returns different instances', () => {
+                const htmlSerializerA = getHTMLSerializerInstance(getSchema([PlainTextKit]))
+                const htmlSerializerB = getHTMLSerializerInstance(getSchema([RichTextKit]))
+
+                expect(htmlSerializerA).not.toBe(htmlSerializerB)
+            })
+        })
+    })
+
     describe('Plain-text Document', () => {
         describe('with default extensions', () => {
             let htmlSerializer: HTMLSerializerReturnType

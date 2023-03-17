@@ -2,7 +2,7 @@ import { escape, kebabCase } from 'lodash-es'
 import { marked } from 'marked'
 
 import { REGEX_LINE_BREAKS } from '../../constants/regular-expressions'
-import { isPlainTextDocument } from '../../helpers/schema'
+import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
 import { buildSuggestionSchemaPartialRegex } from '../../helpers/serializer'
 
 import { checkbox } from './extensions/checkbox'
@@ -27,6 +27,13 @@ type HTMLSerializerReturnType = {
      * @returns The serialized HTML.
      */
     serialize: (markdown: string) => string
+}
+
+/**
+ * The type for the object that holds multiple HTML serializer instances.
+ */
+type HTMLSerializerInstanceById = {
+    [id: string]: HTMLSerializerReturnType
 }
 
 /**
@@ -135,6 +142,28 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     }
 }
 
-export { createHTMLSerializer, INITIAL_MARKED_OPTIONS }
+/**
+ * Object that holds multiple HTML serializer instances based on a given ID.
+ */
+const htmlSerializerInstanceById: HTMLSerializerInstanceById = {}
+
+/**
+ * Returns a singleton instance of a HTML serializer based on the provided editor schema.
+ *
+ * @param schema The editor schema connected to the HTML serializer instance.
+ *
+ * @returns The HTML serializer instance for the given editor schema.
+ */
+function getHTMLSerializerInstance(schema: Schema) {
+    const id = computeSchemaId(schema)
+
+    if (!htmlSerializerInstanceById[id]) {
+        htmlSerializerInstanceById[id] = createHTMLSerializer(schema)
+    }
+
+    return htmlSerializerInstanceById[id]
+}
+
+export { createHTMLSerializer, getHTMLSerializerInstance, INITIAL_MARKED_OPTIONS }
 
 export type { HTMLSerializerReturnType }

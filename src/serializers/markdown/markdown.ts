@@ -1,7 +1,7 @@
 import Turndown from 'turndown'
 
 import { REGEX_PUNCTUATION } from '../../constants/regular-expressions'
-import { isPlainTextDocument } from '../../helpers/schema'
+import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
 
 import { image } from './plugins/image'
 import { listItem } from './plugins/list-item'
@@ -24,6 +24,13 @@ type MarkdownSerializerReturnType = {
      * @returns The serialized Markdown.
      */
     serialize: (html: string) => string
+}
+
+/**
+ * The type for the object that holds multiple Markdown serializer instances.
+ */
+type MarkdownSerializerInstanceById = {
+    [id: string]: MarkdownSerializerReturnType
 }
 
 /**
@@ -187,6 +194,28 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
     }
 }
 
-export { BULLET_LIST_MARKER, createMarkdownSerializer }
+/**
+ * Object that holds multiple Markdown serializer instances based on a given ID.
+ */
+const markdownSerializerInstanceById: MarkdownSerializerInstanceById = {}
+
+/**
+ * Returns a singleton instance of a Markdown serializer based on the provided editor schema.
+ *
+ * @param schema The editor schema connected to the Markdown serializer instance.
+ *
+ * @returns The Markdown serializer instance for the given editor schema.
+ */
+function getMarkdownSerializerInstance(schema: Schema) {
+    const id = computeSchemaId(schema)
+
+    if (!markdownSerializerInstanceById[id]) {
+        markdownSerializerInstanceById[id] = createMarkdownSerializer(schema)
+    }
+
+    return markdownSerializerInstanceById[id]
+}
+
+export { BULLET_LIST_MARKER, createMarkdownSerializer, getMarkdownSerializerInstance }
 
 export type { MarkdownSerializerReturnType }

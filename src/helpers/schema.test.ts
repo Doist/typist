@@ -3,7 +3,7 @@ import { getSchema } from '@tiptap/core'
 import { PlainTextKit } from '../extensions/plain-text/plain-text-kit'
 import { RichTextKit } from '../extensions/rich-text/rich-text-kit'
 
-import { isMultilineDocument, isPlainTextDocument } from './schema'
+import { computeSchemaId, isMultilineDocument, isPlainTextDocument } from './schema'
 
 describe('Helper: Schema', () => {
     describe('#isMultilineDocument', () => {
@@ -55,6 +55,14 @@ describe('Helper: Schema', () => {
 
         test('returns `false` if the schema does NOT contain the `PlainTextKit` extension', () => {
             expect(isPlainTextDocument(getSchema([RichTextKit]))).toBe(false)
+        })
+    })
+
+    describe('#computeSchemaId', () => {
+        test('returns a string ID that matches the given editor schema', () => {
+            expect(computeSchemaId(getSchema([RichTextKit]))).toBe(
+                'link,bold,code,italic,boldAndItalics,strike,paragraph,blockquote,bulletList,codeBlock,doc,hardBreak,heading,horizontalRule,image,listItem,orderedList,text',
+            )
         })
     })
 })
