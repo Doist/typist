@@ -46,7 +46,7 @@ const MentionSuggestion: SuggestionExtensionResult<MentionSuggestionItem> =
             let wasDropdownDestroyed = false
 
             return {
-                onStart: (props) => {
+                onStart(props) {
                     if (wasDropdownDestroyed) {
                         wasDropdownDestroyed = false
                         return
@@ -58,8 +58,12 @@ const MentionSuggestion: SuggestionExtensionResult<MentionSuggestionItem> =
                     })
 
                     dropdown = tippy('body', {
-                        appendTo: () => document.body,
-                        getReferenceClientRect: () => props.clientRect?.() || DOM_RECT_FALLBACK,
+                        appendTo() {
+                            return document.body
+                        },
+                        getReferenceClientRect() {
+                            return props.clientRect?.() || DOM_RECT_FALLBACK
+                        },
                         content: reactRenderer.element,
                         duration: [150, 200],
                         interactive: true,
@@ -78,7 +82,9 @@ const MentionSuggestion: SuggestionExtensionResult<MentionSuggestionItem> =
                     reactRenderer.updateProps(props)
 
                     dropdown[0].setProps({
-                        getReferenceClientRect: () => props.clientRect?.() || DOM_RECT_FALLBACK,
+                        getReferenceClientRect() {
+                            return props.clientRect?.() || DOM_RECT_FALLBACK
+                        },
                     })
                 },
                 onKeyDown(props) {

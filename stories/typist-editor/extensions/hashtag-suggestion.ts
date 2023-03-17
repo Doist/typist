@@ -50,7 +50,7 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
             let wasDropdownDestroyed = false
 
             return {
-                onBeforeStart: (props) => {
+                onBeforeStart(props) {
                     if (wasDropdownDestroyed) {
                         wasDropdownDestroyed = false
                         return
@@ -65,8 +65,12 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
                     })
 
                     dropdown = tippy('body', {
-                        appendTo: () => document.body,
-                        getReferenceClientRect: () => props.clientRect?.() || DOM_RECT_FALLBACK,
+                        appendTo() {
+                            return document.body
+                        },
+                        getReferenceClientRect() {
+                            return props.clientRect?.() || DOM_RECT_FALLBACK
+                        },
                         content: reactRenderer.element,
                         duration: [150, 200],
                         interactive: true,
@@ -85,7 +89,9 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
                     reactRenderer.updateProps(props)
 
                     dropdown[0].setProps({
-                        getReferenceClientRect: () => props.clientRect?.() || DOM_RECT_FALLBACK,
+                        getReferenceClientRect() {
+                            return props.clientRect?.() || DOM_RECT_FALLBACK
+                        },
                     })
                 },
                 onBeforeUpdate(props) {
@@ -99,7 +105,9 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
                     })
 
                     dropdown[0].setProps({
-                        getReferenceClientRect: () => props.clientRect?.() || DOM_RECT_FALLBACK,
+                        getReferenceClientRect() {
+                            return props.clientRect?.() || DOM_RECT_FALLBACK
+                        },
                     })
                 },
                 onUpdate(props) {
@@ -110,7 +118,9 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
                     reactRenderer.updateProps(props)
 
                     dropdown[0].setProps({
-                        getReferenceClientRect: () => props.clientRect?.() || DOM_RECT_FALLBACK,
+                        getReferenceClientRect() {
+                            return props.clientRect?.() || DOM_RECT_FALLBACK
+                        },
                     })
                 },
                 onKeyDown(props) {

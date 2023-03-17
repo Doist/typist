@@ -64,7 +64,7 @@ function BaseSuggestionDropdown<TItem extends object>({
         forwardedRef,
         function exposeKeyboardHandlersToReactRenderer() {
             return {
-                onKeyDown: ({ event }) => {
+                onKeyDown({ event }) {
                     if (event.key === 'ArrowUp') {
                         setSelectedIndex((selectedIndex + items.length - 1) % items.length)
                         return true
