@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/Doist/typist/compare/v1.1.2...v1.2.0) (2023-03-17)
+
+### Features
+
+-   **serializers:** Add `get*` functions for reusable singular instances ([#88](https://github.com/Doist/typist/issues/88)) ([b2c77c3](https://github.com/Doist/typist/commit/b2c77c30b15cd3dd676fc01531ecbeb5a6f7b952))
+
 ## [1.1.2](https://github.com/Doist/typist/compare/v1.1.1...v1.1.2) (2023-03-06)
 
 ### Bug Fixes
