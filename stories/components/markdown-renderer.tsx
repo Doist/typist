@@ -11,7 +11,7 @@ type MarkdownRendererProps = {
 function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
     return (
         <ReactMarkdown
-            className="markdown-body"
+            className="sb-unstyled markdown-body"
             rehypePlugins={[rehypeRaw]}
             remarkPlugins={[remarkGfm]}
             components={{

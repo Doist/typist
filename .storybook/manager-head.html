@@ -16,15 +16,18 @@
 <style type="text/css">
     @namespace xlink 'http://www.w3.org/1999/xlink';
 
-    .sidebar-item[data-nodetype]:hover {
+    .sidebar-item[data-nodetype]:hover,
+    li[class^='search-result'][aria-selected='true'],
+    #panel-tab-content :has(> div[role='button']):hover,
+    [data-testid='tooltip'] a[id^='list-item']:hover {
         background-color: #e3e9e2;
     }
 
     .search-result-item svg,
     .sidebar-item[data-nodetype] svg {
-        width: 14px;
-        height: 14px;
-        margin-top: 2px;
+        width: 16px;
+        height: 16px;
+        margin-top: 1px;
     }
 
     .sidebar-item[data-nodetype='document'] svg {

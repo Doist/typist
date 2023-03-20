@@ -14,6 +14,7 @@ module.exports = {
         '@doist/eslint-config/recommended-requiring-type-checking',
         '@doist/eslint-config/simple-import-sort',
         '@doist/eslint-config/react',
+        'plugin:storybook/recommended',
     ],
     parserOptions: {
         ecmaFeatures: {
@@ -38,7 +39,6 @@ module.exports = {
         // ref: https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
-
         // Experimental `eslint-plugin-unicorn` rules
         // ref: https://github.com/Doist/eslint-config/issues/46
         'unicorn/throw-new-error': 'error',

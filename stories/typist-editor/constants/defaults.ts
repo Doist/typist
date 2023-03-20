@@ -1,10 +1,10 @@
 import { action } from '@storybook/addon-actions'
-import { ComponentMeta } from '@storybook/react'
+import { Meta } from '@storybook/react'
 
 import { TypistEditor, TypistEditorProps } from '../../../src'
 import { RichTextKitOptions } from '../../../src/extensions/rich-text/rich-text-kit'
 
-const DEFAULT_ARG_TYPES: ComponentMeta<typeof TypistEditor>['argTypes'] = {
+const DEFAULT_ARG_TYPES: Meta<typeof TypistEditor>['argTypes'] = {
     extensions: {
         table: {
             disable: true,
