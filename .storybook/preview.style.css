@@ -1,7 +1,7 @@
 :root {
     /*
      * Storybook theme as CSS variables to be used by stories.
-     * (should match values in `preview.style.css`)
+     * (should match values in `theme.ts`)
      */
     --storybook-theme-appBg: #f5f4f2;
     --storybook-theme-appContentBg: #ffffff;
@@ -35,7 +35,7 @@ html {
 
 html,
 body,
-#root {
+#storybook-root {
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
@@ -56,16 +56,16 @@ body,
  * Overwrite `github-markdown-css` style with custom styles.
  */
 
-#docs-root .markdown-body {
+#storybook-docs .markdown-body {
     font-size: 0.875rem;
     line-height: 1.65;
 }
 
-#docs-root .markdown-body :is(code, pre, tt) {
+#storybook-docs .markdown-body :is(code, pre, tt) {
     font-family: var(--storybook-theme-fontCode);
     font-size: 0.8125rem;
 }
 
-#docs-root .sbdocs.sbdocs-wrapper {
+#storybook-docs .sbdocs.sbdocs-wrapper {
     padding: 3rem;
 }

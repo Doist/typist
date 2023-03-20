@@ -6,34 +6,31 @@ import './preview.style.css'
 
 import { theme } from './theme'
 
-export const parameters = {
-    docs: {
-        theme,
-    },
-    options: {
-        isToolshown: true,
-        storySort: {
-            order: [
-                'README',
-                'Documentation',
-                [
-                    'Usage',
-                    ['Basic', 'Singleline', 'Helpers', 'Extensions'],
-                    'Reference',
-                    'Tips & Tricks',
-                    ['Styling', 'Performance'],
+import type { Preview } from '@storybook/react'
+
+const preview: Preview = {
+    parameters: {
+        docs: {
+            theme,
+        },
+        options: {
+            storySort: {
+                order: [
+                    'README',
+                    'Documentation',
+                    [
+                        'Usage',
+                        ['Basic', 'Singleline', 'Helpers', 'Extensions'],
+                        'Reference',
+                        ['Components', 'Utilities'],
+                        'Tips & Tricks',
+                        ['Styling', 'Performance'],
+                    ],
+                    'Typist Editor',
                 ],
-                'Typist Editor',
-            ],
-        },
-    },
-    viewMode: 'story',
-    previewTabs: {
-        canvas: {
-            hidden: true,
-        },
-        'storybook/docs/panel': {
-            hidden: true,
+            },
         },
     },
 }
+
+export default preview

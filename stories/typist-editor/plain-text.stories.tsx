@@ -9,7 +9,7 @@ import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typi
 import { HashtagSuggestion } from './extensions/hashtag-suggestion'
 import { MentionSuggestion } from './extensions/mention-suggestion'
 
-import type { ComponentMeta, ComponentStoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 import type { EditorView } from '../../src'
 
 export default {
@@ -19,9 +19,9 @@ export default {
     parameters: {
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof TypistEditor>
+} as Meta<typeof TypistEditor>
 
-export const Default: ComponentStoryObj<typeof TypistEditor> = {
+export const Default: StoryObj<typeof TypistEditor> = {
     args: {
         ...DEFAULT_STORY_ARGS,
         placeholder: 'A plain-text editor, with smart Markdown typing…',
@@ -34,7 +34,7 @@ export const Default: ComponentStoryObj<typeof TypistEditor> = {
     ],
 }
 
-export const Singleline: ComponentStoryObj<typeof TypistEditor> = {
+export const Singleline: StoryObj<typeof TypistEditor> = {
     argTypes: {
         onKeyDown: {
             table: {

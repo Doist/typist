@@ -11,7 +11,7 @@ import { MARKDOWN_PLACEHOLDER } from './constants/markdown'
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { Default } from './plain-text.stories'
 
-import type { ComponentMeta, ComponentStoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 
 export default {
     title: 'Typist Editor/Plain-text/Functions',
@@ -20,9 +20,9 @@ export default {
     parameters: {
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof TypistEditor>
+} as Meta<typeof TypistEditor>
 
-export const Commands: ComponentStoryObj<typeof TypistEditor> = {
+export const Commands: StoryObj<typeof TypistEditor> = {
     ...Default,
     decorators: [
         (Story, context) => {
@@ -67,7 +67,7 @@ export const Commands: ComponentStoryObj<typeof TypistEditor> = {
     ],
 }
 
-export const Helpers: ComponentStoryObj<typeof TypistEditor> = {
+export const Helpers: StoryObj<typeof TypistEditor> = {
     ...Default,
     decorators: [
         (Story, context) => {

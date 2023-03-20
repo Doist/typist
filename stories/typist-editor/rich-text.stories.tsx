@@ -15,7 +15,7 @@ import { HashtagSuggestion } from './extensions/hashtag-suggestion'
 import { MentionSuggestion } from './extensions/mention-suggestion'
 import { RichTextImageWrapper } from './wrappers/rich-text-image-wrapper'
 
-import type { ComponentMeta, ComponentStoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 import type { Extensions } from '@tiptap/core'
 import type { EditorView, TypistEditorRef } from '../../src'
 
@@ -26,11 +26,11 @@ export default {
     parameters: {
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof TypistEditor>
+} as Meta<typeof TypistEditor>
 
 const COMMON_STORY_EXTENSIONS: Extensions = [HashtagSuggestion, MentionSuggestion]
 
-export const Default: ComponentStoryObj<typeof TypistEditor> = {
+export const Default: StoryObj<typeof TypistEditor> = {
     args: {
         ...DEFAULT_STORY_ARGS,
         placeholder: 'A full rich-text editor, be creative…',
@@ -139,7 +139,7 @@ export const Default: ComponentStoryObj<typeof TypistEditor> = {
     ],
 }
 
-export const Singleline: ComponentStoryObj<typeof TypistEditor> = {
+export const Singleline: StoryObj<typeof TypistEditor> = {
     argTypes: {
         onKeyDown: {
             table: {

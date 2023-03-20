@@ -1,20 +1,16 @@
-import { UserConfig, mergeConfig } from 'vite'
+import { mergeConfig, UserConfig } from 'vite'
 
-module.exports = {
+import type { StorybookConfig } from '@storybook/react-vite'
+
+const config: StorybookConfig = {
     core: {
         disableTelemetry: true,
-        builder: '@storybook/builder-vite',
     },
-    features: {
-        babelModeV7: true,
-        previewMdx2: true,
-        // Switching between story/docs view mode is not as seamless as it should be (toolbar often
-        // flashes on the screen before being hidden in docs mode, and swtiching from a docs page to
-        // a story often loads the docs page erroneously), and for the moment this is disabled
-        storyStoreV7: false,
+    framework: {
+        name: '@storybook/react-vite',
+        options: {},
     },
-    framework: '@storybook/react',
-    stories: ['../stories/**/*.@(story|stories).@(mdx|tsx)'],
+    stories: [{ directory: '../stories' }],
     addons: [
         {
             name: '@storybook/addon-essentials',
@@ -22,7 +18,6 @@ module.exports = {
                 configureJSX: true,
                 babelOptions: {},
                 sourceLoaderOptions: null,
-                transcludeMarkdown: true,
                 backgrounds: false,
                 measure: false,
                 outline: false,
@@ -44,3 +39,5 @@ module.exports = {
         })
     },
 }
+
+export default config
