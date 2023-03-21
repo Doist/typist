@@ -95,7 +95,7 @@
         "@testing-library/dom": "9.0.1",
         "@testing-library/jest-dom": "5.16.5",
         "@testing-library/react": "14.0.0",
-        "@types/jest": "29.4.4",
+        "@types/jest": "29.5.0",
         "@types/lodash-es": "4.17.7",
         "@types/marked": "4.0.8",
         "@types/react": "18.0.28",
