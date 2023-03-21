@@ -130,7 +130,7 @@
         "rehype-raw": "6.1.1",
         "remark-gfm": "3.0.1",
         "rimraf": "4.4.0",
-        "semantic-release": "20.1.1",
+        "semantic-release": "20.1.3",
         "storybook": "7.0.0-rc.5",
         "storybook-css-modules": "1.0.8",
         "ts-jest": "29.0.5",
