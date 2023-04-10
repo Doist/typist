@@ -88,7 +88,7 @@
         "@storybook/addon-a11y": "7.0.2",
         "@storybook/addon-essentials": "7.0.2",
         "@storybook/addons": "7.0.2",
-        "@storybook/csf": "0.0.2-next.11",
+        "@storybook/csf": "0.1.0",
         "@storybook/mdx2-csf": "1.0.0",
         "@storybook/react": "7.0.2",
         "@storybook/react-vite": "7.0.2",
