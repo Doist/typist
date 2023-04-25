@@ -83,6 +83,6 @@ jobs:
             - name: Publish package to GitHub Packages
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               run: |
-                  npm publish
+                  npm publish --provenance
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
