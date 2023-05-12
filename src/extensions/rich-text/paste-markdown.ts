@@ -37,9 +37,9 @@ const PasteMarkdown = Extension.create({
                         return Slice.maxOpen(Fragment.from(editor.schema.text(text)))
                     },
                     handlePaste(_, event, slice) {
-                        const clipboardText = event.clipboardData
-                            ?.getData(ClipboardDataType.Text)
-                            .trim()
+                        // The clipboard contains text if the slice content size is greater than
+                        // zero, otherwise it contains other data types (like files or images)
+                        const clipboardContainsText = Boolean(slice.content.size)
 
                         const clipboardContainsHTML = Boolean(
                             event.clipboardData?.types.some(
@@ -49,7 +49,7 @@ const PasteMarkdown = Extension.create({
 
                         // Unfortunately, the VS Code clipboard data type is not supported by
                         // Firefox or Safari, which means that copy/paste experience from VS Code
-                        // into the editor with any of those browsers is supbar:
+                        // into the editor with either of those browsers is subpar:
                         //  * The Markdown syntax is not fully converted to rich-text
                         //  * Code is not detected nor converted to a code-block
                         const clipboardContainsVSCodeMetadata = Boolean(
@@ -57,6 +57,9 @@ const PasteMarkdown = Extension.create({
                                 (type) => type === ClipboardDataType.VSCode,
                             ),
                         )
+
+                        const clipboardContainsHTMLFromUnknownSource =
+                            clipboardContainsHTML && !clipboardContainsVSCodeMetadata
 
                         const vsCodeClipboardMetadata: VSCodeClipboardMetadata =
                             clipboardContainsVSCodeMetadata
@@ -66,17 +69,31 @@ const PasteMarkdown = Extension.create({
                                   ) as VSCodeClipboardMetadata)
                                 : {}
 
-                        // Do not handle the paste event if:
-                        //  * The clipboard doesn't contain plain-text
-                        //  * The clipboard HTML content doesn't come with VS Code metadata
-                        //  * The clipboard VS Code metadata does not represent plain-Markdown
-                        //  * The user is pasting inside a code block element
-                        if (
-                            !clipboardText ||
-                            (clipboardContainsHTML && !clipboardContainsVSCodeMetadata) ||
-                            (clipboardContainsVSCodeMetadata &&
-                                vsCodeClipboardMetadata.mode !== 'markdown') ||
+                        const clipboardContainsHTMLFromVSCodeOtherThanTextOrMarkdown =
+                            clipboardContainsVSCodeMetadata &&
+                            // If `mode` from the VS Code metadata is `null` it probably means that
+                            // the user has the VS Code `editor.copyWithSyntaxHighlighting` setting
+                            // set to `false`, thus returning plain-text
+                            vsCodeClipboardMetadata.mode !== null &&
+                            vsCodeClipboardMetadata.mode !== 'markdown'
+
+                        const isInsideCodeBlockNode =
                             editor.state.selection.$from.parent.type.name === 'codeBlock'
+
+                        // Do not handle the paste event if:
+                        //  * The clipboard does NOT contain plain-text
+                        //  * The clipboard contains HTML but from an unknown source (like Google
+                        //    Drive, Dropbox Paper, etc.)
+                        //  * The clipboard contains HTML from VS Code that it's NOT plain-text or
+                        //    Markdown (like Python, TypeScript, JSON, etc.)
+                        //  * The user is pasting content inside a code block node
+                        // For all the above conditions we want the default handling behaviour from
+                        // ProseMirror to kick-in, otherwise we'll handle it ourselves below
+                        if (
+                            !clipboardContainsText ||
+                            clipboardContainsHTMLFromUnknownSource ||
+                            clipboardContainsHTMLFromVSCodeOtherThanTextOrMarkdown ||
+                            isInsideCodeBlockNode
                         ) {
                             return false
                         }
@@ -84,9 +101,10 @@ const PasteMarkdown = Extension.create({
                         // Send the clipboard text through the HTML serializer to convert potential
                         // Markdown into HTML, and then insert it into the editor
                         editor.commands.insertMarkdownContent(
-                            // The slice content is used instead of `clipboardText` as the pasted
-                            // content could have already been transformed by other plugins
-                            slice.content.textBetween(0, slice.content.size),
+                            // The slice content is used instead of getting the text directly from
+                            // the clipboard data because the pasted content could have already
+                            // been transformed by other ProseMirror plugins
+                            slice.content.textBetween(0, slice.content.size, '\n'),
                         )
 
                         // Suppress the default handling behaviour
