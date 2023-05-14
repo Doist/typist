@@ -46,7 +46,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
     useEffect(
         function initializeEventListeners() {
             function handleTransactionUpdate() {
-                // Force a rerender for every selection update in the editor - an event that ocurrs
+                // Force a rerender for every transaction in the editor - an event that ocurrs
                 // outside of the React lifecycle - to update the toolbar buttons `pressed` state
                 forceRerender()
             }
