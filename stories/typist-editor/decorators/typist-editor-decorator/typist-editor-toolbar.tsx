@@ -45,16 +45,16 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
 
     useEffect(
         function initializeEventListeners() {
-            function handleSelectionUpdate() {
-                // Force a rerender for every selection update in the editor - an event that ocurrs
+            function handleTransactionUpdate() {
+                // Force a rerender for every transaction in the editor - an event that ocurrs
                 // outside of the React lifecycle - to update the toolbar buttons `pressed` state
                 forceRerender()
             }
 
-            editor.on('selectionUpdate', handleSelectionUpdate)
+            editor.on('transaction', handleTransactionUpdate)
 
             return function cleanupEventListeners() {
-                editor.off('selectionUpdate', handleSelectionUpdate)
+                editor.off('transaction', handleTransactionUpdate)
             }
         },
         [editor, forceRerender],
