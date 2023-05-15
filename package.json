@@ -89,7 +89,7 @@
         "@storybook/addon-essentials": "7.0.10",
         "@storybook/addons": "7.0.10",
         "@storybook/csf": "0.1.0",
-        "@storybook/mdx2-csf": "1.0.0",
+        "@storybook/mdx2-csf": "1.1.0",
         "@storybook/react": "7.0.10",
         "@storybook/react-vite": "7.0.10",
         "@testing-library/dom": "9.2.0",
