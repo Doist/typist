@@ -1,3 +1,9 @@
+## [1.2.7](https://github.com/Doist/typist/compare/v1.2.6...v1.2.7) (2023-05-22)
+
+### Bug Fixes
+
+-   **paste-markdown:** Incorrect paste behaviour when HTML source is VSCode ([#260](https://github.com/Doist/typist/issues/260)) ([3326796](https://github.com/Doist/typist/commit/3326796a9093a984113ac76f69bc3ec109004288))
+
 ## [1.2.6](https://github.com/Doist/typist/compare/v1.2.5...v1.2.6) (2023-04-18)
 
 ### Bug Fixes
