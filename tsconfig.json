@@ -21,11 +21,7 @@
         ],
         "skipLibCheck": true,
         "strict": true,
-        "target": "ESNext"
-    },
-    "ts-node": {
-        "compilerOptions": {
-            "module": "CommonJS"
-        }
+        "target": "ESNext",
+        "types": ["@testing-library/jest-dom", "vitest/globals"]
     }
 }
