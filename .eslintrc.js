@@ -2,7 +2,6 @@ module.exports = {
     env: {
         browser: true,
         es6: true,
-        jest: true,
     },
     globals: {
         global: true,
@@ -45,14 +44,24 @@ module.exports = {
         'unicorn/prefer-optional-catch-binding': 'error',
     },
     overrides: [
-        //
+        // Configure rules specific for Vitest test specifications
         {
-            files: ['**/*.test.js', '**/*.test.ts'],
-            plugins: ['jest'],
-            extends: ['plugin:jest/recommended', 'plugin:jest/style'],
+            files: ['**/*.test.{j,t}s?(x)'],
+            plugins: ['vitest'],
+            extends: ['plugin:vitest-globals/recommended', 'plugin:vitest/recommended'],
+            env: {
+                'vitest-globals/env': true,
+            },
+        },
+        // Disable rules that conflict how configuration files are written
+        {
+            files: ['./*.config.{j,t}s'],
+            rules: {
+                'import/no-default-export': 'off',
+            },
         },
         // Disable rules that are pointless for Typescript files (this shouldn't be needed, but for
-        // some reason `react/prop-types` is being flagged for Typescript files)
+        // some reason `react/prop-types` is being flagged for TypeScript files)
         {
             files: ['./{src,stories}/**/*.tsx'],
             rules: {
