@@ -129,7 +129,7 @@
         "react-syntax-highlighter": "15.5.0",
         "rehype-raw": "6.1.1",
         "remark-gfm": "3.0.1",
-        "rimraf": "4.4.1",
+        "rimraf": "5.0.1",
         "semantic-release": "21.0.2",
         "storybook": "7.0.12",
         "storybook-css-modules": "1.0.8",
