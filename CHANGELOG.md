@@ -1,3 +1,9 @@
+## [1.2.8](https://github.com/Doist/typist/compare/v1.2.7...v1.2.8) (2023-05-30)
+
+### Reverts
+
+-   Revert "ci: Add support to publish experimental releases" (#279) ([dc57964](https://github.com/Doist/typist/commit/dc57964c08f34606fa5070898f0415b4b8340190)), closes [#279](https://github.com/Doist/typist/issues/279) [#278](https://github.com/Doist/typist/issues/278)
+
 ## [1.2.7](https://github.com/Doist/typist/compare/v1.2.6...v1.2.7) (2023-05-22)
 
 ### Bug Fixes
