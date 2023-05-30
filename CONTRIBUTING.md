@@ -66,6 +66,13 @@ After cloning Typist and installing all dependencies, several commands are at yo
 
 The release process for Typist is almost fully automated with [`semantic-release`](https://github.com/semantic-release/semantic-release), only requiring a core team member to trigger [this workflow](https://github.com/Doist/typist/actions/workflows/publish-typist-package-release.yml) manually whenever a new release needs to be published.
 
+#### Experimental Releases
+
+Sometimes the need for an experimental release arises before a new feature or fix is ready for a stable release. In these cases, we can publish an experimental release by pushing code to the `experimental` branch, and manually triggering the [this workflow](https://github.com/Doist/typist/actions/workflows/publish-typist-package-release.yml). The version number will be automatically picked by `semantic-release`, and `-experimental.x` will be appended at the end of the version number, where `x` represents the number of experimental release published to the `experimental` branch.
+
+> **Warning**
+> The `experimental` branch should never be deleted nor rebased with `main`, otherwise we might lose the Git tags required for `semantic-release` to properly pick the next experimental version number. Instead, `main` should be merged into the `experimental` branch with a merge commit before pushing new code to the `experimental` branch, so that those experiments are always published with the latest published stable version.
+
 ### Visual Studio Code
 
 #### CSS Modules for Storybook
