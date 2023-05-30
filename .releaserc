@@ -1,10 +1,6 @@
 {
     "branches": [
-        "main",
-        {
-            "name": "experimental",
-            "prerelease": true
-        }
+        "main"
     ],
     "plugins": [
         [
