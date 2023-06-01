@@ -12,6 +12,9 @@ on:
 permissions:
     # Enable the use of OIDC for npm provenance
     id-token: write
+    # Enable the use of GitHub Packages registry
+    contents: read
+    packages: write
 
 # The release workflow involves many crucial steps that once triggered it shouldn't be cancelled
 # until it's finished, otherwise we might end up in an inconsistent state (e.g., a new release
