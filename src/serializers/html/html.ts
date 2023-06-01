@@ -1,17 +1,19 @@
 import { escape, kebabCase } from 'lodash-es'
-import { marked } from 'marked'
+import rehypeMinifyWhitespace from 'rehype-minify-whitespace'
+import rehypeStringify from 'rehype-stringify'
+import remarkBreaks from 'remark-breaks'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import { unified } from 'unified'
 
-import { REGEX_LINE_BREAKS } from '../../constants/regular-expressions'
 import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
-import { buildSuggestionSchemaPartialRegex } from '../../helpers/serializer'
 
-import { checkbox } from './extensions/checkbox'
-import { code } from './extensions/code'
-import { disabled } from './extensions/disabled'
-import { html } from './extensions/html'
-import { link } from './extensions/link'
-import { paragraph } from './extensions/paragraph'
-import { taskList } from './extensions/task-list'
+import { rehypeCodeBlock } from './plugins/rehype-code-block'
+import { rehypeImage } from './plugins/rehype-image'
+import { rehypeSuggestions } from './plugins/rehype-suggestions'
+import { rehypeTaskList } from './plugins/rehype-task-list'
+import { remarkDisableConstructs } from './plugins/remark-disable-constructs'
+import { remarkStrikethrough } from './plugins/remark-strikethrough'
 
 import type { Schema } from 'prosemirror-model'
 
@@ -34,19 +36,6 @@ type HTMLSerializerReturnType = {
  */
 type HTMLSerializerInstanceById = {
     [id: string]: HTMLSerializerReturnType
-}
-
-/**
- * Sensible default options to initialize the Marked parser with.
- *
- * @see https://marked.js.org/using_advanced#options
- */
-const INITIAL_MARKED_OPTIONS: marked.MarkedOptions = {
-    ...marked.getDefaults(),
-    breaks: true,
-    gfm: true,
-    headerIds: false,
-    silent: true,
 }
 
 /**
@@ -83,9 +72,9 @@ function createHTMLSerializerForPlainTextEditor(schema: Schema) {
 }
 
 /**
- * Create a Markdown to HTML serializer with the Marked library for a rich-text editor, or use a
+ * Create a Markdown to HTML serializer with the unified ecosystem for a rich-text editor, or use a
  * custom serializer for a plain-text editor. The editor schema is used to detect which nodes and
- * marks are available in the editor, and only parses the input with the minimal required rules.
+ * marks are available in the editor, and only parses the input with the minimal required plugins.
  *
  * @param schema The editor schema to be used for nodes and marks detection.
  *
@@ -97,47 +86,73 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
         return createHTMLSerializerForPlainTextEditor(schema)
     }
 
-    // Reset Marked instance to the initial options
-    marked.setOptions(INITIAL_MARKED_OPTIONS)
+    // Initialize a unified processor with a remark plugin for parsing Markdown
+    const unifiedProcessor = unified().use(remarkParse)
 
-    // Disable built-in rules that are not supported by the schema
-    marked.use(disabled(schema))
+    // Configure the unified processor to use a custom plugin to disable constructs based on the
+    // supported extensions that are enabled in the editor schema
+    unifiedProcessor.use(remarkDisableConstructs, schema)
 
-    // Overwrite some built-in rules for handling of special behaviours
-    // (see documentation for each extension for more details)
-    marked.use(checkbox, html, paragraph(schema.nodes.image))
+    // Configure the unified processor to use a third-party plugin to turn soft line endings into
+    // hard breaks (i.e. `<br>`), which will display user content closer to how it was authored
+    // (although not CommonMark compliant, this resembles the behaviour we always supported)
+    if (schema.nodes.hardBreak) {
+        unifiedProcessor.use(remarkBreaks)
+    }
 
-    // Overwrite the built-in `code` rule if the corresponding node exists in the schema
+    // Configure the unified processor to use a custom plugin to add support for the strikethrough
+    // extension from the GitHub Flavored Markdown (GFM) specification
+    if (schema.marks.strike) {
+        unifiedProcessor.use(remarkStrikethrough)
+    }
+
+    // Configure the unified processor with an official plugin to convert Markdown into HTML to
+    // support rehype (a tool that transforms HTML with plugins), followed by another official
+    // plugin to minify whitespace between tags (prevents line feeds from appearing as blank)
+    unifiedProcessor
+        .use(remarkRehype, {
+            // Persist raw HTML (disables support for custom elements/tags)
+            // ref: https://github.com/Doist/Issues/issues/5689
+            allowDangerousHtml: true,
+        })
+        // This must come before all rehype plugins that transform the HTML output
+        .use(rehypeMinifyWhitespace, {
+            // Preserve line breaks when collapsing whitespace (e.g., line feeds)
+            newlines: true,
+        })
+
+    // Configure the unified processor with a custom plugin to remove the trailing newline from code
+    // blocks (i.e. the newline between the last code line and `</code></pre>`)
     if (schema.nodes.codeBlock) {
-        marked.use(code)
+        unifiedProcessor.use(rehypeCodeBlock)
     }
 
-    // Add a rule for a task list if the corresponding nodes exists in the schema
+    // Configure the unified processor with a custom plugin to remove the wrapping paragraph from
+    // images and to remove all inline images based on inline images support in the editor schema
+    if (schema.nodes.paragraph && schema.nodes.image) {
+        unifiedProcessor.use(rehypeImage, schema)
+    }
+
+    // Configure the unified processor with a custom plugin to add support Tiptap task lists
     if (schema.nodes.taskList && schema.nodes.taskItem) {
-        marked.use(taskList)
+        unifiedProcessor.use(rehypeTaskList)
     }
 
-    // Build a regular expression with all the available suggestion nodes from the schema
-    const suggestionSchemaPartialRegex = buildSuggestionSchemaPartialRegex(schema)
+    // Configure the unified processor with a custom plugin to add support for suggestions nodes
+    unifiedProcessor.use(rehypeSuggestions, schema)
 
-    // Overwrite the built-in link rule if any suggestion node exists in the schema
-    if (suggestionSchemaPartialRegex) {
-        marked.use(link(new RegExp(`^${suggestionSchemaPartialRegex}`)))
-    }
+    // Configure the unified processor with an official plugin that defines how to take a syntax
+    // tree as input and turn it into serialized HTML
+    unifiedProcessor.use(rehypeStringify, {
+        entities: {
+            // Compatibility with the previous implementation in Marked
+            useNamedReferences: true,
+        },
+    })
 
     return {
         serialize(markdown: string) {
-            return (
-                marked
-                    .parse(markdown)
-                    // Removes line breaks after HTML tags from the HTML output with a specially
-                    // crafted RegExp (this is needed to prevent the editor from converting newline
-                    // control characters to blank paragraphs).
-                    .replace(
-                        new RegExp(`>${REGEX_LINE_BREAKS.source}`, REGEX_LINE_BREAKS.flags),
-                        '>',
-                    )
-            )
+            return unifiedProcessor.processSync(markdown).toString()
         },
     }
 }
@@ -164,6 +179,6 @@ function getHTMLSerializerInstance(schema: Schema) {
     return htmlSerializerInstanceById[id]
 }
 
-export { createHTMLSerializer, getHTMLSerializerInstance, INITIAL_MARKED_OPTIONS }
+export { createHTMLSerializer, getHTMLSerializerInstance }
 
 export type { HTMLSerializerReturnType }
