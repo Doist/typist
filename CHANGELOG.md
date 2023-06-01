@@ -1,3 +1,9 @@
+## [1.2.9](https://github.com/Doist/typist/compare/v1.2.8...v1.2.9) (2023-06-01)
+
+### Bug Fixes
+
+-   **html-serializer:** Don't share instances between editors ([#275](https://github.com/Doist/typist/issues/275)) ([3aba8c7](https://github.com/Doist/typist/commit/3aba8c7b00b44e22a14ea2bc6d6dcad0f4f5ed80))
+
 ## [1.2.8](https://github.com/Doist/typist/compare/v1.2.7...v1.2.8) (2023-05-30)
 
 ### Notes
