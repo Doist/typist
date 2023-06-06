@@ -26,7 +26,7 @@ const PasteSinglelineText = Extension.create({
                             // Join break lines with a space character in-between
                             .replace(/<br>/g, ' ')
                             // Join paragraphs with a space character in-between
-                            .replace(/<p[^>]+>(.*?)<\/p>/g, '$1 ')
+                            .replace(/<p[^>]*>(.*?)<\/p>/g, '$1 ')
 
                         return isPlainTextDocument(view.state.schema)
                             ? escape(bodyElement.innerText)
