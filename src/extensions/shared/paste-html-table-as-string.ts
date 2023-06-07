@@ -25,45 +25,48 @@ const PasteHTMLTableAsString = Extension.create({
                 key: new PluginKey('pasteHTMLTableAsString'),
                 props: {
                     transformPastedHTML(html) {
-                        // Attempt to extract a table HTML from the pasted HTML
-                        const tableHTML = /<table[^>]+>[\s\S]*?<\/table>/gi.exec(html)
+                        // Attempt to extract table(s) HTML from the pasted HTML
+                        const tableHTML = html.match(/<table[^>]+>[\s\S]*?<\/table>/gi)
 
-                        // Do not handle the event if a table was not found
+                        // Do not handle the event if no table HTML was found
                         if (!tableHTML) {
                             return html
                         }
 
-                        const { firstElementChild: tableElement } = parseHtmlToElement(
-                            tableHTML[0],
-                        ) as {
-                            firstElementChild: HTMLTableElement | null
-                        }
+                        // Concatenate all tables into a single string of paragraphs
+                        return tableHTML.reduce((result, table) => {
+                            const { firstElementChild: tableElement } = parseHtmlToElement(
+                                table,
+                            ) as {
+                                firstElementChild: HTMLTableElement | null
+                            }
 
-                        // Do not handle the event if we don't have a table element
-                        if (!tableElement) {
-                            return html
-                        }
+                            if (!tableElement) {
+                                return result
+                            }
 
-                        // Transform the table element into a string of paragraphs
-                        return (
-                            Array.from(tableElement.rows)
-                                // Join each cell into a single string for each row
-                                .reduce<string[]>((acc, row) => {
-                                    return [
-                                        ...acc,
-                                        Array.from(row.cells)
+                            // Transform the table element into a string of paragraphs
+                            return (
+                                result +
+                                Array.from(tableElement.rows)
+                                    // Join each cell into a single string for each row
+                                    .reduce<string[]>((acc, row) => {
+                                        return [
+                                            ...acc,
                                             // Use `innerHTML` instead of `innerText` to preserve
                                             // potential formatting (e.g., GFM) within each cell
-                                            .map((cell) => cell.innerHTML)
-                                            .join(' '),
-                                    ]
-                                }, [])
-                                // Discard rows that are completely empty
-                                .filter((row) => row.trim().length > 0)
-                                // Wrap each row in a paragraph
-                                .map((row) => `<p>${row}</p>`)
-                                .join('')
-                        )
+                                            Array.from(row.cells)
+                                                .map((cell) => cell.innerHTML)
+                                                .join(' '),
+                                        ]
+                                    }, [])
+                                    // Discard rows that are completely empty
+                                    .filter((row) => row.trim().length > 0)
+                                    // Wrap each row in a paragraph
+                                    .map((row) => `<p>${row}</p>`)
+                                    .join('')
+                            )
+                        }, '')
                     },
                 },
             }),
