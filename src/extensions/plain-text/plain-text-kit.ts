@@ -4,8 +4,8 @@ import { Text } from '@tiptap/extension-text'
 import { Typography } from '@tiptap/extension-typography'
 
 import { CopyMarkdownSource } from '../shared/copy-markdown-source'
+import { PasteHTMLTableAsString } from '../shared/paste-html-table-as-string'
 import { PasteSinglelineText } from '../shared/paste-singleline-text'
-import { PasteSpreadsheetTable } from '../shared/paste-spreadsheet-table'
 
 import { SmartMarkdownTyping } from './smart-markdown-typing/smart-markdown-typing'
 import { PasteMultilineText } from './paste-multiline-text'
@@ -36,9 +36,9 @@ type PlainTextKitOptions = {
     paragraph: Partial<PlainTextParagraphOptions> | false
 
     /**
-     * Set to `false` to disable the `PasteSpreadsheetTable` extension.
+     * Set to `false` to disable the `PasteHTMLTableAsString` extension.
      */
-    pasteSpreadsheetTable: false
+    pasteHTMLTableAsString: false
 
     /**
      * Set to `false` to disable the `Text` extension.
@@ -79,9 +79,9 @@ const PlainTextKit = Extension.create<PlainTextKitOptions>({
                     : PasteMultilineText,
             )
 
-            if (this.options?.pasteSpreadsheetTable !== false) {
+            if (this.options?.pasteHTMLTableAsString !== false) {
                 // Supports pasting tables (from spreadsheets and websites) into the editor
-                extensions.push(PasteSpreadsheetTable)
+                extensions.push(PasteHTMLTableAsString)
             }
         }
 

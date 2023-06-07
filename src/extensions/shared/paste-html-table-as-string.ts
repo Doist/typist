@@ -5,7 +5,7 @@ import { PASTE_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
 import { parseHtmlToElement } from '../../helpers/dom'
 
 /**
- * The `PasteSpreadsheetTable` extension adds the ability to paste a table copied from a spreadsheet
+ * The `PasteHTMLTableAsString` extension adds the ability to paste a table copied from a spreadsheet
  * web app (e.g., Google Sheets, Microsoft Excel), along with tables rendered by GitHub Flavored
  * Markdown (GFM), into the editor.
  *
@@ -16,13 +16,13 @@ import { parseHtmlToElement } from '../../helpers/dom'
  * Lastly, please note that formatting is lost when the copied table comes from Google Sheets or
  * Microsoft Excel, because unfortunately, these apps style the cell contents using CSS.
  */
-const PasteSpreadsheetTable = Extension.create({
-    name: 'pasteSpreadsheetTable',
+const PasteHTMLTableAsString = Extension.create({
+    name: 'pasteHTMLTableAsString',
     priority: PASTE_EXTENSION_PRIORITY,
     addProseMirrorPlugins() {
         return [
             new Plugin({
-                key: new PluginKey('pasteSpreadsheetTable'),
+                key: new PluginKey('pasteHTMLTableAsString'),
                 props: {
                     transformPastedHTML(html) {
                         // Attempt to extract a table HTML from the pasted HTML
@@ -71,4 +71,4 @@ const PasteSpreadsheetTable = Extension.create({
     },
 })
 
-export { PasteSpreadsheetTable }
+export { PasteHTMLTableAsString }

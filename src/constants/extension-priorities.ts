@@ -13,7 +13,7 @@ const SUGGESTION_EXTENSION_PRIORITY = 1000
 const SMART_MARKDOWN_TYPING_PRIORITY = 110
 
 /**
- * Priority for the `PasteSpreadsheetTable` extension. This needs to be higher than most paste
+ * Priority for the `PasteHTMLTableAsString` extension. This needs to be higher than most paste
  * extensions (e.g., `PasteSinglelineText`, `PasteMarkdown`, etc.), so that the extension can first
  * parse HTML tables that might exist in the clipboard data.
  */
