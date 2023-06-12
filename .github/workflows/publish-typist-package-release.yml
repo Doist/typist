@@ -13,8 +13,11 @@ permissions:
     # Enable the use of OIDC for npm provenance
     id-token: write
     # Enable the use of GitHub Packages registry
-    contents: read
     packages: write
+    # Enable `semantic-release` to publish a GitHub release and post comments on issues/PRs
+    contents: write
+    issues: write
+    pull-requests: write
 
 # The release workflow involves many crucial steps that once triggered it shouldn't be cancelled
 # until it's finished, otherwise we might end up in an inconsistent state (e.g., a new release
@@ -86,6 +89,11 @@ jobs:
                   node-version-file: .node-version
                   registry-url: https://npm.pkg.github.com/
                   scope: '@doist'
+
+            - name: Disable npm package provenance (unsupported by GitHub Packages)
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
+              run: |
+                  npm config set provenance false --location=project
 
             - name: Publish package to GitHub Packages
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
