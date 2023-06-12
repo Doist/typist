@@ -185,6 +185,11 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                             return false
                         }
 
+                        // Do not handle the event if there are multiple clipboard types
+                        if ((event.clipboardData?.types || []).length > 1) {
+                            return false
+                        }
+
                         const pastedFiles = Array.from(event.clipboardData?.files || [])
 
                         // Do not handle the event if no files were pasted

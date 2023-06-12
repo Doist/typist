@@ -13,6 +13,13 @@ const SUGGESTION_EXTENSION_PRIORITY = 1000
 const SMART_MARKDOWN_TYPING_PRIORITY = 110
 
 /**
+ * Priority for the `PasteHTMLTableAsString` extension. This needs to be higher than most paste
+ * extensions (e.g., `PasteSinglelineText`, `PasteMarkdown`, etc.), so that the extension can first
+ * parse HTML tables that might exist in the clipboard data.
+ */
+const PASTE_EXTENSION_PRIORITY = 105
+
+/**
  * Priority for the `ViewEventHandlers` extension. This needs to be higher than the default for most
  * of the built-in and official extensions (i.e. `100`), so that the event handlers from the
  * extension can take precedence over the built-in and official extensions event handlers.
@@ -28,6 +35,7 @@ const BLOCKQUOTE_EXTENSION_PRIORITY = 101
 
 export {
     BLOCKQUOTE_EXTENSION_PRIORITY,
+    PASTE_EXTENSION_PRIORITY,
     SMART_MARKDOWN_TYPING_PRIORITY,
     SUGGESTION_EXTENSION_PRIORITY,
     VIEW_EVENT_HANDLERS_PRIORITY,

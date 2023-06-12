@@ -20,6 +20,7 @@ import { Typography } from '@tiptap/extension-typography'
 
 import { BLOCKQUOTE_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
 import { CopyMarkdownSource } from '../shared/copy-markdown-source'
+import { PasteHTMLTableAsString } from '../shared/paste-html-table-as-string'
 import { PasteSinglelineText } from '../shared/paste-singleline-text'
 
 import { BoldAndItalics } from './bold-and-italics'
@@ -160,6 +161,11 @@ type RichTextKitOptions = {
     pasteSinglelineText: false
 
     /**
+     * Set to `false` to disable the `PasteHTMLTableAsString` extension.
+     */
+    pasteHTMLTableAsString: false
+
+    /**
      * Set options for the `Strike` extension, or `false` to disable.
      */
     strike: Partial<StrikeOptions> | false
@@ -241,6 +247,11 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
                 // Supports pasting multiple lines into a singleline editor, by joining all the
                 // pasted lines together
                 extensions.push(PasteSinglelineText)
+            }
+
+            if (this.options?.pasteHTMLTableAsString !== false) {
+                // Supports pasting tables (from spreadsheets and websites) into the editor
+                extensions.push(PasteHTMLTableAsString)
             }
         }
 
