@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/Doist/typist/compare/v1.2.9...v1.3.0) (2023-06-12)
+
+### Features
+
+-   Add the `PasteHTMLTableAsString` extension ([#290](https://github.com/Doist/typist/issues/290)) ([ee90014](https://github.com/Doist/typist/commit/ee90014c4c8bfa8c80b11ab5cae01ba434f942b6))
+
 ## [1.2.9](https://github.com/Doist/typist/compare/v1.2.8...v1.2.9) (2023-06-01)
 
 ### Bug Fixes
