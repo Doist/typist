@@ -12,6 +12,7 @@ import { rehypeCodeBlock } from './plugins/rehype-code-block'
 import { rehypeImage } from './plugins/rehype-image'
 import { rehypeSuggestions } from './plugins/rehype-suggestions'
 import { rehypeTaskList } from './plugins/rehype-task-list'
+import { remarkAutolinkLiteral } from './plugins/remark-autolink-literal'
 import { remarkDisableConstructs } from './plugins/remark-disable-constructs'
 import { remarkStrikethrough } from './plugins/remark-strikethrough'
 
@@ -104,6 +105,12 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     // extension from the GitHub Flavored Markdown (GFM) specification
     if (schema.marks.strike) {
         unifiedProcessor.use(remarkStrikethrough)
+    }
+
+    // Configure the unified processor to use a custom plugin to add support for the autolink
+    // literals extension from the GitHub Flavored Markdown (GFM) specification
+    if (schema.marks.link) {
+        unifiedProcessor.use(remarkAutolinkLiteral)
     }
 
     // Configure the unified processor with an official plugin to convert Markdown into HTML to

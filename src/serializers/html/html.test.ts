@@ -216,10 +216,13 @@ _________________
 ---`
 
 const MARKDOWN_INPUT_LINKS = `My favorite search engine is [Duck Duck Go](https://duckduckgo.com).
-My favorite search engine is [Duck Duck Go](https://duckduckgo.com "The best search engine for privacy").`
+My favorite search engine is [Duck Duck Go](https://duckduckgo.com "The best search engine for privacy").
+My favorite search engine is https://duckduckgo.com.`
 
 const MARKDOWN_INPUT_STYLED_LINKS = `I love supporting the **[EFF](https://eff.org)**.
+I love supporting the **https://eff.org**.
 This is the *[Markdown Guide](https://www.markdownguide.org)*.
+This is the *https://www.markdownguide.org*.
 See the section on [\`code\`](#code).`
 
 describe('HTML Serializer', () => {
@@ -337,13 +340,13 @@ describe('HTML Serializer', () => {
 
             test('links syntax is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_LINKS)).toBe(
-                    '<p>My favorite search engine is [Duck Duck Go](https://duckduckgo.com).</p><p>My favorite search engine is [Duck Duck Go](https://duckduckgo.com &quot;The best search engine for privacy&quot;).</p>',
+                    '<p>My favorite search engine is [Duck Duck Go](https://duckduckgo.com).</p><p>My favorite search engine is [Duck Duck Go](https://duckduckgo.com &quot;The best search engine for privacy&quot;).</p><p>My favorite search engine is https://duckduckgo.com.</p>',
                 )
             })
 
             test('styled links syntax is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_LINKS)).toBe(
-                    '<p>I love supporting the **[EFF](https://eff.org)**.</p><p>This is the *[Markdown Guide](https://www.markdownguide.org)*.</p><p>See the section on [`code`](#code).</p>',
+                    '<p>I love supporting the **[EFF](https://eff.org)**.</p><p>I love supporting the **https://eff.org**.</p><p>This is the *[Markdown Guide](https://www.markdownguide.org)*.</p><p>This is the *https://www.markdownguide.org*.</p><p>See the section on [`code`](#code).</p>',
                 )
             })
         })
@@ -491,13 +494,13 @@ Answer: [Doist Frontend](channel://190200)`),
 
             test('links HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_LINKS)).toBe(
-                    '<p>My favorite search engine is <a href="https://duckduckgo.com">Duck Duck Go</a>.<br>My favorite search engine is <a href="https://duckduckgo.com" title="The best search engine for privacy">Duck Duck Go</a>.</p>',
+                    '<p>My favorite search engine is <a href="https://duckduckgo.com">Duck Duck Go</a>.<br>My favorite search engine is <a href="https://duckduckgo.com" title="The best search engine for privacy">Duck Duck Go</a>.<br>My favorite search engine is <a href="https://duckduckgo.com">https://duckduckgo.com</a>.</p>',
                 )
             })
 
             test('styled links HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_LINKS)).toBe(
-                    '<p>I love supporting the <strong><a href="https://eff.org">EFF</a></strong>.<br>This is the <em><a href="https://www.markdownguide.org">Markdown Guide</a></em>.<br>See the section on <a href="#code"><code>code</code></a>.</p>',
+                    '<p>I love supporting the <strong><a href="https://eff.org">EFF</a></strong>.<br>I love supporting the <strong><a href="https://eff.org">https://eff.org</a></strong>.<br>This is the <em><a href="https://www.markdownguide.org">Markdown Guide</a></em>.<br>This is the <em><a href="https://www.markdownguide.org">https://www.markdownguide.org</a></em>.<br>See the section on <a href="#code"><code>code</code></a>.</p>',
                 )
             })
         })
@@ -669,13 +672,16 @@ I need to add another paragraph below the second list item.
             test('links HTML output is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_LINKS))
                     .toBe(`<p>My favorite search engine is [Duck Duck Go](https://duckduckgo.com).
-My favorite search engine is [Duck Duck Go](https://duckduckgo.com "The best search engine for privacy").</p>`)
+My favorite search engine is [Duck Duck Go](https://duckduckgo.com "The best search engine for privacy").
+My favorite search engine is https://duckduckgo.com.</p>`)
             })
 
             test('styled links HTML output is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_LINKS))
                     .toBe(`<p>I love supporting the **[EFF](https://eff.org)**.
+I love supporting the **https://eff.org**.
 This is the *[Markdown Guide](https://www.markdownguide.org)*.
+This is the *https://www.markdownguide.org*.
 See the section on [\`code\`](#code).</p>`)
             })
         })

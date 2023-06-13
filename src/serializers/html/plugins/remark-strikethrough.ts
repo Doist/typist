@@ -16,7 +16,7 @@ import type { Processor } from 'unified'
  * third-party `remark-gfm` plugin.
  *
  * The reason why we don't use `remark-gfm` directly is because we don't want to support all other
- * GFM features (autolink literals, footnotes, tables, and tasklists).
+ * GFM features (footnotes, tables, tagfilter, and tasklists).
  *
  * @param options Configuration options for the plugin.
  */
