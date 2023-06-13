@@ -1,3 +1,9 @@
+## [1.3.1](https://github.com/Doist/typist/compare/v1.3.0...v1.3.1) (2023-06-13)
+
+### Bug Fixes
+
+-   Add support for literal autolinks (GFM based) ([#303](https://github.com/Doist/typist/issues/303)) ([4537091](https://github.com/Doist/typist/commit/45370914988eed1226722051f18a2fa49d9aa50f))
+
 ## [1.3.0](https://github.com/Doist/typist/compare/v1.2.9...v1.3.0) (2023-06-12)
 
 ### Features
