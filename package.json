@@ -127,7 +127,7 @@
         "react-markdown": "8.0.7",
         "react-syntax-highlighter": "15.5.0",
         "rimraf": "5.0.1",
-        "semantic-release": "21.0.3",
+        "semantic-release": "21.0.5",
         "storybook": "7.0.20",
         "storybook-css-modules": "1.0.8",
         "type-fest": "3.11.1",
