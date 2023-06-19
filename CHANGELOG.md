@@ -1,3 +1,9 @@
+## [1.3.2](https://github.com/Doist/typist/compare/v1.3.1...v1.3.2) (2023-06-19)
+
+### Bug Fixes
+
+-   Extra paragraph node inserted above an Horizontal Rule ([#313](https://github.com/Doist/typist/issues/313)) ([3852309](https://github.com/Doist/typist/commit/38523099af792428531162655a1aabd2bdc9b6ad))
+
 ## [1.3.1](https://github.com/Doist/typist/compare/v1.3.0...v1.3.1) (2023-06-13)
 
 ### Bug Fixes
