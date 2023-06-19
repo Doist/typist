@@ -9,7 +9,6 @@ import { Gapcursor } from '@tiptap/extension-gapcursor'
 import { HardBreak } from '@tiptap/extension-hard-break'
 import { Heading } from '@tiptap/extension-heading'
 import { History } from '@tiptap/extension-history'
-import { HorizontalRule } from '@tiptap/extension-horizontal-rule'
 import { Italic } from '@tiptap/extension-italic'
 import { ListItem } from '@tiptap/extension-list-item'
 import { OrderedList } from '@tiptap/extension-ordered-list'
@@ -28,6 +27,7 @@ import { CurvenoteCodemark } from './curvenote-codemark'
 import { PasteEmojis } from './paste-emojis'
 import { PasteMarkdown } from './paste-markdown'
 import { RichTextDocument } from './rich-text-document'
+import { RichTextHorizontalRule } from './rich-text-horizontal-rule'
 import { RichTextImage } from './rich-text-image'
 import { RichTextLink } from './rich-text-link'
 
@@ -41,13 +41,13 @@ import type { DropcursorOptions } from '@tiptap/extension-dropcursor'
 import type { HardBreakOptions } from '@tiptap/extension-hard-break'
 import type { HeadingOptions } from '@tiptap/extension-heading'
 import type { HistoryOptions } from '@tiptap/extension-history'
-import type { HorizontalRuleOptions } from '@tiptap/extension-horizontal-rule'
 import type { ItalicOptions } from '@tiptap/extension-italic'
 import type { ListItemOptions } from '@tiptap/extension-list-item'
 import type { OrderedListOptions } from '@tiptap/extension-ordered-list'
 import type { ParagraphOptions } from '@tiptap/extension-paragraph'
 import type { StrikeOptions } from '@tiptap/extension-strike'
 import type { RichTextDocumentOptions } from './rich-text-document'
+import type { RichTextHorizontalRuleOptions } from './rich-text-horizontal-rule'
 import type { RichTextImageOptions } from './rich-text-image'
 import type { RichTextLinkOptions } from './rich-text-link'
 
@@ -113,7 +113,7 @@ type RichTextKitOptions = {
     /**
      * Set options for the `HorizontalRule` extension, or `false` to disable.
      */
-    horizontalRule: Partial<HorizontalRuleOptions> | false
+    horizontalRule: Partial<RichTextHorizontalRuleOptions> | false
 
     /**
      * Set options for the `Image` extension, or `false` to disable.
@@ -276,7 +276,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         }
 
         if (this.options.horizontalRule !== false) {
-            extensions.push(HorizontalRule.configure(this.options?.horizontalRule))
+            extensions.push(RichTextHorizontalRule.configure(this.options?.horizontalRule))
         }
 
         if (this.options.image !== false) {

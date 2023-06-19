@@ -116,6 +116,10 @@ div + .editorContainer {
     margin: 0;
 }
 
+:global(div[data-typist-editor] p + hr) {
+    margin-top: 8px;
+}
+
 :global(div[data-typist-editor] :is(pre, code)) {
     font-family: var(--storybook-theme-fontCode);
 }
