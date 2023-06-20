@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/Doist/typist/compare/v1.3.2...v1.4.0) (2023-06-20)
+
+### Features
+
+-   Allow all marks to coexist with the Code mark ([#309](https://github.com/Doist/typist/issues/309)) ([ac06735](https://github.com/Doist/typist/commit/ac067352d97f6c7987ae94a47855654cfbf1dda6))
+
 ## [1.3.2](https://github.com/Doist/typist/compare/v1.3.1...v1.3.2) (2023-06-19)
 
 ### Bug Fixes
