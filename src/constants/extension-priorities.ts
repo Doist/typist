@@ -33,8 +33,16 @@ const VIEW_EVENT_HANDLERS_PRIORITY = 105
  */
 const BLOCKQUOTE_EXTENSION_PRIORITY = 101
 
+/**
+ * Priority for the `RichTextCode` extension. This needs to be lower than the default for most
+ * built-in and official extensions (i.e. `100`), so that other marks wrap the `Code` mark, and not
+ * the other way around (i.e. prevents `<code><em>code</em></code>` from happening).
+ */
+const CODE_EXTENSION_PRIORITY = 99
+
 export {
     BLOCKQUOTE_EXTENSION_PRIORITY,
+    CODE_EXTENSION_PRIORITY,
     PASTE_EXTENSION_PRIORITY,
     SMART_MARKDOWN_TYPING_PRIORITY,
     SUGGESTION_EXTENSION_PRIORITY,

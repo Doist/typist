@@ -2,7 +2,6 @@ import { Extension } from '@tiptap/core'
 import { Blockquote } from '@tiptap/extension-blockquote'
 import { Bold } from '@tiptap/extension-bold'
 import { BulletList } from '@tiptap/extension-bullet-list'
-import { Code } from '@tiptap/extension-code'
 import { CodeBlock } from '@tiptap/extension-code-block'
 import { Dropcursor } from '@tiptap/extension-dropcursor'
 import { Gapcursor } from '@tiptap/extension-gapcursor'
@@ -26,6 +25,7 @@ import { BoldAndItalics } from './bold-and-italics'
 import { CurvenoteCodemark } from './curvenote-codemark'
 import { PasteEmojis } from './paste-emojis'
 import { PasteMarkdown } from './paste-markdown'
+import { RichTextCode } from './rich-text-code'
 import { RichTextDocument } from './rich-text-document'
 import { RichTextHorizontalRule } from './rich-text-horizontal-rule'
 import { RichTextImage } from './rich-text-image'
@@ -209,7 +209,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
 
         if (this.options.code !== false) {
             extensions.push(
-                Code.configure(this.options?.code),
+                RichTextCode.configure(this.options?.code),
 
                 // Enhances the Code extension capabilities with additional features
                 CurvenoteCodemark,
