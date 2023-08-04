@@ -444,7 +444,7 @@ Answer: [Doist Frontend](channel://190200)`),
 
             test('images HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
-                    '<img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"><p><a href="https://octodex.github.com/octobiwan/"><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></a></p><p>Octobi Wan Catnobi: </p><p>Octobi Wan Catnobi:  - These are not the droids you\'re looking for!</p><p> - These are not the droids you\'re looking for!</p>',
+                    '<img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"><p></p><p>Octobi Wan Catnobi: </p><p>Octobi Wan Catnobi:  - These are not the droids you\'re looking for!</p><p> - These are not the droids you\'re looking for!</p>',
                 )
             })
 
