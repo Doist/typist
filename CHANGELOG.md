@@ -1,3 +1,9 @@
+## [1.4.3](https://github.com/Doist/typist/compare/v1.4.2...v1.4.3) (2023-08-04)
+
+### Bug Fixes
+
+-   **deps:** update gfm strikethrough packages to v2 (major) ([#379](https://github.com/Doist/typist/issues/379)) ([6b99f9d](https://github.com/Doist/typist/commit/6b99f9dc3b2f77b864f31e34a12918ea21d78d90))
+
 ## [1.4.2](https://github.com/Doist/typist/compare/v1.4.1...v1.4.2) (2023-08-04)
 
 ### Bug Fixes
