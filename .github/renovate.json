@@ -6,8 +6,12 @@
             "groupName": "tiptap packages"
         },
         {
-            "matchPackagePatterns": ["^prosemirror"],
-            "enabled": false
+            "matchPackagePatterns": ["gfm-autolink-literal"],
+            "groupName": "gfm autolink literal packages"
+        },
+        {
+            "matchPackagePatterns": ["gfm-strikethrough"],
+            "groupName": "gfm strikethrough packages"
         }
     ]
 }
