@@ -30,8 +30,8 @@ function remarkStrikethrough(this: Processor, options: Options = {}) {
     }
 
     add('micromarkExtensions', gfmStrikethrough(options))
-    add('fromMarkdownExtensions', gfmStrikethroughFromMarkdown)
-    add('toMarkdownExtensions', gfmStrikethroughToMarkdown)
+    add('fromMarkdownExtensions', gfmStrikethroughFromMarkdown())
+    add('toMarkdownExtensions', gfmStrikethroughToMarkdown())
 }
 
 export { remarkStrikethrough }
