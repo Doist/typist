@@ -56,17 +56,24 @@ export const Default: StoryObj<typeof TypistEditor> = {
                         return
                     }
 
-                    setTimeout(() => {
-                        setImageAttachmentsProgress((prevState) => {
-                            return Object.keys(prevState).reduce(
-                                (acc, attachmentId) => ({
-                                    ...acc,
-                                    [attachmentId]: clamp(acc[attachmentId] + random(1, 8), 0, 100),
-                                }),
-                                prevState,
-                            )
-                        })
-                    }, random(1, 500))
+                    setTimeout(
+                        () => {
+                            setImageAttachmentsProgress((prevState) => {
+                                return Object.keys(prevState).reduce(
+                                    (acc, attachmentId) => ({
+                                        ...acc,
+                                        [attachmentId]: clamp(
+                                            acc[attachmentId] + random(1, 8),
+                                            0,
+                                            100,
+                                        ),
+                                    }),
+                                    prevState,
+                                )
+                            })
+                        },
+                        random(1, 500),
+                    )
                 },
                 [imageAttachmentsProgress],
             )
