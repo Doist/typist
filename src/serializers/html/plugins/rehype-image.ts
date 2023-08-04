@@ -2,9 +2,9 @@ import { isElement } from 'hast-util-is-element'
 import { remove } from 'unist-util-remove'
 import { visit } from 'unist-util-visit'
 
-import type { Node, Parent } from 'hast'
 import type { Schema } from 'prosemirror-model'
 import type { Transformer } from 'unified'
+import type { Node, Parent } from 'unist'
 
 /**
  * A rehype plugin to remove the wrapping paragraph from images and to remove all inline images if
