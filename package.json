@@ -78,7 +78,7 @@
         "prosemirror-codemark": "0.4.2"
     },
     "devDependencies": {
-        "@doist/eslint-config": "9.0.0",
+        "@doist/eslint-config": "10.0.0",
         "@doist/prettier-config": "3.0.5",
         "@doist/reactist": "21.2.2",
         "@mdx-js/react": "2.3.0",
