@@ -1,3 +1,9 @@
+## [1.4.2](https://github.com/Doist/typist/compare/v1.4.1...v1.4.2) (2023-08-04)
+
+### Bug Fixes
+
+-   **deps:** update dependency unist-util-remove to v4 ([#380](https://github.com/Doist/typist/issues/380)) ([31d7f63](https://github.com/Doist/typist/commit/31d7f63b4d434e8ed42aa585859b646431ff1b89))
+
 ## [1.4.1](https://github.com/Doist/typist/compare/v1.4.0...v1.4.1) (2023-08-04)
 
 ### Bug Fixes

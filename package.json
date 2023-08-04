@@ -1,7 +1,7 @@
 {
     "name": "@doist/typist",
     "description": "The mighty Tiptap-based rich-text editor React component that powers Doist products.",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "license": "MIT",
     "homepage": "https://typist.doist.dev/",
     "repository": "https://github.com/Doist/typist",
