@@ -10,7 +10,7 @@ module.exports = {
     ignorePatterns: ['.eslintrc.js'],
     plugins: ['unicorn'],
     extends: [
-        '@doist/eslint-config/recommended-requiring-type-checking',
+        '@doist/eslint-config/recommended-type-checked',
         '@doist/eslint-config/simple-import-sort',
         '@doist/eslint-config/react',
         'plugin:storybook/recommended',
