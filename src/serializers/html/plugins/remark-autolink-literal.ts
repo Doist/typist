@@ -29,8 +29,8 @@ function remarkAutolinkLiteral(this: Processor) {
     }
 
     add('micromarkExtensions', gfmAutolinkLiteral)
-    add('fromMarkdownExtensions', gfmAutolinkLiteralFromMarkdown)
-    add('toMarkdownExtensions', gfmAutolinkLiteralToMarkdown)
+    add('fromMarkdownExtensions', gfmAutolinkLiteralFromMarkdown())
+    add('toMarkdownExtensions', gfmAutolinkLiteralToMarkdown())
 }
 
 export { remarkAutolinkLiteral }
