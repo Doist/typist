@@ -1,3 +1,9 @@
+## [1.4.4](https://github.com/Doist/typist/compare/v1.4.3...v1.4.4) (2023-08-04)
+
+### Bug Fixes
+
+-   **deps:** update gfm autolink literal packages to v2 (major) ([#378](https://github.com/Doist/typist/issues/378)) ([d5b0e37](https://github.com/Doist/typist/commit/d5b0e379673e94cacb3f1e78557225f20fb9c9e6))
+
 ## [1.4.3](https://github.com/Doist/typist/compare/v1.4.2...v1.4.3) (2023-08-04)
 
 ### Bug Fixes
