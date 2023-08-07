@@ -3,7 +3,8 @@
     "packageRules": [
         {
             "matchDepTypes": ["peerDependencies"],
-            "rangeStrategy": "replace"
+            "rangeStrategy": "replace",
+            "semanticCommitType": "fix"
         },
         {
             "matchPackagePatterns": ["^@tiptap/"],
