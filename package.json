@@ -107,7 +107,7 @@
         "emoji-regex": "10.2.1",
         "eslint": "8.46.0",
         "eslint-formatter-codeframe": "7.32.1",
-        "eslint-import-resolver-typescript": "3.5.5",
+        "eslint-import-resolver-typescript": "3.6.0",
         "eslint-plugin-simple-import-sort": "10.0.0",
         "eslint-plugin-storybook": "0.6.13",
         "eslint-plugin-unicorn": "48.0.1",
