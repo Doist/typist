@@ -2,11 +2,6 @@
     "extends": ["github>doist/renovate-config:frontend-base"],
     "packageRules": [
         {
-            "matchDepTypes": ["peerDependencies"],
-            "rangeStrategy": "replace",
-            "semanticCommitType": "fix"
-        },
-        {
             "matchPackagePatterns": ["^@tiptap/"],
             "groupName": "tiptap packages"
         },
