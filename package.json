@@ -156,7 +156,7 @@
         "remark-rehype": "^10.1.0",
         "turndown": "^7.1.0",
         "unified": "^10.1.0",
-        "unist-util-is": "^5.2.0",
+        "unist-util-is": "^5.2.0 || ^6.0.0",
         "unist-util-remove": "^4.0.0",
         "unist-util-visit": "^4.1.0"
     }
