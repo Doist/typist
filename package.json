@@ -158,6 +158,6 @@
         "unified": "^10.1.0",
         "unist-util-is": "^5.2.0",
         "unist-util-remove": "^4.0.0",
-        "unist-util-visit": "^4.1.0"
+        "unist-util-visit": "^4.1.0 || ^5.0.0"
     }
 }
