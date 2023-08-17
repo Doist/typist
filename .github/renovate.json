@@ -3,7 +3,8 @@
     "packageRules": [
         {
             "matchPackagePatterns": ["^@tiptap/"],
-            "groupName": "tiptap packages"
+            "groupName": "tiptap packages",
+            "automerge": false
         },
         {
             "matchPackagePatterns": ["gfm-autolink-literal"],
