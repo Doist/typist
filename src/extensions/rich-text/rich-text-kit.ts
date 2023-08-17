@@ -10,6 +10,7 @@ import { Heading } from '@tiptap/extension-heading'
 import { History } from '@tiptap/extension-history'
 import { Italic } from '@tiptap/extension-italic'
 import { ListItem } from '@tiptap/extension-list-item'
+import { ListKeymap } from '@tiptap/extension-list-keymap'
 import { OrderedList } from '@tiptap/extension-ordered-list'
 import { Paragraph } from '@tiptap/extension-paragraph'
 import { Strike } from '@tiptap/extension-strike'
@@ -43,6 +44,7 @@ import type { HeadingOptions } from '@tiptap/extension-heading'
 import type { HistoryOptions } from '@tiptap/extension-history'
 import type { ItalicOptions } from '@tiptap/extension-italic'
 import type { ListItemOptions } from '@tiptap/extension-list-item'
+import type { ListKeymapOptions } from '@tiptap/extension-list-keymap'
 import type { OrderedListOptions } from '@tiptap/extension-ordered-list'
 import type { ParagraphOptions } from '@tiptap/extension-paragraph'
 import type { StrikeOptions } from '@tiptap/extension-strike'
@@ -134,6 +136,11 @@ type RichTextKitOptions = {
      * Set options for the `ListItem` extension, or `false` to disable.
      */
     listItem: Partial<ListItemOptions> | false
+
+    /**
+     * Set options for the `ListKeymap` extension, or `false` to disable.
+     */
+    listKeymap: Partial<ListKeymapOptions> | false
 
     /**
      * Set options for the `OrderedList` extension, or `false` to disable.
@@ -297,6 +304,10 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
 
         if (this.options.listItem !== false) {
             extensions.push(ListItem.configure(this.options?.listItem))
+        }
+
+        if (this.options.listKeymap !== false) {
+            extensions.push(ListKeymap)
         }
 
         if (this.options.orderedList !== false) {
