@@ -65,7 +65,8 @@ describe('<TypistEditor />', () => {
         test('validate HTML attributes defined by Tiptap/ProseMirror', () => {
             renderPlainTextEditor()
 
-            expect(screen.getByRole('textbox')).toHaveAttribute('class', 'ProseMirror')
+            expect(screen.getByRole('textbox')).toHaveClass('tiptap')
+            expect(screen.getByRole('textbox')).toHaveClass('ProseMirror')
             expect(screen.getByRole('textbox')).toHaveAttribute('contenteditable', 'true')
             expect(screen.getByRole('textbox')).toHaveAttribute('tabindex', '0')
             expect(screen.getByRole('textbox')).toHaveAttribute('translate', 'no')
@@ -142,7 +143,8 @@ describe('<TypistEditor />', () => {
         test('validate HTML attributes defined by Tiptap/ProseMirror', () => {
             renderRichTextEditor()
 
-            expect(screen.getByRole('textbox')).toHaveAttribute('class', 'ProseMirror')
+            expect(screen.getByRole('textbox')).toHaveClass('tiptap')
+            expect(screen.getByRole('textbox')).toHaveClass('ProseMirror')
             expect(screen.getByRole('textbox')).toHaveAttribute('contenteditable', 'true')
             expect(screen.getByRole('textbox')).toHaveAttribute('tabindex', '0')
             expect(screen.getByRole('textbox')).toHaveAttribute('translate', 'no')
