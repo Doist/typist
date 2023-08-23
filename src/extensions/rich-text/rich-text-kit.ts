@@ -8,11 +8,12 @@ import { Gapcursor } from '@tiptap/extension-gapcursor'
 import { HardBreak } from '@tiptap/extension-hard-break'
 import { Heading } from '@tiptap/extension-heading'
 import { History } from '@tiptap/extension-history'
+import { HorizontalRule } from '@tiptap/extension-horizontal-rule'
 import { Italic } from '@tiptap/extension-italic'
 import { ListItem } from '@tiptap/extension-list-item'
+import { ListKeymap } from '@tiptap/extension-list-keymap'
 import { OrderedList } from '@tiptap/extension-ordered-list'
 import { Paragraph } from '@tiptap/extension-paragraph'
-import { Strike } from '@tiptap/extension-strike'
 import { Text } from '@tiptap/extension-text'
 import { Typography } from '@tiptap/extension-typography'
 
@@ -27,9 +28,9 @@ import { PasteEmojis } from './paste-emojis'
 import { PasteMarkdown } from './paste-markdown'
 import { RichTextCode } from './rich-text-code'
 import { RichTextDocument } from './rich-text-document'
-import { RichTextHorizontalRule } from './rich-text-horizontal-rule'
 import { RichTextImage } from './rich-text-image'
 import { RichTextLink } from './rich-text-link'
+import { RichTextStrikethrough, RichTextStrikethroughOptions } from './rich-text-strikethrough'
 
 import type { Extensions } from '@tiptap/core'
 import type { BlockquoteOptions } from '@tiptap/extension-blockquote'
@@ -41,13 +42,13 @@ import type { DropcursorOptions } from '@tiptap/extension-dropcursor'
 import type { HardBreakOptions } from '@tiptap/extension-hard-break'
 import type { HeadingOptions } from '@tiptap/extension-heading'
 import type { HistoryOptions } from '@tiptap/extension-history'
+import type { HorizontalRuleOptions } from '@tiptap/extension-horizontal-rule'
 import type { ItalicOptions } from '@tiptap/extension-italic'
 import type { ListItemOptions } from '@tiptap/extension-list-item'
+import type { ListKeymapOptions } from '@tiptap/extension-list-keymap'
 import type { OrderedListOptions } from '@tiptap/extension-ordered-list'
 import type { ParagraphOptions } from '@tiptap/extension-paragraph'
-import type { StrikeOptions } from '@tiptap/extension-strike'
 import type { RichTextDocumentOptions } from './rich-text-document'
-import type { RichTextHorizontalRuleOptions } from './rich-text-horizontal-rule'
 import type { RichTextImageOptions } from './rich-text-image'
 import type { RichTextLinkOptions } from './rich-text-link'
 
@@ -113,7 +114,7 @@ type RichTextKitOptions = {
     /**
      * Set options for the `HorizontalRule` extension, or `false` to disable.
      */
-    horizontalRule: Partial<RichTextHorizontalRuleOptions> | false
+    horizontalRule: Partial<HorizontalRuleOptions> | false
 
     /**
      * Set options for the `Image` extension, or `false` to disable.
@@ -134,6 +135,11 @@ type RichTextKitOptions = {
      * Set options for the `ListItem` extension, or `false` to disable.
      */
     listItem: Partial<ListItemOptions> | false
+
+    /**
+     * Set options for the `ListKeymap` extension, or `false` to disable.
+     */
+    listKeymap: Partial<ListKeymapOptions> | false
 
     /**
      * Set options for the `OrderedList` extension, or `false` to disable.
@@ -168,7 +174,7 @@ type RichTextKitOptions = {
     /**
      * Set options for the `Strike` extension, or `false` to disable.
      */
-    strike: Partial<StrikeOptions> | false
+    strike: Partial<RichTextStrikethroughOptions> | false
 
     /**
      * Set to `false` to disable the `Text` extension.
@@ -276,7 +282,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         }
 
         if (this.options.horizontalRule !== false) {
-            extensions.push(RichTextHorizontalRule.configure(this.options?.horizontalRule))
+            extensions.push(HorizontalRule.configure(this.options?.horizontalRule))
         }
 
         if (this.options.image !== false) {
@@ -299,6 +305,10 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
             extensions.push(ListItem.configure(this.options?.listItem))
         }
 
+        if (this.options.listKeymap !== false) {
+            extensions.push(ListKeymap)
+        }
+
         if (this.options.orderedList !== false) {
             extensions.push(OrderedList.configure(this.options?.orderedList))
         }
@@ -308,7 +318,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         }
 
         if (this.options.strike !== false) {
-            extensions.push(Strike.configure(this.options?.strike))
+            extensions.push(RichTextStrikethrough.configure(this.options?.strike))
         }
 
         if (this.options.text !== false) {
