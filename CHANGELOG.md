@@ -1,3 +1,9 @@
+## [1.4.6](https://github.com/Doist/typist/compare/v1.4.5...v1.4.6) (2023-08-24)
+
+### Bug Fixes
+
+-   **deps:** revert update gfm strikethrough and autolink literal packages to v1 ([#408](https://github.com/Doist/typist/issues/408)) ([c231d95](https://github.com/Doist/typist/commit/c231d95bebc9905245930de9ef874c791f74413e))
+
 ## [1.4.5](https://github.com/Doist/typist/compare/v1.4.4...v1.4.5) (2023-08-23)
 
 ### Bug Fixes
