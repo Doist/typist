@@ -1,3 +1,9 @@
+## [1.4.8](https://github.com/Doist/typist/compare/v1.4.7...v1.4.8) (2023-08-28)
+
+### Bug Fixes
+
+-   **rich-text-link:** Markdown pasting broken with conflicting `linkOnPaste` option ([#411](https://github.com/Doist/typist/issues/411)) ([2df2ba9](https://github.com/Doist/typist/commit/2df2ba94208357cbeaa3a9ac482503ac843e9b06))
+
 ## [1.4.7](https://github.com/Doist/typist/compare/v1.4.6...v1.4.7) (2023-08-24)
 
 ### Bug Fixes
