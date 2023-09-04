@@ -306,7 +306,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         }
 
         if (this.options.listKeymap !== false) {
-            extensions.push(ListKeymap)
+            extensions.push(ListKeymap.configure(this.options?.listKeymap))
         }
 
         if (this.options.orderedList !== false) {
