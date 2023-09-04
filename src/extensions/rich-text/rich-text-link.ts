@@ -43,14 +43,14 @@ function linkInputRule(config: Parameters<typeof markInputRule>[0]) {
  * @see https://github.com/ueberdosis/tiptap/discussions/1865
  */
 function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
-    const defaultMarkInputRule = markPasteRule(config)
+    const defaultMarkPasteRule = markPasteRule(config)
 
     return new PasteRule({
         find: config.find,
         handler(props) {
             const { tr } = props.state
 
-            defaultMarkInputRule.handler(props)
+            defaultMarkPasteRule.handler(props)
             tr.setMeta('preventAutolink', true)
         },
     })
