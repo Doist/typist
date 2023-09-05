@@ -1,3 +1,9 @@
+## [1.4.9](https://github.com/Doist/typist/compare/v1.4.8...v1.4.9) (2023-09-05)
+
+### Bug Fixes
+
+-   **rich-text-kit:** Allow the `ListKeymap` extension to be configured ([#426](https://github.com/Doist/typist/issues/426)) ([7d789bb](https://github.com/Doist/typist/commit/7d789bb8a0a4a4c55c219606e0f0c95e3698ebc7))
+
 ## [1.4.8](https://github.com/Doist/typist/compare/v1.4.7...v1.4.8) (2023-08-28)
 
 ### Bug Fixes
