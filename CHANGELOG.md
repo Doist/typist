@@ -1,3 +1,9 @@
+## [1.4.12](https://github.com/Doist/typist/compare/v1.4.11...v1.4.12) (2023-09-08)
+
+### Bug Fixes
+
+-   Hyperlink a text selection when pasting a valid URL ([#435](https://github.com/Doist/typist/issues/435)) ([999455e](https://github.com/Doist/typist/commit/999455ee8bb55df9335ad9ca6e2d07b8833b4d41))
+
 ## [1.4.11](https://github.com/Doist/typist/compare/v1.4.10...v1.4.11) (2023-09-08)
 
 ### Bug Fixes
