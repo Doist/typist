@@ -3,7 +3,21 @@
  * be higher than most extensions, so that event handlers from the dropdown render function can take
  * precedence over all other event handlers in the chain.
  */
-const SUGGESTION_EXTENSION_PRIORITY = 1000
+const SUGGESTION_EXTENSION_PRIORITY = 10000
+
+/**
+ * Priority for the `PasteHTMLTableAsString` extension. This needs to be higher than most paste
+ * extensions (e.g., `PasteSinglelineText`, `PasteMarkdown`, etc.), so that the extension can first
+ * parse HTML tables that might exist in the clipboard data.
+ */
+const PASTE_HTML_TABLE_AS_STRING_EXTENSION_PRIORITY = 1005
+
+/**
+ * Priority for the `PasteMarkdown` extension. This needs to be higher than the built-in and
+ * official `Link` extension (i.e. `1000`), so that the extension can first parse Markdown links
+ * correctly, without having the `Link` extension paste handlers interfering.
+ */
+const PASTE_MARKDOWN_EXTENSION_PRIORITY = 1001
 
 /**
  * Priority for the `SmartMarkdownTyping` extension. This needs to be higher than the
@@ -11,13 +25,6 @@ const SUGGESTION_EXTENSION_PRIORITY = 1000
  * extension can take precedence over the `ViewEventHandlers` extension event handlers.
  */
 const SMART_MARKDOWN_TYPING_PRIORITY = 110
-
-/**
- * Priority for the `PasteHTMLTableAsString` extension. This needs to be higher than most paste
- * extensions (e.g., `PasteSinglelineText`, `PasteMarkdown`, etc.), so that the extension can first
- * parse HTML tables that might exist in the clipboard data.
- */
-const PASTE_EXTENSION_PRIORITY = 105
 
 /**
  * Priority for the `ViewEventHandlers` extension. This needs to be higher than the default for most
@@ -43,7 +50,8 @@ const CODE_EXTENSION_PRIORITY = 99
 export {
     BLOCKQUOTE_EXTENSION_PRIORITY,
     CODE_EXTENSION_PRIORITY,
-    PASTE_EXTENSION_PRIORITY,
+    PASTE_HTML_TABLE_AS_STRING_EXTENSION_PRIORITY,
+    PASTE_MARKDOWN_EXTENSION_PRIORITY,
     SMART_MARKDOWN_TYPING_PRIORITY,
     SUGGESTION_EXTENSION_PRIORITY,
     VIEW_EVENT_HANDLERS_PRIORITY,
