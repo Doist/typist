@@ -1,8 +1,10 @@
 import { Extension } from '@tiptap/core'
+import * as linkify from 'linkifyjs'
 import { Fragment, Slice } from 'prosemirror-model'
 import { Plugin, PluginKey } from 'prosemirror-state'
 
 import { ClipboardDataType } from '../../constants/common'
+import { PASTE_MARKDOWN_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
 
 /**
  * A partial type for the the clipboard metadata coming from VS Code.
@@ -22,6 +24,7 @@ type VSCodeClipboardMetadata = {
  */
 const PasteMarkdown = Extension.create({
     name: 'pasteMarkdown',
+    priority: PASTE_MARKDOWN_EXTENSION_PRIORITY,
     addProseMirrorPlugins() {
         const { editor } = this
 
@@ -37,9 +40,29 @@ const PasteMarkdown = Extension.create({
                         return Slice.maxOpen(Fragment.from(editor.schema.text(text)))
                     },
                     handlePaste(_, event, slice) {
+                        const isInsideCodeBlockNode =
+                            editor.state.selection.$from.parent.type.name === 'codeBlock'
+
                         // The clipboard contains text if the slice content size is greater than
                         // zero, otherwise it contains other data types (like files or images)
                         const clipboardContainsText = Boolean(slice.content.size)
+
+                        // Do not handle the paste event if the user is pasting inside a code block
+                        // or if the clipboard does not contain text
+                        if (isInsideCodeBlockNode || !clipboardContainsText) {
+                            return false
+                        }
+
+                        // Get the clipboard text from the slice content instead of getting it from
+                        // the clipboard data because the pasted content could have already been
+                        // transformed by other ProseMirror plugins
+                        const textContent = slice.content.textBetween(0, slice.content.size, '\n')
+
+                        // Do not handle the paste event if the clipboard text is only a link (in
+                        // this case we want the built-in handlers in Tiptap to handle the event)
+                        if (linkify.test(textContent)) {
+                            return false
+                        }
 
                         const clipboardContainsHTML = Boolean(
                             event.clipboardData?.types.some(
@@ -77,35 +100,19 @@ const PasteMarkdown = Extension.create({
                             vsCodeClipboardMetadata.mode !== null &&
                             vsCodeClipboardMetadata.mode !== 'markdown'
 
-                        const isInsideCodeBlockNode =
-                            editor.state.selection.$from.parent.type.name === 'codeBlock'
-
-                        // Do not handle the paste event if:
-                        //  * The clipboard does NOT contain plain-text
-                        //  * The clipboard contains HTML but from an unknown source (like Google
-                        //    Drive, Dropbox Paper, etc.)
-                        //  * The clipboard contains HTML from VS Code that it's NOT plain-text or
-                        //    Markdown (like Python, TypeScript, JSON, etc.)
-                        //  * The user is pasting content inside a code block node
-                        // For all the above conditions we want the default handling behaviour from
-                        // ProseMirror to kick-in, otherwise we'll handle it ourselves below
+                        // Do not handle the paste event if the clipboard contains HTML from an
+                        // unknown source (e.g., Google Drive, Dropbox Paper, etc.) or from VS Code
+                        // that it's NOT plain-text or Markdown (e.g., Python, TypeScript, etc.)
                         if (
-                            !clipboardContainsText ||
                             clipboardContainsHTMLFromUnknownSource ||
-                            clipboardContainsHTMLFromVSCodeOtherThanTextOrMarkdown ||
-                            isInsideCodeBlockNode
+                            clipboardContainsHTMLFromVSCodeOtherThanTextOrMarkdown
                         ) {
                             return false
                         }
 
                         // Send the clipboard text through the HTML serializer to convert potential
                         // Markdown into HTML, and then insert it into the editor
-                        editor.commands.insertMarkdownContent(
-                            // The slice content is used instead of getting the text directly from
-                            // the clipboard data because the pasted content could have already
-                            // been transformed by other ProseMirror plugins
-                            slice.content.textBetween(0, slice.content.size, '\n'),
-                        )
+                        editor.commands.insertMarkdownContent(textContent)
 
                         // Suppress the default handling behaviour
                         return true

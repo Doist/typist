@@ -1,7 +1,7 @@
 import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from 'prosemirror-state'
 
-import { PASTE_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
+import { PASTE_HTML_TABLE_AS_STRING_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
 import { parseHtmlToElement } from '../../helpers/dom'
 
 /**
@@ -18,7 +18,7 @@ import { parseHtmlToElement } from '../../helpers/dom'
  */
 const PasteHTMLTableAsString = Extension.create({
     name: 'pasteHTMLTableAsString',
-    priority: PASTE_EXTENSION_PRIORITY,
+    priority: PASTE_HTML_TABLE_AS_STRING_EXTENSION_PRIORITY,
     addProseMirrorPlugins() {
         return [
             new Plugin({

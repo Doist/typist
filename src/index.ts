@@ -11,7 +11,7 @@ export type {
     UpdateProps,
 } from './components/typist-editor'
 export { TypistEditor } from './components/typist-editor'
-export { SUGGESTION_EXTENSION_PRIORITY } from './constants/extension-priorities'
+export * from './constants/extension-priorities'
 export * from './extensions/core/extra-editor-commands/commands/extend-word-range'
 export * from './extensions/core/extra-editor-commands/commands/insert-markdown-content'
 export { PlainTextKit } from './extensions/plain-text/plain-text-kit'

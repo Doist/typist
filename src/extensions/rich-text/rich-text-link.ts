@@ -57,31 +57,12 @@ function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
 }
 
 /**
- * The options available to customize the `RichTextLink` extension.
- */
-type RichTextLinkOptions = Omit<
-    LinkOptions,
-    // The `linkOnPaste` option is not available in the `RichTextLink` extension, since we're using
-    // our own paste rules to handle Markdown syntax (see `addOptions` below)
-    'linkOnPaste'
->
-
-/**
  * Custom extension that extends the built-in `Link` extension to add additional input/paste rules
  * for converting the Markdown link syntax (i.e. `[Doist](https://doist.com)`) into links, and also
  * adds support for the `title` attribute.
  */
-const RichTextLink = Link.extend<RichTextLinkOptions>({
+const RichTextLink = Link.extend({
     inclusive: false,
-    addOptions() {
-        return {
-            ...this.parent?.(),
-            // Disable the built-in auto-linking feature for pasted URLs, since we're using our own
-            // paste rules to handle Markdown syntax (on top of that, the `PasteMarkdown` extension
-            // takes precedence, and will handle auto-linking for pasted URLs anyway)
-            linkOnPaste: false,
-        }
-    },
     addAttributes() {
         return {
             ...this.parent?.(),
@@ -130,4 +111,4 @@ const RichTextLink = Link.extend<RichTextLinkOptions>({
 
 export { RichTextLink }
 
-export type { RichTextLinkOptions }
+export type { LinkOptions as RichTextLinkOptions }
