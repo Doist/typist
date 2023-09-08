@@ -1,3 +1,9 @@
+## [1.4.11](https://github.com/Doist/typist/compare/v1.4.10...v1.4.11) (2023-09-08)
+
+### Bug Fixes
+
+-   Remove `handlePaste` escape when clipboard holds multiple types ([#434](https://github.com/Doist/typist/issues/434)) ([4395051](https://github.com/Doist/typist/commit/43950517bcfcc1fa412e4681b4d336dd3bb3ac1b))
+
 ## [1.4.10](https://github.com/Doist/typist/compare/v1.4.9...v1.4.10) (2023-09-05)
 
 ### Bug Fixes
