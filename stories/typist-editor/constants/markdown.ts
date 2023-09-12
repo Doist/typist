@@ -3,7 +3,7 @@
  *
  * @see https://jaspervdj.be/lorem-markdownum/
  */
-const MARKDOWN_PLACEHOLDER = `# Volucrum operisque praepetis distulit
+const MARKDOWN_PLACEHOLDER_LONG = `# Volucrum operisque praepetis distulit
 
 ## Et sponte tamen
 
@@ -48,4 +48,10 @@ python_cisc.smartSurfaceLeopard.encryptionOop(permalinkHardError - primary * tec
 
 Erubuit cum caruisse et **passim** mentesque nulla, vox deus, est ut quis iracunda Propoetidas? Velis adeste parentis vincere, [opem](http://passis-locum.io/saepe), quos acceptaque atque.`
 
-export { MARKDOWN_PLACEHOLDER }
+const MARKDOWN_PLACEHOLDER_SHORT = `> ### Duobus concita cum
+>
+> Simul saevo subcrescit **aetherias non** Pisaeae Mater inquit miserabilis
+attolle muneris mundi *vivacisque accepisse*. Petit ad nullo omni carbasa,
+peccavimus [essem](http://incidere.com/) monte fluxerunt caeruleos subito.`
+
+export { MARKDOWN_PLACEHOLDER_LONG, MARKDOWN_PLACEHOLDER_SHORT }
