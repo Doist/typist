@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/Doist/typist/compare/v1.4.12...v1.5.0) (2023-09-12)
+
+### Features
+
+-   Add `createParagraphEnd` command ([#438](https://github.com/Doist/typist/issues/438)) ([28484aa](https://github.com/Doist/typist/commit/28484aa4c5bdc8b5e47f12b0d03e45dacba7b533))
+
 ## [1.4.12](https://github.com/Doist/typist/compare/v1.4.11...v1.4.12) (2023-09-08)
 
 ### Bug Fixes
