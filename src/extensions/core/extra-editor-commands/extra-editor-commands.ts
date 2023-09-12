@@ -1,5 +1,6 @@
 import { Extension } from '@tiptap/core'
 
+import { createParagraphEnd } from './commands/create-paragraph-end'
 import { extendWordRange } from './commands/extend-word-range'
 import { insertMarkdownContent } from './commands/insert-markdown-content'
 
@@ -12,6 +13,7 @@ const ExtraEditorCommands = Extension.create({
     name: 'extraEditorCommands',
     addCommands() {
         return {
+            createParagraphEnd,
             extendWordRange,
             insertMarkdownContent,
         }

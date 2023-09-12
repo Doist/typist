@@ -28,6 +28,10 @@ export const Commands: StoryObj<typeof TypistEditor> = {
         (Story, context) => {
             const typistEditorRef = useRef<TypistEditorRef>(null)
 
+            const handleCreateParagraphEndClick = useCallback(() => {
+                typistEditorRef.current?.getEditor().chain().focus().createParagraphEnd().run()
+            }, [])
+
             const handleExtendWordRangeClick = useCallback(() => {
                 typistEditorRef.current?.getEditor().chain().focus().extendWordRange().run()
             }, [])
@@ -49,6 +53,9 @@ export const Commands: StoryObj<typeof TypistEditor> = {
                     renderBottomFunctions={() => {
                         return (
                             <>
+                                <Button variant="secondary" onClick={handleCreateParagraphEndClick}>
+                                    createParagraphEnd
+                                </Button>
                                 <Button variant="secondary" onClick={handleExtendWordRangeClick}>
                                     extendWordRange
                                 </Button>
