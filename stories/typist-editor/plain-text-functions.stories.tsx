@@ -3,11 +3,12 @@ import { useCallback, useRef } from 'react'
 import { Button } from '@doist/reactist'
 
 import { action } from '@storybook/addon-actions'
+import { Selection } from '@tiptap/pm/state'
 
 import { TypistEditor, TypistEditorRef } from '../../src'
 
 import { DEFAULT_ARG_TYPES } from './constants/defaults'
-import { MARKDOWN_PLACEHOLDER } from './constants/markdown'
+import { MARKDOWN_PLACEHOLDER_LONG, MARKDOWN_PLACEHOLDER_SHORT } from './constants/markdown'
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { Default } from './plain-text.stories'
 
@@ -41,7 +42,19 @@ export const Commands: StoryObj<typeof TypistEditor> = {
                     ?.getEditor()
                     .chain()
                     .focus()
-                    .insertMarkdownContent(MARKDOWN_PLACEHOLDER)
+                    .insertMarkdownContent(MARKDOWN_PLACEHOLDER_LONG)
+                    .run()
+            }, [])
+
+            const handleInsertMarkdownContentAtClick = useCallback(() => {
+                typistEditorRef.current
+                    ?.getEditor()
+                    .chain()
+                    .focus()
+                    .insertMarkdownContentAt(
+                        Selection.atEnd(typistEditorRef.current?.getEditor().state.doc),
+                        MARKDOWN_PLACEHOLDER_SHORT,
+                    )
                     .run()
             }, [])
 
@@ -64,6 +77,12 @@ export const Commands: StoryObj<typeof TypistEditor> = {
                                     onClick={handleInsertMarkdownContentClick}
                                 >
                                     insertMarkdownContent
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    onClick={handleInsertMarkdownContentAtClick}
+                                >
+                                    insertMarkdownContentAt
                                 </Button>
                             </>
                         )

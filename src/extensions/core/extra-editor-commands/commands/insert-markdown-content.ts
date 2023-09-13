@@ -1,8 +1,4 @@
 import { RawCommands } from '@tiptap/core'
-import { DOMParser } from 'prosemirror-model'
-
-import { parseHtmlToElement } from '../../../../helpers/dom'
-import { getHTMLSerializerInstance } from '../../../../serializers/html/html'
 
 import type { ParseOptions } from 'prosemirror-model'
 
@@ -14,42 +10,43 @@ declare module '@tiptap/core' {
     interface Commands<ReturnType> {
         insertMarkdownContent: {
             /**
-             * Inserts the provided Markdown as HTML into the editor.
+             * Inserts the provided Markdown as HTML into the editor at the current position.
              *
-             * @param markdown The Markdown to parse and insert as HTML.
-             * @param parseOptions The parse options for ProseMirror's DOMParser.
+             * @param markdown The Markdown content to parse and insert as HTML.
+             * @param options An optional object with the following parameters:
+             * @param options.parseOptions The parse options to use when the HTML content is parsed by ProseMirror.
+             * @param options.updateSelection Whether the selection should move to the newly inserted content.
              */
-            insertMarkdownContent: (markdown: string, parseOptions?: ParseOptions) => ReturnType
+            insertMarkdownContent: (
+                markdown: string,
+                options?: {
+                    parseOptions?: ParseOptions
+                    updateSelection?: boolean
+                },
+            ) => ReturnType
         }
     }
 }
 
 /**
- * Inserts the provided Markdown as HTML into the editor.
+ * Inserts the provided Markdown as HTML into the editor at the current position.
  *
- * The solution for this function was inspired how ProseMirror pastes content from the clipboard,
- * and how Tiptap inserts content with the `insertContentAt` command.
+ * The solution for this function was inspired by how Tiptap inserts content with the
+ * `insertContent` command.
  */
 function insertMarkdownContent(
     markdown: string,
-    parseOptions?: ParseOptions,
+    options?: {
+        parseOptions?: ParseOptions
+        updateSelection?: boolean
+    },
 ): ReturnType<RawCommands['insertMarkdownContent']> {
-    return ({ dispatch, editor, tr }) => {
-        // Check if the transaction should be dispatched
-        // ref: https://tiptap.dev/api/commands#dry-run-for-commands
-        if (dispatch) {
-            const htmlContent = getHTMLSerializerInstance(editor.schema).serialize(markdown)
-
-            // Inserts the HTML content into the editor while preserving the current selection
-            tr.replaceSelection(
-                DOMParser.fromSchema(editor.schema).parseSlice(
-                    parseHtmlToElement(htmlContent),
-                    parseOptions,
-                ),
-            )
-        }
-
-        return true
+    return ({ commands, tr }) => {
+        return commands.insertMarkdownContentAt(
+            { from: tr.selection.from, to: tr.selection.to },
+            markdown,
+            options,
+        )
     }
 }
 
