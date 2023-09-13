@@ -1,3 +1,16 @@
+## [2.0.0](https://github.com/Doist/typist/compare/v1.5.0...v2.0.0) (2023-09-13)
+
+### ⚠ BREAKING CHANGES
+
+-   **commands:** With the introduction of `insertMarkdownContentAt`, the
+    API for `insertMarkdownContent` was changed to match the Tiptap's
+    implementation of `insertContent`/`insertContentAt`, which the
+    `insertMarkdown*` commands draw inspiration from.
+
+### Features
+
+-   **commands:** Add `insertMarkdownContentAt` command ([#439](https://github.com/Doist/typist/issues/439)) ([e87b892](https://github.com/Doist/typist/commit/e87b8929c2c77f1a6fbb065d865d73d45f62134f))
+
 ## [1.5.0](https://github.com/Doist/typist/compare/v1.4.12...v1.5.0) (2023-09-12)
 
 ### Features
