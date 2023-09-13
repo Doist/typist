@@ -1,6 +1,6 @@
-import { Plugin, PluginKey, TextSelection } from 'prosemirror-state'
+import { Plugin, PluginKey, TextSelection } from '@tiptap/pm/state'
 
-import type { EditorView } from 'prosemirror-view'
+import type { EditorView } from '@tiptap/pm/view'
 
 /**
  * An object holding the acceptable wrapping symbols. The key represents the trigger character, and

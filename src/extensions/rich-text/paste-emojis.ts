@@ -1,6 +1,6 @@
 import { Extension } from '@tiptap/core'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 import emojiRegex from 'emoji-regex'
-import { Plugin, PluginKey } from 'prosemirror-state'
 
 // Regular expression to match all emoji symbols and sequences (including textual representations)
 const baseEmojiRegExp = emojiRegex()

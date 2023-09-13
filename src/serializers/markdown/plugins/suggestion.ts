@@ -1,6 +1,6 @@
 import { kebabCase } from 'lodash-es'
 
-import type { NodeType } from 'prosemirror-model'
+import type { NodeType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
 
 /**

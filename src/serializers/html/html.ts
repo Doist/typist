@@ -16,7 +16,7 @@ import { remarkAutolinkLiteral } from './plugins/remark-autolink-literal'
 import { remarkDisableConstructs } from './plugins/remark-disable-constructs'
 import { remarkStrikethrough } from './plugins/remark-strikethrough'
 
-import type { Schema } from 'prosemirror-model'
+import type { Schema } from '@tiptap/pm/model'
 
 /**
  * The return type for the `createHTMLSerializer` function.

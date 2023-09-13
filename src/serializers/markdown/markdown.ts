@@ -10,7 +10,7 @@ import { strikethrough } from './plugins/strikethrough'
 import { suggestion } from './plugins/suggestion'
 import { taskItem } from './plugins/task-item'
 
-import type { Schema } from 'prosemirror-model'
+import type { Schema } from '@tiptap/pm/model'
 
 /**
  * The return type for the `createMarkdownSerializer` function.

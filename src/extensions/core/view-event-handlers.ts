@@ -1,9 +1,9 @@
 import { Extension } from '@tiptap/core'
-import { Plugin, PluginKey } from 'prosemirror-state'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 import { VIEW_EVENT_HANDLERS_PRIORITY } from '../../constants/extension-priorities'
 
-import type { EditorView } from 'prosemirror-view'
+import type { EditorView } from '@tiptap/pm/view'
 
 /**
  * The options available to customize the `ViewEventHandlers` extension.

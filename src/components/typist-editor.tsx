@@ -14,7 +14,7 @@ import { getMarkdownSerializerInstance } from '../serializers/markdown/markdown'
 import { getAllNodesAttributesByType, resolveContentSelection } from './typist-editor.helper'
 
 import type { Editor as CoreEditor, EditorEvents, Extensions } from '@tiptap/core'
-import type { Plugin, Selection } from 'prosemirror-state'
+import type { Plugin, Selection } from '@tiptap/pm/state'
 
 /**
  * The forwarded ref that describes the helper methods that the `TypistEditor` parent component

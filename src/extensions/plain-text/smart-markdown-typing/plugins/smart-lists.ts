@@ -1,9 +1,9 @@
-import { Plugin, PluginKey } from 'prosemirror-state'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 import { isMultilineDocument } from '../../../../helpers/schema'
 
-import type { Schema } from 'prosemirror-model'
-import type { EditorView } from 'prosemirror-view'
+import type { Schema } from '@tiptap/pm/model'
+import type { EditorView } from '@tiptap/pm/view'
 
 /**
  * A list of the allowed keys that might trigger smart typing.

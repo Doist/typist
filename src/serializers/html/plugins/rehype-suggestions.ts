@@ -4,8 +4,8 @@ import { visit } from 'unist-util-visit'
 import { buildSuggestionSchemaPartialRegex } from '../../../helpers/serializer'
 import { isTextNode } from '../../../helpers/unified'
 
+import type { Schema } from '@tiptap/pm/model'
 import type { Node } from 'hast'
-import type { Schema } from 'prosemirror-model'
 import type { Transformer } from 'unified'
 
 /**

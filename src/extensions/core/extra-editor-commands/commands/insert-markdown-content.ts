@@ -1,6 +1,6 @@
 import { RawCommands } from '@tiptap/core'
 
-import type { ParseOptions } from 'prosemirror-model'
+import type { ParseOptions } from '@tiptap/pm/model'
 
 /**
  * Augment the official `@tiptap/core` module with extra commands so that the compiler knows about

@@ -1,7 +1,7 @@
+import { Selection, TextSelection } from '@tiptap/pm/state'
 import { clamp } from 'lodash-es'
-import { Selection, TextSelection } from 'prosemirror-state'
 
-import type { Node as ProseMirrorNode } from 'prosemirror-model'
+import type { Node as ProseMirrorNode } from '@tiptap/pm/model'
 
 /**
  * Given a ProseMirror document, and a selection, resolves that selection within the bounds of the

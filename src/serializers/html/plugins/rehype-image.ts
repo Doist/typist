@@ -2,7 +2,7 @@ import { isElement } from 'hast-util-is-element'
 import { remove } from 'unist-util-remove'
 import { visit } from 'unist-util-visit'
 
-import type { Schema } from 'prosemirror-model'
+import type { Schema } from '@tiptap/pm/model'
 import type { Transformer } from 'unified'
 import type { Node, Parent } from 'unist'
 

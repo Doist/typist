@@ -1,6 +1,6 @@
 import { Image } from '@tiptap/extension-image'
+import { Plugin, PluginKey, Selection } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
-import { Plugin, PluginKey, Selection } from 'prosemirror-state'
 
 import type { NodeViewProps } from '@tiptap/react'
 

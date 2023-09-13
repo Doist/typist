@@ -1,6 +1,6 @@
 import { isActive, isTextSelection, RawCommands } from '@tiptap/core'
+import { TextSelection } from '@tiptap/pm/state'
 import { clamp } from 'lodash-es'
-import { TextSelection } from 'prosemirror-state'
 
 /**
  * Augment the official `@tiptap/core` module with extra commands so that the compiler knows about
