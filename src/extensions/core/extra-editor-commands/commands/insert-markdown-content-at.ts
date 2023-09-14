@@ -1,11 +1,11 @@
 import { RawCommands, selectionToInsertionEnd } from '@tiptap/core'
-import { DOMParser } from 'prosemirror-model'
+import { DOMParser } from '@tiptap/pm/model'
 
 import { parseHtmlToElement } from '../../../../helpers/dom'
 import { getHTMLSerializerInstance } from '../../../../serializers/html/html'
 
 import type { Range } from '@tiptap/core'
-import type { ParseOptions } from 'prosemirror-model'
+import type { ParseOptions } from '@tiptap/pm/model'
 
 /**
  * Augment the official `@tiptap/core` module with extra commands so that the compiler knows about
@@ -62,31 +62,20 @@ function insertMarkdownContentAt(
             }
 
             // Get the start and end positions from the provided position
-            let { from, to } =
+            const { from, to } =
                 typeof position === 'number'
                     ? { from: position, to: position }
                     : { from: position.from, to: position.to }
 
-            // If the selection is empty, and we're in an empty textblock, expand the start and end
-            // positions to include the whole textblock (not leaving empty paragraphs behind)
-            if (from === to) {
-                const { parent } = tr.doc.resolve(from)
-
-                if (parent.isTextblock && parent.childCount === 0) {
-                    from -= 1
-                    to += 1
-                }
-            }
-
             // Parse the Markdown to HTML and then then into ProseMirror nodes
             const htmlContent = getHTMLSerializerInstance(editor.schema).serialize(markdown)
-            const content = DOMParser.fromSchema(editor.schema).parse(
+            const content = DOMParser.fromSchema(editor.schema).parseSlice(
                 parseHtmlToElement(htmlContent),
                 options.parseOptions,
             )
 
             // Inserts the content into the editor while preserving the current selection
-            tr.replaceWith(from, to, content)
+            tr.replaceRange(from, to, content)
 
             // Set the text cursor to the end of the inserted content
             if (options.updateSelection) {

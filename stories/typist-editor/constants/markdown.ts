@@ -1,5 +1,5 @@
 /**
- * Markdown placeholder text generated with Lorem Markdownum.
+ * Long Markdown placeholder text generated with Lorem Markdownum.
  *
  * @see https://jaspervdj.be/lorem-markdownum/
  */
@@ -48,6 +48,11 @@ python_cisc.smartSurfaceLeopard.encryptionOop(permalinkHardError - primary * tec
 
 Erubuit cum caruisse et **passim** mentesque nulla, vox deus, est ut quis iracunda Propoetidas? Velis adeste parentis vincere, [opem](http://passis-locum.io/saepe), quos acceptaque atque.`
 
+/**
+ * Short Markdown placeholder text generated with Lorem Markdownum.
+ *
+ * @see https://jaspervdj.be/lorem-markdownum/
+ */
 const MARKDOWN_PLACEHOLDER_SHORT = `> ### Duobus concita cum
 >
 > Simul saevo subcrescit **aetherias non** Pisaeae Mater inquit miserabilis
