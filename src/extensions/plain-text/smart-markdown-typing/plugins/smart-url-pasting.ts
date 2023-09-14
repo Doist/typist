@@ -1,8 +1,8 @@
-import { Plugin, PluginKey, TextSelection } from 'prosemirror-state'
+import { Plugin, PluginKey, TextSelection } from '@tiptap/pm/state'
 
 import { ClipboardDataType } from '../../../../constants/common'
 
-import type { EditorView } from 'prosemirror-view'
+import type { EditorView } from '@tiptap/pm/view'
 
 /**
  * The perfect URL validation regex for Web URLs.

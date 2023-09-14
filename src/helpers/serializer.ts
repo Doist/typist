@@ -1,6 +1,6 @@
 import { kebabCase } from 'lodash-es'
 
-import type { ParseRule, Schema } from 'prosemirror-model'
+import type { ParseRule, Schema } from '@tiptap/pm/model'
 
 /**
  * Builds a partial regular expression that includes valid URL schemas used by all the available

@@ -1,7 +1,7 @@
 import { Extension } from '@tiptap/core'
+import { Fragment, Slice } from '@tiptap/pm/model'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 import * as linkify from 'linkifyjs'
-import { Fragment, Slice } from 'prosemirror-model'
-import { Plugin, PluginKey } from 'prosemirror-state'
 
 import { ClipboardDataType } from '../../constants/common'
 import { PASTE_MARKDOWN_EXTENSION_PRIORITY } from '../../constants/extension-priorities'

@@ -1,5 +1,5 @@
 import { Extension } from '@tiptap/core'
-import { Plugin, PluginKey } from 'prosemirror-state'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 import { PASTE_HTML_TABLE_AS_STRING_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
 import { parseHtmlToElement } from '../../helpers/dom'

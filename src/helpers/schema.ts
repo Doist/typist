@@ -1,4 +1,4 @@
-import type { Schema } from 'prosemirror-model'
+import type { Schema } from '@tiptap/pm/model'
 
 /**
  * Check if the document schema accepts multiple lines of input.

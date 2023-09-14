@@ -1,7 +1,7 @@
 import { mergeAttributes, Node } from '@tiptap/core'
+import { PluginKey } from '@tiptap/pm/state'
 import { Suggestion as TiptapSuggestion } from '@tiptap/suggestion'
 import { camelCase, kebabCase } from 'lodash-es'
-import { PluginKey } from 'prosemirror-state'
 
 import { SUGGESTION_EXTENSION_PRIORITY } from '../constants/extension-priorities'
 import { canInsertNodeAt } from '../utilities/can-insert-node-at'

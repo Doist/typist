@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 
 import { Extension } from '@tiptap/core'
-import { Fragment, Slice } from 'prosemirror-model'
-import { Plugin, PluginKey } from 'prosemirror-state'
+import { Fragment, Slice } from '@tiptap/pm/model'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 import { ClipboardDataType } from '../../constants/common'
 import { REGEX_LINE_BREAKS } from '../../constants/regular-expressions'
 
-import type { Schema } from 'prosemirror-model'
-import type { EditorView } from 'prosemirror-view'
+import type { Schema } from '@tiptap/pm/model'
+import type { EditorView } from '@tiptap/pm/view'
 
 /**
  * Handles a text input or paste event, and replaces all found line breaks with paragraph nodes.

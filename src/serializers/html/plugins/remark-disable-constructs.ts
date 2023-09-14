@@ -1,4 +1,4 @@
-import type { Schema } from 'prosemirror-model'
+import type { Schema } from '@tiptap/pm/model'
 import type { Processor } from 'unified'
 
 /**

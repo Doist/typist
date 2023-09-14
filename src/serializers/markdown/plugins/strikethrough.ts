@@ -1,6 +1,6 @@
 import { extractTagsFromParseRules } from '../../../helpers/serializer'
 
-import type { MarkType } from 'prosemirror-model'
+import type { MarkType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
 
 /**

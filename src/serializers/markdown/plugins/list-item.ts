@@ -1,7 +1,7 @@
 import { extractTagsFromParseRules } from '../../../helpers/serializer'
 import { BULLET_LIST_MARKER } from '../markdown'
 
-import type { NodeType } from 'prosemirror-model'
+import type { NodeType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
 
 /**
