@@ -1,3 +1,9 @@
+## [2.0.1](https://github.com/Doist/typist/compare/v2.0.0...v2.0.1) (2023-09-14)
+
+### Bug Fixes
+
+-   **commands:** Buggy `insertMarkdownContentAt` implementation ([#442](https://github.com/Doist/typist/issues/442)) ([b9667f9](https://github.com/Doist/typist/commit/b9667f94d726285438244db1c58662b7c04ed8be))
+
 ## [2.0.0](https://github.com/Doist/typist/compare/v1.5.0...v2.0.0) (2023-09-13)
 
 ### ⚠ BREAKING CHANGES
