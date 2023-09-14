@@ -1,3 +1,9 @@
+## [2.0.2](https://github.com/Doist/typist/compare/v2.0.1...v2.0.2) (2023-09-14)
+
+### Bug Fixes
+
+-   Update ProseMirror imports to `@tiptap/pm/*` packages ([#443](https://github.com/Doist/typist/issues/443)) ([48e42e8](https://github.com/Doist/typist/commit/48e42e8294bce3b768313047ab8f5268ee900abb))
+
 ## [2.0.1](https://github.com/Doist/typist/compare/v2.0.0...v2.0.1) (2023-09-14)
 
 ### Bug Fixes
