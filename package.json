@@ -152,7 +152,7 @@
         "rehype-raw": "^6.1.0",
         "rehype-stringify": "^9.0.0",
         "linkifyjs": "^4.1.1",
-        "remark": "^14.0.0",
+        "remark": "^14.0.0 || ^15.0.0",
         "remark-breaks": "^3.0.0",
         "remark-gfm": "^3.0.0",
         "remark-rehype": "^10.1.0",
