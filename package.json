@@ -134,7 +134,7 @@
         "type-fest": "4.3.1",
         "typescript": "5.2.2",
         "typescript-plugin-css-modules": "5.0.1",
-        "vitest": "0.34.4"
+        "vitest": "0.34.5"
     },
     "peerDependencies": {
         "@react-hookz/web": "^14.2.3 || >=15.x",
