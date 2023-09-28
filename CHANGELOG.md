@@ -1,3 +1,9 @@
+## [2.1.0](https://github.com/Doist/typist/compare/v2.0.3...v2.1.0) (2023-09-28)
+
+### Features
+
+-   add support for Node v20 and npm v10 ([#465](https://github.com/Doist/typist/issues/465)) ([8e3c1b3](https://github.com/Doist/typist/commit/8e3c1b39f1e4f4d0eabbd113998da29a52e4461f))
+
 ## [2.0.3](https://github.com/Doist/typist/compare/v2.0.2...v2.0.3) (2023-09-25)
 
 ### Bug Fixes
