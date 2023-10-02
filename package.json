@@ -131,7 +131,7 @@
         "semantic-release": "22.0.5",
         "storybook": "7.4.5",
         "storybook-css-modules": "1.0.8",
-        "type-fest": "4.3.1",
+        "type-fest": "4.3.2",
         "typescript": "5.2.2",
         "typescript-plugin-css-modules": "5.0.1",
         "vitest": "0.34.5"
