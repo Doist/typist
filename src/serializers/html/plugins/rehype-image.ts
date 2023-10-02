@@ -1,6 +1,7 @@
-import { isElement } from 'hast-util-is-element'
 import { remove } from 'unist-util-remove'
 import { visit } from 'unist-util-visit'
+
+import { isHastElement } from '../../../helpers/unified'
 
 import type { Schema } from '@tiptap/pm/model'
 import type { Transformer } from 'unified'
@@ -17,13 +18,13 @@ function rehypeImage(schema: Schema): Transformer {
 
     // Return the tree as-is if the editor does not support inline images
     if (allowInlineImages) {
-        return (tree: Node) => tree
+        return (tree) => tree
     }
 
     return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
         visit(tree, 'element', (node: Node, index: number, parent: Parent) => {
-            if (isElement(node, 'p')) {
-                const areAllChildrenImages = node.children.every((c) => isElement(c, 'img'))
+            if (isHastElement(node, 'p')) {
+                const areAllChildrenImages = node.children.every((c) => isHastElement(c, 'img'))
 
                 // Replace the paragraph with the image children if all children are images, or
                 // remove all images from the paragraph if it contains non-image children since the
@@ -31,7 +32,7 @@ function rehypeImage(schema: Schema): Transformer {
                 if (areAllChildrenImages) {
                     parent.children.splice(index, 1, ...node.children)
                 } else {
-                    remove(node, (n) => isElement(n, 'img'))
+                    remove(node, (n) => isHastElement(n, 'img'))
                 }
             }
         })

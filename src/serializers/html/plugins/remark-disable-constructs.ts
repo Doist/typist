@@ -10,12 +10,6 @@ import type { Processor } from 'unified'
 function remarkDisableConstructs(this: Processor, schema: Schema) {
     const data = this.data()
 
-    function add(field: string, value: unknown) {
-        const list = (data[field] ? data[field] : (data[field] = [])) as unknown[]
-
-        list.push(value)
-    }
-
     const disabledConstructs: string[] = []
 
     if (!schema.nodes.blockquote) {
@@ -54,8 +48,10 @@ function remarkDisableConstructs(this: Processor, schema: Schema) {
         disabledConstructs.push('labelStartLink')
     }
 
+    const micromarkExtensions = data.micromarkExtensions || (data.micromarkExtensions = [])
+
     // https://github.com/micromark/micromark#case-turn-off-constructs
-    add('micromarkExtensions', {
+    micromarkExtensions.push({
         disable: {
             null: disabledConstructs,
         },

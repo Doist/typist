@@ -22,15 +22,13 @@ import type { Processor } from 'unified'
 function remarkAutolinkLiteral(this: Processor) {
     const data = this.data()
 
-    function add(field: string, value: unknown) {
-        const list = (data[field] ? data[field] : (data[field] = [])) as unknown[]
+    const micromarkExtensions = data.micromarkExtensions || (data.micromarkExtensions = [])
+    const fromMarkdownExtensions = data.fromMarkdownExtensions || (data.fromMarkdownExtensions = [])
+    const toMarkdownExtensions = data.toMarkdownExtensions || (data.toMarkdownExtensions = [])
 
-        list.push(value)
-    }
-
-    add('micromarkExtensions', gfmAutolinkLiteral)
-    add('fromMarkdownExtensions', gfmAutolinkLiteralFromMarkdown)
-    add('toMarkdownExtensions', gfmAutolinkLiteralToMarkdown)
+    micromarkExtensions.push(gfmAutolinkLiteral())
+    fromMarkdownExtensions.push(gfmAutolinkLiteralFromMarkdown())
+    toMarkdownExtensions.push(gfmAutolinkLiteralToMarkdown())
 }
 
 export { remarkAutolinkLiteral }

@@ -7,11 +7,11 @@
             "automerge": false
         },
         {
-            "matchPackagePatterns": ["gfm-autolink-literal"],
+            "matchPackagePatterns": ["gfm-autolink-literal$"],
             "groupName": "gfm autolink literal packages"
         },
         {
-            "matchPackagePatterns": ["gfm-strikethrough"],
+            "matchPackagePatterns": ["gfm-strikethrough$"],
             "groupName": "gfm strikethrough packages"
         }
     ]

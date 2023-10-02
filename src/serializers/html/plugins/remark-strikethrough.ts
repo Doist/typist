@@ -23,15 +23,13 @@ import type { Processor } from 'unified'
 function remarkStrikethrough(this: Processor, options: Options = {}) {
     const data = this.data()
 
-    function add(field: string, value: unknown) {
-        const list = (data[field] ? data[field] : (data[field] = [])) as unknown[]
+    const micromarkExtensions = data.micromarkExtensions || (data.micromarkExtensions = [])
+    const fromMarkdownExtensions = data.fromMarkdownExtensions || (data.fromMarkdownExtensions = [])
+    const toMarkdownExtensions = data.toMarkdownExtensions || (data.toMarkdownExtensions = [])
 
-        list.push(value)
-    }
-
-    add('micromarkExtensions', gfmStrikethrough(options))
-    add('fromMarkdownExtensions', gfmStrikethroughFromMarkdown)
-    add('toMarkdownExtensions', gfmStrikethroughToMarkdown)
+    micromarkExtensions.push(gfmStrikethrough(options))
+    fromMarkdownExtensions.push(gfmStrikethroughFromMarkdown())
+    toMarkdownExtensions.push(gfmStrikethroughToMarkdown())
 }
 
 export { remarkStrikethrough }

@@ -69,3 +69,11 @@ body,
 #storybook-docs .sbdocs.sbdocs-wrapper {
     padding: 3rem;
 }
+
+/*
+ * This is required becase `github-markdown-css` is a dev dependency (not necessarily used by
+ * consumers) which hides what the `rehypeCodeBlock` extension does.
+ */
+.markdown-body code br {
+    display: unset !important;
+}
