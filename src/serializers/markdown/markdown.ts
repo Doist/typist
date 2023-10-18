@@ -49,7 +49,7 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
     bulletListMarker: BULLET_LIST_MARKER,
     codeBlockStyle: 'fenced',
     fence: '```',
-    emDelimiter: '_',
+    emDelimiter: '*',
     strongDelimiter: '**',
     linkStyle: 'inlined',
     /**
