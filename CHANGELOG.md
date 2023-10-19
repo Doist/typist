@@ -1,3 +1,9 @@
+## [2.1.2](https://github.com/Doist/typist/compare/v2.1.1...v2.1.2) (2023-10-19)
+
+### Bug Fixes
+
+-   Change `emDelimiter` to `*` to fix having only part of word in italic ([#490](https://github.com/Doist/typist/issues/490)) ([7496ff2](https://github.com/Doist/typist/commit/7496ff2b3c42ab39a22c253b7d20cca7f19af3b2))
+
 ## [2.1.1](https://github.com/Doist/typist/compare/v2.1.0...v2.1.1) (2023-10-03)
 
 ### Bug Fixes
