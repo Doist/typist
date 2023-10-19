@@ -389,14 +389,14 @@ And this is the second line.`)
                     `I just love **bold text**.
 I just love **bold text**.
 
-Italicized text is the _cat's meow_.
-Italicized text is the _cat's meow_.
+Italicized text is the *cat's meow*.
+Italicized text is the *cat's meow*.
 
-This text is _**really important**_.
-This text is _**really important**_.
-This text is **_really important_**.
-This text is **_really important_**.
-This is really _**very**_ important text.
+This text is ***really important***.
+This text is ***really important***.
+This text is ***really important***.
+This text is ***really important***.
+This is really ***very*** important text.
 
 Strikethrough uses two tildes: ~~scratch this~~`,
                 )
@@ -419,7 +419,7 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 > - Revenue was off the chart.
 > - Profits were higher than ever.
 >
-> _Everything_ is going according to **plan**.`,
+> *Everything* is going according to **plan**.`,
                 )
             })
 
@@ -576,7 +576,7 @@ My favorite search engine is [Duck Duck Go](https://duckduckgo.com "The best sea
             test('styled links Markdown output is correct', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_STYLED_LINKS)).toBe(
                     `I love supporting the **[EFF](https://eff.org)**.
-This is the _[Markdown Guide](https://www.markdownguide.org)_.
+This is the *[Markdown Guide](https://www.markdownguide.org)*.
 See the section on [\`code\`](#code).`,
                 )
             })
