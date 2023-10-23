@@ -133,7 +133,7 @@
         "storybook-css-modules": "1.0.8",
         "type-fest": "4.4.0",
         "typescript": "5.2.2",
-        "typescript-plugin-css-modules": "5.0.1",
+        "typescript-plugin-css-modules": "5.0.2",
         "vitest": "0.34.6"
     },
     "peerDependencies": {
