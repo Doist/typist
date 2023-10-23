@@ -99,7 +99,7 @@
         "@types/lodash-es": "4.17.10",
         "@types/react": "18.2.29",
         "@types/react-dom": "18.2.13",
-        "@types/react-syntax-highlighter": "15.5.8",
+        "@types/react-syntax-highlighter": "15.5.9",
         "@types/turndown": "5.0.2",
         "@vitejs/plugin-react": "4.1.0",
         "boring-avatars": "1.10.1",
