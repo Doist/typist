@@ -1,3 +1,9 @@
+## [2.1.3](https://github.com/Doist/typist/compare/v2.1.2...v2.1.3) (2023-11-03)
+
+### Bug Fixes
+
+-   **deps:** update tiptap packages to v2.1.12 ([#488](https://github.com/Doist/typist/issues/488)) ([63c619c](https://github.com/Doist/typist/commit/63c619cc085ad14b3909ab6dddd929da04449ff3))
+
 ## [2.1.2](https://github.com/Doist/typist/compare/v2.1.1...v2.1.2) (2023-10-19)
 
 ### Bug Fixes
