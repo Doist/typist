@@ -1,3 +1,9 @@
+## [2.2.0](https://github.com/Doist/typist/compare/v2.1.3...v2.2.0) (2023-11-21)
+
+### Features
+
+-   add support for Node v21 ([#533](https://github.com/Doist/typist/issues/533)) ([87ca351](https://github.com/Doist/typist/commit/87ca35150b03a8a429296a3324b018e1a9121b04))
+
 ## [2.1.3](https://github.com/Doist/typist/compare/v2.1.2...v2.1.3) (2023-11-03)
 
 ### Bug Fixes
