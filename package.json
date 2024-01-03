@@ -103,7 +103,7 @@
         "@types/turndown": "5.0.4",
         "@vitejs/plugin-react": "4.2.1",
         "boring-avatars": "1.10.1",
-        "classnames": "2.5.0",
+        "classnames": "2.5.1",
         "conventional-changelog-conventionalcommits": "7.0.2",
         "emoji-regex": "10.3.0",
         "eslint": "8.56.0",
