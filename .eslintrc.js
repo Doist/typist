@@ -55,7 +55,7 @@ module.exports = {
         },
         // Disable rules that conflict how configuration files are written
         {
-            files: ['./*.config.{j,t}s'],
+            files: ['./*.config.?(m){j,t}s'],
             rules: {
                 'import/no-default-export': 'off',
             },
