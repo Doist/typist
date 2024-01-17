@@ -33,6 +33,7 @@ const RichTextOrderedList = OrderedList.extend({
         const { editor, name, options } = this
 
         return {
+            ...this.parent?.(),
             smartToggleOrderedList() {
                 return ({ commands, state, tr, chain }) => {
                     const { schema } = state
