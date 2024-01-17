@@ -1,7 +1,6 @@
 import { Extension } from '@tiptap/core'
 import { Blockquote } from '@tiptap/extension-blockquote'
 import { Bold } from '@tiptap/extension-bold'
-import { BulletList } from '@tiptap/extension-bullet-list'
 import { CodeBlock } from '@tiptap/extension-code-block'
 import { Dropcursor } from '@tiptap/extension-dropcursor'
 import { Gapcursor } from '@tiptap/extension-gapcursor'
@@ -12,7 +11,6 @@ import { HorizontalRule } from '@tiptap/extension-horizontal-rule'
 import { Italic } from '@tiptap/extension-italic'
 import { ListItem } from '@tiptap/extension-list-item'
 import { ListKeymap } from '@tiptap/extension-list-keymap'
-import { OrderedList } from '@tiptap/extension-ordered-list'
 import { Paragraph } from '@tiptap/extension-paragraph'
 import { Text } from '@tiptap/extension-text'
 import { Typography } from '@tiptap/extension-typography'
@@ -26,16 +24,17 @@ import { BoldAndItalics } from './bold-and-italics'
 import { CurvenoteCodemark } from './curvenote-codemark'
 import { PasteEmojis } from './paste-emojis'
 import { PasteMarkdown } from './paste-markdown'
+import { RichTextBulletList } from './rich-text-bullet-list'
 import { RichTextCode } from './rich-text-code'
 import { RichTextDocument } from './rich-text-document'
 import { RichTextImage } from './rich-text-image'
 import { RichTextLink } from './rich-text-link'
-import { RichTextStrikethrough, RichTextStrikethroughOptions } from './rich-text-strikethrough'
+import { RichTextOrderedList } from './rich-text-ordered-list'
+import { RichTextStrikethrough } from './rich-text-strikethrough'
 
 import type { Extensions } from '@tiptap/core'
 import type { BlockquoteOptions } from '@tiptap/extension-blockquote'
 import type { BoldOptions } from '@tiptap/extension-bold'
-import type { BulletListOptions } from '@tiptap/extension-bullet-list'
 import type { CodeOptions } from '@tiptap/extension-code'
 import type { CodeBlockOptions } from '@tiptap/extension-code-block'
 import type { DropcursorOptions } from '@tiptap/extension-dropcursor'
@@ -46,11 +45,13 @@ import type { HorizontalRuleOptions } from '@tiptap/extension-horizontal-rule'
 import type { ItalicOptions } from '@tiptap/extension-italic'
 import type { ListItemOptions } from '@tiptap/extension-list-item'
 import type { ListKeymapOptions } from '@tiptap/extension-list-keymap'
-import type { OrderedListOptions } from '@tiptap/extension-ordered-list'
 import type { ParagraphOptions } from '@tiptap/extension-paragraph'
+import type { RichTextBulletListOptions } from './rich-text-bullet-list'
 import type { RichTextDocumentOptions } from './rich-text-document'
 import type { RichTextImageOptions } from './rich-text-image'
 import type { RichTextLinkOptions } from './rich-text-link'
+import type { RichTextOrderedListOptions } from './rich-text-ordered-list'
+import type { RichTextStrikethroughOptions } from './rich-text-strikethrough'
 
 /**
  * The options available to customize the `RichTextKit` extension.
@@ -69,7 +70,7 @@ type RichTextKitOptions = {
     /**
      * Set options for the `BulletList` extension, or `false` to disable.
      */
-    bulletList: Partial<BulletListOptions> | false
+    bulletList: Partial<RichTextBulletListOptions> | false
 
     /**
      * Set options for the `Code` extension, or `false` to disable.
@@ -144,7 +145,7 @@ type RichTextKitOptions = {
     /**
      * Set options for the `OrderedList` extension, or `false` to disable.
      */
-    orderedList: Partial<OrderedListOptions> | false
+    orderedList: Partial<RichTextOrderedListOptions> | false
 
     /**
      * Set options for the `Paragraph` extension, or `false` to disable.
@@ -210,7 +211,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         }
 
         if (this.options.bulletList !== false) {
-            extensions.push(BulletList.configure(this.options?.bulletList))
+            extensions.push(RichTextBulletList.configure(this.options?.bulletList))
         }
 
         if (this.options.code !== false) {
@@ -310,7 +311,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         }
 
         if (this.options.orderedList !== false) {
-            extensions.push(OrderedList.configure(this.options?.orderedList))
+            extensions.push(RichTextOrderedList.configure(this.options?.orderedList))
         }
 
         if (this.options.paragraph !== false) {
