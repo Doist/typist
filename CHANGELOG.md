@@ -1,3 +1,9 @@
+## [2.3.0](https://github.com/Doist/typist/compare/v2.2.1...v2.3.0) (2024-01-17)
+
+### Features
+
+-   **commands:** Add `smartToggleBulletList` and `smartToggleOrderedList` ([#612](https://github.com/Doist/typist/issues/612)) ([e5dcc8b](https://github.com/Doist/typist/commit/e5dcc8b523d7596e168f919fd53d9119f7c40ac7))
+
 ## [2.2.1](https://github.com/Doist/typist/compare/v2.2.0...v2.2.1) (2024-01-11)
 
 ### Bug Fixes
