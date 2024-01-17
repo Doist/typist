@@ -33,6 +33,7 @@ const RichTextBulletList = BulletList.extend({
         const { editor, name, options } = this
 
         return {
+            ...this.parent?.(),
             smartToggleBulletList() {
                 return ({ commands, state, tr, chain }) => {
                     const { schema } = state
