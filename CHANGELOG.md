@@ -1,3 +1,9 @@
+## [2.3.1](https://github.com/Doist/typist/compare/v2.3.0...v2.3.1) (2024-01-17)
+
+### Bug Fixes
+
+-   **commands:** Restore built-in `toggleBulletList` and `toggleOrderedList` ([#613](https://github.com/Doist/typist/issues/613)) ([4c4a0dc](https://github.com/Doist/typist/commit/4c4a0dc98e5c7351d6a0d2e8b16661c1e8f54fdd))
+
 ## [2.3.0](https://github.com/Doist/typist/compare/v2.2.1...v2.3.0) (2024-01-17)
 
 ### Features
