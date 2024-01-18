@@ -1,3 +1,22 @@
+## [3.0.0](https://github.com/Doist/typist/compare/v2.3.1...v3.0.0) (2024-01-18)
+
+### ⚠ BREAKING CHANGES
+
+-   **extensions:** The `smartToggleBulletList` and
+    `smartToggleOrderedList` commands were renamed to have the same name as
+    the built-in toggle functions so that they can easily be used by the
+    default keyboard shortcuts without having to change the
+    `addKeyboardShortcuts` function.
+
+The `BulletList` and `OrderedList` extensions now take an additional
+option, `smartToggle` (default: `false`), that indicates whether hard
+breaks should be replaced by paragraphs before toggling the
+selection into a bullet/ordered list, or not.
+
+### Features
+
+-   **extensions:** Overwrite built-in List/Ordered toggle functions with a `smartToggle` option ([#620](https://github.com/Doist/typist/issues/620)) ([059da61](https://github.com/Doist/typist/commit/059da61605370f8a3534d3c7669acbc952ea40d3))
+
 ## [2.3.1](https://github.com/Doist/typist/compare/v2.3.0...v2.3.1) (2024-01-17)
 
 ### Bug Fixes
