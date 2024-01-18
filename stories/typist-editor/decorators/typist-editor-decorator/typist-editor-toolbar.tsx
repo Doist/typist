@@ -187,7 +187,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 disabled={false}
                 icon={<RiListUnordered />}
                 variant="quaternary"
-                onClick={() => editor.chain().focus().smartToggleBulletList().run()}
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
             />
             <Button
                 aria-label="Ordered List"
@@ -195,7 +195,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 disabled={false}
                 icon={<RiListOrdered />}
                 variant="quaternary"
-                onClick={() => editor.chain().focus().smartToggleOrderedList().run()}
+                onClick={() => editor.chain().focus().toggleOrderedList().run()}
             />
             <Button
                 aria-label="Code Block"
