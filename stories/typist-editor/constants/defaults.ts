@@ -116,11 +116,17 @@ const DEFAULT_STORY_ARGS: Partial<TypistEditorProps> = {
 }
 
 const DEFAULT_RICH_TEXT_KIT_OPTIONS: Partial<RichTextKitOptions> = {
+    bulletList: {
+        smartToggle: true,
+    },
     dropCursor: {
         class: 'ProseMirror-dropcursor',
     },
     link: {
         openOnClick: false,
+    },
+    orderedList: {
+        smartToggle: true,
     },
 }
 
