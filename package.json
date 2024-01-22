@@ -82,7 +82,7 @@
     "devDependencies": {
         "@doist/eslint-config": "11.0.0",
         "@doist/prettier-config": "4.0.0",
-        "@doist/reactist": "22.3.3",
+        "@doist/reactist": "23.0.0",
         "@mdx-js/react": "3.0.0",
         "@rollup/rollup-linux-x64-gnu": "4.9.5",
         "@semantic-release/changelog": "6.0.3",
