@@ -32,6 +32,8 @@ export type {
 export { createSuggestionExtension } from './factories/create-suggestion-extension'
 export { isMultilineDocument, isPlainTextDocument } from './helpers/schema'
 export { createHTMLSerializer, getHTMLSerializerInstance } from './serializers/html/html'
+export { remarkAutolinkLiteral } from './serializers/html/plugins/remark-autolink-literal'
+export { remarkStrikethrough } from './serializers/html/plugins/remark-strikethrough'
 export {
     createMarkdownSerializer,
     getMarkdownSerializerInstance,

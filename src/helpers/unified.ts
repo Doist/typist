@@ -1,16 +1,29 @@
 import { is } from 'unist-util-is'
 
-import type { Node, Text } from 'hast'
+import type { Element, Text } from 'hast'
+import type { Node } from 'unist'
 
 /**
- * Check if a given node is a unist text node.
+ * Determines whether a given node is an hast element with a specific tag name.
+ *
+ * @param node The node to check.
+ * @param tagName The tag name to check for.
+ *
+ * @returns `true` if the node is an hast element with the specified tag name, `false` otherwise.
+ */
+function isHastElement(node: Node, tagName: Element['tagName']): node is Element {
+    return is(node, { type: 'element', tagName })
+}
+
+/**
+ * Determines whether a given node is hast a text node.
  *
  * @param node The node to check.
  *
- * @returns `true` if the node is a unist text node, `false` otherwise.
+ * @returns `true` if the node is a hast text node, `false` otherwise.
  */
-function isTextNode(node: Node): node is Text {
+function isHastTextNode(node: Node): node is Text {
     return is(node, { type: 'text' })
 }
 
-export { isTextNode }
+export { isHastElement, isHastTextNode }

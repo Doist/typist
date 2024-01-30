@@ -20,10 +20,10 @@ function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
                     return <>{children}</>
                 },
                 // eslint-disable-next-line react/no-unstable-nested-components
-                code({ children, className, inline }) {
+                code({ children, className }) {
                     const codeLanguage = /language-(\w+)/.exec(className || '')
 
-                    return !inline && codeLanguage ? (
+                    return codeLanguage ? (
                         <SyntaxHighlighter
                             language={codeLanguage[1]}
                             // Match `github-markdown-css` style

@@ -151,7 +151,7 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     // Configure the unified processor with an official plugin that defines how to take a syntax
     // tree as input and turn it into serialized HTML
     unifiedProcessor.use(rehypeStringify, {
-        entities: {
+        characterReferences: {
             // Compatibility with the previous implementation in Marked
             useNamedReferences: true,
         },
