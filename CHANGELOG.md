@@ -1,3 +1,13 @@
+## [4.0.0](https://github.com/Doist/typist/compare/v3.0.0...v4.0.0) (2024-01-30)
+
+### ⚠ BREAKING CHANGES
+
+-   **deps:** update unified ecosystem dependencies (#395)
+
+### Bug Fixes
+
+-   **deps:** update unified ecosystem dependencies ([#395](https://github.com/Doist/typist/issues/395)) ([e97ad83](https://github.com/Doist/typist/commit/e97ad83e7015cf49044bc72cf8ef6dce1be1f2c8))
+
 ## [3.0.0](https://github.com/Doist/typist/compare/v2.3.1...v3.0.0) (2024-01-18)
 
 ### ⚠ BREAKING CHANGES
