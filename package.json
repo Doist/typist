@@ -123,7 +123,7 @@
         "ignore-sync": "7.0.1",
         "is-ci": "3.0.1",
         "jsdom": "24.0.0",
-        "lint-staged": "15.2.0",
+        "lint-staged": "15.2.1",
         "npm-run-all2": "6.1.1",
         "prettier": "3.2.4",
         "react": "18.2.0",
