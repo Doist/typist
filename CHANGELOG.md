@@ -1,3 +1,9 @@
+## [4.0.2](https://github.com/Doist/typist/compare/v4.0.1...v4.0.2) (2024-02-08)
+
+### Bug Fixes
+
+-   **bold-and-italics:** Disallow only whitespace in the markdown shortcuts ([#651](https://github.com/Doist/typist/issues/651)) ([4c740dd](https://github.com/Doist/typist/commit/4c740ddedc487ad27f2fc8b56e2440913911e40f))
+
 ## [4.0.1](https://github.com/Doist/typist/compare/v4.0.0...v4.0.1) (2024-02-07)
 
 ### Bug Fixes
