@@ -118,7 +118,7 @@
         "eslint-plugin-unicorn": "50.0.1",
         "eslint-plugin-vitest": "0.3.21",
         "eslint-plugin-vitest-globals": "1.4.0",
-        "github-markdown-css": "5.5.0",
+        "github-markdown-css": "5.5.1",
         "husky": "8.0.3",
         "ignore-sync": "7.0.1",
         "is-ci": "3.0.1",
