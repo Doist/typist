@@ -1,3 +1,9 @@
+## [4.0.5](https://github.com/Doist/typist/compare/v4.0.4...v4.0.5) (2024-03-06)
+
+### Bug Fixes
+
+-   Prevent extra blank lines on list items ([#685](https://github.com/Doist/typist/issues/685)) ([b538ebe](https://github.com/Doist/typist/commit/b538ebef9a43d6b1af2f68efcdad445ec9e0cc17))
+
 ## [4.0.4](https://github.com/Doist/typist/compare/v4.0.3...v4.0.4) (2024-03-06)
 
 ### Bug Fixes
