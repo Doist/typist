@@ -1,3 +1,9 @@
+## [4.0.3](https://github.com/Doist/typist/compare/v4.0.2...v4.0.3) (2024-03-06)
+
+### Bug Fixes
+
+-   **deps:** update dependency hast-util-is-element to v3 ([#683](https://github.com/Doist/typist/issues/683)) ([97c6428](https://github.com/Doist/typist/commit/97c64288edabf924b524711d0691d7e3ecc4c25a))
+
 ## [4.0.2](https://github.com/Doist/typist/compare/v4.0.1...v4.0.2) (2024-02-08)
 
 ### Bug Fixes
