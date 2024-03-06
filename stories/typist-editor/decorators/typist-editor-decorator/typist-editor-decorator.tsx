@@ -14,7 +14,7 @@ import type { CoreEditor, TypistEditorProps, TypistEditorRef, UpdateProps } from
 
 type TypistEditorArgs = Partial<
     TypistEditorProps & {
-        ref: React.ForwardedRef<TypistEditorRef>
+        ref: React.LegacyRef<TypistEditorRef>
     }
 >
 
@@ -63,12 +63,6 @@ function TypistEditorDecorator({
                                 onUpdate: handleUpdate,
                                 ref: (instance) => {
                                     setTypistEditor(instance?.getEditor() || null)
-
-                                    if (typeof args.ref === 'function') {
-                                        args.ref(instance)
-                                    } else if (args.ref) {
-                                        args.ref.current = instance
-                                    }
                                 },
                             }}
                         />
