@@ -106,6 +106,17 @@ const HTML_INPUT_UNORDERED_LISTS = `<ul>
 <li>And here&#39;s the third list item.</li>
 </ul>`
 
+const HTML_NESTED_UNORDERED_LIST = `<ul>
+<li>
+<p>Parent list element</p>
+<ul>
+<li><p>Sub-item 1</p></li>
+<li><p>Sub-item 2</p></li>
+</ul>
+</li>
+<li>And back to the first list</li>
+</ul>`
+
 const HTML_INPUT_TASK_LISTS = `<ul data-type="taskList">
 <li data-type="taskItem" data-checked="false">First item</li>
 <li data-type="taskItem" data-checked="true">Second item</li>
@@ -468,6 +479,15 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 - Here's the second list item.
     I need to add another paragraph below the second list item.
 - And here's the third list item.`,
+                )
+            })
+
+            test('nested unordered lists Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_NESTED_UNORDERED_LIST)).toBe(
+                    `- Parent list element
+    - Sub-item 1
+    - Sub-item 2
+- And back to the first list`,
                 )
             })
 
