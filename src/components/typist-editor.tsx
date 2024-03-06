@@ -274,6 +274,7 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         },
         [schema],
     )
+
     const markdownSerializer = useMemo(
         function initializeMarkdownSerializer() {
             return getMarkdownSerializerInstance(schema)
