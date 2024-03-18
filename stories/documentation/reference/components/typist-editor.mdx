@@ -1,4 +1,4 @@
-import { ArgsTable, Description, Meta, Title } from '@storybook/addon-docs'
+import { ArgTypes, Description, Meta, Title } from '@storybook/blocks'
 
 import { TypistEditor } from '../../../../src'
 import { MarkdownRenderer } from '../../../components/markdown-renderer.tsx'
@@ -9,4 +9,4 @@ import rawTypistEditor from './typist-editor.md?raw'
 
 <MarkdownRenderer markdown={rawTypistEditor} />
 
-<ArgsTable of={TypistEditor} />
+<ArgTypes of={TypistEditor} />

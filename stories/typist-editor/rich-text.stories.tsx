@@ -19,14 +19,16 @@ import type { Meta, StoryObj } from '@storybook/react'
 import type { Extensions } from '@tiptap/core'
 import type { EditorView, TypistEditorRef } from '../../src'
 
-export default {
+const meta: Meta<typeof TypistEditor> = {
     title: 'Typist Editor/Rich-text',
     component: TypistEditor,
     argTypes: DEFAULT_ARG_TYPES,
     parameters: {
         layout: 'fullscreen',
     },
-} as Meta<typeof TypistEditor>
+}
+
+export default meta
 
 const COMMON_STORY_EXTENSIONS: Extensions = [HashtagSuggestion, MentionSuggestion]
 

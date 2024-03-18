@@ -1,5 +1,5 @@
-import { addons } from '@storybook/addons'
-import { DOCS_RENDERED, STORY_RENDERED } from '@storybook/core-events'
+import { addons } from '@storybook/manager-api'
+import { DOCS_RENDERED, STORY_RENDERED, STORIES_EXPAND_ALL } from '@storybook/core-events'
 
 let isSidebarExpanded = false
 
@@ -11,8 +11,10 @@ addons.register('expand-sidebar', (api) => {
 
     const storybookLoaded = () => {
         if (!isSidebarExpanded) {
-            setTimeout(api.expandAll)
-            isSidebarExpanded = true
+            setTimeout(() => {
+                api.emit(STORIES_EXPAND_ALL)
+                isSidebarExpanded = true
+            })
         }
     }
 
