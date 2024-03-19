@@ -1,4 +1,4 @@
-import { addons } from '@storybook/addons'
+import { addons } from '@storybook/manager-api'
 import { DOCS_RENDERED } from '@storybook/core-events'
 
 /**
@@ -6,6 +6,7 @@ import { DOCS_RENDERED } from '@storybook/core-events'
  */
 addons.register('hide-dark-logo', () => {
     addons.getChannel().on(DOCS_RENDERED, () => {
+        console.debug('hide-dark-logo: docs rendered')
         const darkLogoElement = document
             .querySelector('#storybook-preview-iframe')
             .contentWindow.document.querySelector('source[srcset*="logo-dark"]')

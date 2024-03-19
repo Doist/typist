@@ -12,14 +12,16 @@ import { MentionSuggestion } from './extensions/mention-suggestion'
 import type { Meta, StoryObj } from '@storybook/react'
 import type { EditorView } from '../../src'
 
-export default {
+const meta: Meta<typeof TypistEditor> = {
     title: 'Typist Editor/Plain-text',
     component: TypistEditor,
     argTypes: DEFAULT_ARG_TYPES,
     parameters: {
         layout: 'fullscreen',
     },
-} as Meta<typeof TypistEditor>
+}
+
+export default meta
 
 export const Default: StoryObj<typeof TypistEditor> = {
     args: {

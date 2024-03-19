@@ -14,14 +14,16 @@ import { Default } from './rich-text.stories'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-export default {
+const meta: Meta<typeof TypistEditor> = {
     title: 'Typist Editor/Rich-text/Functions',
     component: TypistEditor,
     argTypes: DEFAULT_ARG_TYPES,
     parameters: {
         layout: 'fullscreen',
     },
-} as Meta<typeof TypistEditor>
+}
+
+export default meta
 
 export const Commands: StoryObj<typeof TypistEditor> = {
     ...Default,
