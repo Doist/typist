@@ -63,7 +63,7 @@ type RichTextImageOptions = {
     acceptedImageMimeTypes: string[]
 
     /**
-     * Renders the image node inline (e.g., <p><img src="spacer.gif"></p>). By default images are on
+     * Renders the image node inline (e.g., <p><img src="doist.jpg"></p>). By default images are on
      * the same level as paragraphs.
      */
     inline: boolean
@@ -82,11 +82,6 @@ type RichTextImageOptions = {
      * The event handler that is fired when an image file is pasted.
      */
     onImageFilePaste?: (file: File) => void
-
-    /**
-     * The event handler that should be fired when an image node is deleted.
-     */
-    onImageNodeDelete?: (attachmentId: string) => void
 }
 
 /**
