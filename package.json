@@ -116,7 +116,7 @@
         "eslint-plugin-storybook": "0.8.0",
         "eslint-plugin-unicorn": "51.0.1",
         "eslint-plugin-vitest": "0.3.26",
-        "eslint-plugin-vitest-globals": "1.4.0",
+        "eslint-plugin-vitest-globals": "1.5.0",
         "github-markdown-css": "5.5.1",
         "husky": "9.0.11",
         "ignore-sync": "7.0.1",
