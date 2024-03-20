@@ -1,3 +1,15 @@
+## [5.0.0](https://github.com/Doist/typist/compare/v4.0.5...v5.0.0) (2024-03-20)
+
+### ⚠ BREAKING CHANGES
+
+-   This option was unused and was not intended for
+    consumer use. However, its removal technically constitutes a breaking
+    change, so we have marked it accordingly.
+
+### Miscellaneous Chores
+
+-   Remove unused `onImageNodeDelete` option ([#702](https://github.com/Doist/typist/issues/702)) ([ebd0678](https://github.com/Doist/typist/commit/ebd06784c14d00b748af7ad38bb030afcba41c35))
+
 ## [4.0.5](https://github.com/Doist/typist/compare/v4.0.4...v4.0.5) (2024-03-06)
 
 ### Bug Fixes
