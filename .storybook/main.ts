@@ -10,13 +10,6 @@ const config: StorybookConfig = {
         options: {},
     },
     stories: [{ directory: '../stories' }],
-    typescript: {
-        // This causes the warning "The CJS build of Vite's Node API is deprecated" when running
-        // Storybook. The warning goes away when using `react-docgen` instead, however, it doesn't
-        // generate the full table of properties for components that use TypeScript.
-        // ref: https://github.com/storybookjs/storybook/discussions/26551
-        reactDocgen: 'react-docgen-typescript',
-    },
     addons: [
         {
             name: '@storybook/addon-essentials',
