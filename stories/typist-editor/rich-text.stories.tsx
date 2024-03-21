@@ -139,9 +139,9 @@ export const Default: StoryObj<typeof TypistEditor> = {
                     args={{
                         ...context.args,
                         extensions,
-                        ref: typistEditorRef,
                     }}
                     withToolbar={true}
+                    ref={typistEditorRef}
                 />
             )
         },

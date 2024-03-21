@@ -60,35 +60,32 @@ export const Commands: StoryObj<typeof TypistEditor> = {
                     .run()
             }, [])
 
+            function renderBottomFunctions() {
+                return (
+                    <>
+                        <Button variant="secondary" onClick={handleCreateParagraphEndClick}>
+                            createParagraphEnd
+                        </Button>
+                        <Button variant="secondary" onClick={handleExtendWordRangeClick}>
+                            extendWordRange
+                        </Button>
+                        <Button variant="secondary" onClick={handleInsertMarkdownContentClick}>
+                            insertMarkdownContent
+                        </Button>
+                        <Button variant="secondary" onClick={handleInsertMarkdownContentAtClick}>
+                            insertMarkdownContentAt
+                        </Button>
+                    </>
+                )
+            }
+
             return (
                 <TypistEditorDecorator
                     Story={Story}
-                    args={{ ...context.args, ref: typistEditorRef }}
+                    args={{ ...context.args }}
                     withToolbar={true}
-                    renderBottomFunctions={() => {
-                        return (
-                            <>
-                                <Button variant="secondary" onClick={handleCreateParagraphEndClick}>
-                                    createParagraphEnd
-                                </Button>
-                                <Button variant="secondary" onClick={handleExtendWordRangeClick}>
-                                    extendWordRange
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    onClick={handleInsertMarkdownContentClick}
-                                >
-                                    insertMarkdownContent
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    onClick={handleInsertMarkdownContentAtClick}
-                                >
-                                    insertMarkdownContentAt
-                                </Button>
-                            </>
-                        )
-                    }}
+                    renderBottomFunctions={renderBottomFunctions}
+                    ref={typistEditorRef}
                 />
             )
         },
@@ -115,29 +112,32 @@ export const Helpers: StoryObj<typeof TypistEditor> = {
                 )
             }, [])
 
+            function renderBottomFunctions() {
+                return (
+                    <>
+                        <Button variant="secondary" onClick={handleGetEditorClick}>
+                            getEditor
+                        </Button>
+                        <Button variant="secondary" onClick={handleGetMarkdownClick}>
+                            getMarkdown
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={handleGetAllNodesAttributesByTypeClick}
+                        >
+                            {"getAllNodesAttributesByType('mentionSuggestion')"}
+                        </Button>
+                    </>
+                )
+            }
+
             return (
                 <TypistEditorDecorator
                     Story={Story}
-                    args={{ ...context.args, ref: typistEditorRef }}
+                    args={{ ...context.args }}
                     withToolbar={true}
-                    renderBottomFunctions={() => {
-                        return (
-                            <>
-                                <Button variant="secondary" onClick={handleGetEditorClick}>
-                                    getEditor
-                                </Button>
-                                <Button variant="secondary" onClick={handleGetMarkdownClick}>
-                                    getMarkdown
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    onClick={handleGetAllNodesAttributesByTypeClick}
-                                >
-                                    {"getAllNodesAttributesByType('mentionSuggestion')"}
-                                </Button>
-                            </>
-                        )
-                    }}
+                    renderBottomFunctions={renderBottomFunctions}
+                    ref={typistEditorRef}
                 />
             )
         },
