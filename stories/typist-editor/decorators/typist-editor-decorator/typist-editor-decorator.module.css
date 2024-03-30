@@ -1,6 +1,7 @@
 :root {
     --reactist-content-primary: var(--storybook-theme-textColor);
     --typist-editor-decorator-default-shadow: 1px 1px 2px 0 #f3f3f1;
+    --typist-editor-media-border-radius: calc(var(--storybook-theme-appBorderRadius) / 2);
 }
 
 .topContainer {
@@ -96,11 +97,11 @@ div + .editorContainer {
 }
 
 :global(div[data-typist-editor] > *:first-child) {
-    margin-top: 0;
+    margin-top: 0 !important;
 }
 
 :global(div[data-typist-editor] > *:last-child) {
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
 }
 
 :global(div[data-typist-editor] > p.is-editor-empty:first-child::before) {
@@ -124,37 +125,45 @@ div + .editorContainer {
     font-family: var(--storybook-theme-fontCode);
 }
 
-:global(div[data-typist-editor] img) {
-    border-radius: calc(var(--storybook-theme-appBorderRadius) / 2);
+:global(div[data-typist-editor] :is(img)) {
+    border-radius: var(--typist-editor-media-border-radius);
 }
 
-:global(div[data-typist-editor] img.ProseMirror-selectednode) {
-    outline: 2px solid var(--storybook-theme-colorSecondary);
+:global(div[data-typist-editor] > :is(img)) {
+    display: block;
 }
 
-:global(div[data-typist-editor] > img),
-:global(div[data-typist-editor] > p > img),
-:global(div[data-typist-editor] > .Typist-image),
-:global(div[data-typist-editor] > p > .Typist-image) {
-    max-width: 480px;
+:global(div[data-typist-editor] > p > :is(img)) {
+    display: inline-block;
 }
 
-:global(div[data-typist-editor] > img),
-:global(div[data-typist-editor] > .Typist-image) {
-    margin-bottom: 1rem;
-}
-
-:global(div[data-typist-editor] > p > img),
-:global(div[data-typist-editor] > p > .Typist-image) {
-    vertical-align: bottom;
-}
-
-:global(div[data-typist-editor] > .Typist-image) {
+:global(div[data-typist-editor] > :is(.Typist-image)) {
     display: flex;
 }
 
-:global(div[data-typist-editor] > p > .Typist-image) {
+:global(div[data-typist-editor] > p > :is(.Typist-image)) {
     display: inline-flex;
+}
+
+:global(div[data-typist-editor] > :is(img)),
+:global(div[data-typist-editor] > :is(.Typist-image)) {
+    margin-bottom: 1rem;
+}
+
+:global(div[data-typist-editor] > :is(img)),
+:global(div[data-typist-editor] > :is(.Typist-image)),
+:global(div[data-typist-editor] > p > :is(img)),
+:global(div[data-typist-editor] > p > :is(.Typist-image)) {
+    border-radius: var(--typist-editor-media-border-radius);
+    max-width: 480px;
+    width: fit-content;
+}
+
+:global(div[data-typist-editor] > :is(img).ProseMirror-selectednode),
+:global(div[data-typist-editor] > :is(.Typist-image).ProseMirror-selectednode),
+:global(div[data-typist-editor] > p > :is(img).ProseMirror-selectednode),
+:global(div[data-typist-editor] > p > :is(.Typist-image).ProseMirror-selectednode) {
+    outline: 2px solid var(--storybook-theme-colorSecondary);
 }
 
 :global(div[data-typist-editor] :is(span[data-mention], span[data-hashtag])) {

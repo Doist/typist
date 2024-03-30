@@ -1,16 +1,15 @@
 import { Plugin, PluginKey, TextSelection } from '@tiptap/pm/state'
 
 import { ClipboardDataType } from '../../../../constants/common'
+import { REGEX_WEB_URL } from '../../../../constants/regular-expressions'
 
 import type { EditorView } from '@tiptap/pm/view'
 
 /**
- * The perfect URL validation regex for Web URLs.
- *
- * @see https://mathiasbynens.be/demo/url-regex
+ * The perfect URL validation regular expression for exact Web URLs (matches a
+ * URL from the beginning to the end without allowing for partial matches).
  */
-const REGEX_WEB_URL =
-    /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i
+const REGEX_WEB_URL_EXACT = new RegExp(`^${REGEX_WEB_URL.source}$`, REGEX_WEB_URL.flags)
 
 /**
  * This plugin replaces a selection with the pasted URL using proper link syntax; unless the
@@ -29,14 +28,14 @@ const smartUrlPasting = new Plugin({
             }
 
             // Do not handle the event if the selected text is already a URL
-            if (REGEX_WEB_URL.test(selection.$head.parent.textContent)) {
+            if (REGEX_WEB_URL_EXACT.test(selection.$head.parent.textContent)) {
                 return false
             }
 
             const clipboardText = event.clipboardData?.getData(ClipboardDataType.Text).trim()
 
             // Do not handle the event if the clipboard text is not a URL
-            if (!clipboardText || !REGEX_WEB_URL.test(clipboardText)) {
+            if (!clipboardText || !REGEX_WEB_URL_EXACT.test(clipboardText)) {
                 return false
             }
 

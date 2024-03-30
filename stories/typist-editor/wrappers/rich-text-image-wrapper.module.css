@@ -1,11 +1,19 @@
 .richTextImageWrapper {
-    display: inline-grid;
-    width: fit-content;
+    display: grid;
 }
 
 .richTextImageWrapper .imageAttachment,
 .richTextImageWrapper .progressOverlay {
     grid-area: 1 / 1;
+}
+
+.richTextImageWrapper .imageAttachment {
+    width: 100%;
+    height: auto;
+}
+
+.richTextImageWrapper .imageAttachment.noPointerEvents {
+    pointer-events: none;
 }
 
 .richTextImageWrapper .progressOverlay {

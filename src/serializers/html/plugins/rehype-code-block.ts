@@ -1,9 +1,9 @@
 import { visit } from 'unist-util-visit'
 
-import { isHastElement, isHastTextNode } from '../../../helpers/unified'
+import { isHastElementNode, isHastTextNode } from '../../../helpers/unified'
 
+import type { Node as HastNode } from 'hast'
 import type { Transformer } from 'unified'
-import type { Node } from 'unist'
 
 /**
  * A rehype plugin to remove the trailing newline from code blocks (i.e. the newline between the
@@ -13,10 +13,10 @@ import type { Node } from 'unist'
  */
 function rehypeCodeBlock(): Transformer {
     return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
-        visit(tree, 'element', (node: Node) => {
+        visit(tree, 'element', (node: HastNode) => {
             if (
-                isHastElement(node, 'pre') &&
-                isHastElement(node.children[0], 'code') &&
+                isHastElementNode(node, 'pre') &&
+                isHastElementNode(node.children[0], 'code') &&
                 isHastTextNode(node.children[0].children[0])
             ) {
                 node.children[0].children[0].value = node.children[0].children[0].value.replace(

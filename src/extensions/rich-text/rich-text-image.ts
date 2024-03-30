@@ -101,7 +101,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         return {
             ...this.parent?.(),
             metadata: {
-                default: undefined,
+                default: null,
                 rendered: false,
             },
         }

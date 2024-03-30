@@ -1,11 +1,11 @@
 import { visit } from 'unist-util-visit'
 
 import { buildSuggestionSchemaPartialRegex } from '../../../helpers/serializer'
-import { isHastElement, isHastTextNode } from '../../../helpers/unified'
+import { isHastElementNode, isHastTextNode } from '../../../helpers/unified'
 
 import type { Schema } from '@tiptap/pm/model'
+import type { Node as HastNode } from 'hast'
 import type { Transformer } from 'unified'
-import type { Node } from 'unist'
 
 /**
  * A rehype plugin to add support for suggestions nodes (e.g., `@username` or `#channel).
@@ -17,15 +17,15 @@ function rehypeSuggestions(schema: Schema): Transformer {
 
     // Return the tree as-is if the editor does not support suggestions
     if (!suggestionSchemaPartialRegex) {
-        return (tree: Node) => tree
+        return (tree: HastNode) => tree
     }
 
     return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
         const suggestionSchemaRegex = new RegExp(`^${suggestionSchemaPartialRegex}`)
 
-        visit(tree, 'element', (node: Node) => {
+        visit(tree, 'element', (node: HastNode) => {
             if (
-                isHastElement(node, 'a') &&
+                isHastElementNode(node, 'a') &&
                 suggestionSchemaRegex.test(String(node.properties?.href))
             ) {
                 const [, schema, id] =

@@ -46,73 +46,101 @@ export const Default: StoryObj<typeof TypistEditor> = {
         (Story, context) => {
             const typistEditorRef = useRef<TypistEditorRef>(null)
 
-            const [imageAttachmentsProgress, setImageAttachmentsProgress] = useState<{
-                [attachmentId: string]: number
+            const [inlineAttachments, setInlineAttachments] = useState<{
+                [attachmentId: string]: {
+                    type: 'image'
+                    progress: number
+                }
             }>({})
 
             useEffect(
-                function simulateImageAttachmentsUploadProgress() {
+                function simulateInlineAttachmentsUpload() {
                     if (
-                        Object.keys(imageAttachmentsProgress).length === 0 ||
-                        Object.values(imageAttachmentsProgress).every((p) => p === 100)
+                        Object.keys(inlineAttachments).length === 0 ||
+                        Object.values(inlineAttachments).every((a) => a.progress === 100)
                     ) {
                         return
                     }
 
                     setTimeout(
                         () => {
-                            setImageAttachmentsProgress((prevState) => {
-                                return Object.keys(prevState).reduce(
-                                    (acc, attachmentId) => ({
-                                        ...acc,
-                                        [attachmentId]: clamp(
-                                            acc[attachmentId] + random(1, 8),
-                                            0,
-                                            100,
-                                        ),
-                                    }),
-                                    prevState,
+                            setInlineAttachments((prevState) => {
+                                return Object.fromEntries(
+                                    Object.entries(prevState).map(
+                                        ([attachmentId, { progress, type }]) => [
+                                            attachmentId,
+                                            {
+                                                progress: clamp(progress + random(1, 8), 0, 100),
+                                                type,
+                                            },
+                                        ],
+                                    ),
                                 )
                             })
                         },
                         random(1, 500),
                     )
                 },
-                [imageAttachmentsProgress],
+                [inlineAttachments],
             )
 
             useEffect(
-                function updateImageAttachmentsMetadata() {
-                    Object.keys(imageAttachmentsProgress).forEach((attachmentId) => {
-                        typistEditorRef.current?.getEditor()?.commands.updateImage({
+                function updateInlineAttachmentsMetadata() {
+                    Object.keys(inlineAttachments).forEach((attachmentId) => {
+                        const commands = typistEditorRef.current?.getEditor().commands
+
+                        const updateInlineAttachmentAttributes =
+                            inlineAttachments[attachmentId].type === 'image'
+                                ? commands?.updateImage
+                                : () => {}
+
+                        updateInlineAttachmentAttributes?.({
                             metadata: {
                                 attachmentId,
                                 isUploadFailed: false,
-                                uploadProgress: imageAttachmentsProgress[attachmentId],
+                                uploadProgress: inlineAttachments[attachmentId].progress,
                             },
                         })
                     })
                 },
-                [imageAttachmentsProgress],
+                [inlineAttachments],
             )
 
-            const handleImageFilePaste = useCallback((file: File) => {
+            const handleInlineFilePaste = useCallback(function handleInlineFilePaste(file: File) {
+                const fileType = file.type.split('/')[0]
+
+                if (fileType !== 'image') {
+                    return
+                }
+
                 const attachmentId = Math.random().toString(16).slice(2, 10)
 
-                setImageAttachmentsProgress((prevState) => ({ ...prevState, [attachmentId]: 0 }))
+                const metadata = {
+                    attachmentId,
+                    isUploadFailed: false,
+                    uploadProgress: 0,
+                }
+
+                setInlineAttachments((prevState) => ({
+                    ...prevState,
+                    [attachmentId]: {
+                        progress: 0,
+                        type: fileType,
+                    },
+                }))
 
                 const fileReader = new FileReader()
 
                 fileReader.onload = () => {
-                    typistEditorRef.current?.getEditor()?.commands.insertImage({
-                        alt: `${attachmentId}.${file.type.split('/')[1]}`,
-                        src: String(fileReader.result),
-                        metadata: {
-                            attachmentId,
-                            isUploadFailed: false,
-                            uploadProgress: 0,
-                        },
-                    })
+                    const commands = typistEditorRef.current?.getEditor().commands
+
+                    if (fileType === 'image') {
+                        commands?.insertImage({
+                            alt: `${attachmentId}.${file.type.split('/')[1]}`,
+                            src: String(fileReader.result),
+                            metadata,
+                        })
+                    }
                 }
 
                 fileReader.readAsDataURL(file)
@@ -125,13 +153,13 @@ export const Default: StoryObj<typeof TypistEditor> = {
                             ...DEFAULT_RICH_TEXT_KIT_OPTIONS,
                             image: {
                                 NodeViewComponent: RichTextImageWrapper,
-                                onImageFilePaste: handleImageFilePaste,
+                                onImageFilePaste: handleInlineFilePaste,
                             },
                         }),
                         ...COMMON_STORY_EXTENSIONS,
                     ]
                 },
-                [handleImageFilePaste],
+                [handleInlineFilePaste],
             )
 
             return (

@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useState } from 'react'
+import { forwardRef, useCallback, useState } from 'react'
 
 import { Box, Column, Columns } from '@doist/reactist'
 
@@ -41,13 +41,6 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
             setMarkdownOutput(props.getMarkdown())
         }, [])
 
-        useEffect(
-            function updateMarkdownOutputOnContentControlChange() {
-                setMarkdownOutput(args.content)
-            },
-            [args.content],
-        )
-
         return (
             <Box display="flex" flexDirection="column" height="full">
                 <Columns exceptionallySetClassName={styles.topContainer}>
@@ -65,6 +58,7 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
                                     className: storyClassName,
                                     onUpdate: handleUpdate,
                                     ref: (instance) => {
+                                        setMarkdownOutput(instance?.getMarkdown() || '')
                                         setTypistEditor(instance?.getEditor() || null)
 
                                         if (typeof forwardedRef === 'function') {

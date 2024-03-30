@@ -172,6 +172,9 @@ const MARKDOWN_INPUT_TASK_LISTS = `- [ ] First item
 
 const MARKDOWN_INPUT_IMAGES = `![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)
 
+![](https://octodex.github.com/images/octobiwan.jpg)
+![](https://octodex.github.com/images/octobiwan.jpg)
+
 ![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)
 
 ![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")
@@ -310,7 +313,7 @@ describe('HTML Serializer', () => {
 
             test('images syntax is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
-                    '<p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg &quot;Octobi Wan Catnobi&quot;)</p><p></p><p>[![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg &quot;Octobi Wan Catnobi&quot;)](https://octodex.github.com/octobiwan/)</p><p></p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you&#39;re looking for!</p><p></p><p>![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you&#39;re looking for!</p>',
+                    '<p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>![](https://octodex.github.com/images/octobiwan.jpg)</p><p>![](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg &quot;Octobi Wan Catnobi&quot;)</p><p></p><p>[![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg &quot;Octobi Wan Catnobi&quot;)](https://octodex.github.com/octobiwan/)</p><p></p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you&#39;re looking for!</p><p></p><p>![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you&#39;re looking for!</p>',
                 )
             })
 
@@ -444,7 +447,7 @@ Answer: [Doist Frontend](channel://190200)`),
 
             test('images HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
-                    '<img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"><p></p><p>Octobi Wan Catnobi: </p><p>Octobi Wan Catnobi:  - These are not the droids you\'re looking for!</p><p> - These are not the droids you\'re looking for!</p>',
+                    '<img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"><p><br></p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"><p></p><p>Octobi Wan Catnobi: </p><p>Octobi Wan Catnobi:  - These are not the droids you\'re looking for!</p><p> - These are not the droids you\'re looking for!</p>',
                 )
             })
 
@@ -460,7 +463,7 @@ Answer: [Doist Frontend](channel://190200)`),
                 )
 
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
-                    '<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></p><p><a href="https://octodex.github.com/octobiwan/"><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></a></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p>',
+                    '<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><br><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></p><p><a href="https://octodex.github.com/octobiwan/"><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></a></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p>',
                 )
             })
 
@@ -626,9 +629,9 @@ I need to add another paragraph below the second list item.
             })
 
             test('images HTML output is preserved', () => {
-                expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
-                    '<p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)</p><p>![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)</p><p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")</p><p>[![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")](https://octodex.github.com/octobiwan/)</p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)</p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you\'re looking for!</p><p>![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you\'re looking for!</p>',
-                )
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES))
+                    .toBe(`<p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)</p><p>![](https://octodex.github.com/images/octobiwan.jpg)
+![](https://octodex.github.com/images/octobiwan.jpg)</p><p>![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)</p><p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")</p><p>[![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")](https://octodex.github.com/octobiwan/)</p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)</p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!</p><p>![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!</p>`)
             })
 
             test('code HTML output is preserved', () => {
