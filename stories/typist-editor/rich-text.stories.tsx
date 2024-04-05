@@ -17,7 +17,8 @@ import { RichTextImageWrapper } from './wrappers/rich-text-image-wrapper'
 
 import type { Meta, StoryObj } from '@storybook/react'
 import type { Extensions } from '@tiptap/core'
-import type { EditorView, TypistEditorRef } from '../../src'
+import type { EditorView } from '@tiptap/pm/view'
+import type { TypistEditorRef } from '../../src'
 
 const meta: Meta<typeof TypistEditor> = {
     title: 'Typist Editor/Rich-text',

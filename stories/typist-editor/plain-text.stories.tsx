@@ -10,7 +10,7 @@ import { HashtagSuggestion } from './extensions/hashtag-suggestion'
 import { MentionSuggestion } from './extensions/mention-suggestion'
 
 import type { Meta, StoryObj } from '@storybook/react'
-import type { EditorView } from '../../src'
+import type { EditorView } from '@tiptap/pm/view'
 
 const meta: Meta<typeof TypistEditor> = {
     title: 'Typist Editor/Plain-text',
