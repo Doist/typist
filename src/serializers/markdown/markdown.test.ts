@@ -177,6 +177,8 @@ const HTML_INPUT_IMAGES = `<img src="https://octodex.github.com/images/octobiwan
 <p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you're looking for!</p>
 <p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you're looking for!</p>`
 
+const HTML_INPUT_VIDEOS = `<video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video><p><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video></p><p><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video> <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video></p><p><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video><br><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video></p><p>Big Buck Bunny: <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video></p><p>Big Buck Bunny: <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video> - The story of a giant rabbit with a heart bigger than himself.</p><p><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video> - The story of a giant rabbit with a heart bigger than himself.</p>`
+
 const HTML_INPUT_CODE = `<p>At the command prompt, type <code>nano</code>.</p>
 <p><code>Use \`code\` in your Markdown file.</code></p>`
 
@@ -579,6 +581,46 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)
 Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!
 
 ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!`)
+            })
+
+            // FIXME: This is the correct implementation of the "Turndown version" below, however,
+            // the current serializer implementation based on Turndown cannot handle this case.
+            // To fix this, we should switch to a different Markdown serializer library, such as
+            // unifiedjs/remark (something we should consider anyway).
+            test.skip('videos Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_VIDEOS))
+                    .toBe(`https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 - The story of a giant rabbit with a heart bigger than himself.
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 - The story of a giant rabbit with a heart bigger than himself.`)
+            })
+
+            test('videos Markdown output is correct (Turndown version)', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_VIDEOS))
+                    .toBe(`https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+Big Buck Bunny:https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4- The story of a giant rabbit with a heart bigger than himself.
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4- The story of a giant rabbit with a heart bigger than himself.`)
             })
 
             test('code Markdown output is correct', () => {

@@ -1,4 +1,4 @@
-import { isHastElementNode, isHastTextNode } from './unified'
+import { isHastElementNode, isHastTextNode, isMdastNode } from './unified'
 
 describe('Helper: Unified', () => {
     describe('#isHastElementNode', () => {
@@ -28,6 +28,21 @@ describe('Helper: Unified', () => {
 
         test('returns `true` when the given hast node is a text node', () => {
             expect(isHastTextNode({ type: 'text' })).toBe(true)
+        })
+    })
+
+    describe('#isMdastNode', () => {
+        test('returns `false` when the given mdast node is NOT a node with the specified type name', () => {
+            expect(isMdastNode({ type: 'unknown' }, 'link')).toBe(false)
+            expect(isMdastNode({ type: 'unknown' }, 'paragraph')).toBe(false)
+        })
+
+        test('returns `true` when the given mdast node is a node of type `link`', () => {
+            expect(isMdastNode({ type: 'link' }, 'link')).toBe(true)
+        })
+
+        test('returns `true` when the given mdast node is a node of type `paragraph`', () => {
+            expect(isMdastNode({ type: 'paragraph' }, 'paragraph')).toBe(true)
         })
     })
 })
