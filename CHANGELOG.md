@@ -1,3 +1,13 @@
+## [6.0.0](https://github.com/Doist/typist/compare/v5.0.1...v6.0.0) (2024-04-11)
+
+### ⚠ BREAKING CHANGES
+
+-   Use a wildcard export for ProseMirror model, state and view (#733)
+
+### Code Refactoring
+
+-   Use a wildcard export for ProseMirror model, state and view ([#733](https://github.com/Doist/typist/issues/733)) ([496e976](https://github.com/Doist/typist/commit/496e976553f7de235dde8c9e50e934b85fb9f217))
+
 ## [5.0.1](https://github.com/Doist/typist/compare/v5.0.0...v5.0.1) (2024-04-11)
 
 ### Bug Fixes
