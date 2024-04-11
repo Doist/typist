@@ -1,20 +1,20 @@
 import { visit } from 'unist-util-visit'
 
-import { isHastElement, isHastTextNode } from '../../../helpers/unified'
+import { isHastElementNode, isHastTextNode } from '../../../helpers/unified'
 
+import type { Node as HastNode } from 'hast'
 import type { Transformer } from 'unified'
-import type { Node } from 'unist'
 
 /**
  * A rehype plugin to add support for Tiptap task lists (i.e., `* [ ] Task`).
  */
 function rehypeTaskList(): Transformer {
     return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
-        visit(tree, 'element', (node: Node) => {
-            if (isHastElement(node, 'ul')) {
+        visit(tree, 'element', (node: HastNode) => {
+            if (isHastElementNode(node, 'ul')) {
                 const areAllChildrenTaskItems = node.children.every(
                     (c) =>
-                        isHastElement(c, 'li') &&
+                        isHastElementNode(c, 'li') &&
                         isHastTextNode(c.children[0]) &&
                         /^\[[ x]\] /i.test(c.children[0].value),
                 )
@@ -28,7 +28,7 @@ function rehypeTaskList(): Transformer {
                     }
 
                     node.children.forEach((c) => {
-                        if (isHastElement(c, 'li') && isHastTextNode(c.children[0])) {
+                        if (isHastElementNode(c, 'li') && isHastTextNode(c.children[0])) {
                             c.properties = {
                                 ...c.properties,
                                 'data-type': 'taskItem',

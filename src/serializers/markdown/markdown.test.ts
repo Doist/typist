@@ -155,10 +155,15 @@ const HTML_INPUT_TASK_LISTS = `<ul data-type="taskList">
 <li data-type="taskItem" data-checked="false">And here&#39;s the third list item.</li>
 </ul>`
 
-const HTML_INPUT_IMAGES = `<img src="/assets/images/tux.png" alt="Tux, the Linux mascot">
-<img src="/assets/images/tux.png" alt="Tux, the Linux mascot" title="The Linux mascot">
-<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">
-<p><a href="https://d33wubrfki0l68.cloudfront.net/e7ed9fe4bafe46e275c807d63591f85f9ab246ba/e2d28/assets/images/tux.png"><img src="/assets/images/tux.png" alt="Tux, the Linux mascot" title="The Linux mascot"></a></p>`
+const HTML_INPUT_IMAGES = `<img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi">
+<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"></p>
+<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><br><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p>
+<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p>
+<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></p>
+<p><a href="https://octodex.github.com/octobiwan/"><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></a></p>
+<p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p>
+<p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you're looking for!</p>
+<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you're looking for!</p>`
 
 const HTML_INPUT_CODE = `<p>At the command prompt, type <code>nano</code>.</p>
 <p><code>Use \`code\` in your Markdown file.</code></p>`
@@ -531,11 +536,25 @@ Strikethrough uses two tildes: ~~scratch this~~`,
             })
 
             test('images Markdown output is correct', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_IMAGES)).toBe(
-                    `![Tux, the Linux mascot](/assets/images/tux.png) ![Tux, the Linux mascot](/assets/images/tux.png "The Linux mascot") ![](data:image/gif;base64,NOT_SUPPORTED)
+                expect(markdownSerializer.serialize(HTML_INPUT_IMAGES))
+                    .toBe(`![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)
 
-[![Tux, the Linux mascot](/assets/images/tux.png "The Linux mascot")](https://d33wubrfki0l68.cloudfront.net/e7ed9fe4bafe46e275c807d63591f85f9ab246ba/e2d28/assets/images/tux.png)`,
-                )
+![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)
+
+![](https://octodex.github.com/images/octobiwan.jpg)
+![](https://octodex.github.com/images/octobiwan.jpg)
+
+![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)
+
+![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")
+
+[![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")](https://octodex.github.com/octobiwan/)
+
+Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)
+
+Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!
+
+![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!`)
             })
 
             test('code Markdown output is correct', () => {
@@ -747,11 +766,25 @@ See the section on [\`code\`](#code).`,
             })
 
             test('images Markdown output is correct', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_IMAGES)).toBe(
-                    `![Tux, the Linux mascot](/assets/images/tux.png) ![Tux, the Linux mascot](/assets/images/tux.png "The Linux mascot") ![](data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=)
+                expect(markdownSerializer.serialize(HTML_INPUT_IMAGES))
+                    .toBe(`![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)
 
-[![Tux, the Linux mascot](/assets/images/tux.png "The Linux mascot")](https://d33wubrfki0l68.cloudfront.net/e7ed9fe4bafe46e275c807d63591f85f9ab246ba/e2d28/assets/images/tux.png)`,
-                )
+![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)
+
+![](https://octodex.github.com/images/octobiwan.jpg)
+![](https://octodex.github.com/images/octobiwan.jpg)
+
+![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)
+
+![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")
+
+[![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")](https://octodex.github.com/octobiwan/)
+
+Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)
+
+Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!
+
+![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!`)
             })
 
             test('strikethrough Markdown output is ignored', () => {
