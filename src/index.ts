@@ -77,10 +77,9 @@ export {
 } from '@tiptap/core'
 export { Extension, Mark } from '@tiptap/core'
 export * from '@tiptap/extension-character-count'
-export { DOMParser, Fragment, Node as ProseMirrorNode } from '@tiptap/pm/model'
-export type { Selection, Transaction } from '@tiptap/pm/state'
-export { EditorState, Plugin, PluginKey } from '@tiptap/pm/state'
-export type { EditorView } from '@tiptap/pm/view'
+export * as ProseMirrorModel from '@tiptap/pm/model'
+export * as ProseMirrorState from '@tiptap/pm/state'
+export * as ProseMirrorView from '@tiptap/pm/view'
 export type { Editor, NodeViewProps, ReactRendererOptions } from '@tiptap/react'
 export { NodeViewWrapper, ReactRenderer } from '@tiptap/react'
 export type {
