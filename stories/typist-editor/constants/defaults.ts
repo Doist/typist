@@ -122,9 +122,6 @@ const DEFAULT_RICH_TEXT_KIT_OPTIONS: Partial<RichTextKitOptions> = {
     dropCursor: {
         class: 'ProseMirror-dropcursor',
     },
-    link: {
-        openOnClick: false,
-    },
     orderedList: {
         smartToggle: true,
     },
