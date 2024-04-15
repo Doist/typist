@@ -63,6 +63,12 @@ function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
  */
 const RichTextLink = Link.extend({
     inclusive: false,
+    addOptions() {
+        return {
+            ...this.parent?.(),
+            openOnClick: 'whenNotEditable' as LinkOptions['openOnClick'],
+        }
+    },
     addAttributes() {
         return {
             ...this.parent?.(),
