@@ -1,3 +1,9 @@
+## [6.0.2](https://github.com/Doist/typist/compare/v6.0.1...v6.0.2) (2024-04-15)
+
+### Bug Fixes
+
+-   **rich-text-link:** Change `openOnClick` default to `whenNotEditable` ([#744](https://github.com/Doist/typist/issues/744)) ([db729d4](https://github.com/Doist/typist/commit/db729d48702231b78c77313510a7069d5c36fdde))
+
 ## [6.0.1](https://github.com/Doist/typist/compare/v6.0.0...v6.0.1) (2024-04-15)
 
 ### Bug Fixes
