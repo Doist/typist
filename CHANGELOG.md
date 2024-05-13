@@ -1,3 +1,9 @@
+## [6.0.3](https://github.com/Doist/typist/compare/v6.0.2...v6.0.3) (2024-05-13)
+
+### Bug Fixes
+
+-   Check `code` mark presence instead of any mark in `canInsertSuggestion` ([#791](https://github.com/Doist/typist/issues/791)) ([2f70959](https://github.com/Doist/typist/commit/2f709597c029e1d68bf7d39fb20c8a9a17a0f800))
+
 ## [6.0.2](https://github.com/Doist/typist/compare/v6.0.1...v6.0.2) (2024-04-15)
 
 ### Bug Fixes
