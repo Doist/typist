@@ -14,12 +14,14 @@ function canInsertSuggestion({ editor, state }: { editor: Editor; state: EditorS
     const isInsideCodeBlockNode = selection.$from.parent.type.name === 'codeBlock'
 
     const wordsBeforeSelection = (selection.$from.nodeBefore?.text ?? '').split(' ')
+    const nodeBeforeSelection = selection.$from.parent.cut(
+        selection.$from.parentOffset - wordsBeforeSelection.slice(-1)[0].length - 1,
+        selection.$from.parentOffset - 1,
+    ).content.firstChild
 
-    const hasCodeMarkBefore =
-        (selection.$from.parent.cut(
-            selection.$from.parentOffset - wordsBeforeSelection.slice(-1)[0].length - 1,
-            selection.$from.parentOffset - 1,
-        ).content.firstChild?.marks.length ?? 0) > 0
+    const hasCodeMarkBefore = (nodeBeforeSelection?.marks ?? []).some(
+        (mark) => mark.type.name === 'code',
+    )
 
     const isComposingInlineCode = wordsBeforeSelection.some((word) => word.startsWith('`'))
 
