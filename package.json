@@ -94,7 +94,7 @@
         "@storybook/mdx2-csf": "1.1.0",
         "@storybook/react": "8.2.2",
         "@storybook/react-vite": "8.2.2",
-        "@testing-library/dom": "10.3.1",
+        "@testing-library/dom": "10.3.2",
         "@testing-library/jest-dom": "6.4.6",
         "@testing-library/react": "16.0.0",
         "@types/hast": "3.0.4",
