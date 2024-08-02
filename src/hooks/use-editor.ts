@@ -1,9 +1,28 @@
-import { DependencyList, useEffect, useState } from 'react'
+import { DependencyList, useCallback, useEffect, useState } from 'react'
 
-import { useRerender } from '@react-hookz/web'
 import { Editor } from '@tiptap/react'
 
 import type { EditorOptions } from '@tiptap/core'
+
+function stateChanger(state: number) {
+    return (state + 1) % Number.MAX_SAFE_INTEGER
+}
+
+/**
+ * This is a copy of the `useRerender` hook from `@react-hookz/web`, which is a utility hook that
+ * returns a function that can be called to force a re-render of the component.
+ *
+ * Turns out we don't have the need to use any of the other hooks from `@react-hookz/web`, which is
+ * a peer dependency that often introduces breaking changes, causing upgrade issues across our
+ * projects.
+ */
+function useRerender(): () => void {
+    const [, setState] = useState(0)
+
+    return useCallback(() => {
+        setState(stateChanger)
+    }, [])
+}
 
 /**
  * This is a fork of the official `useEditor` hook with one key difference, which is to prevent a

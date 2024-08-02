@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useReducer } from 'react'
 import {
     RiArrowGoBackLine,
     RiArrowGoForwardLine,
@@ -28,8 +28,6 @@ import {
 
 import { Box, Button } from '@doist/reactist'
 
-import { useRerender } from '@react-hookz/web'
-
 import styles from './typist-editor-toolbar.module.css'
 
 import type { CoreEditor } from '../../../../src'
@@ -41,7 +39,7 @@ type TypistEditorToolbarProps = {
 function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
     const isCursorOverLink = Boolean(editor.getAttributes('link').href)
 
-    const forceRerender = useRerender()
+    const [, forceRerender] = useReducer((x: number) => x + 1, 0)
 
     useEffect(
         function initializeEventListeners() {

@@ -143,7 +143,6 @@
         "vitest": "2.0.4"
     },
     "peerDependencies": {
-        "@react-hookz/web": "^14.2.3 || >=15.x",
         "emoji-regex": "^10.2.1",
         "hast-util-is-element": "^3.0.0",
         "linkifyjs": "^4.1.1",
