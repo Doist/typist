@@ -1,3 +1,9 @@
+## [6.0.4](https://github.com/Doist/typist/compare/v6.0.3...v6.0.4) (2024-08-02)
+
+### Bug Fixes
+
+-   Remove `@react-hookz/web` peer dependency ([#861](https://github.com/Doist/typist/issues/861)) ([ad7644d](https://github.com/Doist/typist/commit/ad7644d0c5f33225607198b3f549a19d9632f405))
+
 ## [6.0.3](https://github.com/Doist/typist/compare/v6.0.2...v6.0.3) (2024-05-13)
 
 ### Bug Fixes
