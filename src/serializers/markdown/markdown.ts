@@ -114,11 +114,10 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
         turndown.escape = (str) => {
             return (
                 str
-                    // Escape all backslash characters that precedes any punctuation characters,
-                    // otherwise the backslash character itself will be interpreted as escaping the
-                    // character that comes after it (which is not the intent). It's important that
-                    // this escape rule is executed before all other escape rules, otherwise we
-                    // could be double escaping some backslash characters.
+                    // Escape all backslash characters that precede any punctuation marks, to
+                    // prevent the backslash itself from being interpreted as an escape sequence
+                    // for the subsequent character. It's important to apply this rule first to
+                    // avoid double escaping.
                     .replace(new RegExp(`(\\\\${REGEX_PUNCTUATION.source})`, 'g'), '\\$1')
 
                     // Although the CommonMark specification allows for bulleted or ordered lists

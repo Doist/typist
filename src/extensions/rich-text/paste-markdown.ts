@@ -5,6 +5,7 @@ import * as linkify from 'linkifyjs'
 
 import { ClipboardDataType } from '../../constants/common'
 import { PASTE_MARKDOWN_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
+import { REGEX_PUNCTUATION } from '../../constants/regular-expressions'
 
 /**
  * A partial type for the the clipboard metadata coming from VS Code.
@@ -110,9 +111,17 @@ const PasteMarkdown = Extension.create({
                             return false
                         }
 
+                        // Escape all backslash characters that precede any punctuation marks, to
+                        // prevent the backslash itself from being interpreted as an escape sequence
+                        // for the subsequent character.
+                        const escapedTextContent = textContent.replace(
+                            new RegExp(`(\\\\${REGEX_PUNCTUATION.source})`, 'g'),
+                            '\\$1',
+                        )
+
                         // Send the clipboard text through the HTML serializer to convert potential
                         // Markdown into HTML, and then insert it into the editor
-                        editor.commands.insertMarkdownContent(textContent)
+                        editor.commands.insertMarkdownContent(escapedTextContent)
 
                         // Suppress the default handling behaviour
                         return true
