@@ -1,3 +1,9 @@
+## [6.0.5](https://github.com/Doist/typist/compare/v6.0.4...v6.0.5) (2024-08-09)
+
+### Bug Fixes
+
+-   **paste-markdown:** Escape backslashes before punctuation ([#866](https://github.com/Doist/typist/issues/866)) ([e7e83de](https://github.com/Doist/typist/commit/e7e83dec4f522ca14533f8ad0ffb81e8492664ff))
+
 ## [6.0.4](https://github.com/Doist/typist/compare/v6.0.3...v6.0.4) (2024-08-02)
 
 ### Bug Fixes
