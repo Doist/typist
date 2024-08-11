@@ -255,7 +255,7 @@ function createSuggestionExtension<
             } = this.options
 
             return [
-                TiptapSuggestion<SuggestionItemType>({
+                TiptapSuggestion<SuggestionItemType, SuggestionItemType>({
                     pluginKey: new PluginKey(nodeType),
                     editor: this.editor,
                     char: triggerChar,
