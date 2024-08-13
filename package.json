@@ -137,7 +137,7 @@
         "storybook": "8.2.8",
         "storybook-css-modules": "1.0.8",
         "tippy.js": "6.3.7",
-        "type-fest": "4.23.0",
+        "type-fest": "4.24.0",
         "typescript": "5.5.4",
         "typescript-plugin-css-modules": "5.1.0",
         "vitest": "2.0.5"
