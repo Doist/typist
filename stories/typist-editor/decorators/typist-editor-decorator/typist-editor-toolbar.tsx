@@ -26,7 +26,7 @@ import {
     RiTextWrap,
 } from 'react-icons/ri'
 
-import { Box, Button } from '@doist/reactist'
+import { Box, IconButton } from '@doist/reactist'
 
 import styles from './typist-editor-toolbar.module.css'
 
@@ -90,7 +90,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
             marginX="large"
             padding="xsmall"
         >
-            <Button
+            <IconButton
                 aria-label="Bold"
                 aria-pressed={editor.isActive('bold')}
                 disabled={false}
@@ -98,7 +98,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleBold().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Italic"
                 aria-pressed={editor.isActive('italic')}
                 disabled={false}
@@ -106,7 +106,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleItalic().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Strikethrough"
                 aria-pressed={editor.isActive('strike')}
                 disabled={false}
@@ -114,7 +114,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleStrike().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Code"
                 aria-pressed={editor.isActive('code')}
                 disabled={false}
@@ -122,7 +122,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleCode().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Heading 1"
                 aria-pressed={editor.isActive('heading', { level: 1 })}
                 disabled={false}
@@ -131,7 +131,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             />
-            <Button
+            <IconButton
                 aria-label="Heading 2"
                 aria-pressed={editor.isActive('heading', { level: 2 })}
                 disabled={false}
@@ -139,7 +139,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             />
-            <Button
+            <IconButton
                 aria-label="Heading 3"
                 aria-pressed={editor.isActive('heading', { level: 3 })}
                 disabled={false}
@@ -147,7 +147,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
             />
-            <Button
+            <IconButton
                 aria-label="Heading 4"
                 aria-pressed={editor.isActive('heading', { level: 4 })}
                 disabled={false}
@@ -155,7 +155,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
             />
-            <Button
+            <IconButton
                 aria-label="Heading 5"
                 aria-pressed={editor.isActive('heading', { level: 5 })}
                 disabled={false}
@@ -163,7 +163,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
             />
-            <Button
+            <IconButton
                 aria-label="Heading 6"
                 aria-pressed={editor.isActive('heading', { level: 6 })}
                 disabled={false}
@@ -171,7 +171,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
             />
-            <Button
+            <IconButton
                 aria-label="Paragraph"
                 aria-pressed={editor.isActive('paragraph')}
                 disabled={false}
@@ -179,7 +179,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().setParagraph().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Bullet List"
                 aria-pressed={editor.isActive('bulletList')}
                 disabled={false}
@@ -187,7 +187,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Ordered List"
                 aria-pressed={editor.isActive('orderedList')}
                 disabled={false}
@@ -195,7 +195,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Code Block"
                 aria-pressed={editor.isActive('codeBlock')}
                 disabled={false}
@@ -203,7 +203,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Insert/Edit Link"
                 aria-pressed={editor.isActive('link')}
                 disabled={!isCursorOverLink && editor.state.selection.empty}
@@ -212,14 +212,14 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={handleLinkButtonClick}
             />
-            <Button
+            <IconButton
                 aria-label="Remove Link"
                 disabled={!isCursorOverLink}
                 icon={<RiLinkUnlink />}
                 variant="quaternary"
                 onClick={() => editor.chain().focus().unsetLink().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Insert Image"
                 disabled={false}
                 exceptionallySetClassName={styles.withLeftDivider}
@@ -227,7 +227,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={handleImageButtonClick}
             />
-            <Button
+            <IconButton
                 aria-label="Blockquote"
                 aria-pressed={editor.isActive('blockquote')}
                 disabled={false}
@@ -235,7 +235,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().toggleBlockquote().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Horizontal Rule"
                 aria-pressed={editor.isActive('horizontalRule')}
                 disabled={false}
@@ -243,7 +243,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().setHorizontalRule().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Hard Break"
                 disabled={false}
                 exceptionallySetClassName={styles.withLeftDivider}
@@ -251,14 +251,14 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().setHardBreak().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Clear Format"
                 disabled={false}
                 icon={<RiFormatClear />}
                 variant="quaternary"
                 onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Undo"
                 disabled={false}
                 exceptionallySetClassName={styles.withLeftDivider}
@@ -266,14 +266,14 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                 variant="quaternary"
                 onClick={() => editor.chain().focus().undo().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Redo"
                 disabled={false}
                 icon={<RiArrowGoForwardLine />}
                 variant="quaternary"
                 onClick={() => editor.chain().focus().redo().run()}
             />
-            <Button
+            <IconButton
                 aria-label="Clear Document"
                 disabled={false}
                 exceptionallySetClassName={styles.withLeftDivider}
