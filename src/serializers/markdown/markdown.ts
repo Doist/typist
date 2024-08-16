@@ -62,7 +62,7 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
 
         // Return the list marker for empty bullet list items
         if (node.nodeName === 'UL' || (parentNode?.nodeName === 'UL' && node.nodeName === 'LI')) {
-            return `${BULLET_LIST_MARKER} `
+            return `${BULLET_LIST_MARKER} \n`
         }
 
         // Return the list marker for empty ordered list items
@@ -73,7 +73,7 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
                     : (node as HTMLElement).getAttribute('start')
             const index = Array.prototype.indexOf.call(parentNode.children, node)
 
-            return `${start ? Number(start) + index : index + 1}. `
+            return `${start ? Number(start) + index : index + 1}. \n`
         }
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment

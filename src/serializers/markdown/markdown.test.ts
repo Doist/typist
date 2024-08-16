@@ -64,6 +64,12 @@ const HTML_INPUT_ORDERED_LISTS = `<ol>
 <li>Fourth item</li>
 </ol>
 <hr>
+<ol>
+<li>First item</li>
+<li></li>
+<li>Third item</li>
+</ol>
+<hr>
 <ol start="5">
 <li>First item</li>
 <li>Second item</li>
@@ -87,6 +93,12 @@ const HTML_INPUT_UNORDERED_LISTS = `<ul>
 <li>Second item</li>
 <li>Third item</li>
 <li>Fourth item</li>
+</ul>
+<hr>
+<ul>
+<li>First item</li>
+<li></li>
+<li>Third item</li>
 </ul>
 <hr>
 <ul>
@@ -447,6 +459,12 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 
 ---
 
+1. First item
+2.
+3. Third item
+
+---
+
 5. First item
 6. Second item
 7. Third item
@@ -468,6 +486,12 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 - Second item
 - Third item
 - Fourth item
+
+---
+
+- First item
+-
+- Third item
 
 ---
 
@@ -725,6 +749,12 @@ See the section on [\`code\`](#code).`,
 
 ---
 
+1.  First item
+2.
+3.  Third item
+
+---
+
 5.  First item
 6.  Second item
 7.  Third item
@@ -746,6 +776,12 @@ See the section on [\`code\`](#code).`,
 -   Second item
 -   Third item
 -   Fourth item
+
+---
+
+-   First item
+-
+-   Third item
 
 ---
 
