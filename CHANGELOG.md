@@ -1,3 +1,9 @@
+## [6.0.8](https://github.com/Doist/typist/compare/v6.0.7...v6.0.8) (2024-08-16)
+
+### Bug Fixes
+
+-   Empty list items returns incorrectly formatted Markdown ([#874](https://github.com/Doist/typist/issues/874)) ([9c8bcb5](https://github.com/Doist/typist/commit/9c8bcb5e00040a24b0287a227baed27eb2ecf0d7))
+
 ## [6.0.7](https://github.com/Doist/typist/compare/v6.0.6...v6.0.7) (2024-08-14)
 
 ### Bug Fixes
