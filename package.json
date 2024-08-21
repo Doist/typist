@@ -118,7 +118,7 @@
         "eslint-plugin-vitest": "0.4.1",
         "eslint-plugin-vitest-globals": "1.5.0",
         "github-markdown-css": "5.6.1",
-        "husky": "9.1.4",
+        "husky": "9.1.5",
         "ignore-sync": "7.0.1",
         "is-ci": "3.0.1",
         "jsdom": "24.1.1",
