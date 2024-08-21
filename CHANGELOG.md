@@ -1,3 +1,9 @@
+## [6.0.10](https://github.com/Doist/typist/compare/v6.0.9...v6.0.10) (2024-08-21)
+
+### Bug Fixes
+
+-   **deps:** update tiptap packages to v2.6.5 ([#881](https://github.com/Doist/typist/issues/881)) ([b72cf19](https://github.com/Doist/typist/commit/b72cf192cd50035a87a54ff83f194cb41b5ad700))
+
 ## [6.0.9](https://github.com/Doist/typist/compare/v6.0.8...v6.0.9) (2024-08-20)
 
 ### Bug Fixes
