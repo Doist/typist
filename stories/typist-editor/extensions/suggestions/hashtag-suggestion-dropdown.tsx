@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
 import { Inline, Text } from '@doist/reactist'
 
@@ -15,11 +16,22 @@ const HashtagSuggestionDropdown = forwardRef<
     SuggestionRendererRef,
     SuggestionRendererProps<HashtagSuggestionItem>
 >(function HashtagSuggestionDropdown({ items, command }, ref) {
+    const handleItemSelect = useEvent((index: number) => {
+        const item = items[index] as HashtagSuggestionItem | undefined
+
+        if (item) {
+            command({
+                id: item.id,
+                label: item.name,
+            })
+        }
+    })
+
     return (
         <BaseSuggestionDropdown
             forwardedRef={ref}
             items={items}
-            onItemSelect={command}
+            onItemSelect={handleItemSelect}
             renderItem={(item) => (
                 <Inline space="small" exceptionallySetClassName={styles.hashtagSuggestionItem}>
                     <Avatar

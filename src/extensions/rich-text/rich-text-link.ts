@@ -57,16 +57,21 @@ function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
 }
 
 /**
+ * The options available to customize the `RichTextLink` extension.
+ */
+type RichTextLinkOptions = LinkOptions
+
+/**
  * Custom extension that extends the built-in `Link` extension to add additional input/paste rules
  * for converting the Markdown link syntax (i.e. `[Doist](https://doist.com)`) into links, and also
  * adds support for the `title` attribute.
  */
-const RichTextLink = Link.extend({
+const RichTextLink = Link.extend<RichTextLinkOptions>({
     inclusive: false,
     addOptions() {
         return {
             ...this.parent?.(),
-            openOnClick: 'whenNotEditable' as LinkOptions['openOnClick'],
+            openOnClick: 'whenNotEditable',
         }
     },
     addAttributes() {
@@ -117,4 +122,4 @@ const RichTextLink = Link.extend({
 
 export { RichTextLink }
 
-export type { LinkOptions as RichTextLinkOptions }
+export type { RichTextLinkOptions }

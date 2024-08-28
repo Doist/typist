@@ -22,7 +22,7 @@ type TypistEditorDecoratorProps = {
     Story: PartialStoryFn<ReactRenderer, TypistEditorPropsWithRef>
     args: TypistEditorProps
     withToolbar?: boolean
-    renderBottomFunctions?: () => JSX.Element
+    renderBottomFunctions?: () => React.ReactElement
 }
 
 const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorProps>(
