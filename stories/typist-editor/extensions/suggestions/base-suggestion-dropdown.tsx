@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import { Box, Inline, Text } from '@doist/reactist'
 
@@ -6,21 +6,21 @@ import { SuggestionRendererRef } from '../../../../src'
 
 import styles from './base-suggestion-dropdown.module.css'
 
-type BaseSuggestionDropdownProps<TItem> = {
+type BaseSuggestionDropdownProps<TSuggestionItem> = {
     forwardedRef: React.ForwardedRef<SuggestionRendererRef>
-    items: TItem[]
+    items: TSuggestionItem[]
     itemSize?: number
-    renderItem: (item: TItem) => JSX.Element
-    onItemSelect: (item: TItem) => void
+    renderItem: (item: TSuggestionItem) => React.ReactElement
+    onItemSelect: (index: number) => void
 }
 
-function BaseSuggestionDropdown<TItem extends object>({
+function BaseSuggestionDropdown<TSuggestionItem extends object>({
     forwardedRef,
     items,
     itemSize = 6,
     renderItem,
     onItemSelect,
-}: BaseSuggestionDropdownProps<TItem>): JSX.Element | null {
+}: BaseSuggestionDropdownProps<TSuggestionItem>) {
     const selectedItemRef = useRef<HTMLLIElement>(null)
     const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -30,17 +30,6 @@ function BaseSuggestionDropdown<TItem extends object>({
 
     const areSuggestionsLoading = items.length === 1 && 'isLoading' in items[0]
     const areSuggestionsEmpty = items.length === 0
-
-    const handleItemSelect = useCallback(
-        (index: number) => {
-            const item = items[index]
-
-            if (item) {
-                onItemSelect(item)
-            }
-        },
-        [items, onItemSelect],
-    )
 
     useEffect(
         function scrollSelectedItemIntoView() {
@@ -76,7 +65,7 @@ function BaseSuggestionDropdown<TItem extends object>({
                     }
 
                     if (event.key === 'Enter') {
-                        handleItemSelect(selectedIndex)
+                        onItemSelect(selectedIndex)
                         return true
                     }
 
@@ -84,7 +73,7 @@ function BaseSuggestionDropdown<TItem extends object>({
                 },
             }
         },
-        [items.length, handleItemSelect, selectedIndex],
+        [items.length, onItemSelect, selectedIndex],
     )
 
     return (
@@ -135,7 +124,7 @@ function BaseSuggestionDropdown<TItem extends object>({
                             display="flex"
                             alignItems="center"
                             borderRadius="standard"
-                            onClick={() => handleItemSelect(index)}
+                            onClick={() => onItemSelect(index)}
                             ref={index === selectedIndex ? selectedItemRef : null}
                         >
                             {renderItem(item)}

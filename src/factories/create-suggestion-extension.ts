@@ -10,13 +10,14 @@ import { canInsertSuggestion } from '../utilities/can-insert-suggestion'
 import type {
     SuggestionKeyDownProps as CoreSuggestionKeyDownProps,
     SuggestionOptions as CoreSuggestionOptions,
+    SuggestionProps as CoreSuggestionProps,
 } from '@tiptap/suggestion'
 import type { ConditionalKeys, RequireAtLeastOne } from 'type-fest'
 
 /**
- * The properties that describe the suggestion node attributes.
+ * A type that describes the suggestion node attributes.
  */
-type SuggestionAttributes = {
+type SuggestionNodeAttributes = {
     /**
      * The suggestion node unique identifier to be rendered by the editor as a `data-id` attribute.
      */
@@ -30,23 +31,23 @@ type SuggestionAttributes = {
 }
 
 /**
- * The properties that describe the minimal props that an autocomplete dropdown must receive.
+ * A type that describes the minimal props that an autocomplete dropdown must receive.
  */
-type SuggestionRendererProps<SuggestionItemType> = {
-    /**
-     * The function that must be invoked when a suggestion item is selected.
-     */
-    command: (item: SuggestionItemType) => void
-
+type SuggestionRendererProps<TSuggestionItem> = {
     /**
      * The list of suggestion items to be rendered by the autocomplete dropdown.
      */
-    items: SuggestionItemType[]
+    items: CoreSuggestionProps<TSuggestionItem>['items']
+
+    /**
+     * The function that must be invoked when a suggestion item is selected.
+     */
+    command: CoreSuggestionProps<TSuggestionItem, SuggestionNodeAttributes>['command']
 }
 
 /**
  * A type that describes the forwarded ref that an autocomplete dropdown must implement with
- * `useImperativeHandle` to receive `keyDown` events from the render function.
+ * `useImperativeHandle` to handle `keydown` events in the dropdown render function.
  */
 type SuggestionRendererRef = {
     onKeyDown: (props: CoreSuggestionKeyDownProps) => boolean
@@ -55,11 +56,11 @@ type SuggestionRendererRef = {
 /**
  * The options available to customize the extension created by the factory function.
  */
-type SuggestionOptions<SuggestionItemType> = {
+type SuggestionOptions<TSuggestionItem> = {
     /**
      * The character that triggers the autocomplete dropdown.
      */
-    triggerChar: '@' | '#' | '+'
+    triggerChar: string
 
     /**
      * Allows or disallows spaces in suggested items.
@@ -79,46 +80,46 @@ type SuggestionOptions<SuggestionItemType> = {
     /**
      * Define how the suggestion item `aria-label` attribute should be rendered.
      */
-    renderAriaLabel?: (attrs: SuggestionAttributes) => string
+    renderAriaLabel?: (attrs: SuggestionNodeAttributes) => string
 
     /**
      * A render function for the autocomplete dropdown.
      */
-    dropdownRenderFn?: CoreSuggestionOptions<SuggestionItemType>['render']
+    dropdownRenderFn?: CoreSuggestionOptions<TSuggestionItem>['render']
 
     /**
      * The event handler that is fired when the search string has changed.
      */
     onSearchChange?: (
         query: string,
-        storage: SuggestionStorage<SuggestionItemType>,
-    ) => SuggestionItemType[] | Promise<SuggestionItemType[]>
+        storage: SuggestionStorage<TSuggestionItem>,
+    ) => TSuggestionItem[] | Promise<TSuggestionItem[]>
 
     /**
      * The event handler that is fired when a suggestion item is selected.
      */
-    onItemSelect?: (item: SuggestionItemType) => void
+    onItemSelect?: (item: TSuggestionItem) => void
 }
 
 /**
  * The storage holding the suggestion items original array, and a collection indexed by the item id.
  */
-type SuggestionStorage<SuggestionItemType> = Readonly<{
+type SuggestionStorage<TSuggestionItem> = Readonly<{
     /**
      * The original array of suggestion items.
      */
-    items: SuggestionItemType[]
+    items: TSuggestionItem[]
 
     /**
      * A collection of suggestion items indexed by the item id.
      */
-    itemsById: { readonly [id: SuggestionAttributes['id']]: SuggestionItemType | undefined }
+    itemsById: { readonly [id: SuggestionNodeAttributes['id']]: TSuggestionItem | undefined }
 }>
 
 /**
  * The return type for a suggestion extension created by the factory function.
  */
-type SuggestionExtensionResult<SuggestionItemType> = Node<SuggestionOptions<SuggestionItemType>>
+type SuggestionExtensionResult<TSuggestionItem> = Node<SuggestionOptions<TSuggestionItem>>
 
 /**
  * A factory function responsible for creating different types of suggestion extensions with
@@ -131,30 +132,40 @@ type SuggestionExtensionResult<SuggestionItemType> = Node<SuggestionOptions<Sugg
  * specify the source item type, and use the optional `attributesMapping` option to map the
  * source properties to the internal `data-id` and `data-label` attributes.
  *
+ * This factory function also stores the suggestion items internally in the editor storage (as-is,
+ * and indexed by an identifier), as a way to make sure that if a previously referenced suggestion
+ * changes its label, the editor will always render the most up-to-date label for the suggestion by
+ * reading it from the storage. An example use case for this is when a user mention is added to the
+ * editor, and the user changed its name afterwards, the editor will always render the most
+ * up-to-date user name for the mention.
+ *
  * @param type A unique identifier for the suggestion extension type.
+ * @param items An array of suggestion items to be stored in the editor storage.
  * @param attributesMapping An object to map the `data-id` and `data-label` attributes with the
  * source item type properties.
  *
  * @returns A new suggestion extension tailored to a specific use case.
  */
 function createSuggestionExtension<
-    SuggestionItemType extends { [id: SuggestionAttributes['id']]: unknown } = SuggestionAttributes,
+    TSuggestionItem extends {
+        [id: SuggestionNodeAttributes['id']]: unknown
+    } = SuggestionNodeAttributes,
 >(
     type: string,
-    items: SuggestionItemType[] = [],
+    items: TSuggestionItem[] = [],
 
     // This type makes sure that if a generic type variable is specified, the `attributesMapping`
     // is also defined (and vice versa) along with making sure that at least one attribute is
     // specified, and that all constraints are satisfied.
-    ...attributesMapping: SuggestionItemType extends SuggestionAttributes
+    ...attributesMapping: TSuggestionItem extends SuggestionNodeAttributes
         ? []
         : [
               RequireAtLeastOne<{
-                  id: ConditionalKeys<SuggestionItemType, SuggestionAttributes['id']>
-                  label: ConditionalKeys<SuggestionItemType, SuggestionAttributes['label']>
+                  id: ConditionalKeys<TSuggestionItem, SuggestionNodeAttributes['id']>
+                  label: ConditionalKeys<TSuggestionItem, SuggestionNodeAttributes['label']>
               }>,
           ]
-): SuggestionExtensionResult<SuggestionItemType> {
+): SuggestionExtensionResult<TSuggestionItem> {
     // Normalize the node type and add the `Suggestion` suffix so that it can be easily identified
     // when parsing the editor schema programatically (useful for Markdown/HTML serialization)
     const nodeType = `${camelCase(type)}Suggestion`
@@ -167,10 +178,7 @@ function createSuggestionExtension<
     const labelAttribute = String(attributesMapping[0]?.label ?? 'label')
 
     // Create a personalized suggestion extension
-    return Node.create<
-        SuggestionOptions<SuggestionItemType>,
-        SuggestionStorage<SuggestionItemType>
-    >({
+    return Node.create<SuggestionOptions<TSuggestionItem>, SuggestionStorage<TSuggestionItem>>({
         name: nodeType,
         priority: SUGGESTION_EXTENSION_PRIORITY,
         inline: true,
@@ -198,25 +206,27 @@ function createSuggestionExtension<
         },
         addAttributes() {
             return {
-                [idAttribute]: {
+                id: {
                     default: null,
                     parseHTML: (element) => element.getAttribute('data-id'),
                     renderHTML: (attributes) => ({
-                        'data-id': String(attributes[idAttribute]),
+                        'data-id': String(attributes.id),
                     }),
                 },
-                [labelAttribute]: {
+                label: {
                     default: null,
                     parseHTML: (element: Element) => {
                         const id = String(element.getAttribute('data-id'))
                         const item = this.storage.itemsById[id]
 
-                        // Read the latest item label from the storage, if available, otherwise
-                        // fallback to the item label in the `data-label` attribute
+                        // Attempt to read the item label from the storage first (as a way to make
+                        // sure that a previously referenced suggestion always renders the most
+                        // up-to-date label for the suggestion), and fallback to the `data-label`
+                        // attribute if the item is not found in the storage
                         return String(item?.[labelAttribute] ?? element.getAttribute('data-label'))
                     },
                     renderHTML: (attributes) => ({
-                        'data-label': String(attributes[labelAttribute]),
+                        'data-label': String(attributes.label),
                     }),
                 },
             }
@@ -231,31 +241,34 @@ function createSuggestionExtension<
                     {
                         [`data-${attributeType}`]: '',
                         'aria-label': this.options.renderAriaLabel?.({
-                            id: String(node.attrs[idAttribute]),
-                            label: String(node.attrs[labelAttribute]),
+                            id: String(node.attrs.id),
+                            label: String(node.attrs.label),
                         }),
                     },
                     HTMLAttributes,
                 ),
-                `${String(this.options.triggerChar)}${String(node.attrs[labelAttribute])}`,
+                `${String(this.options.triggerChar)}${String(node.attrs.label)}`,
             ]
         },
         renderText({ node }) {
-            return `${String(this.options.triggerChar)}${String(node.attrs[labelAttribute])}`
+            return `${String(this.options.triggerChar)}${String(node.attrs.label)}`
         },
         addProseMirrorPlugins() {
             const {
-                triggerChar,
-                allowSpaces,
-                allowedPrefixes,
-                startOfLine,
-                onSearchChange,
-                onItemSelect,
-                dropdownRenderFn,
-            } = this.options
+                options: {
+                    triggerChar,
+                    allowSpaces,
+                    allowedPrefixes,
+                    startOfLine,
+                    onSearchChange,
+                    onItemSelect,
+                    dropdownRenderFn,
+                },
+                storage,
+            } = this
 
             return [
-                TiptapSuggestion<SuggestionItemType, SuggestionItemType>({
+                TiptapSuggestion<TSuggestionItem, SuggestionNodeAttributes>({
                     pluginKey: new PluginKey(nodeType),
                     editor: this.editor,
                     char: triggerChar,
@@ -266,7 +279,7 @@ function createSuggestionExtension<
                         return (
                             onSearchChange?.(
                                 query,
-                                editor.storage[nodeType] as SuggestionStorage<SuggestionItemType>,
+                                editor.storage[nodeType] as SuggestionStorage<TSuggestionItem>,
                             ) || []
                         )
                     },
@@ -299,7 +312,11 @@ function createSuggestionExtension<
                             ])
                             .run()
 
-                        onItemSelect?.(props)
+                        const item = storage.itemsById[props.id]
+
+                        if (item) {
+                            onItemSelect?.(item)
+                        }
                     },
                     render: dropdownRenderFn,
                 }),
