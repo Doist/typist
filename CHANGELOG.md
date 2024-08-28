@@ -1,3 +1,23 @@
+## [7.0.0](https://github.com/Doist/typist/compare/v6.0.11...v7.0.0) (2024-08-28)
+
+### ⚠ BREAKING CHANGES
+
+-   Fix TypeScript types for the Suggestion plugin
+    `command` function (allowing for generic override).
+
+Although this was not causing any issues for us due to the convoluted
+implementation, the same fix was recently applied to Tiptap, and this
+aligns our suggestion factory function implementation with the original
+one. Unfortunately, this comes as a breaking change (examples were also
+updated to reflect the required changes).
+
+Additionally, other smaller TypeScript types were refactored for
+consistency and clarity, but these are safe changes.
+
+### Code Refactoring
+
+-   General improvements for TypeScript types ([#883](https://github.com/Doist/typist/issues/883)) ([b235eaf](https://github.com/Doist/typist/commit/b235eaf9506c5bf8ed0a94e863f9262b9735ad7e))
+
 ## [6.0.11](https://github.com/Doist/typist/compare/v6.0.10...v6.0.11) (2024-08-23)
 
 ### Bug Fixes
