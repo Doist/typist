@@ -105,7 +105,7 @@
         "@types/turndown": "5.0.5",
         "@types/unist": "3.0.3",
         "@vitejs/plugin-react": "4.3.1",
-        "boring-avatars": "1.10.2",
+        "boring-avatars": "1.11.0",
         "classnames": "2.5.1",
         "conventional-changelog-conventionalcommits": "8.0.0",
         "emoji-regex": "10.4.0",
