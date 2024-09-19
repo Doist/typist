@@ -1,3 +1,9 @@
+## [7.0.1](https://github.com/Doist/typist/compare/v7.0.0...v7.0.1) (2024-09-19)
+
+### Bug Fixes
+
+-   Destroy React renderer and dropdown on Escape ([4f8d5be](https://github.com/Doist/typist/commit/4f8d5beadfd1235a8f4d4c032905ecb07fccf785))
+
 ## [7.0.0](https://github.com/Doist/typist/compare/v6.0.11...v7.0.0) (2024-08-28)
 
 ### ⚠ BREAKING CHANGES
