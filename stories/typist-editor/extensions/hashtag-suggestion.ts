@@ -129,7 +129,8 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
                     }
 
                     if (props.event.key === 'Escape') {
-                        dropdown[0].hide()
+                        dropdown[0].destroy()
+                        reactRenderer.destroy()
                         return true
                     }
 
