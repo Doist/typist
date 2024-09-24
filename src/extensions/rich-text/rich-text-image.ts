@@ -2,6 +2,7 @@ import { Image } from '@tiptap/extension-image'
 import { Plugin, PluginKey, Selection } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 
+import type { NodeView } from '@tiptap/pm/view'
 import type { NodeViewProps } from '@tiptap/react'
 
 /**
@@ -158,7 +159,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
 
         // Do not add a node view if component was not specified
         if (!NodeViewComponent) {
-            return () => ({})
+            return () => ({}) as NodeView
         }
 
         // Render the node view with the provided React component
