@@ -40,8 +40,10 @@ const MentionSuggestion: SuggestionExtensionResult<MentionSuggestionItem> =
 
             // These flag variables control when the renderer functions are allowed to be called,
             // and they are needed to work around a few issues with Tiptap's suggestion utility:
+            //   * https://github.com/ueberdosis/tiptap/issues/214
             //   * https://github.com/ueberdosis/tiptap/issues/2547
             //   * https://github.com/ueberdosis/tiptap/issues/2592
+            let isDropdownHidden = false
             let isDropdownInitialized = false
             let wasDropdownDestroyed = false
 
@@ -63,6 +65,12 @@ const MentionSuggestion: SuggestionExtensionResult<MentionSuggestionItem> =
                         },
                         getReferenceClientRect() {
                             return props.clientRect?.() || DOM_RECT_FALLBACK
+                        },
+                        onHide() {
+                            isDropdownHidden = true
+                        },
+                        onShow() {
+                            isDropdownHidden = false
                         },
                         content: reactRenderer.element,
                         duration: [150, 200],
@@ -88,7 +96,7 @@ const MentionSuggestion: SuggestionExtensionResult<MentionSuggestionItem> =
                     })
                 },
                 onKeyDown(props) {
-                    if (!isDropdownInitialized) {
+                    if (!isDropdownInitialized || isDropdownHidden) {
                         return false
                     }
 

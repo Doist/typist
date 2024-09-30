@@ -44,8 +44,10 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
 
             // These flag variables control when the renderer functions are allowed to be called,
             // and they are needed to work around a few issues with Tiptap's suggestion utility:
+            //   * https://github.com/ueberdosis/tiptap/issues/214
             //   * https://github.com/ueberdosis/tiptap/issues/2547
             //   * https://github.com/ueberdosis/tiptap/issues/2592
+            let isDropdownHidden = false
             let isDropdownInitialized = false
             let wasDropdownDestroyed = false
 
@@ -70,6 +72,12 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
                         },
                         getReferenceClientRect() {
                             return props.clientRect?.() || DOM_RECT_FALLBACK
+                        },
+                        onHide() {
+                            isDropdownHidden = true
+                        },
+                        onShow() {
+                            isDropdownHidden = false
                         },
                         content: reactRenderer.element,
                         duration: [150, 200],
@@ -124,13 +132,12 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
                     })
                 },
                 onKeyDown(props) {
-                    if (!isDropdownInitialized) {
+                    if (!isDropdownInitialized || isDropdownHidden) {
                         return false
                     }
 
                     if (props.event.key === 'Escape') {
-                        dropdown[0].destroy()
-                        reactRenderer.destroy()
+                        dropdown[0].hide()
                         return true
                     }
 
