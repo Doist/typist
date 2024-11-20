@@ -2,17 +2,17 @@
     "extends": ["github>doist/renovate-config:frontend-base"],
     "packageRules": [
         {
-            "matchPackagePatterns": ["^@tiptap/"],
             "groupName": "tiptap packages",
-            "automerge": false
+            "automerge": false,
+            "matchPackageNames": ["/^@tiptap//"]
         },
         {
-            "matchPackagePatterns": ["gfm-autolink-literal$"],
-            "groupName": "gfm autolink literal packages"
+            "groupName": "gfm autolink literal packages",
+            "matchPackageNames": ["/gfm-autolink-literal$/"]
         },
         {
-            "matchPackagePatterns": ["gfm-strikethrough$"],
-            "groupName": "gfm strikethrough packages"
+            "groupName": "gfm strikethrough packages",
+            "matchPackageNames": ["/gfm-strikethrough$/"]
         }
     ]
 }
