@@ -33,7 +33,7 @@ jobs:
                   node-version-file: .node-version
 
             - name: Cache project 'node_modules' directory
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               id: node-modules-cache
               with:
                   key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
@@ -63,7 +63,7 @@ jobs:
                   node-version-file: .node-version
 
             - name: Cache project 'node_modules' directory
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               id: node-modules-cache
               with:
                   key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
@@ -105,7 +105,7 @@ jobs:
                   node-version-file: .node-version
 
             - name: Cache project 'node_modules' directory
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               id: node-modules-cache
               with:
                   key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
@@ -139,7 +139,7 @@ jobs:
                   node-version-file: .node-version
 
             - name: Cache project 'node_modules' directory
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               id: node-modules-cache
               with:
                   key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
