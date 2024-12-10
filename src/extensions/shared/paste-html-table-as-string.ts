@@ -35,13 +35,13 @@ const PasteHTMLTableAsString = Extension.create({
 
                         // Concatenate all tables into a single string of paragraphs
                         return tableHTML.reduce((result, table) => {
-                            const { firstElementChild: tableElement } = parseHtmlToElement(
-                                table,
-                            ) as {
-                                firstElementChild: HTMLTableElement | null
-                            }
+                            const { firstElementChild: tableElement } = parseHtmlToElement(table)
 
-                            if (!tableElement) {
+                            if (
+                                !tableElement ||
+                                !(tableElement instanceof HTMLTableElement) ||
+                                !tableElement.rows
+                            ) {
                                 return result
                             }
 
