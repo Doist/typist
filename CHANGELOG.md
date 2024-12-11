@@ -1,3 +1,9 @@
+## [7.0.4](https://github.com/Doist/typist/compare/v7.0.3...v7.0.4) (2024-12-11)
+
+### Bug Fixes
+
+-   Check table element before pasting it as a string ([#977](https://github.com/Doist/typist/issues/977)) ([954568e](https://github.com/Doist/typist/commit/954568efdacd362855a68078050975bea7c2d2c3))
+
 ## [7.0.3](https://github.com/Doist/typist/compare/v7.0.2...v7.0.3) (2024-12-02)
 
 ### Bug Fixes
