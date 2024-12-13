@@ -120,7 +120,7 @@
         "github-markdown-css": "5.8.1",
         "husky": "9.1.7",
         "ignore-sync": "7.0.1",
-        "is-ci": "3.0.1",
+        "is-ci": "4.1.0",
         "jsdom": "25.0.1",
         "lint-staged": "15.2.10",
         "npm-run-all2": "7.0.1",
