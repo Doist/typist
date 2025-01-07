@@ -1,3 +1,9 @@
+## [7.0.6](https://github.com/Doist/typist/compare/v7.0.5...v7.0.6) (2025-01-07)
+
+### Bug Fixes
+
+-   **rich-text-code:** Retore original Tiptap input/paste rules ([#999](https://github.com/Doist/typist/issues/999)) ([6673d83](https://github.com/Doist/typist/commit/6673d83e1e6985cfcd68e5f836518f7edee8d444))
+
 ## [7.0.5](https://github.com/Doist/typist/compare/v7.0.4...v7.0.5) (2025-01-07)
 
 ### Bug Fixes
