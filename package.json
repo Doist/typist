@@ -81,7 +81,7 @@
     "devDependencies": {
         "@doist/eslint-config": "11.1.0",
         "@doist/prettier-config": "4.0.0",
-        "@doist/reactist": "27.2.1",
+        "@doist/reactist": "27.2.2",
         "@mdx-js/react": "3.1.0",
         "@semantic-release/changelog": "6.0.3",
         "@semantic-release/exec": "6.0.3",
