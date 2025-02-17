@@ -132,7 +132,7 @@
         "react-syntax-highlighter": "15.6.1",
         "react-use-event-hook": "0.9.6",
         "rehype-raw": "7.0.0",
-        "remark-gfm": "4.0.0",
+        "remark-gfm": "4.0.1",
         "rimraf": "6.0.1",
         "semantic-release": "24.2.2",
         "storybook": "8.5.3",
