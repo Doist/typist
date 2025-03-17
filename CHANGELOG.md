@@ -1,3 +1,13 @@
+## [8.0.0](https://github.com/Doist/typist/compare/v7.0.8...v8.0.0) (2025-03-17)
+
+### ⚠ BREAKING CHANGES
+
+-   **html-serializer:** Removed support for the single tilde syntax (e.g., `~text~`) for strike-through formatting. Please update your content to use the double tilde syntax (e.g., `~~text~~`) instead.
+
+### Bug Fixes
+
+-   **html-serializer:** Remove support for single tilde syntax for strike-through text ([#1055](https://github.com/Doist/typist/issues/1055)) ([95c7231](https://github.com/Doist/typist/commit/95c72316196e932c4599d2566684a9b2813acd09))
+
 ## [7.0.8](https://github.com/Doist/typist/compare/v7.0.7...v7.0.8) (2025-02-05)
 
 ### Bug Fixes
