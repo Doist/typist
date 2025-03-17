@@ -104,7 +104,7 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     // Configure the unified processor to use a custom plugin to add support for the strikethrough
     // extension from the GitHub Flavored Markdown (GFM) specification
     if (schema.marks.strike) {
-        unifiedProcessor.use(remarkStrikethrough)
+        unifiedProcessor.use(remarkStrikethrough, { singleTilde: false })
     }
 
     // Configure the unified processor to use a custom plugin to add support for the autolink
