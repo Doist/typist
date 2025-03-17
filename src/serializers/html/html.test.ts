@@ -43,7 +43,8 @@ This text is __*really important*__.
 This text is **_really important_**.
 This is really ***very*** important text.
 
-Strikethrough uses two tildes: ~~scratch this~~`
+Strikethrough uses two tildes: ~~scratch this~~
+Strikethrough with a single tilde: ~not scratched~`
 
 const MARKDOWN_INPUT_BLOCKQUOTES = `> Dorothy followed her through many of the beautiful rooms in her castle.
 
@@ -283,7 +284,7 @@ describe('HTML Serializer', () => {
 
             test('styled text syntax is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_TEXT)).toBe(
-                    '<p>I just love **bold text**.</p><p>I just love __bold text__.</p><p></p><p>Italicized text is the *cat&#39;s meow*.</p><p>Italicized text is the _cat&#39;s meow_.</p><p></p><p>This text is ***really important***.</p><p>This text is ___really important___.</p><p>This text is __*really important*__.</p><p>This text is **_really important_**.</p><p>This is really ***very*** important text.</p><p></p><p>Strikethrough uses two tildes: ~~scratch this~~</p>',
+                    '<p>I just love **bold text**.</p><p>I just love __bold text__.</p><p></p><p>Italicized text is the *cat&#39;s meow*.</p><p>Italicized text is the _cat&#39;s meow_.</p><p></p><p>This text is ***really important***.</p><p>This text is ___really important___.</p><p>This text is __*really important*__.</p><p>This text is **_really important_**.</p><p>This is really ***very*** important text.</p><p></p><p>Strikethrough uses two tildes: ~~scratch this~~</p><p>Strikethrough with a single tilde: ~not scratched~</p>',
                 )
             })
 
@@ -417,7 +418,7 @@ Answer: [Doist Frontend](channel://190200)`),
 
             test('styled text HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_TEXT)).toBe(
-                    "<p>I just love <strong>bold text</strong>.<br>I just love <strong>bold text</strong>.</p><p>Italicized text is the <em>cat's meow</em>.<br>Italicized text is the <em>cat's meow</em>.</p><p>This text is <em><strong>really important</strong></em>.<br>This text is <em><strong>really important</strong></em>.<br>This text is <strong><em>really important</em></strong>.<br>This text is <strong><em>really important</em></strong>.<br>This is really <em><strong>very</strong></em> important text.</p><p>Strikethrough uses two tildes: <del>scratch this</del></p>",
+                    "<p>I just love <strong>bold text</strong>.<br>I just love <strong>bold text</strong>.</p><p>Italicized text is the <em>cat's meow</em>.<br>Italicized text is the <em>cat's meow</em>.</p><p>This text is <em><strong>really important</strong></em>.<br>This text is <em><strong>really important</strong></em>.<br>This text is <strong><em>really important</em></strong>.<br>This text is <strong><em>really important</em></strong>.<br>This is really <em><strong>very</strong></em> important text.</p><p>Strikethrough uses two tildes: <del>scratch this</del><br>Strikethrough with a single tilde: ~not scratched~</p>",
                 )
             })
 
@@ -568,7 +569,8 @@ Italicized text is the _cat's meow_.</p><p>This text is ***really important***.
 This text is ___really important___.
 This text is __*really important*__.
 This text is **_really important_**.
-This is really ***very*** important text.</p><p>Strikethrough uses two tildes: ~~scratch this~~</p>`)
+This is really ***very*** important text.</p><p>Strikethrough uses two tildes: ~~scratch this~~
+Strikethrough with a single tilde: ~not scratched~</p>`)
             })
 
             test('blockquotes HTML output is preserved', () => {
