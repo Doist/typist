@@ -141,7 +141,7 @@
         "type-fest": "4.37.0",
         "typescript": "5.8.2",
         "typescript-plugin-css-modules": "5.1.0",
-        "vitest": "3.0.8"
+        "vitest": "3.0.9"
     },
     "peerDependencies": {
         "emoji-regex": "^10.2.1",
