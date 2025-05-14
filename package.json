@@ -84,7 +84,7 @@
         "@doist/reactist": "27.5.0",
         "@mdx-js/react": "3.1.0",
         "@semantic-release/changelog": "6.0.3",
-        "@semantic-release/exec": "7.0.3",
+        "@semantic-release/exec": "7.1.0",
         "@semantic-release/git": "10.0.1",
         "@storybook/addon-a11y": "8.6.12",
         "@storybook/addon-essentials": "8.6.12",
