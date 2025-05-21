@@ -1,3 +1,9 @@
+## [8.0.2](https://github.com/Doist/typist/compare/v8.0.1...v8.0.2) (2025-05-21)
+
+### Bug Fixes
+
+-   Add support for npm 11 ([#1097](https://github.com/Doist/typist/issues/1097)) ([62cf6a0](https://github.com/Doist/typist/commit/62cf6a055acf283af2c9424fdce9367b397d9012))
+
 ## [8.0.1](https://github.com/Doist/typist/compare/v8.0.0...v8.0.1) (2025-05-21)
 
 ### Bug Fixes
