@@ -70,7 +70,6 @@ jobs:
                   npx semantic-release
               env:
                   GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
-                  NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
                   GIT_AUTHOR_EMAIL: doistbot@users.noreply.github.com
                   GIT_AUTHOR_NAME: Doist Bot
                   GIT_COMMITTER_EMAIL: doistbot@users.noreply.github.com
