@@ -3,7 +3,7 @@ import { Plugin, PluginKey, Selection } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 
 import type { NodeView } from '@tiptap/pm/view'
-import type { NodeViewProps } from '@tiptap/react'
+import type { ReactNodeViewProps } from '@tiptap/react'
 
 /**
  * The properties that describe `RichTextImage` node attributes.
@@ -77,7 +77,7 @@ type RichTextImageOptions = {
     /**
      * A React component to render inside the interactive node view.
      */
-    NodeViewComponent?: React.ComponentType<NodeViewProps>
+    NodeViewComponent?: React.ComponentType<ReactNodeViewProps>
 
     /**
      * The event handler that is fired when an image file is pasted.
