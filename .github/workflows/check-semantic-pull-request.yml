@@ -7,9 +7,6 @@ on:
             - opened
             - synchronize
 
-env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
     validate-title:
         name: Validate Title
@@ -19,3 +16,5 @@ jobs:
         steps:
             - name: Validate pull request title
               uses: amannn/action-semantic-pull-request@01d5fd8a8ebb9aafe902c40c53f0f4744f7381eb
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
