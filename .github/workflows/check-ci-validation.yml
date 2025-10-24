@@ -13,7 +13,7 @@ env:
     GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
 
 concurrency:
-    group: check-ci-validation-${{ github.ref }}
+    group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
@@ -24,17 +24,17 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Prepare Node.js environment
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v6
               with:
                   cache: npm
                   node-version-file: .node-version
 
             - name: Cache project 'node_modules' directory
-              uses: actions/cache@v4
               id: node-modules-cache
+              uses: actions/cache@v4
               with:
                   key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
                   path: node_modules/
@@ -54,17 +54,17 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Prepare Node.js environment
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v6
               with:
                   cache: npm
                   node-version-file: .node-version
 
             - name: Cache project 'node_modules' directory
-              uses: actions/cache@v4
               id: node-modules-cache
+              uses: actions/cache@v4
               with:
                   key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
                   path: node_modules/
@@ -96,17 +96,17 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Prepare Node.js environment
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v6
               with:
                   cache: npm
                   node-version-file: .node-version
 
             - name: Cache project 'node_modules' directory
-              uses: actions/cache@v4
               id: node-modules-cache
+              uses: actions/cache@v4
               with:
                   key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
                   path: node_modules/
@@ -130,17 +130,17 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Prepare Node.js environment
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v6
               with:
                   cache: npm
                   node-version-file: .node-version
 
             - name: Cache project 'node_modules' directory
-              uses: actions/cache@v4
               id: node-modules-cache
+              uses: actions/cache@v4
               with:
                   key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
                   path: node_modules/

@@ -9,8 +9,8 @@
     "types": "dist/index.d.ts",
     "sideEffects": false,
     "engines": {
-        "node": "^16.0.0 || ^18.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0",
-        "npm": "^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0"
+        "node": "^22.14.0 || >= 24.10.0",
+        "npm": "^10.9.2 || >= 11.5.1"
     },
     "publishConfig": {
         "access": "public"
@@ -134,7 +134,7 @@
         "rehype-raw": "7.0.0",
         "remark-gfm": "4.0.1",
         "rimraf": "6.0.1",
-        "semantic-release": "24.2.5",
+        "semantic-release": "25.0.1",
         "storybook": "8.6.14",
         "storybook-css-modules": "1.0.8",
         "tippy.js": "6.3.7",
