@@ -26,15 +26,7 @@ jobs:
             - name: Prepare Node.js environment
               uses: actions/setup-node@v3
               with:
-                  # cache: npm
                   node-version-file: .node-version
-
-            # - name: Cache project 'node_modules' directory
-            #   uses: actions/cache@v4
-            #   id: node-modules-cache
-            #   with:
-            #       key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
-            #       path: node_modules/
 
             - name: Install project npm dependencies
               if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
@@ -56,15 +48,7 @@ jobs:
             - name: Prepare Node.js environment
               uses: actions/setup-node@v3
               with:
-                  cache: npm
                   node-version-file: .node-version
-
-            - name: Cache project 'node_modules' directory
-              uses: actions/cache@v4
-              id: node-modules-cache
-              with:
-                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
-                  path: node_modules/
 
             - name: Install project npm dependencies
               if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
@@ -98,15 +82,7 @@ jobs:
             - name: Prepare Node.js environment
               uses: actions/setup-node@v3
               with:
-                  cache: npm
                   node-version-file: .node-version
-
-            - name: Cache project 'node_modules' directory
-              uses: actions/cache@v4
-              id: node-modules-cache
-              with:
-                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
-                  path: node_modules/
 
             - name: Install project npm dependencies
               if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
@@ -132,15 +108,7 @@ jobs:
             - name: Prepare Node.js environment
               uses: actions/setup-node@v3
               with:
-                  cache: npm
                   node-version-file: .node-version
-
-            - name: Cache project 'node_modules' directory
-              uses: actions/cache@v4
-              id: node-modules-cache
-              with:
-                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
-                  path: node_modules/
 
             - name: Install project npm dependencies
               if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
