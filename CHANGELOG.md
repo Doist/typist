@@ -1,3 +1,9 @@
+## [8.0.4](https://github.com/Doist/typist/compare/v8.0.3...v8.0.4) (2025-10-24)
+
+### Bug Fixes
+
+-   **deps:** update tiptap packages to v2.26.4 ([#1116](https://github.com/Doist/typist/issues/1116)) ([0b2f55b](https://github.com/Doist/typist/commit/0b2f55bd1191d5c7a8c5caa7b53185b5ded77a0e))
+
 ## [8.0.3](https://github.com/Doist/typist/compare/v8.0.2...v8.0.3) (2025-10-24)
 
 ### Bug Fixes
