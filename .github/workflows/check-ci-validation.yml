@@ -9,9 +9,6 @@ on:
             - opened
             - synchronize
 
-env:
-    GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-
 concurrency:
     group: check-ci-validation-${{ github.ref }}
     cancel-in-progress: true
