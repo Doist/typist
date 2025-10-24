@@ -10,37 +10,38 @@ type MarkdownRendererProps = {
 
 function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
     return (
-        <ReactMarkdown
-            className="sb-unstyled markdown-body"
-            rehypePlugins={[rehypeRaw]}
-            remarkPlugins={[remarkGfm]}
-            components={{
-                // eslint-disable-next-line react/no-unstable-nested-components
-                pre({ children }) {
-                    return <>{children}</>
-                },
-                // eslint-disable-next-line react/no-unstable-nested-components
-                code({ children, className }) {
-                    const codeLanguage = /language-(\w+)/.exec(className || '')
+        <div className="sb-unstyled markdown-body">
+            <ReactMarkdown
+                rehypePlugins={[rehypeRaw]}
+                remarkPlugins={[remarkGfm]}
+                components={{
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    pre({ children }) {
+                        return <>{children}</>
+                    },
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    code({ children, className }) {
+                        const codeLanguage = /language-(\w+)/.exec(className || '')
 
-                    return codeLanguage ? (
-                        <SyntaxHighlighter
-                            language={codeLanguage[1]}
-                            // Match `github-markdown-css` style
-                            customStyle={{
-                                background: '#f6f8fa',
-                            }}
-                        >
-                            {String(children).replace(/\n$/, '')}
-                        </SyntaxHighlighter>
-                    ) : (
-                        <code className={className}>{children}</code>
-                    )
-                },
-            }}
-        >
-            {markdown}
-        </ReactMarkdown>
+                        return codeLanguage ? (
+                            <SyntaxHighlighter
+                                language={codeLanguage[1]}
+                                // Match `github-markdown-css` style
+                                customStyle={{
+                                    background: '#f6f8fa',
+                                }}
+                            >
+                                {String(children).replace(/\n$/, '')}
+                            </SyntaxHighlighter>
+                        ) : (
+                            <code className={className}>{children}</code>
+                        )
+                    },
+                }}
+            >
+                {markdown}
+            </ReactMarkdown>
+        </div>
     )
 }
 
