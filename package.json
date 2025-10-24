@@ -107,7 +107,7 @@
         "@vitejs/plugin-react": "4.5.1",
         "boring-avatars": "1.11.2",
         "classnames": "2.5.1",
-        "conventional-changelog-conventionalcommits": "8.0.0",
+        "conventional-changelog-conventionalcommits": "9.1.0",
         "emoji-regex": "10.4.0",
         "eslint": "8.57.1",
         "eslint-formatter-codeframe": "7.32.1",
