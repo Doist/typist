@@ -68,13 +68,12 @@ jobs:
                   npm run build
 
             # The Node.js environment is prepared based on the `.npmrc` file in the repo, which
-            # configures Doist scoped packages to use the GitHub Packages registry for the initial
-            # `semantic-release` publish, after which we remove the Doist registry configuration,
-            # prepare the Node.js environment for the public npm registry with OIDC authentication,
-            # and update npm to the latest version (required for trusted publishing support),
-            # providing a predictable release workflow for both registries.
+            # configures Doist scoped packages to use the public npm registry with OIDC
+            # authentication for the initial `semantic-release` publish, after which we remove the
+            # Doist registry configuration, and prepare the Node.js environment for the GitHub
+            # Packages registry, providing a predictable release workflow for both registries.
 
-            - name: Publish package to private GitHub Packages registry
+            - name: Publish package to private npm registry
               id: semantic-release
               run: |
                   npx semantic-release
@@ -90,20 +89,16 @@ jobs:
               run: |
                   npm config delete @doist:registry --location=project
 
-            - name: Prepare Node.js environment for npm registry
+            - name: Prepare Node.js environment for GitHub Packages registry
               uses: actions/setup-node@v6
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               with:
                   cache: npm
                   node-version-file: .node-version
-                  registry-url: https://registry.npmjs.org/
+                  registry-url: https://npm.pkg.github.com/
                   scope: '@doist'
 
-            - name: Update npm for trusted publishing (requires 11.5.1 or later)
-              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
-              run: npm install -g npm@latest
-
-            - name: Publish package to public npm registry
+            - name: Publish package to public GitHub Packages registry
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               run: |
                   npm publish
