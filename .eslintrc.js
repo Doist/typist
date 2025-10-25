@@ -7,7 +7,7 @@ module.exports = {
         global: true,
         module: true,
     },
-    ignorePatterns: ['.eslintrc.js'],
+    ignorePatterns: ['.eslintrc.js', 'lint-staged.config.js'],
     plugins: ['unicorn'],
     extends: [
         '@doist/eslint-config/recommended-type-checked',

@@ -137,7 +137,7 @@ export const Default: StoryObj<typeof TypistEditor> = {
                     if (fileType === 'image') {
                         commands?.insertImage({
                             alt: `${attachmentId}.${file.type.split('/')[1]}`,
-                            src: String(fileReader.result),
+                            src: typeof fileReader.result === 'string' ? fileReader.result : '',
                             metadata,
                         })
                     }
