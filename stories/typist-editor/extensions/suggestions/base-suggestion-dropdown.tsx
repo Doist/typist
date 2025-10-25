@@ -1,4 +1,4 @@
-import { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { useImperativeHandle, useRef, useState } from 'react'
 
 import { Box, Inline, Text } from '@doist/reactist'
 
@@ -21,7 +21,8 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
     renderItem,
     onItemSelect,
 }: BaseSuggestionDropdownProps<TSuggestionItem>) {
-    const selectedItemRef = useRef<HTMLLIElement>(null)
+    const itemRefs = useRef<Map<number, HTMLLIElement>>(new Map())
+
     const [selectedIndex, setSelectedIndex] = useState(0)
 
     const suggestionDropdownStyle: React.CSSProperties = {
@@ -31,23 +32,10 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
     const areSuggestionsLoading = items.length === 1 && 'isLoading' in items[0]
     const areSuggestionsEmpty = items.length === 0
 
-    useEffect(
-        function scrollSelectedItemIntoView() {
-            selectedItemRef.current?.scrollIntoView({
-                block: 'nearest',
-            })
-        },
-        [selectedIndex],
-    )
-
-    useEffect(
-        function autoSelectLastItemIfNeeded() {
-            if (selectedIndex > items.length) {
-                setSelectedIndex(items.length - 1)
-            }
-        },
-        [items, selectedIndex],
-    )
+    function updateSelectedItem(index: number) {
+        setSelectedIndex(index)
+        itemRefs.current.get(index)?.scrollIntoView({ block: 'nearest' })
+    }
 
     useImperativeHandle(
         forwardedRef,
@@ -55,12 +43,12 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
             return {
                 onKeyDown({ event }) {
                     if (event.key === 'ArrowUp') {
-                        setSelectedIndex((selectedIndex + items.length - 1) % items.length)
+                        updateSelectedItem((selectedIndex + items.length - 1) % items.length)
                         return true
                     }
 
                     if (event.key === 'ArrowDown') {
-                        setSelectedIndex((selectedIndex + 1) % items.length)
+                        updateSelectedItem((selectedIndex + 1) % items.length)
                         return true
                     }
 
@@ -125,7 +113,13 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
                             alignItems="center"
                             borderRadius="standard"
                             onClick={() => onItemSelect(index)}
-                            ref={index === selectedIndex ? selectedItemRef : null}
+                            ref={(node) => {
+                                if (node) {
+                                    itemRefs.current.set(index, node)
+                                } else {
+                                    itemRefs.current.delete(index)
+                                }
+                            }}
                         >
                             {renderItem(item)}
                         </Box>
