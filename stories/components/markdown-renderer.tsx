@@ -22,6 +22,7 @@ function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
                     // eslint-disable-next-line react/no-unstable-nested-components
                     code({ children, className }) {
                         const codeLanguage = /language-(\w+)/.exec(className || '')
+                        const codeContent = typeof children === 'string' ? children : ''
 
                         return codeLanguage ? (
                             <SyntaxHighlighter
@@ -31,7 +32,7 @@ function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
                                     background: '#f6f8fa',
                                 }}
                             >
-                                {String(children).replace(/\n$/, '')}
+                                {codeContent.replace(/\n$/, '')}
                             </SyntaxHighlighter>
                         ) : (
                             <code className={className}>{children}</code>

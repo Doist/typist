@@ -223,7 +223,9 @@ function createSuggestionExtension<
                         // sure that a previously referenced suggestion always renders the most
                         // up-to-date label for the suggestion), and fallback to the `data-label`
                         // attribute if the item is not found in the storage
-                        return String(item?.[labelAttribute] ?? element.getAttribute('data-label'))
+                        const labelValue =
+                            item?.[labelAttribute] ?? element.getAttribute('data-label')
+                        return typeof labelValue === 'string' ? labelValue : ''
                     },
                     renderHTML: (attributes) => ({
                         'data-label': String(attributes.label),
