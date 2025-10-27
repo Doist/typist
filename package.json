@@ -109,7 +109,7 @@
         "boring-avatars": "2.0.4",
         "classnames": "2.5.1",
         "conventional-changelog-conventionalcommits": "9.1.0",
-        "emoji-regex": "10.4.0",
+        "emoji-regex": "10.6.0",
         "eslint": "8.57.1",
         "eslint-formatter-codeframe": "7.32.1",
         "eslint-import-resolver-typescript": "3.6.1",
