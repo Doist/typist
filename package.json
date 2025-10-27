@@ -105,7 +105,7 @@
         "@types/react-syntax-highlighter": "15.5.13",
         "@types/turndown": "5.0.5",
         "@types/unist": "3.0.3",
-        "@vitejs/plugin-react": "4.5.1",
+        "@vitejs/plugin-react": "4.7.0",
         "boring-avatars": "2.0.4",
         "classnames": "2.5.1",
         "conventional-changelog-conventionalcommits": "9.1.0",
