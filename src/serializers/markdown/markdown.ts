@@ -70,7 +70,7 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
             const start =
                 node.nodeName === 'LI'
                     ? parentNode.getAttribute('start')
-                    : (node as HTMLElement).getAttribute('start')
+                    : node.getAttribute('start')
             const index = Array.prototype.indexOf.call(parentNode.children, node)
 
             return `${start ? Number(start) + index : index + 1}. \n`
