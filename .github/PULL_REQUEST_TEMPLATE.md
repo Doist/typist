@@ -11,9 +11,9 @@
 
 <!-- Feel free to remove the lines that are not applicable or leave them unchecked. -->
 
--   [ ] Pull request title follows the [Conventional Commits Specification](https://www.conventionalcommits.org/)
--   [ ] Added/updated unit test cases and/or end-to-end test cases
--   [ ] Added/updated documentation to Storybook or `README.md`
+- [ ] Pull request title follows the [Conventional Commits Specification](https://www.conventionalcommits.org/)
+- [ ] Added/updated unit test cases and/or end-to-end test cases
+- [ ] Added/updated documentation to Storybook or `README.md`
 
 ## Test plan
 

@@ -64,8 +64,8 @@ If you're looking for additional documentation, in-depth examples, or a live dem
 
 A curated list of open-source rich-text editors powered by Tiptap that we can draw inspiration from:
 
--   GitLab's content editor:\
-    https://gitlab.com/gitlab-org/gitlab/-/tree/master/app/assets/javascripts/content_editor
+- GitLab's content editor:\
+  https://gitlab.com/gitlab-org/gitlab/-/tree/master/app/assets/javascripts/content_editor
 
 ## Contributing
 

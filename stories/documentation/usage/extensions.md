@@ -66,5 +66,5 @@ function TypistEditorContainer({ content }) {
 
 A few observations about the example above:
 
--   The example takes advantage of the built-in storage to store the suggestion items internally, and use them to render the suggestions based on always up-to-date data. However, the storage is not mandatory, you can use the extension without it.
--   You may have noticed that the `createSuggestionExtension` function is called within a functional component, which means it will be re-created with every render. You may need to optimize this with `useMemo` to avoid re-creating the extension on every render.
+- The example takes advantage of the built-in storage to store the suggestion items internally, and use them to render the suggestions based on always up-to-date data. However, the storage is not mandatory, you can use the extension without it.
+- You may have noticed that the `createSuggestionExtension` function is called within a functional component, which means it will be re-created with every render. You may need to optimize this with `useMemo` to avoid re-creating the extension on every render.
