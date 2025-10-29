@@ -11,7 +11,7 @@
         "jsx": "react-jsx",
         "lib": ["DOM", "ES2020"],
         "module": "ESNext",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "noEmit": true,
         "noEmitOnError": true,
         "plugins": [
