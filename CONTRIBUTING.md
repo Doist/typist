@@ -28,7 +28,7 @@ If you intend to change the public API, or make any non-trivial changes to the i
 
 Working on your first Pull Request? You can learn how from this free video series:
 
--   [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
+- [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
 
 If you decide to fix an issue, please be sure to check the comment thread in case somebody is already working on a fix. If nobody is working on it at the moment, please leave a comment stating that you intend to work on it so other people don't accidentally duplicate your effort.
 
@@ -55,12 +55,12 @@ cd typist
 
 After cloning Typist and installing all dependencies, several commands are at your disposal:
 
--   `npm run build`: Builds the `@doist/typist` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/Doist/packages?repo_name=typist);
--   `npm run check`: Validates code quality with ESLint, styling with Prettier, and types with TypeScript;
--   `npm run clean`: Removes temporary directories used for multiple caches;
--   `npm run storybook:build`: Builds Storybook as a static Web application;
--   `npm run storybook:start`: Starts Storybook Web application (available at http://localhost:6006/);
--   `npm run test`: Runs all unit test with Jest and end-to-end tests with Storybook.
+- `npm run build`: Builds the `@doist/typist` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/Doist/packages?repo_name=typist);
+- `npm run check`: Validates code quality with ESLint, styling with Prettier, and types with TypeScript;
+- `npm run clean`: Removes temporary directories used for multiple caches;
+- `npm run storybook:build`: Builds Storybook as a static Web application;
+- `npm run storybook:start`: Starts Storybook Web application (available at http://localhost:6006/);
+- `npm run test`: Runs all unit test with Jest and end-to-end tests with Storybook.
 
 ### Release Process (core team only)
 
@@ -80,11 +80,11 @@ Pull requests are actively monitored, and only need the approval of one or more 
 
 Before submitting a pull request, please take the following into consideration:
 
--   Fork [the repository](https://github.com/doist/typist) and create your branch from `main`;
--   Follow the [Commit Message Guidelines](#commit-message-guidelines) below;
--   Add tests for code that should be tested (like bug fixes);
--   Ensure the test suite passes with flying colours;
--   Do not override built-in validation and formatting checks.
+- Fork [the repository](https://github.com/doist/typist) and create your branch from `main`;
+- Follow the [Commit Message Guidelines](#commit-message-guidelines) below;
+- Add tests for code that should be tested (like bug fixes);
+- Ensure the test suite passes with flying colours;
+- Do not override built-in validation and formatting checks.
 
 ### Commit Message Guidelines
 
@@ -92,9 +92,9 @@ Before submitting a pull request, please take the following into consideration:
 
 If possible, make [atomic commits](https://en.wikipedia.org/wiki/Atomic_commit), which means:
 
--   A commit should not mix whitespace and/or code style changes with functional code changes;
--   A commit should contain exactly one self-contained functional change;
--   A commit should not create an inconsistent state (e.g., test errors, linting errors, partial fix, etc.).
+- A commit should not mix whitespace and/or code style changes with functional code changes;
+- A commit should contain exactly one self-contained functional change;
+- A commit should not create an inconsistent state (e.g., test errors, linting errors, partial fix, etc.).
 
 #### Commit Message Format
 

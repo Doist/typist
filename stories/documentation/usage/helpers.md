@@ -2,9 +2,9 @@
 
 Passing down a `ref` to the `TypistEditor` component gives us access to some helper functions, such as:
 
--   `getEditor()`: Returns the [`Editor`](https://tiptap.dev/api/editor) instance coupled to the `TypistEditor` component;
--   `getMarkdown()`: Returns the current editor document output as Markdown;
--   `getAllNodesAttributesByType(nodeType)`: Returns the attributes of a given node type for all the nodes in the editor document.
+- `getEditor()`: Returns the [`Editor`](https://tiptap.dev/api/editor) instance coupled to the `TypistEditor` component;
+- `getMarkdown()`: Returns the current editor document output as Markdown;
+- `getAllNodesAttributesByType(nodeType)`: Returns the attributes of a given node type for all the nodes in the editor document.
 
 ```tsx
 import { useCallback, useRef } from 'react'
