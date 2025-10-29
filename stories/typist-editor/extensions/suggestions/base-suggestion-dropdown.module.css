@@ -14,7 +14,7 @@
     width: var(--suggestion-dropdown-width);
     max-height: calc(
         var(--suggestion-dropdown-option-height) * var(--suggestion-dropdown-item-size) +
-            var(--suggestion-dropdown-spacing) * (var(--suggestion-dropdown-item-size) + 1)
+            var(--suggestion-dropdown-spacing) * (var(--suggestion-dropdown-item-size) + 1) + 2px
     );
     padding: var(--suggestion-dropdown-spacing) 0;
     overflow-x: hidden;
