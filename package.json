@@ -122,7 +122,7 @@
         "husky": "9.1.7",
         "ignore-sync": "8.0.0",
         "is-ci": "4.1.0",
-        "jsdom": "26.1.0",
+        "jsdom": "27.0.1",
         "lint-staged": "16.2.6",
         "npm-run-all-next": "0.1.10",
         "prettier": "3.2.5",
