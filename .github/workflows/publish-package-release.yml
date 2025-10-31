@@ -73,7 +73,7 @@ jobs:
             # Doist registry configuration, and prepare the Node.js environment for the GitHub
             # Packages registry, providing a predictable release workflow for both registries.
 
-            - name: Publish package to private npm registry
+            - name: Publish package to public npm registry
               id: semantic-release
               run: |
                   npx semantic-release
@@ -98,7 +98,7 @@ jobs:
                   registry-url: https://npm.pkg.github.com/
                   scope: '@doist'
 
-            - name: Publish package to public GitHub Packages registry
+            - name: Publish package to private GitHub Packages registry
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               run: |
                   npm publish
