@@ -102,3 +102,5 @@ jobs:
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               run: |
                   npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
