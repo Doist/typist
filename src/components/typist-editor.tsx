@@ -14,7 +14,7 @@ import { getMarkdownSerializerInstance } from '../serializers/markdown/markdown'
 import { getAllNodesAttributesByType, resolveContentSelection } from './typist-editor.helper'
 
 import type { Editor as CoreEditor, EditorEvents, Extensions } from '@tiptap/core'
-import type { Plugin, Selection } from '@tiptap/pm/state'
+import type { Selection } from '@tiptap/pm/state'
 
 /**
  * The forwarded ref that describes the helper methods that the `TypistEditor` parent component
@@ -312,30 +312,6 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
                     view.state.tr
                         .setSelection(resolveContentSelection(view.state.doc, contentSelection))
                         .scrollIntoView(),
-                )
-            }
-
-            // Move the suggestion plugins to the top of the plugins list so they have a higher priority
-            // than all input rules (such as the ones used for Markdown shortcuts)
-            // ref: https://github.com/ueberdosis/tiptap/issues/2570
-            if (view.state.plugins.length > 0) {
-                const restOfPlugins: Plugin[] = []
-                const suggestionPlugins: Plugin[] = []
-
-                view.state.plugins.forEach((plugin) => {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore: The `Plugin` type does not include `key`
-                    if ((plugin.key as string).includes('Suggestion')) {
-                        suggestionPlugins.push(plugin)
-                    } else {
-                        restOfPlugins.push(plugin)
-                    }
-                })
-
-                view.updateState(
-                    view.state.reconfigure({
-                        plugins: [...suggestionPlugins, ...restOfPlugins],
-                    }),
                 )
             }
 
