@@ -1,3 +1,9 @@
+## [8.0.6](https://github.com/Doist/typist/compare/v8.0.5...v8.0.6) (2025-11-10)
+
+### Bug Fixes
+
+- add `NODE_AUTH_TOKEN` for GitHub Packages publish step ([#1157](https://github.com/Doist/typist/issues/1157)) ([c3cce1e](https://github.com/Doist/typist/commit/c3cce1e71d1819ad91d5c962572c95a9ef0132f8))
+
 ## [8.0.5](https://github.com/Doist/typist/compare/v8.0.4...v8.0.5) (2025-11-10)
 
 ### Bug Fixes
