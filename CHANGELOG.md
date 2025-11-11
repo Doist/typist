@@ -1,3 +1,9 @@
+## [8.0.7](https://github.com/Doist/typist/compare/v8.0.6...v8.0.7) (2025-11-11)
+
+### Bug Fixes
+
+- replace plugin reordering workaround with simpler heading input rule override ([#1158](https://github.com/Doist/typist/issues/1158)) ([bb1c1a3](https://github.com/Doist/typist/commit/bb1c1a3b48e6af71ec8d239f79f48f1452dbc902))
+
 ## [8.0.6](https://github.com/Doist/typist/compare/v8.0.5...v8.0.6) (2025-11-10)
 
 ### Bug Fixes
