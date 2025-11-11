@@ -5,7 +5,6 @@ import { CodeBlock } from '@tiptap/extension-code-block'
 import { Dropcursor } from '@tiptap/extension-dropcursor'
 import { Gapcursor } from '@tiptap/extension-gapcursor'
 import { HardBreak } from '@tiptap/extension-hard-break'
-import { Heading } from '@tiptap/extension-heading'
 import { History } from '@tiptap/extension-history'
 import { HorizontalRule } from '@tiptap/extension-horizontal-rule'
 import { Italic } from '@tiptap/extension-italic'
@@ -27,6 +26,7 @@ import { PasteMarkdown } from './paste-markdown'
 import { RichTextBulletList } from './rich-text-bullet-list'
 import { RichTextCode } from './rich-text-code'
 import { RichTextDocument } from './rich-text-document'
+import { RichTextHeading, RichTextHeadingOptions } from './rich-text-heading'
 import { RichTextImage } from './rich-text-image'
 import { RichTextLink } from './rich-text-link'
 import { RichTextOrderedList } from './rich-text-ordered-list'
@@ -39,7 +39,6 @@ import type { CodeOptions } from '@tiptap/extension-code'
 import type { CodeBlockOptions } from '@tiptap/extension-code-block'
 import type { DropcursorOptions } from '@tiptap/extension-dropcursor'
 import type { HardBreakOptions } from '@tiptap/extension-hard-break'
-import type { HeadingOptions } from '@tiptap/extension-heading'
 import type { HistoryOptions } from '@tiptap/extension-history'
 import type { HorizontalRuleOptions } from '@tiptap/extension-horizontal-rule'
 import type { ItalicOptions } from '@tiptap/extension-italic'
@@ -105,7 +104,7 @@ type RichTextKitOptions = {
     /**
      * Set options for the `Heading` extension, or `false` to disable.
      */
-    heading: Partial<HeadingOptions> | false
+    heading: Partial<RichTextHeadingOptions> | false
 
     /**
      * Set options for the `History` extension, or `false` to disable.
@@ -275,7 +274,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         }
 
         if (this.options.heading !== false) {
-            extensions.push(Heading.configure(this.options?.heading))
+            extensions.push(RichTextHeading.configure(this.options?.heading))
         }
 
         if (this.options.history !== false) {
