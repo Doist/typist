@@ -1,3 +1,9 @@
+## [8.0.8](https://github.com/Doist/typist/compare/v8.0.7...v8.0.8) (2025-11-19)
+
+### Bug Fixes
+
+- Revert accidental Node.js upgrade ([#1167](https://github.com/Doist/typist/issues/1167)) ([3da7eb8](https://github.com/Doist/typist/commit/3da7eb8431d3a4d1290aaa7b0e38cf64c4875075))
+
 ## [8.0.7](https://github.com/Doist/typist/compare/v8.0.6...v8.0.7) (2025-11-11)
 
 ### Bug Fixes
