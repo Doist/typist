@@ -1,3 +1,13 @@
+## [9.0.0](https://github.com/Doist/typist/compare/v8.0.8...v9.0.0) (2025-11-19)
+
+### ⚠ BREAKING CHANGES
+
+- update minimum Node.js version to 22.14.0 (#1169)
+
+### Miscellaneous Chores
+
+- update minimum Node.js version to 22.14.0 ([#1169](https://github.com/Doist/typist/issues/1169)) ([36467c9](https://github.com/Doist/typist/commit/36467c93e28cfd6fd45946f1f75ee8d409010462))
+
 ## [8.0.8](https://github.com/Doist/typist/compare/v8.0.7...v8.0.8) (2025-11-19)
 
 ### Bug Fixes
