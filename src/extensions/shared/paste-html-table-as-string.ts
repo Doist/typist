@@ -24,7 +24,16 @@ function transformPastedHTML(html: string): string {
         const paragraphs = Array.from(table.rows)
             .map((row) =>
                 Array.from(row.cells)
-                    .map((cell) => cell.innerHTML)
+                    .map((cell) => {
+                        // Unwrap paragraphs but preserve inline formatting
+                        const paragraphs = cell.querySelectorAll('p')
+
+                        for (const p of Array.from(paragraphs)) {
+                            p.replaceWith(...Array.from(p.childNodes))
+                        }
+
+                        return cell.innerHTML
+                    })
                     .join(' '),
             )
             .filter((row) => row.trim().length > 0)
