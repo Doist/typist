@@ -5,6 +5,51 @@ import { PASTE_HTML_TABLE_AS_STRING_EXTENSION_PRIORITY } from '../../constants/e
 import { parseHtmlToElement } from '../../helpers/dom'
 
 /**
+ * Transforms pasted HTML by converting tables to paragraphs while preserving surrounding content.
+ */
+function transformPastedHTML(html: string): string {
+    const body = parseHtmlToElement(html)
+    const tables = body.querySelectorAll('table')
+
+    if (tables.length === 0) {
+        return html
+    }
+
+    for (const table of Array.from(tables)) {
+        if (!table.rows) {
+            continue
+        }
+
+        // Convert table rows to paragraphs (using innerHTML to preserve formatting)
+        const paragraphs = Array.from(table.rows)
+            .map((row) =>
+                Array.from(row.cells)
+                    .map((cell) => {
+                        // Unwrap paragraphs but preserve inline formatting
+                        const paragraphs = cell.querySelectorAll('p')
+
+                        for (const p of Array.from(paragraphs)) {
+                            p.replaceWith(...Array.from(p.childNodes))
+                        }
+
+                        return cell.innerHTML
+                    })
+                    .join(' '),
+            )
+            .filter((row) => row.trim().length > 0)
+            .map((row) => {
+                const p = document.createElement('p')
+                p.innerHTML = row
+                return p
+            })
+
+        table.replaceWith(...paragraphs)
+    }
+
+    return body.innerHTML
+}
+
+/**
  * The `PasteHTMLTableAsString` extension adds the ability to paste a table copied from a spreadsheet
  * web app (e.g., Google Sheets, Microsoft Excel), along with tables rendered by GitHub Flavored
  * Markdown (GFM), into the editor.
@@ -24,54 +69,11 @@ const PasteHTMLTableAsString = Extension.create({
             new Plugin({
                 key: new PluginKey('pasteHTMLTableAsString'),
                 props: {
-                    transformPastedHTML(html) {
-                        // Attempt to extract table(s) HTML from the pasted HTML
-                        const tableHTML = html.match(/<table[^>]+>[\s\S]*?<\/table>/gi)
-
-                        // Do not handle the event if no table HTML was found
-                        if (!tableHTML) {
-                            return html
-                        }
-
-                        // Concatenate all tables into a single string of paragraphs
-                        return tableHTML.reduce((result, table) => {
-                            const { firstElementChild: tableElement } = parseHtmlToElement(table)
-
-                            if (
-                                !tableElement ||
-                                !(tableElement instanceof HTMLTableElement) ||
-                                !tableElement.rows
-                            ) {
-                                return result
-                            }
-
-                            // Transform the table element into a string of paragraphs
-                            return (
-                                result +
-                                Array.from(tableElement.rows)
-                                    // Join each cell into a single string for each row
-                                    .reduce<string[]>((acc, row) => {
-                                        return [
-                                            ...acc,
-                                            // Use `innerHTML` instead of `innerText` to preserve
-                                            // potential formatting (e.g., GFM) within each cell
-                                            Array.from(row.cells)
-                                                .map((cell) => cell.innerHTML)
-                                                .join(' '),
-                                        ]
-                                    }, [])
-                                    // Discard rows that are completely empty
-                                    .filter((row) => row.trim().length > 0)
-                                    // Wrap each row in a paragraph
-                                    .map((row) => `<p>${row}</p>`)
-                                    .join('')
-                            )
-                        }, '')
-                    },
+                    transformPastedHTML,
                 },
             }),
         ]
     },
 })
 
-export { PasteHTMLTableAsString }
+export { PasteHTMLTableAsString, transformPastedHTML }
