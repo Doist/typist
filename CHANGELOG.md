@@ -1,3 +1,9 @@
+## [9.0.1](https://github.com/Doist/typist/compare/v9.0.0...v9.0.1) (2026-01-13)
+
+### Bug Fixes
+
+- **paste-html-table-as-string:** preserve surrounding content when pasting HTML tables ([#1189](https://github.com/Doist/typist/issues/1189)) ([6588f4f](https://github.com/Doist/typist/commit/6588f4f59e0b5bc81a3b09ea195a09896a7ba951))
+
 ## [9.0.0](https://github.com/Doist/typist/compare/v8.0.8...v9.0.0) (2025-11-19)
 
 ### ⚠ BREAKING CHANGES
