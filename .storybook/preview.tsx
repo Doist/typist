@@ -4,11 +4,14 @@ import 'github-markdown-css/github-markdown-light.css'
 
 import './preview.style.css'
 
-import { theme } from './theme'
+import addonA11y from '@storybook/addon-a11y'
+import addonDocs from '@storybook/addon-docs'
+import { definePreview } from '@storybook/react-vite'
 
-import type { Preview } from '@storybook/react'
+import { theme } from './themes'
 
-const preview: Preview = {
+export default definePreview({
+    addons: [addonA11y(), addonDocs()],
     parameters: {
         docs: {
             theme,
@@ -31,6 +34,4 @@ const preview: Preview = {
             },
         },
     },
-}
-
-export default preview
+})

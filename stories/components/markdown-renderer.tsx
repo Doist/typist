@@ -27,9 +27,8 @@ function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
                         return codeLanguage ? (
                             <SyntaxHighlighter
                                 language={codeLanguage[1]}
-                                // Match `github-markdown-css` style
                                 customStyle={{
-                                    background: '#f6f8fa',
+                                    background: 'revert-layer',
                                 }}
                             >
                                 {codeContent.replace(/\n$/, '')}

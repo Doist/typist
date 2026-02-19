@@ -1,8 +1,9 @@
-import { action } from '@storybook/addon-actions'
-import { Meta } from '@storybook/react'
+import { action } from 'storybook/actions'
 
 import { TypistEditor, TypistEditorProps } from '../../../src'
 import { RichTextKitOptions } from '../../../src/extensions/rich-text/rich-text-kit'
+
+import type { Meta } from '@storybook/react-vite'
 
 const DEFAULT_ARG_TYPES: Meta<typeof TypistEditor>['argTypes'] = {
     extensions: {

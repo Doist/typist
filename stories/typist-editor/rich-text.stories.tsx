@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { action } from '@storybook/addon-actions'
 import { clamp, random } from 'lodash-es'
+import { action } from 'storybook/actions'
 
+import preview from '../../.storybook/preview'
 import { RichTextKit, TypistEditor } from '../../src'
 
 import {
@@ -15,25 +16,22 @@ import { HashtagSuggestion } from './extensions/hashtag-suggestion'
 import { MentionSuggestion } from './extensions/mention-suggestion'
 import { RichTextImageWrapper } from './wrappers/rich-text-image-wrapper'
 
-import type { Meta, StoryObj } from '@storybook/react'
 import type { Extensions } from '@tiptap/core'
 import type { EditorView } from '@tiptap/pm/view'
 import type { TypistEditorRef } from '../../src'
 
-const meta: Meta<typeof TypistEditor> = {
+const meta = preview.meta({
     title: 'Typist Editor/Rich-text',
     component: TypistEditor,
     argTypes: DEFAULT_ARG_TYPES,
     parameters: {
         layout: 'fullscreen',
     },
-}
-
-export default meta
+})
 
 const COMMON_STORY_EXTENSIONS: Extensions = [HashtagSuggestion, MentionSuggestion]
 
-export const Default: StoryObj<typeof TypistEditor> = {
+export const Default = meta.story({
     args: {
         ...DEFAULT_STORY_ARGS,
         placeholder: 'A full rich-text editor, be creative…',
@@ -175,9 +173,9 @@ export const Default: StoryObj<typeof TypistEditor> = {
             )
         },
     ],
-}
+})
 
-export const Singleline: StoryObj<typeof TypistEditor> = {
+export const Singleline = meta.story({
     argTypes: {
         onKeyDown: {
             table: {
@@ -186,7 +184,7 @@ export const Singleline: StoryObj<typeof TypistEditor> = {
         },
     },
     args: {
-        ...Default.args,
+        ...Default.composed.args,
         placeholder: 'A single-line full rich-text editor, be creative…',
         extensions: [
             RichTextKit.configure({
@@ -221,4 +219,4 @@ export const Singleline: StoryObj<typeof TypistEditor> = {
             )
         },
     ],
-}
+})

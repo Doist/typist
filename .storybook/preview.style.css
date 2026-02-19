@@ -1,7 +1,7 @@
 :root {
     /*
      * Storybook theme as CSS variables to be used by stories.
-     * (should match values in `theme.ts`)
+     * (should match values in `themes.ts`)
      */
     --storybook-theme-appBg: #f5f4f2;
     --storybook-theme-appContentBg: #ffffff;
@@ -49,7 +49,7 @@ body,
 
 .netlify-badge {
     text-align: center;
-    margin-top: 3rem;
+    margin-top: 3rem !important;
 }
 
 /*
@@ -57,13 +57,22 @@ body,
  */
 
 #storybook-docs .markdown-body {
+    background-color: unset;
     font-size: 0.875rem;
     line-height: 1.65;
+}
+
+#storybook-docs .markdown-body a {
+    color: var(--storybook-theme-colorSecondary);
 }
 
 #storybook-docs .markdown-body :is(code, pre, tt) {
     font-family: var(--storybook-theme-fontCode);
     font-size: 0.8125rem;
+}
+
+#storybook-docs .markdown-body pre {
+    background-color: var(--storybook-theme-appBg);
 }
 
 #storybook-docs .sbdocs.sbdocs-wrapper {

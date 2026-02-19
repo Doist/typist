@@ -1,4 +1,4 @@
-import { action } from '@storybook/addon-actions'
+import { action } from 'storybook/actions'
 import tippy from 'tippy.js'
 
 import { createSuggestionExtension, ReactRenderer } from '../../../src'

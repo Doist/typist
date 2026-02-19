@@ -2,9 +2,10 @@ import { useCallback, useRef } from 'react'
 
 import { Button } from '@doist/reactist'
 
-import { action } from '@storybook/addon-actions'
 import { Selection } from '@tiptap/pm/state'
+import { action } from 'storybook/actions'
 
+import preview from '../../.storybook/preview'
 import { TypistEditor, TypistEditorRef } from '../../src'
 
 import { DEFAULT_ARG_TYPES } from './constants/defaults'
@@ -12,21 +13,17 @@ import { MARKDOWN_PLACEHOLDER_LONG, MARKDOWN_PLACEHOLDER_SHORT } from './constan
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { Default } from './rich-text.stories'
 
-import type { Meta, StoryObj } from '@storybook/react'
-
-const meta: Meta<typeof TypistEditor> = {
+const meta = preview.meta({
     title: 'Typist Editor/Rich-text/Functions',
     component: TypistEditor,
     argTypes: DEFAULT_ARG_TYPES,
     parameters: {
         layout: 'fullscreen',
     },
-}
+})
 
-export default meta
-
-export const Commands: StoryObj<typeof TypistEditor> = {
-    ...Default,
+export const Commands = meta.story({
+    ...Default.composed,
     decorators: [
         (Story, context) => {
             const typistEditorRef = useRef<TypistEditorRef>(null)
@@ -90,10 +87,10 @@ export const Commands: StoryObj<typeof TypistEditor> = {
             )
         },
     ],
-}
+})
 
-export const Helpers: StoryObj<typeof TypistEditor> = {
-    ...Default,
+export const Helpers = meta.story({
+    ...Default.composed,
     decorators: [
         (Story, context) => {
             const typistEditorRef = useRef<TypistEditorRef>(null)
@@ -142,4 +139,4 @@ export const Helpers: StoryObj<typeof TypistEditor> = {
             )
         },
     ],
-}
+})
