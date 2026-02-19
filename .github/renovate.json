@@ -13,6 +13,10 @@
         {
             "groupName": "gfm strikethrough packages",
             "matchPackageNames": ["/gfm-strikethrough$/"]
+        },
+        {
+            "matchPackageNames": ["/eslint/"],
+            "enabled": false
         }
     ]
 }
