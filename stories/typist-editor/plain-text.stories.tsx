@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 
 import { action } from 'storybook/actions'
 
+import preview from '../../.storybook/preview'
 import { PlainTextKit, TypistEditor } from '../../src'
 
 import { DEFAULT_ARG_TYPES, DEFAULT_STORY_ARGS } from './constants/defaults'
@@ -9,21 +10,18 @@ import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typi
 import { HashtagSuggestion } from './extensions/hashtag-suggestion'
 import { MentionSuggestion } from './extensions/mention-suggestion'
 
-import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { EditorView } from '@tiptap/pm/view'
 
-const meta: Meta<typeof TypistEditor> = {
+const meta = preview.meta({
     title: 'Typist Editor/Plain-text',
     component: TypistEditor,
     argTypes: DEFAULT_ARG_TYPES,
     parameters: {
         layout: 'fullscreen',
     },
-}
+})
 
-export default meta
-
-export const Default: StoryObj<typeof TypistEditor> = {
+export const Default = meta.story({
     args: {
         ...DEFAULT_STORY_ARGS,
         placeholder: 'A plain-text editor, with smart Markdown typing…',
@@ -34,9 +32,9 @@ export const Default: StoryObj<typeof TypistEditor> = {
             return <TypistEditorDecorator Story={Story} args={context.args} />
         },
     ],
-}
+})
 
-export const Singleline: StoryObj<typeof TypistEditor> = {
+export const Singleline = meta.story({
     argTypes: {
         onKeyDown: {
             table: {
@@ -45,7 +43,7 @@ export const Singleline: StoryObj<typeof TypistEditor> = {
         },
     },
     args: {
-        ...Default.args,
+        ...Default.composed.args,
         placeholder: 'A single-line plain-text editor, with smart Markdown typing…',
         extensions: [
             PlainTextKit.configure({
@@ -80,4 +78,4 @@ export const Singleline: StoryObj<typeof TypistEditor> = {
             )
         },
     ],
-}
+})

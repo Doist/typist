@@ -1,11 +1,8 @@
 import { addons } from 'storybook/manager-api'
-import { DOCS_RENDERED, STORY_RENDERED, STORIES_EXPAND_ALL } from 'storybook/internal/core-events'
+import { STORIES_EXPAND_ALL, DOCS_RENDERED, STORY_RENDERED } from 'storybook/internal/core-events'
 
 let isSidebarExpanded = false
 
-/**
- * Workaround to expand all sidebar nested categories on first render.
- */
 addons.register('expand-sidebar', (api) => {
     const emitter = addons.getChannel()
 
@@ -14,7 +11,7 @@ addons.register('expand-sidebar', (api) => {
             setTimeout(() => {
                 api.emit(STORIES_EXPAND_ALL)
                 isSidebarExpanded = true
-            })
+            }, 0)
         }
     }
 

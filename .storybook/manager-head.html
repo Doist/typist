@@ -10,70 +10,55 @@
 <link rel="shortcut icon" href="/favicon.ico" />
 
 <!--
-    Custom theming for Storybook UI and Docs components. It's important to note that these use
-    undocumented CSS classes and attributes, and styling might break with future versions.
+    Custom theming for Storybook UI and Docs components. It's important to note
+    that these use undocumented CSS classes and attributes, and styling might
+    break with future versions.
 -->
 <style type="text/css">
-    @namespace xlink 'http://www.w3.org/1999/xlink';
-
-    .sidebar-item[data-nodetype]:hover,
-    li[class^='search-result'][aria-selected='true'],
-    #panel-tab-content :has(> div[role='button']):hover,
-    [data-testid='tooltip'] a[id^='list-item']:hover {
-        background-color: #e3e9e2;
+    :root {
+        --storybook-item-hover-background: #e3e9e2;
+        --storybook-group-icon-color: #962d21;
+        --storybook-story-icon-color: #c3a60b;
+        --storybook-document-icon-color: #cc8311;
+        --storybook-sidebar-toast-background: #384337;
+        --storybook-sidebar-toast-color: #e0ddd8;
     }
 
-    .search-result-item svg,
-    .sidebar-item[data-nodetype] svg {
-        width: 16px;
-        height: 16px;
-        margin-top: 1px;
+    /* Search result item (idle) */
+    .search-result-item {
+        background: transparent !important;
     }
 
-    .sidebar-item[data-nodetype='document'] svg {
-        color: #cc8311;
+    /* Search result item (hover) */
+    .search-result-item:hover {
+        background: var(--storybook-item-hover-background) !important;
     }
 
-    .search-result-item svg use[xlink|href*='bookmarkhollow'],
-    .sidebar-item[data-nodetype='story'] svg {
-        color: #c3a60b;
+    /* Sidebar item (hover) */
+    .sidebar-item[data-nodetype]:hover {
+        --tree-node-background-hover: var(--storybook-item-hover-background);
     }
 
+    /* Sidebar folder icon */
     .sidebar-item[data-nodetype='group'] svg {
-        color: #962d21;
+        color: var(--storybook-group-icon-color);
     }
 
-    button[title='Reset controls'] {
-        background-color: #f1f0ee;
+    /* Sidebar and search result story icon */
+    .search-result-item svg[type='story'],
+    .sidebar-item[data-nodetype='story'] svg {
+        color: var(--storybook-story-icon-color);
     }
 
-    button[title='Reset controls']:hover {
-        background-color: #eaeae5;
+    /* Sidebar and search result document icon */
+    .search-result-item svg[type='document'],
+    .sidebar-item[data-nodetype='document'] svg {
+        color: var(--storybook-document-icon-color);
+    }
+
+    /* Sidebar bottom toast */
+    #sidebar-bottom-wrapper > div > div {
+        background-color: var(--storybook-sidebar-toast-background);
+        color: var(--storybook-sidebar-toast-color);
     }
 </style>
-
-<!--
-    Workaround to set a different initial sidebar width.
--->
-<script>
-    const SIDEBAR_INITIAL_WIDTH = 320
-
-    let storybookConfig = JSON.parse(localStorage.getItem('storybook-layout'))
-
-    if (
-        typeof storybookConfig === 'object' &&
-        storybookConfig !== null &&
-        storybookConfig.resizerNav.x < SIDEBAR_INITIAL_WIDTH
-    ) {
-        storybookConfig.resizerNav.x = SIDEBAR_INITIAL_WIDTH
-        localStorage.setItem('storybook-layout', JSON.stringify(storybookConfig))
-        document.location.reload()
-    } else if (storybookConfig === null) {
-        storybookConfig = {
-            resizerNav: { x: SIDEBAR_INITIAL_WIDTH, y: 0 },
-            resizerPanel: { x: 0, y: 710 },
-        }
-        localStorage.setItem('storybook-layout', JSON.stringify(storybookConfig))
-        document.location.reload()
-    }
-</script>
