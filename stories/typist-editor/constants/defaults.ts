@@ -1,5 +1,5 @@
-import { action } from '@storybook/addon-actions'
 import { Meta } from '@storybook/react'
+import { action } from 'storybook/actions'
 
 import { TypistEditor, TypistEditorProps } from '../../../src'
 import { RichTextKitOptions } from '../../../src/extensions/rich-text/rich-text-kit'

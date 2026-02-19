@@ -1,5 +1,5 @@
-import { addons } from '@storybook/manager-api'
-import { DOCS_RENDERED, STORY_RENDERED, STORIES_EXPAND_ALL } from '@storybook/core-events'
+import { addons } from 'storybook/manager-api'
+import { DOCS_RENDERED, STORY_RENDERED, STORIES_EXPAND_ALL } from 'storybook/internal/core-events'
 
 let isSidebarExpanded = false
 

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { action } from '@storybook/addon-actions'
 import { clamp, random } from 'lodash-es'
+import { action } from 'storybook/actions'
 
 import { RichTextKit, TypistEditor } from '../../src'
 
@@ -15,7 +15,7 @@ import { HashtagSuggestion } from './extensions/hashtag-suggestion'
 import { MentionSuggestion } from './extensions/mention-suggestion'
 import { RichTextImageWrapper } from './wrappers/rich-text-image-wrapper'
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { Extensions } from '@tiptap/core'
 import type { EditorView } from '@tiptap/pm/view'
 import type { TypistEditorRef } from '../../src'

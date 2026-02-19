@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { action } from '@storybook/addon-actions'
+import { action } from 'storybook/actions'
 
 import { PlainTextKit, TypistEditor } from '../../src'
 
@@ -9,7 +9,7 @@ import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typi
 import { HashtagSuggestion } from './extensions/hashtag-suggestion'
 import { MentionSuggestion } from './extensions/mention-suggestion'
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { EditorView } from '@tiptap/pm/view'
 
 const meta: Meta<typeof TypistEditor> = {

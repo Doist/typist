@@ -2,8 +2,8 @@ import { useCallback, useRef } from 'react'
 
 import { Button } from '@doist/reactist'
 
-import { action } from '@storybook/addon-actions'
 import { Selection } from '@tiptap/pm/state'
+import { action } from 'storybook/actions'
 
 import { TypistEditor, TypistEditorRef } from '../../src'
 
@@ -12,7 +12,7 @@ import { MARKDOWN_PLACEHOLDER_LONG, MARKDOWN_PLACEHOLDER_SHORT } from './constan
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { Default } from './plain-text.stories'
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta: Meta<typeof TypistEditor> = {
     title: 'Typist Editor/Plain-text/Functions',

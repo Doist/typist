@@ -6,7 +6,7 @@ import './preview.style.css'
 
 import { theme } from './theme'
 
-import type { Preview } from '@storybook/react'
+import type { Preview } from '@storybook/react-vite'
 
 const preview: Preview = {
     parameters: {

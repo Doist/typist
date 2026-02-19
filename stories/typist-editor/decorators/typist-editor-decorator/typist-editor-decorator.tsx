@@ -8,8 +8,7 @@ import { TypistEditorToolbar } from './typist-editor-toolbar'
 
 import styles from './typist-editor-decorator.module.css'
 
-import type { PartialStoryFn } from '@storybook/csf'
-import type { ReactRenderer } from '@storybook/react'
+import type { PartialStoryFn as StoryFunction, Renderer } from 'storybook/internal/types'
 import type { CoreEditor, TypistEditorProps, TypistEditorRef, UpdateProps } from '../../../../src'
 
 type TypistEditorPropsWithRef = Partial<
@@ -19,7 +18,7 @@ type TypistEditorPropsWithRef = Partial<
 >
 
 type TypistEditorDecoratorProps = {
-    Story: PartialStoryFn<ReactRenderer, TypistEditorPropsWithRef>
+    Story: StoryFunction<Renderer, TypistEditorPropsWithRef>
     args: TypistEditorProps
     withToolbar?: boolean
     renderBottomFunctions?: () => React.ReactElement
