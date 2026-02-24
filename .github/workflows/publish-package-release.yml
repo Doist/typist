@@ -6,6 +6,7 @@ on:
             - CI Validation
         branches:
             - main
+            - next
         types:
             - completed
 
@@ -83,6 +84,7 @@ jobs:
                   GIT_AUTHOR_NAME: Doist Bot
                   GIT_COMMITTER_EMAIL: doistbot@users.noreply.github.com
                   GIT_COMMITTER_NAME: Doist Bot
+                  SEMANTIC_RELEASE_BRANCH: ${{ github.event.workflow_run.head_branch }}
 
             - name: Remove Doist registry configuration from `.npmrc`
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
@@ -98,9 +100,19 @@ jobs:
                   registry-url: https://npm.pkg.github.com/
                   scope: '@doist'
 
+            - name: Determine npm dist-tag for GitHub Packages
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
+              id: dist-tag
+              run: |
+                  if [[ "${{ github.event.workflow_run.head_branch }}" == "next" ]]; then
+                    echo "tag=next" >> $GITHUB_OUTPUT
+                  else
+                    echo "tag=latest" >> $GITHUB_OUTPUT
+                  fi
+
             - name: Publish package to private GitHub Packages registry
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               run: |
-                  npm publish
+                  npm publish --tag ${{ steps.dist-tag.outputs.tag }}
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
