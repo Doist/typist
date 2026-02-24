@@ -18,7 +18,9 @@ Every significant change is documented in the [CHANGELOG.md](CHANGELOG.md) file.
 
 ## Branch Organization
 
-Submit all changes directly to the [main](https://github.com/doist/typist/tree/main) branch. We don't use separate branches for development or for upcoming releases. We do our best to keep `main` in good shape, with all tests passing.
+Submit all changes directly to the [main](https://github.com/doist/typist/tree/main) branch. We do our best to keep `main` in good shape, with all tests passing.
+
+For pre-release testing, the `next` branch is used to publish pre-release versions to npm before promoting to stable. See [Release Process](#release-process-core-team-only) for details.
 
 ## Proposing a Change
 
@@ -64,7 +66,41 @@ After cloning Typist and installing all dependencies, several commands are at yo
 
 ### Release Process (core team only)
 
-The release process for Typist is almost fully automated with [`semantic-release`](https://github.com/semantic-release/semantic-release), only requiring a core team member to trigger [this workflow](https://github.com/Doist/typist/actions/workflows/publish-typist-package-release.yml) manually whenever a new release needs to be published.
+The release process for Typist is fully automated with [`semantic-release`](https://github.com/semantic-release/semantic-release). Pushing to `main` (after CI passes) triggers a stable release automatically.
+
+#### Pre-releases
+
+To test features before publishing a stable release:
+
+1. **Create the `next` branch** from `main` (if it doesn't exist):
+
+    ```sh
+    git checkout main
+    git pull origin main
+    git checkout -b next
+    git push origin next
+    ```
+
+2. **Develop on a feature branch** and open a PR targeting `next`.
+
+3. **Automatic pre-release:** Each PR merge into `next` triggers CI → a pre-release version (e.g., `9.1.0-next.1`) is published to the `@next` dist-tag on npm and GitHub Packages.
+
+4. **Install the pre-release version** for testing:
+
+    ```sh
+    npm install @doist/typist@next
+    ```
+
+5. **Promote to stable:** Once validated, merge `next` into `main` via a PR. This triggers a stable release with the final version number (e.g., `9.1.0`).
+
+6. **Sync next branch:** After the stable release, update `next` from `main` to keep them in sync:
+    ```sh
+    git checkout next
+    git merge main
+    git push origin next
+    ```
+
+> **Note:** The `CHANGELOG.md` is only updated for stable releases on `main`. Pre-releases still get GitHub release notes and npm publication.
 
 ### Visual Studio Code
 
