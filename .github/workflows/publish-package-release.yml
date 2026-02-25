@@ -46,6 +46,7 @@ jobs:
               with:
                   token: ${{ secrets.GH_REPO_TOKEN }}
                   ref: ${{ github.event.workflow_run.head_sha }}
+                  fetch-depth: 0
 
             # The checkout above uses `head_sha` to pin the exact commit that CI validated, but this
             # results in a detached HEAD. semantic-release requires a named branch matching its

@@ -72,31 +72,25 @@ The release process for Typist is fully automated with [`semantic-release`](http
 
 To test features before publishing a stable release:
 
-1. **Create the `next` branch** from `main` (if it doesn't exist):
+1. **Sync `next` with `main`** if they are out of sync, before starting new work:
 
     ```sh
-    git checkout main
-    git pull origin main
-    git checkout -b next
+    git checkout next
+    git merge main -m "chore: sync next with main [skip ci]"
     git push origin next
     ```
 
-2. **Develop on a feature branch** and open a PR targeting `next`.
+2. **Develop on a feature branch** based off `next` and open a PR targeting `next`.
 
 3. **Automatic pre-release:** Each PR merge into `next` triggers CI → a pre-release version (e.g., `9.1.0-next.1`) is published to the `@next` dist-tag on npm and GitHub Packages.
 
-4. **Install the pre-release version** for testing:
+4. **Promote to stable:** When ready, open a PR to merge `next` into `main`. The PR title must follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g., `feat: ...`, `fix: ...`) as it determines the version bump for the stable release.
 
-    ```sh
-    npm install @doist/typist@next
-    ```
+5. **Sync `next` with `main`** after the stable release, to pull back the release commit:
 
-5. **Promote to stable:** Once validated, merge `next` into `main` via a PR. This triggers a stable release with the final version number (e.g., `9.1.0`).
-
-6. **Sync next branch:** After the stable release, update `next` from `main` to keep them in sync:
     ```sh
     git checkout next
-    git merge main
+    git merge main -m "chore: sync next with main [skip ci]"
     git push origin next
     ```
 
