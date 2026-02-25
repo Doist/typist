@@ -17,7 +17,7 @@ module.exports = {
             },
         ],
         // Only update CHANGELOG.md and commit back on stable releases (main branch)
-        ...(process.env.SEMANTIC_RELEASE_BRANCH === 'next'
+        ...(process.env.GITHUB_REF === 'next'
             ? []
             : [
                   '@semantic-release/changelog',
@@ -30,7 +30,7 @@ module.exports = {
               ]),
         '@semantic-release/npm',
         // Only commit artifacts back on stable releases (main branch)
-        ...(process.env.SEMANTIC_RELEASE_BRANCH === 'next' ? [] : ['@semantic-release/git']),
+        ...(process.env.GITHUB_REF === 'next' ? [] : ['@semantic-release/git']),
         '@semantic-release/github',
         [
             '@semantic-release/exec',
