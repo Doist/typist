@@ -45,15 +45,7 @@ jobs:
               uses: actions/checkout@v5
               with:
                   token: ${{ secrets.GH_REPO_TOKEN }}
-                  ref: ${{ github.event.workflow_run.head_sha }}
-                  fetch-depth: 0
-
-            # The checkout above uses `head_sha` to pin the exact commit that CI validated, but this
-            # results in a detached HEAD. semantic-release requires a named branch matching its
-            # `branches` configuration to determine the release channel.
-            - name: Create local branch for semantic-release
-              run: |
-                  git checkout -B ${{ github.event.workflow_run.head_branch }}
+                  ref: ${{ github.event.workflow_run.head_branch }}
 
             - name: Prepare Node.js environment
               uses: actions/setup-node@v6
