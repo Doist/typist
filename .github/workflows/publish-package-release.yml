@@ -84,7 +84,7 @@ jobs:
                   GIT_AUTHOR_NAME: Doist Bot
                   GIT_COMMITTER_EMAIL: doistbot@users.noreply.github.com
                   GIT_COMMITTER_NAME: Doist Bot
-                  SEMANTIC_RELEASE_BRANCH: ${{ github.event.workflow_run.head_branch }}
+                  GITHUB_REF: ${{ github.event.workflow_run.head_branch }}
 
             - name: Remove Doist registry configuration from `.npmrc`
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
