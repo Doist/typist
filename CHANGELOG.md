@@ -1,3 +1,14 @@
+## [9.0.3](https://github.com/Doist/typist/compare/v9.0.2...v9.0.3) (2026-02-25)
+
+### Bug Fixes
+
+- test prerelease workflow ([#1219](https://github.com/Doist/typist/issues/1219)) ([f5a9e05](https://github.com/Doist/typist/commit/f5a9e058e022e3caa9709d2df9b48a41d77a4c8e))
+- test prerelease workflow (take 2) ([#1222](https://github.com/Doist/typist/issues/1222)) ([6eb32ab](https://github.com/Doist/typist/commit/6eb32abfaeb6d2d47069bad53984e34893a6248f))
+- test prerelease workflow (take 3) ([#1225](https://github.com/Doist/typist/issues/1225)) ([7dd6258](https://github.com/Doist/typist/commit/7dd62582462194412ec5b272959575f87d286b14))
+- test prerelease workflow (take 4) ([#1227](https://github.com/Doist/typist/issues/1227)) ([48fdcad](https://github.com/Doist/typist/commit/48fdcad8da26690fc4d6f6a800dc9027ee1a9705))
+- test prerelease workflow (take 5) ([#1229](https://github.com/Doist/typist/issues/1229)) ([7b706c0](https://github.com/Doist/typist/commit/7b706c053df877a142ca868581f60f4213713db8))
+- test prerelease workflow (take 6) ([#1231](https://github.com/Doist/typist/issues/1231)) ([674bbcd](https://github.com/Doist/typist/commit/674bbcd23e48dec129a4ccba09cd4f79756d8a41))
+
 ## [9.0.2](https://github.com/Doist/typist/compare/v9.0.1...v9.0.2) (2026-02-19)
 
 ### Bug Fixes
