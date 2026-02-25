@@ -9,6 +9,7 @@ import { paragraph } from './plugins/paragraph'
 import { strikethrough } from './plugins/strikethrough'
 import { suggestion } from './plugins/suggestion'
 import { taskItem } from './plugins/task-item'
+import { video } from './plugins/video'
 
 import type { Schema } from '@tiptap/pm/model'
 
@@ -152,6 +153,11 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
     // Add a rule for `taskItem` if the corresponding nodes exists in the schema
     if (schema.nodes.taskList && schema.nodes.taskItem) {
         turndown.use(taskItem(schema.nodes.taskItem))
+    }
+
+    // Add a rule for `video` if the corresponding node exists in the schema
+    if (schema.nodes.video) {
+        turndown.use(video(schema.nodes.video))
     }
 
     // Add a custom rule for all suggestion nodes available in the schema

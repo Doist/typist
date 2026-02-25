@@ -1,0 +1,26 @@
+.richTextVideoWrapper {
+    display: grid;
+}
+
+.richTextVideoWrapper .videoAttachment,
+.richTextVideoWrapper .progressOverlay {
+    grid-area: 1 / 1;
+}
+
+.richTextVideoWrapper .videoAttachment {
+    width: 100%;
+    height: auto;
+}
+
+.richTextVideoWrapper .videoAttachment.noPointerEvents {
+    pointer-events: none;
+}
+
+.richTextVideoWrapper .progressOverlay {
+    background-color: var(--storybook-theme-appBg);
+    border-radius: calc(var(--storybook-theme-appBorderRadius) / 2);
+    place-self: end center;
+    width: 100%;
+    height: var(--video-upload-progress);
+    opacity: 0.75;
+}

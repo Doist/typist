@@ -125,44 +125,44 @@ div + .editorContainer {
     font-family: var(--storybook-theme-fontCode);
 }
 
-:global(div[data-typist-editor] :is(img)) {
+:global(div[data-typist-editor] :is(img, video)) {
     border-radius: var(--typist-editor-media-border-radius);
 }
 
-:global(div[data-typist-editor] > :is(img)) {
+:global(div[data-typist-editor] > :is(img, video)) {
     display: block;
 }
 
-:global(div[data-typist-editor] > p > :is(img)) {
+:global(div[data-typist-editor] > p > :is(img, video)) {
     display: inline-block;
 }
 
-:global(div[data-typist-editor] > :is(.Typist-image)) {
+:global(div[data-typist-editor] > :is(.Typist-image, .Typist-video)) {
     display: flex;
 }
 
-:global(div[data-typist-editor] > p > :is(.Typist-image)) {
+:global(div[data-typist-editor] > p > :is(.Typist-image, .Typist-video)) {
     display: inline-flex;
 }
 
-:global(div[data-typist-editor] > :is(img)),
-:global(div[data-typist-editor] > :is(.Typist-image)) {
+:global(div[data-typist-editor] > :is(img, video)),
+:global(div[data-typist-editor] > :is(.Typist-image, .Typist-video)) {
     margin-bottom: 1rem;
 }
 
-:global(div[data-typist-editor] > :is(img)),
-:global(div[data-typist-editor] > :is(.Typist-image)),
-:global(div[data-typist-editor] > p > :is(img)),
-:global(div[data-typist-editor] > p > :is(.Typist-image)) {
+:global(div[data-typist-editor] > :is(img, video)),
+:global(div[data-typist-editor] > :is(.Typist-image, .Typist-video)),
+:global(div[data-typist-editor] > p > :is(img, video)),
+:global(div[data-typist-editor] > p > :is(.Typist-image, .Typist-video)) {
     border-radius: var(--typist-editor-media-border-radius);
     max-width: 480px;
     width: fit-content;
 }
 
-:global(div[data-typist-editor] > :is(img).ProseMirror-selectednode),
-:global(div[data-typist-editor] > :is(.Typist-image).ProseMirror-selectednode),
-:global(div[data-typist-editor] > p > :is(img).ProseMirror-selectednode),
-:global(div[data-typist-editor] > p > :is(.Typist-image).ProseMirror-selectednode) {
+:global(div[data-typist-editor] > :is(img, video).ProseMirror-selectednode),
+:global(div[data-typist-editor] > :is(.Typist-image, .Typist-video).ProseMirror-selectednode),
+:global(div[data-typist-editor] > p > :is(img, video).ProseMirror-selectednode),
+:global(div[data-typist-editor] > p > :is(.Typist-image, .Typist-video).ProseMirror-selectednode) {
     outline: 2px solid var(--storybook-theme-colorSecondary);
 }
 
