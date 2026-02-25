@@ -1,10 +1,7 @@
 name: CI Validation
 
 on:
-    push:
-        branches:
-            - main
-            - next
+    workflow_call:
     pull_request:
         types:
             - opened
