@@ -92,7 +92,7 @@ jobs:
             - name: Publish package to public npm registry
               id: semantic-release
               run: |
-                  GITHUB_REF=refs/heads/${{ github.event.workflow_run.head_branch }} npx semantic-release --dry-run
+                  GITHUB_REF=${{ github.event.workflow_run.head_branch }} npx semantic-release --dry-run
               env:
                   GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
                   GIT_AUTHOR_EMAIL: doistbot@users.noreply.github.com
