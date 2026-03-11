@@ -1,6 +1,6 @@
-const doistPrettierConfig = require('@doist/prettier-config')
+import doistPrettierConfig from '@doist/prettier-config' with { type: 'json' }
 
-module.exports = {
+export default {
     ...doistPrettierConfig,
     overrides: [
         {
