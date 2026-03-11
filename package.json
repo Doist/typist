@@ -25,6 +25,7 @@
     ],
     "scripts": {
         "build": "run-s clean:* build:typist",
+        "postbuild": "publint",
         "build:storybook": "storybook build",
         "build:typist": "tsc --build tsconfig.build.json",
         "check": "run-p check:* -c -l -t",
@@ -121,6 +122,7 @@
         "lint-staged": "16.3.2",
         "npm-run-all-next": "1.2.3",
         "prettier": "3.8.1",
+        "publint": "0.3.18",
         "react": "18.3.1",
         "react-dom": "18.3.1",
         "react-icons": "5.6.0",
