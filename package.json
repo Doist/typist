@@ -4,9 +4,19 @@
     "version": "9.0.3",
     "license": "MIT",
     "homepage": "https://typist.doist.dev/",
-    "repository": "https://github.com/Doist/typist",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Doist/typist.git"
+    },
+    "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        }
+    },
     "sideEffects": false,
     "engines": {
         "node": "^22.14.0 || >= 24.10.0",
@@ -25,6 +35,7 @@
     ],
     "scripts": {
         "build": "run-s clean:* build:typist",
+        "postbuild": "publint",
         "build:storybook": "storybook build",
         "build:typist": "tsc --build tsconfig.build.json",
         "check": "run-p check:* -c -l -t",
@@ -121,6 +132,7 @@
         "lint-staged": "16.3.2",
         "npm-run-all-next": "1.2.3",
         "prettier": "3.8.1",
+        "publint": "0.3.18",
         "react": "18.3.1",
         "react-dom": "18.3.1",
         "react-icons": "5.6.0",
