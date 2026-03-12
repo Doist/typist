@@ -144,6 +144,16 @@ Commit types, such as `feat:` or `fix:`, are the only ones that will affect vers
 
 A commit that has the text `BREAKING CHANGE:` at the beginning of its optional body or footer section, or appends a `!` after the type/scope, introduces a breaking API change (correlating with `MAJOR` in Semantic Versioning). A breaking change can be part of commits of any _type_.
 
+#### How Commits Map to the CHANGELOG
+
+Only the commit **header** (subject line) and `BREAKING CHANGE:` **footer** are used to generate the `CHANGELOG.md`. The commit body is ignored by the changelog generator.
+
+When squash-merging a PR, GitHub lets you edit the commit message and extended description. Keep the following in mind:
+
+- The **commit message** (header) becomes the entry under its type section (e.g., Features, Bug Fixes).
+- A `BREAKING CHANGE:` **footer** in the extended description becomes a separate entry in the Breaking Changes section. Use it to describe the impact for consumers.
+- Using `!` in the header without a `BREAKING CHANGE:` footer will duplicate the subject line in both the type section and the Breaking Changes section. To avoid this, always include a `BREAKING CHANGE:` footer with a distinct description when introducing breaking changes.
+
 ## License
 
 By contributing to Typist, you agree that your contributions will be licensed under its [MIT license](LICENSE).
