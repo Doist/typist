@@ -1,3 +1,15 @@
+## [10.0.0](https://github.com/Doist/typist/compare/v9.0.3...v10.0.0) (2026-03-12)
+
+### ⚠ BREAKING CHANGES
+
+- The package is now declared as ESM ("type": "module")
+  and uses an exports map. Deep imports (e.g. @doist/typist/dist/...) are
+  no longer supported. Minimum Node.js version is now 22.18.0.
+
+### Features
+
+- modernize package publishing and build tooling ([#1255](https://github.com/Doist/typist/issues/1255)) ([1c8a194](https://github.com/Doist/typist/commit/1c8a194cbbdac1548281717133f36d730c97ea29))
+
 ## [9.0.3](https://github.com/Doist/typist/compare/v9.0.2...v9.0.3) (2026-02-25)
 
 ### Bug Fixes
