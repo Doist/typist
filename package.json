@@ -19,7 +19,7 @@
     },
     "sideEffects": false,
     "engines": {
-        "node": "^22.14.0 || >= 24.10.0",
+        "node": "^22.18.0 || >= 24.10.0",
         "npm": "^10.9.2 || >= 11.5.1"
     },
     "publishConfig": {
@@ -37,7 +37,7 @@
         "build": "run-s clean:* build:typist",
         "postbuild": "publint",
         "build:storybook": "storybook build",
-        "build:typist": "tsc --build tsconfig.build.json",
+        "build:typist": "tsdown",
         "check": "run-p check:* -c -l -t",
         "check:eslint": "eslint --format codeframe --cache --cache-location ./.cache/.eslintcache --ext js,jsx,ts,tsx ./",
         "check:prettier": "prettier --check \"./**/*.{js,jsx,ts,tsx,json,css,yml,md}\"",
@@ -146,6 +146,7 @@
         "storybook": "10.2.16",
         "storybook-css-modules": "1.0.8",
         "tippy.js": "6.3.7",
+        "tsdown": "0.21.2",
         "type-fest": "5.4.4",
         "typescript": "5.9.3",
         "typescript-plugin-css-modules": "5.2.0",
