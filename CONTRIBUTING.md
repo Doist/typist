@@ -86,14 +86,6 @@ To test features before publishing a stable release:
 
 4. **Promote to stable:** When ready, open a PR to merge `next` into `main`. The PR title must follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g., `feat: ...`, `fix: ...`) as it determines the version bump for the stable release.
 
-5. **Sync `next` with `main`** after the stable release, to pull back the release commit:
-
-    ```sh
-    git checkout next
-    git merge main -m "chore: sync next with main [skip ci]"
-    git push origin next
-    ```
-
 > **Note:** The `CHANGELOG.md` is only updated for stable releases on `main`. Pre-releases still get GitHub release notes and npm publication.
 
 ### Visual Studio Code
