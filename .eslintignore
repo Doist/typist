@@ -12,6 +12,7 @@
 # Project output
 dist/
 storybook-static/
+*.tsbuildinfo
 
 # Project dependencies
 node_modules/

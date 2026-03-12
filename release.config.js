@@ -1,7 +1,7 @@
 /**
  * @type {import('semantic-release').GlobalConfig}
  */
-module.exports = {
+export default {
     branches: ['main', { name: 'next', prerelease: true }],
     plugins: [
         [
