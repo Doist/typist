@@ -138,7 +138,7 @@ A commit that has the text `BREAKING CHANGE:` at the beginning of its optional b
 
 #### How Commits Map to the CHANGELOG
 
-Only the commit **header** (subject line) and `BREAKING CHANGE:` notes (whether in the body or footer) are used to generate the `CHANGELOG.md`. The rest of the commit body is ignored by the changelog generator.
+The commit **header** (subject line) and footer metadata — including `BREAKING CHANGE:` notes and issue references (e.g., `Closes #123`) — are used to generate the `CHANGELOG.md`. The commit body is ignored by the changelog generator.
 
 When squash-merging a PR, GitHub lets you edit the commit message and extended description. Keep the following in mind:
 
