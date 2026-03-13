@@ -72,7 +72,7 @@ The release process for Typist is fully automated with [`semantic-release`](http
 
 To test features before publishing a stable release:
 
-1. **Sync `next` with `main`** if they are out of sync, before starting new work:
+1. **Sync `next` with `main`** before starting new work, and after each stable release (required for `semantic-release` to correctly initiate the next pre-release versioning cycle):
 
     ```sh
     git checkout next
@@ -138,7 +138,7 @@ A commit that has the text `BREAKING CHANGE:` at the beginning of its optional b
 
 #### How Commits Map to the CHANGELOG
 
-Only the commit **header** (subject line) and `BREAKING CHANGE:` **footer** are used to generate the `CHANGELOG.md`. The commit body is ignored by the changelog generator.
+Only the commit **header** (subject line) and `BREAKING CHANGE:` notes (whether in the body or footer) are used to generate the `CHANGELOG.md`. The rest of the commit body is ignored by the changelog generator.
 
 When squash-merging a PR, GitHub lets you edit the commit message and extended description. Keep the following in mind:
 
