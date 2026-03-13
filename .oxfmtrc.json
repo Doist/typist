@@ -1,0 +1,63 @@
+{
+    "$schema": "./node_modules/oxfmt/configuration_schema.json",
+    "ignorePatterns": [".cache/*", "dist/*", "storybook-static/*", "**/node_modules/*"],
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "embeddedLanguageFormatting": "auto",
+    "insertFinalNewline": true,
+    "jsxSingleQuote": false,
+    "printWidth": 100,
+    "proseWrap": "preserve",
+    "quoteProps": "as-needed",
+    "semi": false,
+    "singleAttributePerLine": false,
+    "singleQuote": true,
+    "sortImports": {
+        "customGroups": [
+            {
+                "elementNamePattern": ["react", "react-*", "react-dom", "react-dom/**"],
+                "groupName": "react"
+            },
+            {
+                "elementNamePattern": ["@doist/**"],
+                "groupName": "doist"
+            },
+            {
+                "groupName": "side-effect-parent",
+                "modifiers": ["side_effect"],
+                "selector": "parent"
+            },
+            {
+                "groupName": "side-effect-sibling",
+                "modifiers": ["side_effect"],
+                "selector": "sibling"
+            },
+            {
+                "groupName": "side-effect-index",
+                "modifiers": ["side_effect"],
+                "selector": "index"
+            }
+        ],
+        "groups": [
+            "value-builtin",
+            "side_effect",
+            "side-effect-parent",
+            ["side-effect-sibling", "side-effect-index"],
+            "side_effect_style",
+            "react",
+            "doist",
+            "value-external",
+            "value-internal",
+            "value-parent",
+            ["value-sibling", "value-index"],
+            "style",
+            "type-import",
+            "unknown"
+        ],
+        "newlinesBetween": true
+    },
+    "sortPackageJson": false,
+    "tabWidth": 4,
+    "trailingComma": "all",
+    "useTabs": false
+}

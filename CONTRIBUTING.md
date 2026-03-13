@@ -58,7 +58,7 @@ cd typist
 After cloning Typist and installing all dependencies, several commands are at your disposal:
 
 - `npm run build`: Builds the `@doist/typist` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/Doist/packages?repo_name=typist);
-- `npm run check`: Validates code quality with ESLint, styling with Prettier, and types with TypeScript;
+- `npm run check`: Validates code quality with Oxlint, formatting with Oxfmt, and types with TypeScript;
 - `npm run clean`: Removes temporary directories used for multiple caches;
 - `npm run storybook:build`: Builds Storybook as a static Web application;
 - `npm run storybook:start`: Starts Storybook Web application (available at http://localhost:6006/);

@@ -1,0 +1,35 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "ignorePatterns": [".cache/*", "dist/*", "storybook-static/*", "**/node_modules/*"],
+    "plugins": [
+        "import",
+        "jsdoc",
+        "jsx-a11y",
+        "oxc",
+        "react",
+        "react-perf",
+        "typescript",
+        "unicorn",
+        "vitest"
+    ],
+    "categories": {
+        "perf": "warn",
+        "suspicious": "warn"
+    },
+    "rules": {
+        "import/no-default-export": "warn",
+        "react/react-in-jsx-scope": "off"
+    },
+    "overrides": [
+        {
+            "files": [
+                "./*.config.{js,ts,mjs,mts}",
+                "./stories/**/*.{story,stories}.tsx",
+                "./typings/**/*.d.ts"
+            ],
+            "rules": {
+                "import/no-default-export": "off"
+            }
+        }
+    ]
+}
