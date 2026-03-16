@@ -129,7 +129,7 @@
         "ignore-sync": "8.0.0",
         "is-ci": "4.1.0",
         "jsdom": "28.1.0",
-        "lint-staged": "16.3.2",
+        "lint-staged": "16.3.3",
         "npm-run-all-next": "1.2.3",
         "prettier": "3.8.1",
         "publint": "0.3.18",
