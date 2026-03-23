@@ -15,6 +15,7 @@ import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typi
 import { HashtagSuggestion } from './extensions/hashtag-suggestion'
 import { MentionSuggestion } from './extensions/mention-suggestion'
 import { RichTextImageWrapper } from './wrappers/rich-text-image-wrapper'
+import { RichTextVideoWrapper } from './wrappers/rich-text-video-wrapper'
 
 import type { Extensions } from '@tiptap/core'
 import type { EditorView } from '@tiptap/pm/view'
@@ -46,7 +47,7 @@ export const Default = meta.story({
 
             const [inlineAttachments, setInlineAttachments] = useState<{
                 [attachmentId: string]: {
-                    type: 'image'
+                    type: 'image' | 'video'
                     progress: number
                 }
             }>({})
@@ -90,7 +91,7 @@ export const Default = meta.story({
                         const updateInlineAttachmentAttributes =
                             inlineAttachments[attachmentId].type === 'image'
                                 ? commands?.updateImage
-                                : () => {}
+                                : commands?.updateVideo
 
                         updateInlineAttachmentAttributes?.({
                             metadata: {
@@ -107,7 +108,7 @@ export const Default = meta.story({
             const handleInlineFilePaste = useCallback(function handleInlineFilePaste(file: File) {
                 const fileType = file.type.split('/')[0]
 
-                if (fileType !== 'image') {
+                if (fileType !== 'image' && fileType !== 'video') {
                     return
                 }
 
@@ -138,6 +139,11 @@ export const Default = meta.story({
                             src: typeof fileReader.result === 'string' ? fileReader.result : '',
                             metadata,
                         })
+                    } else {
+                        commands?.insertVideo({
+                            src: String(fileReader.result),
+                            metadata,
+                        })
                     }
                 }
 
@@ -152,6 +158,10 @@ export const Default = meta.story({
                             image: {
                                 NodeViewComponent: RichTextImageWrapper,
                                 onImageFilePaste: handleInlineFilePaste,
+                            },
+                            video: {
+                                NodeViewComponent: RichTextVideoWrapper,
+                                onVideoFilePaste: handleInlineFilePaste,
                             },
                         }),
                         ...COMMON_STORY_EXTENSIONS,
