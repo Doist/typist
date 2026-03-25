@@ -17,6 +17,7 @@ If you find existing `useMemo` or `useCallback` calls in compiler-enabled code, 
 > - The component still has compiler violations (check `.react-compiler.rec.json`)
 > - The compiler is not enabled in the project
 > - The memoized value is defined before other hook calls that separate it from its hook consumer (e.g., `useState`, `useEffect`). The compiler silently skips memoization in this case, even though the file compiles without errors. See [Memoization gap with intervening hooks](#memoization-gap-with-intervening-hooks).
+> - The value comes from a `use`-prefixed function that contains no actual hook calls. The compiler treats these as hooks and cannot cache their return values. See [Hook-named helper functions prevent return-value memoization](#hook-named-helper-functions-prevent-return-value-memoization).
 
 ## Workflow: Identifying and fixing violations
 
@@ -1145,6 +1146,62 @@ expect(state.someValue).toBe(expected)
 const { result } = renderHook(() => useMyHook(options))
 expect(result.current.someValue).toBe(expected)
 ```
+
+### Hook-named helper functions prevent return-value memoization
+
+> This is not a compiler error. The file compiles cleanly and passes
+> `react-compiler-tracker --check-files`, but the compiler silently skips
+> memoization it would otherwise apply.
+
+Any function named `use` + uppercase letter is treated as a hook, even if it contains no hook calls. This causes two missed optimizations:
+
+1. **At the call site**, the compiler must invoke hooks unconditionally every render (Rules of Hooks), so the return value cannot be cached.
+2. **At the definition site**, the compiler [skips functions that look like hooks but contain no hook calls or JSX](https://github.com/facebook/react/issues/31727). The function body is never compiled, so expressions inside it (like array literals) are never memoized either.
+
+**Fix:** Rename the function to `get`, `create`, `build`, or another non-hook prefix at the definition/export site.
+
+```typescript
+// Before
+export function useMembersTableColumns({ workspaceId, isMembersActivityLoading }) { ... }
+// After (rename at the definition site)
+export function getMembersTableColumns({ workspaceId, isMembersActivityLoading }) { ... }
+```
+
+The compiled output shows the difference. With the `use` prefix, the argument is cached but the call runs unconditionally:
+
+```javascript
+// Compiled: useMembersTableColumns (argument cached, call is not)
+let t2
+if ($[4] !== isMembersActivityLoading || $[5] !== workspaceId) {
+    t2 = { workspaceId, isMembersActivityLoading }
+    $[4] = isMembersActivityLoading
+    $[5] = workspaceId
+    $[6] = t2
+} else {
+    t2 = $[6]
+}
+const columns = useMembersTableColumns(t2) // ← called every render
+```
+
+With a plain name, the entire call moves inside the cache block:
+
+```javascript
+// Compiled: getMembersTableColumns (entire call cached)
+let t2
+if ($[4] !== isMembersActivityLoading || $[5] !== workspaceId) {
+    t2 = getMembersTableColumns({ workspaceId, isMembersActivityLoading })
+    $[4] = isMembersActivityLoading
+    $[5] = workspaceId
+    $[6] = t2
+} else {
+    t2 = $[6]
+}
+const columns = t2 // ← stable reference when inputs unchanged
+```
+
+> **Import aliases don't help.** The compiler resolves the original export
+> name, not the local alias. `import { useFoo as getFoo }` still treats
+> the call as a hook. The rename must happen at the definition/export site.
 
 ### Memoization gap with intervening hooks
 
