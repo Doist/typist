@@ -220,6 +220,70 @@ export function useCurrentViewConfig() {
 }
 ```
 
+## Render Purity and Local State
+
+### Don't read external state during render
+
+React components [must be idempotent](https://react.dev/reference/rules/components-and-hooks-must-be-pure) - they should always return the same output with respect to their inputs. Reading from external sources like `localStorage`, `sessionStorage`, or browser APIs during render violates this because they are mutable sources outside React's control (same category as `Date.now()` or `Math.random()`). Beyond purity, these reads also create new references on every call, which causes render loops and stale-value bugs.
+
+```typescript
+// Bad: reads localStorage on every render, creates new arrays each time
+function useActivityFilters(urlParams: URLSearchParams) {
+    const presets = getLocalStorageValue<string[]>('filterPresets') ?? []
+    const types = urlParams.get('types')?.split(',') ?? presets
+    return { types } // New object + new array every render
+}
+
+// Good: read external state once via useState initializer
+function useActivityFilters(urlParams: URLSearchParams) {
+    const [initialPresets] = useState(() => getLocalStorageValue<string[]>('filterPresets') ?? [])
+    // Use the stable string as the dependency, derive the array inside useMemo
+    const typesParam = urlParams.get('types')
+    return useMemo(
+        () => ({ types: typesParam?.split(',') ?? initialPresets }),
+        [typesParam, initialPresets],
+    )
+}
+```
+
+### `useState` initializer vs `useMemo` for one-time computations
+
+When you need to compute something once on mount and never recompute it, `useState(() => ...)` is the right tool - the [initializer function runs only on the first render](https://react.dev/reference/react/useState#avoiding-recreating-the-initial-state). `useMemo` recalculates when dependencies get new references, which can trigger the very re-renders you're trying to avoid. The lazy initializer runs once, freezes the result, and is immune to reference instability.
+
+```typescript
+// Good: computed once, stable forever
+const [initialFilters] = useState(() => deriveFiltersFromURL(searchParams))
+
+// Risky: recalculates if searchParams reference changes
+const initialFilters = useMemo(() => deriveFiltersFromURL(searchParams), [searchParams])
+```
+
+Use `useState(() => ...)` when the value should be pinned to mount time. For reactive derived values, the [React Compiler](react-compiler.md) handles memoization automatically in compiler-enabled code; only reach for manual `useMemo` when the compiler is not active.
+
+See also: [useState lazy initialization](react-compiler.md#alternative-usestate-lazy-initialization) in the React Compiler guide for the compiler-specific motivation.
+
+### Stable reducer sentinel values
+
+React [skips re-rendering when the new state is identical to the current state](https://react.dev/reference/react/useReducer#dispatch) via `Object.is` comparison. If a reducer returns a new object with the same shape on every dispatch, that check fails and React re-renders. Hoisting fixed sentinel states to module scope ensures the same reference is returned, letting React bail out.
+
+This is only worth investigating if profiling shows unnecessary re-renders from a reducer - React's render batching already handles most cases. Only use sentinels for truly fixed values; states that carry variable data (like errors with messages) need a new object each time.
+
+```typescript
+const loadingState = { status: 'loading' as const, data: null, error: null }
+
+function fetchReducer(state: FetchState, action: FetchAction): FetchState {
+    switch (action.type) {
+        case 'FETCH_START':
+            return loadingState // Same reference — React bails out of re-render
+        case 'FETCH_ERROR':
+            // New object is correct here — error carries variable data
+            return { status: 'error', data: null, error: action.error }
+        case 'FETCH_SUCCESS':
+            return { status: 'success', data: action.payload, error: null }
+    }
+}
+```
+
 ## Rules
 
 - **Never import `useDispatch` / `useSelector` from `react-redux`** - Use `useAppDispatch` / `useAppSelector`
@@ -230,3 +294,6 @@ export function useCurrentViewConfig() {
 - **Selectors must return stable references** - Unstable selectors cause infinite loops in Zustand v5 and wasted renders in Redux; hoist fallback values to module scope
 - **Use `useShallow` for multi-value Zustand selectors** - Prefer atomic selectors, but when multiple values are always consumed together, `useShallow` prevents reference instability
 - **Don't suppress dev-mode stability checks** - Reselect and React-Redux stability warnings catch real bugs; fix the root cause instead
+- **Don't read external state during render** - `localStorage`, `sessionStorage`, and browser APIs produce unstable references; read once via `useState(() => ...)` or in effects
+- **Use `useState` initializer for mount-time values** - `useState(() => ...)` runs once and is immune to reference instability. For reactive derived values, the [React Compiler](react-compiler.md) handles memoization automatically in compiler-enabled code; only reach for `useMemo` when the compiler is not active
+- **Consider stable reducer sentinels when profiling shows wasted renders** - Hoisting fixed states (loading) to module scope lets `useReducer` return the same reference so React can bail out; only worth doing when the sub-tree is expensive
