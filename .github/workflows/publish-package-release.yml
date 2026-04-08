@@ -14,6 +14,8 @@ permissions:
     id-token: write
     # Enable the use of GitHub Packages registry
     packages: write
+    # Enable the CI validation workflow to checkout the repository
+    contents: read
 
 # The release workflow involves many crucial steps that once triggered shouldn't be cancelled until
 # finished, otherwise we might end up in an inconsistent state (e.g., published to GitHub Packages
