@@ -1,3 +1,9 @@
+## [10.0.1](https://github.com/Doist/typist/compare/v10.0.0...v10.0.1) (2026-04-08)
+
+### Bug Fixes
+
+- add contents read permission for CI validation workflow ([#1292](https://github.com/Doist/typist/issues/1292)) ([d3cb224](https://github.com/Doist/typist/commit/d3cb2243e7f6fc732b6a2c76b8f854ae4eda09dc))
+
 ## [10.0.0](https://github.com/Doist/typist/compare/v9.0.3...v10.0.0) (2026-03-12)
 
 ### ⚠ BREAKING CHANGES
