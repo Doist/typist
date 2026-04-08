@@ -35,8 +35,10 @@ export default {
         [
             '@semantic-release/exec',
             {
-                verifyConditionsCmd: 'echo "package-published=false" >> $GITHUB_OUTPUT',
-                successCmd: 'echo "package-published=true" >> $GITHUB_OUTPUT',
+                verifyConditionsCmd:
+                    'if [ -n "$GITHUB_OUTPUT" ]; then echo "package-published=false" >> "$GITHUB_OUTPUT"; fi',
+                successCmd:
+                    'if [ -n "$GITHUB_OUTPUT" ]; then echo "package-published=true" >> "$GITHUB_OUTPUT"; fi',
             },
         ],
     ],
