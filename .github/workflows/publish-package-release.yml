@@ -14,7 +14,7 @@ permissions:
     id-token: write
     # Enable the use of GitHub Packages registry
     packages: write
-    # Enable `semantic-release` to publish a GitHub release
+    # Enable `semantic-release` to publish a GitHub release and push commits
     contents: write
     # Enable `semantic-release` to post comments on issues
     issues: write
@@ -32,20 +32,29 @@ jobs:
     ci-validation:
         name: CI Validation
         uses: ./.github/workflows/check-ci-validation.yml
-        secrets: inherit
 
     release-and-publish:
         name: Release & Publish
         runs-on: ubuntu-latest
-        timeout-minutes: 60
+        timeout-minutes: 30
 
         needs: ci-validation
 
         steps:
+            - name: Generate release bot token
+              id: release-bot
+              uses: actions/create-github-app-token@v3
+              with:
+                  app-id: ${{ secrets.DOIST_RELEASE_BOT_ID }}
+                  private-key: ${{ secrets.DOIST_RELEASE_BOT_PRIVATE_KEY }}
+                  permission-contents: write
+                  permission-issues: write
+                  permission-pull-requests: write
+
             - name: Checkout repository
               uses: actions/checkout@v6
               with:
-                  token: ${{ secrets.GH_REPO_TOKEN }}
+                  token: ${{ steps.release-bot.outputs.token }}
                   fetch-depth: 0
 
             - name: Prepare Node.js environment
@@ -80,7 +89,7 @@ jobs:
               run: |
                   npx semantic-release
               env:
-                  GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
+                  GITHUB_TOKEN: ${{ steps.release-bot.outputs.token }}
                   GIT_AUTHOR_EMAIL: doistbot@users.noreply.github.com
                   GIT_AUTHOR_NAME: Doist Bot
                   GIT_COMMITTER_EMAIL: doistbot@users.noreply.github.com
@@ -92,8 +101,8 @@ jobs:
                   npm config delete @doist:registry --location=project
 
             - name: Prepare Node.js environment for GitHub Packages registry
-              uses: actions/setup-node@v6
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
+              uses: actions/setup-node@v6
               with:
                   cache: npm
                   node-version-file: .node-version
@@ -101,8 +110,8 @@ jobs:
                   scope: '@doist'
 
             - name: Determine npm dist-tag for GitHub Packages
-              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               id: dist-tag
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               run: |
                   if [[ "${{ github.ref_name }}" == "next" ]]; then
                     echo "tag=next" >> $GITHUB_OUTPUT

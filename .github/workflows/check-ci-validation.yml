@@ -5,10 +5,14 @@ on:
     pull_request:
         types:
             - opened
+            - reopened
             - synchronize
 
-env:
-    GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+# Restrict permissions to read-only since validation jobs only need to checkout
+# and analyse the code. This limits the blast radius when called from workflows
+# that have broader permissions (e.g., the release workflow).
+permissions:
+    contents: read
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
@@ -18,7 +22,7 @@ jobs:
     prepare-workflow:
         name: Prepare Workflow
         runs-on: ubuntu-latest
-        timeout-minutes: 60
+        timeout-minutes: 15
 
         steps:
             - name: Checkout repository
@@ -45,7 +49,7 @@ jobs:
     static-code-analysis:
         name: Static Code Analysis
         runs-on: ubuntu-latest
-        timeout-minutes: 60
+        timeout-minutes: 15
 
         needs:
             - prepare-workflow
@@ -87,7 +91,7 @@ jobs:
     unit-testing:
         name: Unit Testing
         runs-on: ubuntu-latest
-        timeout-minutes: 60
+        timeout-minutes: 15
 
         needs:
             - prepare-workflow
@@ -114,14 +118,14 @@ jobs:
               run: |
                   npm ci
 
-            - name: Test codebase correctnesss
+            - name: Test codebase correctness
               run: |
                   npm run test
 
     build-package:
         name: Build Package
         runs-on: ubuntu-latest
-        timeout-minutes: 60
+        timeout-minutes: 15
 
         needs:
             - prepare-workflow
