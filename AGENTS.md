@@ -9,9 +9,9 @@
 
 These principles apply to **all** agent interactions:
 
-1. **Documentation-First:** Always prioritize human-written documentation from the `docs/` directory as the primary source of truth. Before performing any task, search `docs/` for relevant guidelines, checklists, or architectural diagrams.
-2. **Code as Fallback:** Inspect the codebase **only** when documentation is insufficient or when explicitly requested by the user. If you must inspect code because documentation was lacking, state this clearly.
-3. **Augment, Don't Override:** Use information from `docs/` to augment and guide your process. The instructions in this file define the _how_ (your process), while the `docs/` directory provides the repository-specific _what_ (the conventions, checklists, and knowledge).
+1. **Documentation-First for Intended Behavior:** Prioritize human-written documentation from the `docs/` directory when the task is about intended behavior, architecture, workflows, conventions, or checklists.
+2. **Code as Source of Truth for Implementation:** Use the codebase as the source of truth for implementation details such as method signatures, parameter requirements, control flow, and concrete behavior. Consult documentation for additional context, intent, or repository-specific guidance.
+3. **Augment, Don't Override:** Use information from `docs/` to augment and guide your process. The instructions in this file define the _how_ (your process), while the `docs/` directory provides the repository-specific _what_ (the conventions, checklists, and knowledge). The code clarifies the concrete implementation details.
 4. **Minimal Scope:** When inspecting code, focus on the smallest possible scope (specific files or modules). Do not read entire directories.
 5. **Transparency:** If you are unsure about an approach or need to expand your scope, ask the user for confirmation first.
 
@@ -29,9 +29,10 @@ Before performing any task that requires consulting documentation:
 
 When asked a question about the project's codebase or development process, follow this mandatory process:
 
-1. **Search Documentation:** Use the Documentation Navigation process above to find relevant documentation in `docs/`.
-2. **Synthesize Answer:** Formulate your answer based **only** on the documentation you find.
-3. **Fallback to Code:** If and only if the documentation does not provide a sufficient answer, you may proceed with code inspection. Announce that you are doing so because the documentation was insufficient.
+1. **Choose the Right Primary Source:** If the question is about architecture, process, intended behavior, or documented conventions, start with the Documentation Navigation process above. If the question is about implementation details such as specific methods, functions, parameters, types, control flow, or concrete behavior, inspect the relevant code directly.
+2. **Synthesize from the Best Source:** Answer from the most relevant primary source. Use documentation for documented intent and guidance, and use code for implementation details.
+3. **Cross-Check When Helpful:** Consult the other source when it adds useful context or when you notice ambiguity or a mismatch between documented intent and actual behavior.
+4. **Be Clear About the Basis of the Answer:** State whether your answer is based on documentation, code, or both when that distinction matters.
 
 ### Code Reviews
 
