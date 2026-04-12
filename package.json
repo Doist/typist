@@ -19,7 +19,7 @@
     },
     "sideEffects": false,
     "engines": {
-        "node": "^22.14.0 || >= 24.10.0",
+        "node": "^22.18.0 || >= 24.10.0",
         "npm": "^10.9.2 || >= 11.5.1"
     },
     "publishConfig": {
