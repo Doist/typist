@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useReducer } from 'react'
+
+import { Box, IconButton } from '@doist/reactist'
+
 import {
     RiArrowGoBackLine,
     RiArrowGoForwardLine,
@@ -25,8 +28,6 @@ import {
     RiStrikethrough,
     RiTextWrap,
 } from 'react-icons/ri'
-
-import { Box, IconButton } from '@doist/reactist'
 
 import styles from './typist-editor-toolbar.module.css'
 

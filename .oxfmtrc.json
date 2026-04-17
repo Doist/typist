@@ -15,34 +15,51 @@
     "sortImports": {
         "customGroups": [
             {
-                "elementNamePattern": ["react", "react-*", "react-dom", "react-dom/**"],
-                "groupName": "react"
+                "groupName": "doist-side-effect-style",
+                "selector": "side_effect_style",
+                "elementNamePattern": ["@doist/**/*.{css,less}"]
             },
             {
-                "elementNamePattern": ["@doist/**"],
-                "groupName": "doist"
+                "groupName": "scoped-side-effect-style",
+                "selector": "side_effect_style",
+                "elementNamePattern": ["@*/**/*.{css,less}"]
             },
             {
-                "groupName": "side-effect-parent",
-                "modifiers": ["side_effect"],
-                "selector": "parent"
+                "groupName": "package-side-effect-style",
+                "selector": "side_effect_style",
+                "elementNamePattern": ["{[!@.]*,[!@.]*/**/*}.{css,less}"]
             },
             {
-                "groupName": "side-effect-sibling",
-                "modifiers": ["side_effect"],
-                "selector": "sibling"
+                "groupName": "react",
+                "selector": "external",
+                "modifiers": ["value"],
+                "elementNamePattern": ["react", "react-*", "react-dom", "react-dom/**"]
             },
             {
-                "groupName": "side-effect-index",
-                "modifiers": ["side_effect"],
-                "selector": "index"
+                "groupName": "doist",
+                "selector": "external",
+                "modifiers": ["value"],
+                "elementNamePattern": ["@doist/**"]
+            },
+            {
+                "groupName": "react-type",
+                "selector": "external",
+                "modifiers": ["type"],
+                "elementNamePattern": ["react", "react-*", "react-dom", "react-dom/**"]
+            },
+            {
+                "groupName": "doist-type",
+                "selector": "external",
+                "modifiers": ["type"],
+                "elementNamePattern": ["@doist/**"]
             }
         ],
         "groups": [
             "value-builtin",
             "side_effect",
-            "side-effect-parent",
-            ["side-effect-sibling", "side-effect-index"],
+            "doist-side-effect-style",
+            "scoped-side-effect-style",
+            "package-side-effect-style",
             "side_effect_style",
             "react",
             "doist",
@@ -51,7 +68,31 @@
             "value-parent",
             ["value-sibling", "value-index"],
             "style",
-            "type-import",
+            "type-builtin",
+            {
+                "newlinesBetween": false
+            },
+            "react-type",
+            {
+                "newlinesBetween": false
+            },
+            "doist-type",
+            {
+                "newlinesBetween": false
+            },
+            "type-external",
+            {
+                "newlinesBetween": false
+            },
+            "type-internal",
+            {
+                "newlinesBetween": false
+            },
+            "type-parent",
+            {
+                "newlinesBetween": false
+            },
+            ["type-sibling", "type-index"],
             "unknown"
         ],
         "newlinesBetween": true

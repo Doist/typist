@@ -7,10 +7,10 @@ import { CopyMarkdownSource } from '../shared/copy-markdown-source'
 import { PasteHTMLTableAsString } from '../shared/paste-html-table-as-string'
 import { PasteSinglelineText } from '../shared/paste-singleline-text'
 
-import { SmartMarkdownTyping } from './smart-markdown-typing/smart-markdown-typing'
 import { PasteMultilineText } from './paste-multiline-text'
 import { PlainTextDocument } from './plain-text-document'
 import { PlainTextParagraph } from './plain-text-paragraph'
+import { SmartMarkdownTyping } from './smart-markdown-typing/smart-markdown-typing'
 
 import type { Extensions } from '@tiptap/core'
 import type { PlainTextDocumentOptions } from './plain-text-document'
