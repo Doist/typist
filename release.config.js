@@ -17,17 +17,7 @@ export default {
             },
         ],
         // Only update CHANGELOG.md and commit back on stable releases (main branch)
-        ...(process.env.GITHUB_REF_NAME === 'next'
-            ? []
-            : [
-                  '@semantic-release/changelog',
-                  [
-                      '@semantic-release/exec',
-                      {
-                          prepareCmd: 'npx prettier --write CHANGELOG.md',
-                      },
-                  ],
-              ]),
+        ...(process.env.GITHUB_REF_NAME === 'next' ? [] : ['@semantic-release/changelog']),
         '@semantic-release/npm',
         // Only commit artifacts back on stable releases (main branch)
         ...(process.env.GITHUB_REF_NAME === 'next' ? [] : ['@semantic-release/git']),

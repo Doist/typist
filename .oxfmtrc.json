@@ -1,6 +1,12 @@
 {
     "$schema": "./node_modules/oxfmt/configuration_schema.json",
-    "ignorePatterns": [".cache/*", "dist/*", "storybook-static/*", "**/node_modules/*"],
+    "ignorePatterns": [
+        ".cache/*",
+        "dist/*",
+        "storybook-static/*",
+        "**/node_modules/*",
+        "CHANGELOG.md"
+    ],
     "arrowParens": "always",
     "bracketSpacing": true,
     "embeddedLanguageFormatting": "auto",

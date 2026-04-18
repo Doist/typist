@@ -46,7 +46,7 @@
         "clean:cache": "rimraf .cache/",
         "clean:dist": "rimraf dist/",
         "clean:storybook-static": "rimraf storybook-static/",
-        "fix": "run-p fix:* -c -l -t",
+        "fix": "run-s fix:*",
         "fix:format": "oxfmt",
         "fix:lint": "oxlint --fix",
         "prepare": "is-ci || husky",

@@ -77,12 +77,10 @@ jobs:
                   npm ci
 
             - name: Check formatting with Oxfmt
-              if: success() || failure()
               run: |
                   npm run check:format
 
             - name: Lint code with Oxlint
-              if: success() || failure()
               run: |
                   npm run check:lint
 
