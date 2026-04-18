@@ -76,13 +76,13 @@ jobs:
               run: |
                   npm ci
 
-            - name: Analyse code style with Prettier
+            - name: Check formatting with Oxfmt
               run: |
-                  npm run check:prettier
+                  npm run check:format
 
-            - name: Analyse code quality with ESLint
+            - name: Lint code with Oxlint
               run: |
-                  npm run check:eslint
+                  npm run check:lint
 
             - name: Perform type checking with TypeScript
               run: |

@@ -289,6 +289,7 @@ I think I'll use it to format all of my documents from now on.`,
 
             // FIXME: Disabled until we can figure out how to write this with Vitest
             // (see: https://github.com/vitest-dev/vitest/discussions/3427)
+            // oxlint-disable-next-line no-disabled-tests
             test.skip('only the paragraph rule is overwritten', () => {
                 const useMock = vi.spyOn(Turndown.prototype, 'use')
                 const addRuleMock = vi.spyOn(Turndown.prototype, 'addRule')
