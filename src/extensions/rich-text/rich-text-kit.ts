@@ -31,6 +31,7 @@ import { RichTextImage } from './rich-text-image'
 import { RichTextLink } from './rich-text-link'
 import { RichTextOrderedList } from './rich-text-ordered-list'
 import { RichTextStrikethrough } from './rich-text-strikethrough'
+import { RichTextVideo } from './rich-text-video'
 
 import type { Extensions } from '@tiptap/core'
 import type { BlockquoteOptions } from '@tiptap/extension-blockquote'
@@ -51,6 +52,7 @@ import type { RichTextImageOptions } from './rich-text-image'
 import type { RichTextLinkOptions } from './rich-text-link'
 import type { RichTextOrderedListOptions } from './rich-text-ordered-list'
 import type { RichTextStrikethroughOptions } from './rich-text-strikethrough'
+import type { RichTextVideoOptions } from './rich-text-video'
 
 /**
  * The options available to customize the `RichTextKit` extension.
@@ -185,6 +187,11 @@ type RichTextKitOptions = {
      * Set to `false` to disable the `Typography` extension.
      */
     typography: false
+
+    /**
+     * Set options for the `Video` extension, or `false` to disable.
+     */
+    video: Partial<RichTextVideoOptions> | false
 }
 
 /**
@@ -327,6 +334,10 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
 
         if (this.options.typography !== false) {
             extensions.push(Typography)
+        }
+
+        if (this.options.video !== false) {
+            extensions.push(RichTextVideo.configure(this.options?.video))
         }
 
         return extensions
