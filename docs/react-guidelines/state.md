@@ -224,7 +224,7 @@ export function useCurrentViewConfig() {
 
 ### Don't read external state during render
 
-React components [must be idempotent](https://react.dev/reference/rules/components-and-hooks-must-be-pure) - they should always return the same output with respect to their inputs. Reading from external sources like `localStorage`, `sessionStorage`, or browser APIs during render violates this because they are mutable sources outside React's control (same category as `Date.now()` or `Math.random()`). Beyond purity, these reads also create new references on every call, which causes render loops and stale-value bugs.
+React components [must be idempotent](https://react.dev/reference/rules/components-and-hooks-must-be-pure) - they should always return the same output with respect to their inputs. Reading from external sources like `localStorage`, `sessionStorage`, or browser APIs during render violates this because they are mutable sources outside React's control (same category as `Date.now()` or `Math.random()`). Beyond purity, these reads might create new references on every call (if you create new objects like parsing JSON or creating a new `Date`), which cause stale-value bugs and can contribute to unnecessary re-renders in children.
 
 ```typescript
 // Bad: reads localStorage on every render, creates new arrays each time
@@ -246,6 +246,8 @@ function useActivityFilters(urlParams: URLSearchParams) {
 }
 ```
 
+If your project has a storage-aware hook like `useLocalStorageState`, prefer it over rolling the pattern by hand - they typically wrap the initial read in `useState(() => ...)`, sync writes back to storage, and re-render the component when the value in storage changes, so you get stable references for free.
+
 ### `useState` initializer vs `useMemo` for one-time computations
 
 When you need to compute something once on mount and never recompute it, `useState(() => ...)` is the right tool - the [initializer function runs only on the first render](https://react.dev/reference/react/useState#avoiding-recreating-the-initial-state). `useMemo` recalculates when dependencies get new references, which can trigger the very re-renders you're trying to avoid. The lazy initializer runs once, freezes the result, and is immune to reference instability.
@@ -265,6 +267,8 @@ See also: [useState lazy initialization](react-compiler.md#alternative-usestate-
 ### Stable reducer sentinel values
 
 React [skips re-rendering when the new state is identical to the current state](https://react.dev/reference/react/useReducer#dispatch) via `Object.is` comparison. If a reducer returns a new object with the same shape on every dispatch, that check fails and React re-renders. Hoisting fixed sentinel states to module scope ensures the same reference is returned, letting React bail out.
+
+Combined with a [render-time read of external state](#dont-read-external-state-during-render), an unstable reducer result is enough to close a render loop: dispatch → reducer returns a new ref → re-render → render-read produces new refs → effect re-fires → dispatch again. Fixing one end stops the loop, but it's worth fixing both: defense-in-depth against a regression on either side.
 
 This is only worth investigating if profiling shows unnecessary re-renders from a reducer - React's render batching already handles most cases. Only use sentinels for truly fixed values; states that carry variable data (like errors with messages) need a new object each time.
 
