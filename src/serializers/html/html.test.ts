@@ -188,6 +188,32 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
 
 ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!`
 
+const MARKDOWN_INPUT_VIDEOS = `https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid
+
+Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid
+
+Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 - The story of a giant rabbit with a heart bigger than himself.
+
+Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid - The story of a giant rabbit with a heart bigger than himself.
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 - The story of a giant rabbit with a heart bigger than himself.
+
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid - The story of a giant rabbit with a heart bigger than himself.`
+
 const MARKDOWN_INPUT_CODE = `At the command prompt, type \`nano\`.
 
 \`\`Use \`code\` in your Markdown file.\`\``
@@ -315,6 +341,12 @@ describe('HTML Serializer', () => {
             test('images syntax is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
                     '<p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>![](https://octodex.github.com/images/octobiwan.jpg)</p><p>![](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg &quot;Octobi Wan Catnobi&quot;)</p><p></p><p>[![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg &quot;Octobi Wan Catnobi&quot;)](https://octodex.github.com/octobiwan/)</p><p></p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)</p><p></p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you&#39;re looking for!</p><p></p><p>![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you&#39;re looking for!</p>',
+                )
+            })
+
+            test('videos syntax is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_VIDEOS)).toBe(
+                    '<p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</p><p></p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</p><p></p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</p><p></p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</p><p></p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</p><p></p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</p><p></p><p>Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</p><p></p><p>Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</p><p></p><p>Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 - The story of a giant rabbit with a heart bigger than himself.</p><p></p><p>Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid - The story of a giant rabbit with a heart bigger than himself.</p><p></p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 - The story of a giant rabbit with a heart bigger than himself.</p><p></p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid - The story of a giant rabbit with a heart bigger than himself.</p>',
                 )
             })
 
@@ -468,6 +500,28 @@ Answer: [Doist Frontend](channel://190200)`),
                 )
             })
 
+            test('videos HTML output is correct', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_VIDEOS)).toBe(
+                    '<video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a></p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</a> <a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</a></p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a> <a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a></p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</a><br><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</a></p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a><br><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a></p><p>Big Buck Bunny: <a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</a></p><p>Big Buck Bunny: <a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a></p><p>Big Buck Bunny: <a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</a> - The story of a giant rabbit with a heart bigger than himself.</p><p>Big Buck Bunny: <a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a> - The story of a giant rabbit with a heart bigger than himself.</p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</a> - The story of a giant rabbit with a heart bigger than himself.</p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a> - The story of a giant rabbit with a heart bigger than himself.</p>',
+                )
+            })
+
+            test('videos HTML output is correct (inline mode)', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([
+                        RichTextKit.configure({
+                            video: {
+                                inline: true,
+                            },
+                        }),
+                    ]),
+                )
+
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_VIDEOS)).toBe(
+                    '<p><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video></p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a></p><p><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video> <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video></p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a> <a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a></p><p><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video><br><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video></p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a><br><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a></p><p>Big Buck Bunny: <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video></p><p>Big Buck Bunny: <a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a></p><p>Big Buck Bunny: <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video> - The story of a giant rabbit with a heart bigger than himself.</p><p>Big Buck Bunny: <a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a> - The story of a giant rabbit with a heart bigger than himself.</p><p><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"></video> - The story of a giant rabbit with a heart bigger than himself.</p><p><a href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</a> - The story of a giant rabbit with a heart bigger than himself.</p>',
+                )
+            })
+
             test('code HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_CODE)).toBe(
                     '<p>At the command prompt, type <code>nano</code>.</p><p><code>Use `code` in your Markdown file.</code></p>',
@@ -532,6 +586,7 @@ Answer: [Doist Frontend](channel://190200)`),
                             link: false,
                             orderedList: false,
                             strike: false,
+                            video: false,
                         }),
                     ]),
                 )
@@ -634,6 +689,13 @@ I need to add another paragraph below the second list item.
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES))
                     .toBe(`<p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)</p><p>![](https://octodex.github.com/images/octobiwan.jpg)
 ![](https://octodex.github.com/images/octobiwan.jpg)</p><p>![](https://octodex.github.com/images/octobiwan.jpg)![](https://octodex.github.com/images/octobiwan.jpg)</p><p>![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")</p><p>[![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg "Octobi Wan Catnobi")](https://octodex.github.com/octobiwan/)</p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg)</p><p>Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!</p><p>![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!</p>`)
+            })
+
+            test('videos HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_VIDEOS))
+                    .toBe(`<p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</p><p>Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</p><p>Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid</p><p>Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 - The story of a giant rabbit with a heart bigger than himself.</p><p>Big Buck Bunny: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid - The story of a giant rabbit with a heart bigger than himself.</p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 - The story of a giant rabbit with a heart bigger than himself.</p><p>https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.invalid - The story of a giant rabbit with a heart bigger than himself.</p>`)
             })
 
             test('code HTML output is preserved', () => {

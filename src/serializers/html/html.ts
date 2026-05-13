@@ -15,6 +15,7 @@ import { rehypeTaskList } from './plugins/rehype-task-list'
 import { remarkAutolinkLiteral } from './plugins/remark-autolink-literal'
 import { remarkDisableConstructs } from './plugins/remark-disable-constructs'
 import { remarkStrikethrough } from './plugins/remark-strikethrough'
+import { remarkVideo } from './plugins/remark-video'
 
 import type { Schema } from '@tiptap/pm/model'
 
@@ -111,6 +112,11 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     // literals extension from the GitHub Flavored Markdown (GFM) specification
     if (schema.marks.link) {
         unifiedProcessor.use(remarkAutolinkLiteral)
+    }
+
+    // Configure the unified processor with a custom plugin to add support for video nodes
+    if (schema.nodes.video) {
+        unifiedProcessor.use(remarkVideo, schema)
     }
 
     // Configure the unified processor with an official plugin to convert Markdown into HTML to

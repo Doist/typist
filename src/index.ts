@@ -23,6 +23,10 @@ export type {
 } from './extensions/rich-text/rich-text-image'
 export { RichTextKit } from './extensions/rich-text/rich-text-kit'
 export type {
+    RichTextVideoAttributes,
+    RichTextVideoOptions,
+} from './extensions/rich-text/rich-text-video'
+export type {
     SuggestionExtensionResult,
     SuggestionOptions,
     SuggestionRendererProps,
