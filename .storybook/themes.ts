@@ -1,4 +1,4 @@
-import { create, getPreferredColorScheme } from 'storybook/theming'
+import { create } from 'storybook/theming'
 
 export const theme = create({
     base: 'light',

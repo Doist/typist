@@ -26,9 +26,9 @@ function transformPastedHTML(html: string): string {
                 Array.from(row.cells)
                     .map((cell) => {
                         // Unwrap paragraphs but preserve inline formatting
-                        const paragraphs = cell.querySelectorAll('p')
+                        const cellParagraphs = cell.querySelectorAll('p')
 
-                        for (const p of Array.from(paragraphs)) {
+                        for (const p of Array.from(cellParagraphs)) {
                             p.replaceWith(...Array.from(p.childNodes))
                         }
 

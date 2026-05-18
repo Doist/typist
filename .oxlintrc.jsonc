@@ -1,0 +1,58 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "ignorePatterns": [".cache/*", "dist/*", "storybook-static/*", "**/node_modules/*"],
+    "plugins": [
+        "import",
+        "jsdoc",
+        "jsx-a11y",
+        "oxc",
+        "react",
+        "react-perf",
+        "typescript",
+        "unicorn",
+        "vitest",
+    ],
+    "categories": {
+        "perf": "warn",
+        "suspicious": "warn",
+    },
+    "rules": {
+        // Prefer named exports over default exports for better refactorability and IDE support
+        "import/no-default-export": "warn",
+        // Not needed with the React 17+ automatic JSX runtime
+        "react/react-in-jsx-scope": "off",
+    },
+    "overrides": [
+        {
+            // Tooling config files, the Storybook config directory, and story files conventionally
+            // use default exports (config objects, story metadata) and side-effect imports (CSS,
+            // setup files, Storybook addons)
+            "files": [
+                "./*.config.{js,ts,mjs,mts}",
+                "./*.setup.{js,ts,mjs,mts}",
+                "./.storybook/**/*.{ts,tsx}",
+                "./stories/**/*.{story,stories}.tsx",
+            ],
+            "rules": {
+                "import/no-default-export": "off",
+                "import/no-unassigned-import": "off",
+            },
+        },
+        {
+            // Tests routinely pass inline arrays as props for assertions and setup; the perf
+            // rule's referential-stability concern doesn't apply in a test environment
+            "files": ["**/*.test.{ts,tsx}"],
+            "rules": {
+                "react-perf/jsx-no-new-array-as-prop": "off",
+            },
+        },
+        {
+            // Unified plugins are invoked by the processor via `.use()`, which binds `this` to
+            // the Processor instance; the bundler-`undefined`-`this` concern doesn't apply here
+            "files": ["src/serializers/html/plugins/*.ts"],
+            "rules": {
+                "oxc/no-this-in-exported-function": "off",
+            },
+        },
+    ],
+}

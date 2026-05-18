@@ -76,7 +76,6 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
             return `${start ? Number(start) + index : index + 1}. \n`
         }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore: The `Turndown.Node` type does not include `isBlock`
         return node.isBlock ? '\n\n' : ''
     },

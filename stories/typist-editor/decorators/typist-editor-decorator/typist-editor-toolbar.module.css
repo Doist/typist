@@ -7,22 +7,8 @@
 }
 
 .toolbarContainer button[aria-disabled] {
-    position: relative;
     width: 26px;
     height: 26px;
-}
-
-.toolbarContainer button[aria-disabled].withLeftDivider {
-    margin-left: calc(var(--reactist-spacing-xsmall) * 2 + 1px);
-}
-
-.toolbarContainer button[aria-disabled].withLeftDivider::before {
-    content: '';
-    background-color: var(--storybook-theme-appBorderColor);
-    position: absolute;
-    left: calc(var(--reactist-spacing-xsmall) * -2);
-    width: 1px;
-    height: 100%;
 }
 
 .toolbarContainer button[aria-pressed='true'] {
@@ -32,4 +18,19 @@
 .toolbarContainer button[aria-disabled] > svg {
     width: 16px;
     height: 16px;
+}
+
+.withDividerBefore {
+    position: relative;
+    margin-left: calc(var(--reactist-spacing-xsmall) * 2 + 1px);
+}
+
+.withDividerBefore::before {
+    content: '';
+    background-color: var(--storybook-theme-appBorderColor);
+    position: absolute;
+    top: 0;
+    left: calc(var(--reactist-spacing-xsmall) * -2);
+    width: 1px;
+    height: 100%;
 }

@@ -12,6 +12,23 @@ import styles from './hashtag-suggestion-dropdown.module.css'
 import type { SuggestionRendererProps, SuggestionRendererRef } from '../../../../src'
 import type { HashtagSuggestionItem } from '../../constants/suggestions'
 
+const HASHTAG_AVATAR_COLORS = ['#f6d5b5', '#ede6b5', '#cde2d9', '#afd2c9', '#f1bab5']
+
+function getHashtagItemKey(item: HashtagSuggestionItem) {
+    return item.id
+}
+
+function renderHashtagItem(item: HashtagSuggestionItem) {
+    return (
+        <Inline space="small" exceptionallySetClassName={styles.hashtagSuggestionItem}>
+            <Avatar size={20} name={item.name} variant="marble" colors={HASHTAG_AVATAR_COLORS} />
+            <Text size="copy" lineClamp={1}>
+                #{item.name}
+            </Text>
+        </Inline>
+    )
+}
+
 const HashtagSuggestionDropdown = forwardRef<
     SuggestionRendererRef,
     SuggestionRendererProps<HashtagSuggestionItem>
@@ -31,20 +48,9 @@ const HashtagSuggestionDropdown = forwardRef<
         <BaseSuggestionDropdown
             forwardedRef={ref}
             items={items}
+            getItemKey={getHashtagItemKey}
             onItemSelect={handleItemSelect}
-            renderItem={(item) => (
-                <Inline space="small" exceptionallySetClassName={styles.hashtagSuggestionItem}>
-                    <Avatar
-                        size={20}
-                        name={item.name}
-                        variant="marble"
-                        colors={['#f6d5b5', '#ede6b5', '#cde2d9', '#afd2c9', '#f1bab5']}
-                    />
-                    <Text size="copy" lineClamp={1}>
-                        #{item.name}
-                    </Text>
-                </Inline>
-            )}
+            renderItem={renderHashtagItem}
         />
     )
 })

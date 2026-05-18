@@ -453,7 +453,7 @@ Answer: [Doist Frontend](channel://190200)`),
             })
 
             test('images HTML output is correct (inline mode)', () => {
-                const htmlSerializer = createHTMLSerializer(
+                const inlineHtmlSerializer = createHTMLSerializer(
                     getSchema([
                         RichTextKit.configure({
                             image: {
@@ -463,7 +463,7 @@ Answer: [Doist Frontend](channel://190200)`),
                     ]),
                 )
 
-                expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
+                expect(inlineHtmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
                     '<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><br><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></p><p><a href="https://octodex.github.com/octobiwan/"><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></a></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p>',
                 )
             })

@@ -198,9 +198,8 @@ function createSuggestionExtension<
         addStorage() {
             return {
                 items,
-                itemsById: items.reduce(
-                    (acc, item) => ({ ...acc, [String(item[idAttribute])]: item }),
-                    {},
+                itemsById: Object.fromEntries(
+                    items.map((item) => [String(item[idAttribute]), item]),
                 ),
             }
         },
