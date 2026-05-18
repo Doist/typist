@@ -297,7 +297,6 @@ I think I'll use it to format all of my documents from now on.`,
                 expect(useMock).toHaveBeenCalledTimes(1)
                 expect(addRuleMock).toHaveBeenLastCalledWith('paragraph', {
                     filter: 'p',
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     replacement: expect.any(Function),
                 })
             })

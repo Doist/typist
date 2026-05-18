@@ -28,14 +28,14 @@ function rehypeSuggestions(schema: Schema): Transformer {
                 isHastElementNode(node, 'a') &&
                 suggestionSchemaRegex.test(String(node.properties?.href))
             ) {
-                const [, schema, id] =
+                const [, urlScheme, id] =
                     /^([a-z-]+):\/\/(\S+)$/i.exec(String(node.properties?.href)) || []
 
                 // Replace the link element with a span containing the suggestion attributes
-                if (schema && id && isHastTextNode(node.children[0])) {
+                if (urlScheme && id && isHastTextNode(node.children[0])) {
                     node.tagName = 'span'
                     node.properties = {
-                        [`data-${schema}`]: '',
+                        [`data-${urlScheme}`]: '',
                         'data-id': id,
                         'data-label': node.children[0].value,
                     }

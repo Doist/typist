@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useState } from 'react'
+import { forwardRef, useCallback, useMemo, useState } from 'react'
 
 import { Box, Column, Columns } from '@doist/reactist'
 
@@ -21,12 +21,12 @@ type TypistEditorDecoratorProps = {
     Story: StoryFunction<Renderer, TypistEditorPropsWithRef>
     args: TypistEditorProps
     withToolbar?: boolean
-    renderBottomFunctions?: () => React.ReactElement
+    bottomFunctions?: React.ReactNode
 }
 
 const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorProps>(
     function TypistEditorDecorator(
-        { Story, args, withToolbar = false, renderBottomFunctions },
+        { Story, args, withToolbar = false, bottomFunctions },
         forwardedRef,
     ) {
         const [typistEditor, setTypistEditor] = useState<CoreEditor | null>(null)
@@ -40,6 +40,30 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
             setMarkdownOutput(props.getMarkdown())
         }, [])
 
+        const handleRef = useCallback(
+            (instance: TypistEditorRef | null) => {
+                setMarkdownOutput(instance?.getMarkdown() || '')
+                setTypistEditor(instance?.getEditor() || null)
+
+                if (typeof forwardedRef === 'function') {
+                    forwardedRef(instance)
+                } else if (forwardedRef) {
+                    forwardedRef.current = instance
+                }
+            },
+            [forwardedRef],
+        )
+
+        const storyArgs = useMemo(
+            () => ({
+                ...args,
+                className: storyClassName,
+                onUpdate: handleUpdate,
+                ref: handleRef,
+            }),
+            [args, storyClassName, handleUpdate, handleRef],
+        )
+
         return (
             <Box display="flex" flexDirection="column" height="full">
                 <Columns exceptionallySetClassName={styles.topContainer}>
@@ -51,23 +75,7 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
                             marginX="large"
                             marginBottom="large"
                         >
-                            <Story
-                                args={{
-                                    ...args,
-                                    className: storyClassName,
-                                    onUpdate: handleUpdate,
-                                    ref: (instance) => {
-                                        setMarkdownOutput(instance?.getMarkdown() || '')
-                                        setTypistEditor(instance?.getEditor() || null)
-
-                                        if (typeof forwardedRef === 'function') {
-                                            forwardedRef(instance)
-                                        } else if (forwardedRef) {
-                                            forwardedRef.current = instance
-                                        }
-                                    },
-                                }}
-                            />
+                            <Story args={storyArgs} />
                         </Box>
                     </Column>
                     <Column width="1/2">
@@ -81,14 +89,14 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
                         </Box>
                     </Column>
                 </Columns>
-                {renderBottomFunctions ? (
+                {bottomFunctions ? (
                     <Box
                         display="flex"
                         justifyContent="center"
                         flexWrap="wrap"
                         className={styles.bottomFunctionsContainer}
                     >
-                        {renderBottomFunctions()}
+                        {bottomFunctions}
                     </Box>
                 ) : null}
             </Box>

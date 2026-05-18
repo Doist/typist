@@ -12,6 +12,23 @@ import styles from './mention-suggestion-dropdown.module.css'
 import type { SuggestionRendererProps, SuggestionRendererRef } from '../../../../src'
 import type { MentionSuggestionItem } from '../../constants/suggestions'
 
+const MENTION_AVATAR_COLORS = ['#e34432', '#ffc93e', '#ffa416', '#6b8767', '#2a1d30']
+
+function getMentionItemKey(item: MentionSuggestionItem) {
+    return item.uid
+}
+
+function renderMentionItem(item: MentionSuggestionItem) {
+    return (
+        <Inline space="small" exceptionallySetClassName={styles.mentionSuggestionItem}>
+            <Avatar size={20} name={item.name} variant="bauhaus" colors={MENTION_AVATAR_COLORS} />
+            <Text size="copy" lineClamp={1}>
+                {item.name}
+            </Text>
+        </Inline>
+    )
+}
+
 const MentionSuggestionDropdown = forwardRef<
     SuggestionRendererRef,
     SuggestionRendererProps<MentionSuggestionItem>
@@ -31,20 +48,9 @@ const MentionSuggestionDropdown = forwardRef<
         <BaseSuggestionDropdown
             forwardedRef={ref}
             items={items}
+            getItemKey={getMentionItemKey}
             onItemSelect={handleItemSelect}
-            renderItem={(item) => (
-                <Inline space="small" exceptionallySetClassName={styles.mentionSuggestionItem}>
-                    <Avatar
-                        size={20}
-                        name={item.name}
-                        variant="bauhaus"
-                        colors={['#e34432', '#ffc93e', '#ffa416', '#6b8767', '#2a1d30']}
-                    />
-                    <Text size="copy" lineClamp={1}>
-                        {item.name}
-                    </Text>
-                </Inline>
-            )}
+            renderItem={renderMentionItem}
         />
     )
 })

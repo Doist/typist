@@ -55,7 +55,7 @@ const RichTextOrderedList = OrderedList.extend<RichTextOrderedListOptions>({
                         // effectively inserting a "paragraph break" in place of a "hard break"
                         // (this is performed in reverse order to compensate for content shifting that
                         // occurs with each replacement, ensuring accurate insertion points)
-                        hardBreakPositions.reverse().forEach((pos) => {
+                        hardBreakPositions.toReversed().forEach((pos) => {
                             tr.replace(
                                 pos,
                                 pos + 1,
