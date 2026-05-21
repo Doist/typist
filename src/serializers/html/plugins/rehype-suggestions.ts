@@ -22,7 +22,7 @@ function rehypeSuggestions(schema: Schema): Transformer {
 
     const suggestionSchemaRegex = new RegExp(`^${suggestionSchemaInfo.urlSchemeRegex}`)
 
-    return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
+    return (tree: HastNode) => {
         visit(tree, 'element', (node: HastNode) => {
             if (
                 isHastElementNode(node, 'a') &&

@@ -298,6 +298,28 @@ I think I'll use it to format all of my documents from now on.`,
     1. Indented`)
             })
 
+            test('nested ordered lists use marker-width indentation', () => {
+                expect(
+                    markdownSerializer.serialize(
+                        '<ol><li>First<ol><li>Nested A</li><li>Nested B</li></ol></li><li>Second</li></ol>',
+                    ),
+                ).toBe(`1. First
+   1. Nested A
+   2. Nested B
+2. Second`)
+            })
+
+            test('nested unordered lists use marker-width indentation', () => {
+                expect(
+                    markdownSerializer.serialize(
+                        '<ul><li>First<ul><li>Nested A</li><li>Nested B</li></ul></li><li>Second</li></ul>',
+                    ),
+                ).toBe(`- First
+  - Nested A
+  - Nested B
+- Second`)
+            })
+
             describe('with overridden `escape` function', () => {
                 test('return the input as-is (escaping behaviour disabled)', () => {
                     expect(
@@ -506,8 +528,8 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 1. First item
 2. Second item
 3. Third item
-    1. Indented item
-    2. Indented item
+   1. Indented item
+   2. Indented item
 4. Fourth item`)
             })
 
@@ -541,15 +563,15 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 - First item
 - Second item
 - Third item
-    - Indented item
-    - Indented item
+  - Indented item
+  - Indented item
 - Fourth item
 
 ---
 
 - This is the first list item.
 - Here's the second list item.
-    I need to add another paragraph below the second list item.
+  I need to add another paragraph below the second list item.
 - And here's the third list item.`,
                 )
             })
@@ -557,48 +579,48 @@ Strikethrough uses two tildes: ~~scratch this~~`,
             test('nested unordered lists Markdown output is correct', () => {
                 expect(markdownSerializer.serialize(HTML_NESTED_UNORDERED_LIST)).toBe(
                     `- Parent list element
-    - Sub-item 1
-    - Sub-item 2
+  - Sub-item 1
+  - Sub-item 2
 - And back to the first list`,
                 )
             })
 
             test('task lists syntax is ignored (unsupported by default)', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_TASK_LISTS)).toBe(
-                    `-   First item
--   Second item
--   Third item
--   Fourth item
-
----
-
--   First item
--   Second item
--   Third item
--   Fourth item
-
----
-
--   First item
--   Second item
--   Third item
--   Fourth item
+                    `- First item
+- Second item
+- Third item
+- Fourth item
 
 ---
 
 - First item
 - Second item
 - Third item
-    -   Indented item
-    -   Indented item
 - Fourth item
 
 ---
 
--   This is the first list item.
--   Here's the second list item.
-    I need to add another paragraph below the second list item.
--   And here's the third list item.`,
+- First item
+- Second item
+- Third item
+- Fourth item
+
+---
+
+- First item
+- Second item
+- Third item
+  - Indented item
+  - Indented item
+- Fourth item
+
+---
+
+- This is the first list item.
+- Here's the second list item.
+  I need to add another paragraph below the second list item.
+- And here's the third list item.`,
                 )
             })
 
@@ -671,19 +693,17 @@ console.log("hello")
             test('block elements Markdown output is correct', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_INDENTED_BLOCK_ELEMENTS))
                     .toBe(`1. Blockquote:
-
-    > Dorothy followed her through many of the beautiful rooms in her castle.
+   > Dorothy followed her through many of the beautiful rooms in her castle.
 2. Image:
-    ![Tux, the Linux mascot](/assets/images/tux.png)
+   ![Tux, the Linux mascot](/assets/images/tux.png)
 3. Codeblock:
-
-    \`\`\`
-    <html>
-      <head>
-        <title>Test</title>
-      </head>
-    </html>
-    \`\`\``)
+   \`\`\`
+   <html>
+     <head>
+       <title>Test</title>
+     </head>
+   </html>
+   \`\`\``)
             })
 
             test('horizontal rules Markdown output is correct', () => {
@@ -809,62 +829,62 @@ See the section on [\`code\`](#code).`,
             })
 
             test('ordered lists Markdown output is correct', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_ORDERED_LISTS)).toBe(`1.  First item
-2.  Second item
-3.  Third item
-4.  Fourth item
+                expect(markdownSerializer.serialize(HTML_INPUT_ORDERED_LISTS)).toBe(`1. First item
+2. Second item
+3. Third item
+4. Fourth item
 
 ---
 
-1.  First item
+1. First item
 2.
-3.  Third item
+3. Third item
 
 ---
 
-5.  First item
-6.  Second item
-7.  Third item
-8.  Fourth item
+5. First item
+6. Second item
+7. Third item
+8. Fourth item
 
 ---
 
-1.  First item
-2.  Second item
-3.  Third item
-    1.  Indented item
-    2.  Indented item
-4.  Fourth item`)
+1. First item
+2. Second item
+3. Third item
+   1. Indented item
+   2. Indented item
+4. Fourth item`)
             })
 
             test('unordered lists Markdown output is correct', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_UNORDERED_LISTS)).toBe(
-                    `-   First item
--   Second item
--   Third item
--   Fourth item
+                    `- First item
+- Second item
+- Third item
+- Fourth item
 
 ---
 
--   First item
+- First item
 -
--   Third item
+- Third item
 
 ---
 
--   First item
--   Second item
--   Third item
-    -   Indented item
-    -   Indented item
--   Fourth item
+- First item
+- Second item
+- Third item
+  - Indented item
+  - Indented item
+- Fourth item
 
 ---
 
--   This is the first list item.
--   Here's the second list item.
-    I need to add another paragraph below the second list item.
--   And here's the third list item.`,
+- This is the first list item.
+- Here's the second list item.
+  I need to add another paragraph below the second list item.
+- And here's the third list item.`,
                 )
             })
 
@@ -896,6 +916,14 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
                         '<p>Strikethrough uses two tildes: <del>scratch this</del></p>',
                     ),
                 ).toBe('Strikethrough uses two tildes: scratch this')
+            })
+
+            test('all strikethrough HTML tags are unwrapped', () => {
+                expect(
+                    markdownSerializer.serialize(
+                        '<p><s>one</s> <del>two</del> <strike>three</strike></p>',
+                    ),
+                ).toBe('one two three')
             })
         })
 
@@ -930,15 +958,15 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
 - First item
 - Second item
 - Third item
-    - [ ] Indented item
-    - [ ] Indented item
+  - [ ] Indented item
+  - [ ] Indented item
 - Fourth item
 
 ---
 
 - [ ] This is the first list item.
 - [ ] Here's the second list item.
-    I need to add another paragraph below the second list item.
+  I need to add another paragraph below the second list item.
 - [ ] And here's the third list item.`,
                 )
             })

@@ -1,17 +1,23 @@
-import Turndown from 'turndown'
+import rehypeParse from 'rehype-parse'
+import rehypeRemark from 'rehype-remark'
+import remarkStringify from 'remark-stringify'
+import { unified } from 'unified'
 
 import { REGEX_PUNCTUATION } from '../../constants/regular-expressions'
 import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
-import { getSuggestionNodes } from '../../helpers/serializer'
 
-import { image } from './plugins/image'
-import { listItem } from './plugins/list-item'
-import { paragraph } from './plugins/paragraph'
-import { strikethrough } from './plugins/strikethrough'
-import { suggestion } from './plugins/suggestion'
-import { taskItem } from './plugins/task-item'
+import { rehypeImage } from './plugins/rehype-image'
+import { rehypeSuggestions } from './plugins/rehype-suggestions'
+import { rehypeTaskList } from './plugins/rehype-task-list'
+import { remarkStrikethrough } from './plugins/remark-strikethrough'
+import { remarkTaskList } from './plugins/remark-task-list'
 
 import type { Schema } from '@tiptap/pm/model'
+import type { Options as RemarkStringifyOptions } from 'remark-stringify'
+
+type RehypeRemarkOptions = NonNullable<Parameters<typeof rehypeRemark>[1]>
+type Handle = NonNullable<NonNullable<RehypeRemarkOptions['handlers']>[string]>
+type Join = NonNullable<RemarkStringifyOptions['join']>[number]
 
 /**
  * The return type for the `createMarkdownSerializer` function.
@@ -40,52 +46,125 @@ type MarkdownSerializerInstanceById = {
 const BULLET_LIST_MARKER = '-'
 
 /**
- * Sensible default options to initialize the Turndown with.
- *
- * @see https://github.com/mixmark-io/turndown#options
+ * Regular expression matching a backslash followed by any punctuation mark. Used to escape the
+ * backslash itself so it isn't interpreted as an escape sequence for the subsequent character.
  */
-const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
-    headingStyle: 'atx',
-    hr: '---',
-    bulletListMarker: BULLET_LIST_MARKER,
-    codeBlockStyle: 'fenced',
-    fence: '```',
-    emDelimiter: '*',
-    strongDelimiter: '**',
-    linkStyle: 'inlined',
-    /**
-     * Special rule to handle blank elements (overrides EVERY rule).
-     *
-     * @see https://github.com/mixmark-io/turndown#special-rules
-     */
-    blankReplacement(_, node) {
-        const parentNode = node.parentNode as HTMLElement
+const REGEX_ESCAPED_PUNCTUATION = new RegExp(`(\\\\${REGEX_PUNCTUATION.source})`, 'g')
 
-        // Return the list marker for empty bullet list items
-        if (node.nodeName === 'UL' || (parentNode?.nodeName === 'UL' && node.nodeName === 'LI')) {
-            return `${BULLET_LIST_MARKER} \n`
-        }
+/**
+ * Regular expression matching text that looks like an ordered list item at the start of a line
+ * (e.g. `1. Foo`). Used to escape the period so the text isn't interpreted as a list.
+ */
+const REGEX_ORDERED_LIST_PREFIX = /^(\d+)\.(\s.+|$)/
 
-        // Return the list marker for empty ordered list items
-        if (node.nodeName === 'OL' || (parentNode?.nodeName === 'OL' && node.nodeName === 'LI')) {
-            const start =
-                node.nodeName === 'LI'
-                    ? parentNode.getAttribute('start')
-                    : node.getAttribute('start')
-            const index = Array.prototype.indexOf.call(parentNode.children, node)
+/**
+ * Builds the rehype-remark options for the given editor schema. Element handlers are added
+ * conditionally based on which marks and nodes are available, so unsupported elements are
+ * preserved as their text content rather than being dropped or causing errors.
+ *
+ * @see https://github.com/rehypejs/rehype-remark#api
+ *
+ * @param schema The editor schema to be used for nodes and marks detection.
+ */
+function getRehypeRemarkOptions(schema: Schema): RehypeRemarkOptions {
+    const handlers: Record<string, Handle> = {}
 
-            return `${start ? Number(start) + index : index + 1}. \n`
-        }
+    // When the schema does not support strikethrough, unwrap the strikethrough tags into their
+    // children so the inner text is preserved without a `delete` mdast node being created
+    // (`hast-util-to-mdast` maps all three tags to the same node type)
+    if (!schema.marks.strike) {
+        handlers.s = (state, node) => state.all(node)
+        handlers.del = (state, node) => state.all(node)
+        handlers.strike = (state, node) => state.all(node)
+    }
 
-        // @ts-ignore: The `Turndown.Node` type does not include `isBlock`
-        return node.isBlock ? '\n\n' : ''
-    },
+    return { handlers }
 }
 
 /**
- * Create an HTML to Markdown serializer with the Turndown library for both a rich-text editor, and
+ * Builds the remark-stringify options for the given editor mode. For plain-text editors, Markdown
+ * escaping is disabled (so user-authored content is preserved as-is) and consecutive paragraphs
+ * are separated by a single newline instead of a blank line.
+ *
+ * @see https://github.com/remarkjs/remark/tree/main/packages/remark-stringify#options
+ *
+ * @param isPlainText Whether the editor is a plain-text editor.
+ */
+function getRemarkStringifyOptions(isPlainText: boolean): RemarkStringifyOptions {
+    return {
+        bullet: BULLET_LIST_MARKER,
+        emphasis: '*',
+        strong: '*',
+        rule: '-',
+        ruleRepetition: 3,
+        fences: true,
+        fence: '`',
+        listItemIndent: 'one',
+        resourceLink: true,
+        handlers: {
+            // Output a plain newline for hard breaks instead of the CommonMark backslash syntax
+            // (i.e. `\\\n`), since `remark-breaks` treats plain newlines as hard breaks
+            break() {
+                return '\n'
+            },
+            // Apply the minimal custom escape rules required for rich-text content. Plain-text
+            // mode returns text values as-is, so user-authored content is preserved without any
+            // Markdown escaping.
+            text(node) {
+                if (isPlainText) {
+                    return node.value
+                }
+
+                return (
+                    node.value
+                        // Escape backslashes that precede any punctuation mark, to prevent the
+                        // backslash itself from being interpreted as an escape sequence for the
+                        // subsequent character. It's important to apply this rule first to avoid
+                        // double escaping.
+                        .replace(REGEX_ESCAPED_PUNCTUATION, '\\$1')
+                        // Escape text content that looks like an ordered list item at the start of
+                        // a line, to prevent it from being interpreted as a list whenserialized
+                        .replace(REGEX_ORDERED_LIST_PREFIX, '$1\\.$2')
+                )
+            },
+        },
+        join: [
+            // Force tight list rendering regardless of the `spread` attribute on lists or list
+            // items, so that simple list items are not separated by blank lines (matching the
+            // previous behavior and the common user expectation). Consecutive paragraphs inside
+            // a list item keep the default blank-line separation, so multi-paragraph items
+            // serialize as valid loose-list content and survive round-tripping.
+            (left, right, parent) => {
+                if (parent.type === 'list') {
+                    return 0
+                }
+
+                if (
+                    parent.type === 'listItem' &&
+                    !(left.type === 'paragraph' && right.type === 'paragraph')
+                ) {
+                    return 0
+                }
+            },
+            // Separate consecutive paragraphs with a single newline instead of a blank line
+            // (plain-text only)
+            ...(isPlainText
+                ? [
+                      ((left, right) => {
+                          if (left.type === 'paragraph' && right.type === 'paragraph') {
+                              return 0
+                          }
+                      }) as Join,
+                  ]
+                : []),
+        ],
+    }
+}
+
+/**
+ * Create an HTML to Markdown serializer with the unified ecosystem for both a rich-text editor, and
  * a plain-text editor. The editor schema is used to detect which nodes and marks are available in
- * the editor, and only parses the input with the minimal required rules.
+ * the editor, and only parses the input with the minimal required plugins.
  *
  * **Note:** Unlike the HTML serializer, built-in rules that are not supported by the schema are not
  * disabled because if the schema does not support certain nodes/marks, the parsing rules don't have
@@ -96,98 +175,60 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
  * @returns A normalized object for the Markdown serializer.
  */
 function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType {
-    // Initialize Turndown with custom options
-    const turndown = new Turndown(INITIAL_TURNDOWN_OPTIONS)
+    const isPlainText = isPlainTextDocument(schema)
 
-    // Turndown ensures Markdown characters are escaped (i.e. `\`) by default, so they are not
-    // interpreted as Markdown when the output is compiled back to HTML. However, for plain-text
-    // editors, we need to override the `escape` function to return the input as-is (effectively
-    // disabling the escaping behaviour), so that all characters are interpreted as Markdown.
-    if (isPlainTextDocument(schema)) {
-        turndown.escape = (str) => str
-    }
+    // Initialize a unified processor with a rehype plugin for parsing HTML fragments
+    const unifiedProcessor = unified().use(rehypeParse, { fragment: true })
 
-    // As for rich-text editors, we need to override the built-in escaping behaviour with a custom
-    // implementation to suit our requirements. Please note that the `escape` function takes the
-    // text content of each HTML element, with the exception of code elements, so we can be sure
-    // that the escaping behaviour will only touch relevant Markdown characters.
-    else {
-        turndown.escape = (str) => {
-            return (
-                str
-                    // Escape all backslash characters that precede any punctuation marks, to
-                    // prevent the backslash itself from being interpreted as an escape sequence
-                    // for the subsequent character. It's important to apply this rule first to
-                    // avoid double escaping.
-                    .replace(new RegExp(`(\\\\${REGEX_PUNCTUATION.source})`, 'g'), '\\$1')
-
-                    // Although the CommonMark specification allows for bulleted or ordered lists
-                    // inside other bulleted or ordered lists (i.e. `- 1. - 1. Item`), the markup
-                    // generated by Markdown compilers is not supported by Tiptap, and we need to
-                    // make sure that text context that matches the ordered list syntax is
-                    // correctly escaped in order to be interpreted as text.
-                    .replace(/^(\d+)\.(\s.+|$)/, '$1\\.$2')
-            )
-        }
-    }
-
-    // Overwrite some built-in rules for handling of special behaviours
-    // (see documentation for each extension for more details)
-    turndown.use(paragraph(schema.nodes.paragraph, isPlainTextDocument(schema)))
-
-    // Overwrite the built-in `image` rule if the corresponding node exists in the schema
+    // Configure the unified processor with a custom plugin to handle edge cases for images
+    // (must run before `rehypeRemark` since it transforms hast nodes)
     if (schema.nodes.image) {
-        turndown.use(image(schema.nodes.image))
+        unifiedProcessor.use(rehypeImage)
     }
 
-    // Overwrite the built-in `listItem` rule if the corresponding node exists in the schema
-    if ((schema.nodes.bulletList || schema.nodes.orderedList) && schema.nodes.listItem) {
-        turndown.use(listItem(schema.nodes.listItem))
-    }
-
-    // Add a rule for `strikethrough` if the corresponding node exists in the schema
-    if (schema.marks.strike) {
-        turndown.use(strikethrough(schema.marks.strike))
-    }
-
-    // Add a rule for `taskItem` if the corresponding nodes exists in the schema
+    // Configure the unified processor with a custom plugin to add support for Tiptap task lists
+    // (must run before `rehypeRemark` since it transforms hast nodes)
     if (schema.nodes.taskList && schema.nodes.taskItem) {
-        turndown.use(taskItem(schema.nodes.taskItem))
+        unifiedProcessor.use(rehypeTaskList)
     }
 
-    // Add a custom rule for all suggestion nodes available in the schema
-    getSuggestionNodes(schema).forEach((suggestionNode) => {
-        turndown.use(suggestion(suggestionNode))
-    })
+    // Configure the unified processor with a custom plugin to add support for suggestions nodes
+    // (must run before `rehypeRemark` since it transforms hast nodes)
+    unifiedProcessor.use(rehypeSuggestions, schema)
 
-    // Return a normalized `serialize` function
+    // Configure the unified processor with an official plugin to convert HTML into Markdown to
+    // support remark (a tool that transforms Markdown with plugins)
+    unifiedProcessor.use(rehypeRemark, getRehypeRemarkOptions(schema))
+
+    // Configure the unified processor with a custom plugin to add support for the strikethrough
+    // extension from the GitHub Flavored Markdown (GFM) specification
+    if (schema.marks.strike) {
+        unifiedProcessor.use(remarkStrikethrough)
+    }
+
+    // Configure the unified processor with a custom plugin to add support for the task list
+    // extension from the GitHub Flavored Markdown (GFM) specification
+    if (schema.nodes.taskList && schema.nodes.taskItem) {
+        unifiedProcessor.use(remarkTaskList)
+    }
+
+    // Configure the unified processor with an official plugin that defines how to take a syntax
+    // tree as input and turn it into serialized Markdown
+    unifiedProcessor.use(remarkStringify, getRemarkStringifyOptions(isPlainText))
+
     return {
         serialize(html: string) {
-            let markdownResult = html
+            // For plain-text editors, preserve runs of 2+ spaces by replacing them with
+            // non-breaking spaces before parsing (otherwise `rehype-parse` collapses them), and
+            // restoring them after serialization. This is required to preserve syntax like
+            // nested lists where leading indentation matters.
+            const input = isPlainText
+                ? html.replace(/ {2,}/g, (match) => match.replace(/ /g, '\u00a0'))
+                : html
 
-            // Turndown was built to convert HTML into Markdown, expecting the input to be
-            // standard-compliant HTML. As such, it collapses all whitespace by default, and there's
-            // currently no way to opt-out of this behavior. However, for plain-text editors, we
-            // need to preserve Markdown whitespace (otherwise we lose syntax like nested lists) by
-            // replacing all instances of the space character (but only if it's preceded by another
-            // space character) by the non-breaking space character, and after processing the input
-            // with Turndown, we restore the original space character.
-            if (isPlainTextDocument(schema)) {
-                markdownResult = markdownResult.replace(/ {2,}/g, (m) => m.replace(/ /g, '\u00a0'))
-            }
+            const result = unifiedProcessor.processSync(input).toString().trimEnd()
 
-            // Get the serialized Markdown parsed with Turndown
-            markdownResult = turndown.turndown(markdownResult)
-
-            // Restore the original space character for plain-text editors (as mentioned above),
-            // after Markdown serialization has been performed
-            if (isPlainTextDocument(schema)) {
-                markdownResult = markdownResult.replace(/\u00a0/g, ' ')
-            }
-
-            // Return the serialized Markdown parsed with Turndown, and with trailing space
-            // characters removed
-            return markdownResult.replace(/ +$/gm, '')
+            return isPlainText ? result.replace(/\u00a0/g, ' ') : result
         },
     }
 }
