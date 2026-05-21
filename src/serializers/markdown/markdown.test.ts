@@ -268,8 +268,19 @@ describe('Markdown Serializer', () => {
         describe('with default extensions', () => {
             let markdownSerializer: MarkdownSerializerReturnType
 
+            const useSpy = vi.spyOn(Turndown.prototype, 'use')
+            const addRuleSpy = vi.spyOn(Turndown.prototype, 'addRule')
+
             beforeEach(() => {
+                useSpy.mockClear()
+                addRuleSpy.mockClear()
+
                 markdownSerializer = createMarkdownSerializer(getSchema([PlainTextKit]))
+            })
+
+            afterAll(() => {
+                useSpy.mockRestore()
+                addRuleSpy.mockRestore()
             })
 
             test('empty string returns empty output', () => {
@@ -299,15 +310,9 @@ I think I'll use it to format all of my documents from now on.`,
     1. Indented`)
             })
 
-            // FIXME: Disabled until we can figure out how to write this with Vitest
-            // (see: https://github.com/vitest-dev/vitest/discussions/3427)
-            // oxlint-disable-next-line no-disabled-tests
-            test.skip('only the paragraph rule is overwritten', () => {
-                const useMock = vi.spyOn(Turndown.prototype, 'use')
-                const addRuleMock = vi.spyOn(Turndown.prototype, 'addRule')
-
-                expect(useMock).toHaveBeenCalledTimes(1)
-                expect(addRuleMock).toHaveBeenLastCalledWith('paragraph', {
+            test('only the paragraph rule is overwritten', () => {
+                expect(useSpy).toHaveBeenCalledTimes(1)
+                expect(addRuleSpy).toHaveBeenLastCalledWith('paragraph', {
                     filter: 'p',
                     replacement: expect.any(Function),
                 })
