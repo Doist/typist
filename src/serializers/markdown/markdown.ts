@@ -105,6 +105,7 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
     if (isPlainTextDocument(schema)) {
         turndown.escape = (str) => str
     }
+
     // As for rich-text editors, we need to override the built-in escaping behaviour with a custom
     // implementation to suit our requirements. Please note that the `escape` function takes the
     // text content of each HTML element, with the exception of code elements, so we can be sure

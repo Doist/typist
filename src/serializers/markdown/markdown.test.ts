@@ -186,6 +186,8 @@ const HTML_INPUT_CODE_BLOCK = `<pre><code>&lt;html&gt;
   &lt;/head&gt;
 &lt;/html&gt;</code></pre>`
 
+const HTML_INPUT_CODE_BLOCK_WITH_LANGUAGE = `<pre><code class="language-javascript">console.log("hello")</code></pre>`
+
 const HTML_INPUT_INDENTED_BLOCK_ELEMENTS = `<ol>
 <li>Blockquote:<blockquote>
 <p>Dorothy followed her through many of the beautiful rooms in her castle.</p>
@@ -270,6 +272,10 @@ describe('Markdown Serializer', () => {
                 markdownSerializer = createMarkdownSerializer(getSchema([PlainTextKit]))
             })
 
+            test('empty string returns empty output', () => {
+                expect(markdownSerializer.serialize('')).toBe('')
+            })
+
             test('special HTML entities are converted to ASCII characters', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_HTML_CHARS))
                     .toBe(`Ambition & Balance
@@ -285,6 +291,12 @@ describe('Markdown Serializer', () => {
                     `I really like using Markdown.
 I think I'll use it to format all of my documents from now on.`,
                 )
+            })
+
+            test('leading whitespace is preserved', () => {
+                expect(markdownSerializer.serialize('<p>1. First</p><p>    1. Indented</p>'))
+                    .toBe(`1. First
+    1. Indented`)
             })
 
             // FIXME: Disabled until we can figure out how to write this with Vitest
@@ -348,7 +360,7 @@ I think I'll use it to format all of my documents from now on.`,
         describe('with custom `*Suggestion` extensions', () => {
             test('mention suggestion Markdown output is correct', () => {
                 const markdownSerializer = createMarkdownSerializer(
-                    getSchema([RichTextKit, createSuggestionExtension('mention')]),
+                    getSchema([PlainTextKit, createSuggestionExtension('mention')]),
                 )
 
                 expect(
@@ -361,7 +373,7 @@ Answer: [Henning M](mention://963827)`)
 
             test('channel suggestions Markdown output is correct', () => {
                 const markdownSerializer = createMarkdownSerializer(
-                    getSchema([RichTextKit, createSuggestionExtension('channel')]),
+                    getSchema([PlainTextKit, createSuggestionExtension('channel')]),
                 )
 
                 expect(
@@ -370,6 +382,36 @@ Answer: [Henning M](mention://963827)`)
                     ),
                 ).toBe(`Question: What's the best channel on Twist?
 Answer: [Doist Frontend](channel://190200)`)
+            })
+
+            test('suggestion with alphanumeric ID is serialized', () => {
+                const markdownSerializer = createMarkdownSerializer(
+                    getSchema([PlainTextKit, createSuggestionExtension('mention')]),
+                )
+
+                expect(
+                    markdownSerializer.serialize(
+                        '<p><span data-mention data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span></p>',
+                    ),
+                ).toBe('[Henning M](mention://user:190200@doist.dev)')
+            })
+
+            test('multiple suggestion types in the same input are serialized', () => {
+                const markdownSerializer = createMarkdownSerializer(
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('mention'),
+                        createSuggestionExtension('channel'),
+                    ]),
+                )
+
+                expect(
+                    markdownSerializer.serialize(
+                        '<p>Hey <span data-mention data-id="123" data-label="Alice">@Alice</span> and <span data-mention data-id="456" data-label="Bob">@Bob</span>, check <span data-channel data-id="789" data-label="General">#General</span></p>',
+                    ),
+                ).toBe(
+                    'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
+                )
             })
         })
     })
@@ -380,6 +422,10 @@ Answer: [Doist Frontend](channel://190200)`)
 
             beforeEach(() => {
                 markdownSerializer = createMarkdownSerializer(getSchema([RichTextKit]))
+            })
+
+            test('empty string returns empty output', () => {
+                expect(markdownSerializer.serialize('')).toBe('')
             })
 
             test('special HTML entities are converted to ASCII characters', () => {
@@ -478,6 +524,18 @@ Strikethrough uses two tildes: ~~scratch this~~`,
     1. Indented item
     2. Indented item
 4. Fourth item`)
+            })
+
+            test('empty ordered list items with start attribute are numbered correctly', () => {
+                expect(
+                    markdownSerializer.serialize(`<ol start="5">
+<li>First item</li>
+<li></li>
+<li>Third item</li>
+</ol>`),
+                ).toBe(`5. First item
+6.
+7. Third item`)
             })
 
             test('unordered lists Markdown output is correct', () => {
@@ -581,6 +639,18 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
 ![](https://octodex.github.com/images/octobiwan.jpg) - These are not the droids you're looking for!`)
             })
 
+            test('images with Data URLs replace base64 content with NOT_SUPPORTED', () => {
+                expect(
+                    markdownSerializer.serialize(
+                        '<p><img src="data:image/png;base64,iVBORw0KGgo=" alt="screenshot"></p>',
+                    ),
+                ).toBe('![screenshot](data:image/png;base64,NOT_SUPPORTED)')
+            })
+
+            test('images with empty src are omitted', () => {
+                expect(markdownSerializer.serialize('<p><img src="" alt="test"></p>')).toBe('')
+            })
+
             test('code Markdown output is correct', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_CODE)).toBe(
                     `At the command prompt, type \`nano\`.
@@ -597,6 +667,14 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
     <title>Test</title>
   </head>
 </html>
+\`\`\``,
+                )
+            })
+
+            test('code block with language Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_CODE_BLOCK_WITH_LANGUAGE)).toBe(
+                    `\`\`\`javascript
+console.log("hello")
 \`\`\``,
                 )
             })
@@ -902,6 +980,36 @@ Answer: [Henning M](mention://963827)`)
                     ),
                 ).toBe(`Question: What's the best channel on Twist?
 Answer: [Doist Frontend](channel://190200)`)
+            })
+
+            test('suggestion with alphanumeric ID is serialized', () => {
+                const markdownSerializer = createMarkdownSerializer(
+                    getSchema([RichTextKit, createSuggestionExtension('mention')]),
+                )
+
+                expect(
+                    markdownSerializer.serialize(
+                        '<p><span data-mention data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span></p>',
+                    ),
+                ).toBe('[Henning M](mention://user:190200@doist.dev)')
+            })
+
+            test('multiple suggestion types in the same input are serialized', () => {
+                const markdownSerializer = createMarkdownSerializer(
+                    getSchema([
+                        RichTextKit,
+                        createSuggestionExtension('mention'),
+                        createSuggestionExtension('channel'),
+                    ]),
+                )
+
+                expect(
+                    markdownSerializer.serialize(
+                        '<p>Hey <span data-mention data-id="123" data-label="Alice">@Alice</span> and <span data-mention data-id="456" data-label="Bob">@Bob</span>, check <span data-channel data-id="789" data-label="General">#General</span></p>',
+                    ),
+                ).toBe(
+                    'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
+                )
             })
         })
     })
