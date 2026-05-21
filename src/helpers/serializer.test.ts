@@ -3,24 +3,26 @@ import { getSchema } from '@tiptap/core'
 import { RichTextKit } from '../extensions/rich-text/rich-text-kit'
 import { createSuggestionExtension } from '../factories/create-suggestion-extension'
 
-import { buildSuggestionSchemaPartialRegex, extractTagsFromParseRules } from './serializer'
+import { buildSuggestionSchemaInfo, extractTagsFromParseRules } from './serializer'
 
 describe('Helper: Serializer', () => {
-    describe('#buildSuggestionSchemaPartialRegex', () => {
+    describe('#buildSuggestionSchemaInfo', () => {
         test('returns `null` when there are no suggestion nodes in the schema', () => {
-            expect(buildSuggestionSchemaPartialRegex(getSchema([RichTextKit]))).toBeNull()
+            expect(buildSuggestionSchemaInfo(getSchema([RichTextKit]))).toBeNull()
         })
 
-        test('returns a partial regular expression including valid URL schemas', () => {
-            expect(
-                buildSuggestionSchemaPartialRegex(
-                    getSchema([
-                        RichTextKit,
-                        createSuggestionExtension('mention'),
-                        createSuggestionExtension('channel'),
-                    ]),
-                ),
-            ).toBe('(?:mention|channel)://')
+        test('returns the URL scheme regex and trigger character map for available suggestions', () => {
+            const info = buildSuggestionSchemaInfo(
+                getSchema([
+                    RichTextKit,
+                    createSuggestionExtension('mention'),
+                    createSuggestionExtension('channel').configure({ triggerChar: '#' }),
+                ]),
+            )
+
+            expect(info?.urlSchemeRegex).toBe('(?:mention|channel)://')
+            expect(info?.triggerCharByScheme.get('mention')).toBe('@')
+            expect(info?.triggerCharByScheme.get('channel')).toBe('#')
         })
     })
 
