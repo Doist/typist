@@ -20,9 +20,9 @@ function rehypeSuggestions(schema: Schema): Transformer {
         return (tree: HastNode) => tree
     }
 
-    return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
-        const suggestionSchemaRegex = new RegExp(`^${suggestionSchemaInfo.urlSchemeRegex}`)
+    const suggestionSchemaRegex = new RegExp(`^${suggestionSchemaInfo.urlSchemeRegex}`)
 
+    return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
         visit(tree, 'element', (node: HastNode) => {
             if (
                 isHastElementNode(node, 'a') &&
