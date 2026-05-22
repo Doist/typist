@@ -108,26 +108,27 @@ Once all violations in a file are fixed, the file's entry will be removed from `
 
 ## Error reference
 
-| Compiler error message                                                              | Pattern                       | Section                                          |
-| ----------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------ |
-| Cannot access refs during render                                                    | Ref access during render      | [Link](#ref-access-during-render)                |
-| Existing memoization could not be preserved                                         | Mismatched useMemo deps       | [Link](#mismatched-usememo-dependencies)         |
-| Support destructuring of context variables                                          | Mutating props                | [Link](#mutating-props)                          |
-| Expression type `X` cannot be safely reordered                                      | Default parameters for props  | [Link](#default-parameters-for-props)            |
-| Expression type `BinaryExpression` / `LogicalExpression` cannot be safely reordered | switch(true) pattern          | [Link](#switchtrue-pattern)                      |
-| Expected Identifier, got `X` key in ObjectExpression                                | Computed property keys        | [Link](#computed-property-keys)                  |
-| Destructure should never be Reassign                                                | Loop variable reassignment    | [Link](#loop-variable-reassignment)              |
-| Hooks must always be called in a consistent order                                   | Conditional hook calls        | [Link](#conditional-hook-calls)                  |
-| Hooks must be the same function on every render                                     | Hooks passed as props         | [Link](#hooks-passed-as-props)                   |
-| Hooks must be called at the top level … not within function expressions             | Hooks in function expressions | [Link](#hooks-in-function-expressions)           |
-| Cannot access variable before it is declared                                        | Function declaration order    | [Link](#function-declaration-order)              |
-| Handle TryStatement with a finalizer / without a catch clause                       | Try/catch blocks              | [Link](#trycatch-blocks)                         |
-| ThrowStatement inside try/catch not yet supported                                   | Try/catch blocks              | [Link](#trycatch-blocks)                         |
-| Support value blocks … within a try/catch statement                                 | Try/catch blocks              | [Link](#trycatch-blocks)                         |
-| This value cannot be modified (hook argument)                                       | Mutable objects with useMemo  | [Link](#mutable-objects-created-with-usememo)    |
-| This value cannot be modified (function return)                                     | Mutating return values        | [Link](#mutating-function-or-hook-return-values) |
-| This value cannot be modified (DOM)                                                 | DOM mutations                 | [Link](#dom-mutations)                           |
-| This value cannot be modified (test code)                                           | Render-time test mutations    | [Link](#render-time-mutations-in-test-code)      |
+| Compiler error message                                                              | Pattern                        | Section                                          |
+| ----------------------------------------------------------------------------------- | ------------------------------ | ------------------------------------------------ |
+| Cannot access refs during render                                                    | Ref access during render       | [Link](#ref-access-during-render)                |
+| Existing memoization could not be preserved                                         | Mismatched useMemo deps        | [Link](#mismatched-usememo-dependencies)         |
+| Support destructuring of context variables                                          | Mutating props                 | [Link](#mutating-props)                          |
+| Expression type `X` cannot be safely reordered                                      | Default parameters for props   | [Link](#default-parameters-for-props)            |
+| Expression type `BinaryExpression` / `LogicalExpression` cannot be safely reordered | switch(true) pattern           | [Link](#switchtrue-pattern)                      |
+| Expected Identifier, got `X` key in ObjectExpression                                | Computed property keys         | [Link](#computed-property-keys)                  |
+| Destructure should never be Reassign                                                | Loop variable reassignment     | [Link](#loop-variable-reassignment)              |
+| Hooks must always be called in a consistent order                                   | Conditional hook calls         | [Link](#conditional-hook-calls)                  |
+| Hooks must be the same function on every render                                     | Hooks passed as props          | [Link](#hooks-passed-as-props)                   |
+| Hooks must be called at the top level … not within function expressions             | Hooks in function expressions  | [Link](#hooks-in-function-expressions)           |
+| Hooks may not be referenced as normal values                                        | Hook-named props and variables | [Link](#hook-named-props-and-variables)          |
+| Cannot access variable before it is declared                                        | Function declaration order     | [Link](#function-declaration-order)              |
+| Handle TryStatement with a finalizer / without a catch clause                       | Try/catch blocks               | [Link](#trycatch-blocks)                         |
+| ThrowStatement inside try/catch not yet supported                                   | Try/catch blocks               | [Link](#trycatch-blocks)                         |
+| Support value blocks … within a try/catch statement                                 | Try/catch blocks               | [Link](#trycatch-blocks)                         |
+| This value cannot be modified (hook argument)                                       | Mutable objects with useMemo   | [Link](#mutable-objects-created-with-usememo)    |
+| This value cannot be modified (function return)                                     | Mutating return values         | [Link](#mutating-function-or-hook-return-values) |
+| This value cannot be modified (DOM)                                                 | DOM mutations                  | [Link](#dom-mutations)                           |
+| This value cannot be modified (test code)                                           | Render-time test mutations     | [Link](#render-time-mutations-in-test-code)      |
 
 ## Fix patterns
 
@@ -1146,6 +1147,52 @@ expect(state.someValue).toBe(expected)
 const { result } = renderHook(() => useMyHook(options))
 expect(result.current.someValue).toBe(expected)
 ```
+
+### Hook-named props and variables
+
+> Reason: Hooks may not be referenced as normal values, they must be called. See https://react.dev/reference/rules/react-calls-components-and-hooks#never-pass-around-hooks-as-regular-values
+
+The compiler treats any identifier named `use` + an uppercase letter as a hook, including props and local variables, not just functions. Referencing such a value anywhere except a direct call is a violation that blocks the compiler from optimizing the file.
+
+Boolean flag props are the common trap, since `use` reads as the English verb in names like `useThemeColors` or `useCompactLayout`.
+
+**Fix:** Rename to a non-`use` prefix. For boolean flags, `with`, `is`, `has`, or `should` are clear conventions.
+
+**Before:**
+
+```typescript
+type Props = {
+    checked: boolean
+    useOnboardingColors?: boolean
+}
+
+function TaskCheckbox({ checked, useOnboardingColors = false }: Props) {
+    const className = classNames(styles.taskCheckbox, {
+        [styles.checked]: checked,
+        [styles.useOnboardingColors]: useOnboardingColors, // Violation: `use`-named prop referenced as a value
+    })
+    // ...
+}
+```
+
+**After:**
+
+```typescript
+type Props = {
+    checked: boolean
+    withOnboardingColors?: boolean
+}
+
+function TaskCheckbox({ checked, withOnboardingColors = false }: Props) {
+    const className = classNames(styles.taskCheckbox, {
+        [styles.checked]: checked,
+        [styles.withOnboardingColors]: withOnboardingColors,
+    })
+    // ...
+}
+```
+
+This is the prop/variable counterpart of [Hook-named helper functions](#hook-named-helper-functions-prevent-return-value-memoization), which covers `use`-named functions. That case is a silent missed optimization; this one is a hard compiler error.
 
 ### Hook-named helper functions prevent return-value memoization
 
