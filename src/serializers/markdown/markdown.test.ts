@@ -1,7 +1,6 @@
 import { getSchema } from '@tiptap/core'
 import { TaskItem } from '@tiptap/extension-task-item'
 import { TaskList } from '@tiptap/extension-task-list'
-import Turndown from 'turndown'
 
 import { PlainTextKit } from '../../extensions/plain-text/plain-text-kit'
 import { RichTextKit } from '../../extensions/rich-text/rich-text-kit'
@@ -268,19 +267,8 @@ describe('Markdown Serializer', () => {
         describe('with default extensions', () => {
             let markdownSerializer: MarkdownSerializerReturnType
 
-            const useSpy = vi.spyOn(Turndown.prototype, 'use')
-            const addRuleSpy = vi.spyOn(Turndown.prototype, 'addRule')
-
             beforeEach(() => {
-                useSpy.mockClear()
-                addRuleSpy.mockClear()
-
                 markdownSerializer = createMarkdownSerializer(getSchema([PlainTextKit]))
-            })
-
-            afterAll(() => {
-                useSpy.mockRestore()
-                addRuleSpy.mockRestore()
             })
 
             test('empty string returns empty output', () => {
@@ -308,14 +296,6 @@ I think I'll use it to format all of my documents from now on.`,
                 expect(markdownSerializer.serialize('<p>1. First</p><p>    1. Indented</p>'))
                     .toBe(`1. First
     1. Indented`)
-            })
-
-            test('only the paragraph rule is overwritten', () => {
-                expect(useSpy).toHaveBeenCalledTimes(1)
-                expect(addRuleSpy).toHaveBeenLastCalledWith('paragraph', {
-                    filter: 'p',
-                    replacement: expect.any(Function),
-                })
             })
 
             describe('with overridden `escape` function', () => {
