@@ -61,7 +61,7 @@ function createHTMLSerializerForPlainTextEditor(schema: Schema) {
                     const linkSchema = kebabCase(suggestionNode.name.replace(/Suggestion$/, ''))
 
                     htmlResult = htmlResult.replace(
-                        new RegExp(`\\[([^\\[]+)\\]\\((?:${linkSchema}):\\/\\/(\\S+)\\)`, 'gm'),
+                        new RegExp(`\\[([^\\[]+)\\]\\((?:${linkSchema}):\\/\\/([^\\s)]+)\\)`, 'gm'),
                         `<span data-${linkSchema} data-id="$2" data-label="$1"></span>`,
                     )
                 })

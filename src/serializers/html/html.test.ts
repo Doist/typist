@@ -408,6 +408,18 @@ Answer: [Doist Frontend](channel://190200)`),
                 )
             })
 
+            test('suggestion inside parentheses does not absorb the trailing parenthesis', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([PlainTextKit, createSuggestionExtension('mention')]),
+                )
+
+                expect(
+                    htmlSerializer.serialize('([Henning M](mention://user:190200@doist.dev))'),
+                ).toBe(
+                    '<p>(<span data-mention data-id="user:190200@doist.dev" data-label="Henning M"></span>)</p>',
+                )
+            })
+
             test('multiple suggestion types in the same input are serialized', () => {
                 const htmlSerializer = createHTMLSerializer(
                     getSchema([
