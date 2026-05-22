@@ -656,6 +656,10 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
                 expect(markdownSerializer.serialize('<p><img src="" alt="test"></p>')).toBe('')
             })
 
+            test('images with missing src are omitted', () => {
+                expect(markdownSerializer.serialize('<p><img alt="test"></p>')).toBe('')
+            })
+
             test('code Markdown output is correct', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_CODE)).toBe(
                     `At the command prompt, type \`nano\`.
