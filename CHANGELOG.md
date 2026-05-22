@@ -1,3 +1,9 @@
+## [10.0.2](https://github.com/Doist/typist/compare/v10.0.1...v10.0.2) (2026-05-22)
+
+### Bug Fixes
+
+* **serializers:** include trigger character in suggestion HTML output ([#1341](https://github.com/Doist/typist/issues/1341)) ([82e04a3](https://github.com/Doist/typist/commit/82e04a38667fa6a3e93e670a2a95d3030d459161))
+
 ## [10.0.1](https://github.com/Doist/typist/compare/v10.0.0...v10.0.1) (2026-04-08)
 
 ### Bug Fixes
