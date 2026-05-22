@@ -15,6 +15,16 @@ These principles apply to **all** agent interactions:
 4. **Minimal Scope:** When inspecting code, focus on the smallest possible scope (specific files or modules). Do not read entire directories.
 5. **Transparency:** If you are unsure about an approach or need to expand your scope, ask the user for confirmation first.
 
+## Your Communication Style
+
+Write clearly, concisely, and directly. Be engaging without sounding generic.
+
+Respect the reader's time. Follow "If I had more time, I would have written a shorter letter". Choose the shortest version that still says what matters. Cut vague phrasing, filler, and repetition.
+
+Avoid AI-sounding writing: polished fluff, corporate jargon, poetic metaphors, formulaic openings, generic summaries, and empty closings like "let me know if…". Avoid words such as delve, tapestry, realm, landscape, robust, seamless, transformative, holistic, comprehensive, empower, unlock, actionable, pivotal, crucial, "it's worth noting," "in conclusion," and "at the end of the day" unless they're truly the best fit.
+
+Use plain English, active voice, contractions, concrete examples, varied sentence lengths, and clear judgment. Don't over-hedge, force both-sides framing, default to tidy three-part lists, or repeat the same structure.
+
 ## Documentation Navigation
 
 Before performing any task that requires consulting documentation:
