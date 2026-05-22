@@ -837,7 +837,7 @@ See the section on [\`code\`](#code).</p>`)
                     htmlSerializer.serialize(`Question: Who's the head of the Frontend team?
 Answer: [Henning M](mention://user:190200@doist.dev)`),
                 ).toBe(
-                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="user:190200@doist.dev" data-label="Henning M"></span></p>',
+                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span></p>',
                 )
             })
 
@@ -846,7 +846,7 @@ Answer: [Henning M](mention://user:190200@doist.dev)`),
                     htmlSerializer.serialize(`Question: Who's the head of the Frontend team?
 Answer: [Henning M](mention://963827)`),
                 ).toBe(
-                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="963827" data-label="Henning M"></span></p>',
+                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="963827" data-label="Henning M">@Henning M</span></p>',
                 )
             })
 
@@ -855,7 +855,7 @@ Answer: [Henning M](mention://963827)`),
                     htmlSerializer.serialize(`Question: What's the best channel on Twist?
 Answer: [Doist Frontend](channel://190200)`),
                 ).toBe(
-                    '<p>Question: What\'s the best channel on Twist?<br>Answer: <span data-channel="" data-id="190200" data-label="Doist Frontend"></span></p>',
+                    '<p>Question: What\'s the best channel on Twist?<br>Answer: <span data-channel="" data-id="190200" data-label="Doist Frontend">@Doist Frontend</span></p>',
                 )
             })
 
@@ -865,7 +865,7 @@ Answer: [Doist Frontend](channel://190200)`),
                         'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
                     ),
                 ).toBe(
-                    '<p>Hey <span data-mention="" data-id="123" data-label="Alice"></span> and <span data-mention="" data-id="456" data-label="Bob"></span>, check <span data-channel="" data-id="789" data-label="General"></span></p>',
+                    '<p>Hey <span data-mention="" data-id="123" data-label="Alice">@Alice</span> and <span data-mention="" data-id="456" data-label="Bob">@Bob</span>, check <span data-channel="" data-id="789" data-label="General">@General</span></p>',
                 )
             })
         })

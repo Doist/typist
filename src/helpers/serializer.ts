@@ -1,17 +1,36 @@
 import { kebabCase } from 'lodash-es'
 
+import { DEFAULT_SUGGESTION_TRIGGER_CHAR } from '../constants/suggestions'
+
 import type { ParseRule, Schema } from '@tiptap/pm/model'
 
 /**
- * Builds a partial regular expression that includes valid URL schemas used by all the available
- * suggestion nodes from the given editor schema.
+ * Information derived from the suggestion nodes available in the editor schema, used by the
+ * HTML serializer to identify and transform suggestion links into spans.
+ */
+type SuggestionSchemaInfo = {
+    /**
+     * A partial regular expression that matches the URL schemes used by all the available
+     * suggestion nodes (e.g. `(?:mention|channel)://`).
+     */
+    urlSchemeRegex: string
+
+    /**
+     * A map from each URL scheme (e.g. `mention`, `channel`) to its configured trigger character
+     * (e.g. `@`, `#`).
+     */
+    triggerCharByScheme: Map<string, string>
+}
+
+/**
+ * Builds the information derived from all the suggestion nodes available in the given editor
+ * schema, in a single iteration. Returns `null` if there are no suggestion nodes in the schema.
  *
  * @param schema The editor schema to be used for suggestion nodes detection.
  *
- * @returns A partial regular expression with valid URL schemas for the available suggestion nodes,
- * `null` if there are no suggestion nodes in the editor schema.
+ * @returns A `SuggestionSchemaInfo` object, or `null` if there are no suggestion nodes.
  */
-function buildSuggestionSchemaPartialRegex(schema: Schema) {
+function buildSuggestionSchemaInfo(schema: Schema): SuggestionSchemaInfo | null {
     const suggestionNodes = Object.values(schema.nodes).filter((node) =>
         node.name.endsWith('Suggestion'),
     )
@@ -20,9 +39,22 @@ function buildSuggestionSchemaPartialRegex(schema: Schema) {
         return null
     }
 
-    return `(?:${suggestionNodes
-        .map((suggestionNode) => kebabCase(suggestionNode.name.replace(/Suggestion$/, '')))
-        .join('|')})://`
+    const triggerCharByScheme = new Map(
+        suggestionNodes.map((node) => [
+            kebabCase(node.name.replace(/Suggestion$/, '')),
+            String(
+                (node.spec as { triggerChar?: string }).triggerChar ??
+                    DEFAULT_SUGGESTION_TRIGGER_CHAR,
+            ),
+        ]),
+    )
+
+    const urlSchemes = [...triggerCharByScheme.keys()]
+
+    return {
+        urlSchemeRegex: `(?:${urlSchemes.join('|')})://`,
+        triggerCharByScheme,
+    }
 }
 
 /**
@@ -44,4 +76,4 @@ function extractTagsFromParseRules(
         .map((rule) => rule.tag as keyof HTMLElementTagNameMap)
 }
 
-export { buildSuggestionSchemaPartialRegex, extractTagsFromParseRules }
+export { buildSuggestionSchemaInfo, extractTagsFromParseRules }
