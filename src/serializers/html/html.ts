@@ -1,4 +1,4 @@
-import { escape, kebabCase } from 'lodash-es'
+import { escape } from 'lodash-es'
 import rehypeMinifyWhitespace from 'rehype-minify-whitespace'
 import rehypeStringify from 'rehype-stringify'
 import remarkBreaks from 'remark-breaks'
@@ -7,6 +7,7 @@ import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
 import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
+import { getSuggestionUrlScheme } from '../../helpers/serializer'
 
 import { rehypeCodeBlock } from './plugins/rehype-code-block'
 import { rehypeImage } from './plugins/rehype-image'
@@ -58,7 +59,7 @@ function createHTMLSerializerForPlainTextEditor(schema: Schema) {
             Object.values(schema.nodes)
                 .filter((node) => node.name.endsWith('Suggestion'))
                 .forEach((suggestionNode) => {
-                    const linkSchema = kebabCase(suggestionNode.name.replace(/Suggestion$/, ''))
+                    const linkSchema = getSuggestionUrlScheme(suggestionNode)
 
                     htmlResult = htmlResult.replace(
                         new RegExp(`\\[([^\\[]+)\\]\\((?:${linkSchema}):\\/\\/([^\\s)]+)\\)`, 'gm'),

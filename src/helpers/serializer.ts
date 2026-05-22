@@ -2,7 +2,19 @@ import { kebabCase } from 'lodash-es'
 
 import { DEFAULT_SUGGESTION_TRIGGER_CHAR } from '../constants/suggestions'
 
-import type { ParseRule, Schema } from '@tiptap/pm/model'
+import type { NodeType, ParseRule, Schema } from '@tiptap/pm/model'
+
+/**
+ * Extracts the URL scheme used by a suggestion node (e.g. `mention`, `channel`) from its node
+ * name (e.g. `mentionSuggestion`, `channelSuggestion`).
+ *
+ * @param node The suggestion node type.
+ *
+ * @returns The URL scheme as a kebab-case string.
+ */
+function getSuggestionUrlScheme(node: NodeType): string {
+    return kebabCase(node.name.replace(/Suggestion$/, ''))
+}
 
 /**
  * Information derived from the suggestion nodes available in the editor schema, used by the
@@ -41,7 +53,7 @@ function buildSuggestionSchemaInfo(schema: Schema): SuggestionSchemaInfo | null 
 
     const triggerCharByScheme = new Map(
         suggestionNodes.map((node) => [
-            kebabCase(node.name.replace(/Suggestion$/, '')),
+            getSuggestionUrlScheme(node),
             String(
                 (node.spec as { triggerChar?: string }).triggerChar ??
                     DEFAULT_SUGGESTION_TRIGGER_CHAR,
@@ -76,4 +88,4 @@ function extractTagsFromParseRules(
         .map((rule) => rule.tag as keyof HTMLElementTagNameMap)
 }
 
-export { buildSuggestionSchemaInfo, extractTagsFromParseRules }
+export { buildSuggestionSchemaInfo, extractTagsFromParseRules, getSuggestionUrlScheme }
