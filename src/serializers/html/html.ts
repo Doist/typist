@@ -6,6 +6,7 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
+import { DEFAULT_SUGGESTION_TRIGGER_CHAR } from '../../constants/suggestions'
 import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
 import { getSuggestionUrlScheme } from '../../helpers/serializer'
 
@@ -61,9 +62,14 @@ function createHTMLSerializerForPlainTextEditor(schema: Schema) {
                 .forEach((suggestionNode) => {
                     const linkSchema = getSuggestionUrlScheme(suggestionNode)
 
+                    const triggerChar = String(
+                        (suggestionNode.spec as { triggerChar?: string }).triggerChar ??
+                            DEFAULT_SUGGESTION_TRIGGER_CHAR,
+                    )
+
                     htmlResult = htmlResult.replace(
                         new RegExp(`\\[([^\\[]+)\\]\\((?:${linkSchema}):\\/\\/([^\\s)]+)\\)`, 'gm'),
-                        `<span data-${linkSchema} data-id="$2" data-label="$1"></span>`,
+                        `<span data-${linkSchema} data-id="$2" data-label="$1">${triggerChar}$1</span>`,
                     )
                 })
 
