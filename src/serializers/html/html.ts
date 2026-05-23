@@ -69,7 +69,8 @@ function createHTMLSerializerForPlainTextEditor(schema: Schema) {
 
                     htmlResult = htmlResult.replace(
                         new RegExp(`\\[([^\\[]+)\\]\\((?:${linkSchema}):\\/\\/([^\\s)]+)\\)`, 'gm'),
-                        `<span data-${linkSchema} data-id="$2" data-label="$1">${triggerChar}$1</span>`,
+                        (_, label, id) =>
+                            `<span data-${linkSchema} data-id="${id}" data-label="${label}">${triggerChar}${label}</span>`,
                     )
                 })
 
