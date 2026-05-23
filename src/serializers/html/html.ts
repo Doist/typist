@@ -7,7 +7,10 @@ import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
 import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
-import { buildSuggestionSchemaInfo } from '../../helpers/serializer'
+import {
+    buildSuggestionSchemaInfo,
+    computeSuggestionTriggerCharsId,
+} from '../../helpers/serializer'
 
 import { rehypeCodeBlock } from './plugins/rehype-code-block'
 import { rehypeImage } from './plugins/rehype-image'
@@ -179,7 +182,10 @@ const htmlSerializerInstanceById: HTMLSerializerInstanceById = {}
  * @returns The HTML serializer instance for the given editor schema.
  */
 function getHTMLSerializerInstance(schema: Schema) {
-    const id = computeSchemaId(schema)
+    const schemaId = computeSchemaId(schema)
+    const triggerCharsId = computeSuggestionTriggerCharsId(schema)
+
+    const id = [schemaId, triggerCharsId].join('|')
 
     if (!htmlSerializerInstanceById[id]) {
         htmlSerializerInstanceById[id] = createHTMLSerializer(schema)

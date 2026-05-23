@@ -24,23 +24,13 @@ function isPlainTextDocument(schema: Schema): boolean {
 
 /**
  * Computes a string ID that identifies a given editor schema which can be used for object mapping.
- * The trigger character of each suggestion node is included in the ID so schemas that differ only
- * in suggestion configuration produce distinct cache keys.
  *
  * @param schema The current editor document schema.
  *
  * @returns A string ID matching the editor schema.
  */
 function computeSchemaId(schema: Schema) {
-    const suggestionTriggers = Object.values(schema.nodes)
-        .filter((node) => node.name.endsWith('Suggestion'))
-        .map((node) => `${node.name}=${(node.spec as { triggerChar?: string }).triggerChar ?? ''}`)
-
-    return [
-        ...Object.keys(schema.marks),
-        ...Object.keys(schema.nodes),
-        ...suggestionTriggers,
-    ].join()
+    return [...Object.keys(schema.marks), ...Object.keys(schema.nodes)].join()
 }
 
 export { computeSchemaId, isMultilineDocument, isPlainTextDocument }

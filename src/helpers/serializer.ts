@@ -70,6 +70,27 @@ function buildSuggestionSchemaInfo(schema: Schema): SuggestionSchemaInfo | null 
 }
 
 /**
+ * Computes a string ID that identifies the configured trigger characters of all the suggestion
+ * nodes in the given editor schema. Used to discriminate cache keys for serializers whose output
+ * depends on the trigger character (e.g. the HTML serializer).
+ *
+ * @param schema The current editor document schema.
+ *
+ * @returns A string ID matching the suggestion trigger characters in the schema.
+ */
+function computeSuggestionTriggerCharsId(schema: Schema): string {
+    const suggestionSchemaInfo = buildSuggestionSchemaInfo(schema)
+
+    if (!suggestionSchemaInfo) {
+        return ''
+    }
+
+    return [...suggestionSchemaInfo.triggerCharByScheme]
+        .map(([scheme, triggerChar]) => `${scheme}=${triggerChar}`)
+        .join()
+}
+
+/**
  * Extract all tags from the given parse rules argument, and returns an array of said tags.
  *
  * @param parseRules The parse rules for a DOM node or inline style.
@@ -88,4 +109,9 @@ function extractTagsFromParseRules(
         .map((rule) => rule.tag as keyof HTMLElementTagNameMap)
 }
 
-export { buildSuggestionSchemaInfo, extractTagsFromParseRules, getSuggestionUrlScheme }
+export {
+    buildSuggestionSchemaInfo,
+    computeSuggestionTriggerCharsId,
+    extractTagsFromParseRules,
+    getSuggestionUrlScheme,
+}
