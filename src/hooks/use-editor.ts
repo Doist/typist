@@ -45,6 +45,7 @@ function useEditor(
 
     const forceRerender = useRerender()
 
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
     useEffect(
         function initializeEditorInstance() {
             let instance: Editor
@@ -70,7 +71,7 @@ function useEditor(
                 instance.destroy()
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // oxlint-disable-next-line react-hooks/exhaustive-deps
         dependencies,
     )
 

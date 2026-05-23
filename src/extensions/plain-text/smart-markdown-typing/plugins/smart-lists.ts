@@ -8,7 +8,7 @@ import type { EditorView } from '@tiptap/pm/view'
 /**
  * A list of the allowed keys that might trigger smart typing.
  */
-const ALLOWED_KEYS = ['Enter', 'Tab']
+const ALLOWED_KEYS = new Set(['Enter', 'Tab'])
 
 /**
  * The standard and task list item regex for smart typing triggers.
@@ -38,7 +38,7 @@ const smartLists = new Plugin({
             }
 
             // Do not handle the event if allowed keys were not pressed
-            if (!ALLOWED_KEYS.includes(event.key)) {
+            if (!ALLOWED_KEYS.has(event.key)) {
                 return false
             }
 

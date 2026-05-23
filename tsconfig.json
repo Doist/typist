@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
         "declaration": true,
         "declarationMap": true,
         "esModuleInterop": true,
@@ -13,12 +12,12 @@
         "noEmit": true,
         "plugins": [
             {
-                "name": "typescript-plugin-css-modules",
-            },
+                "name": "typescript-plugin-css-modules"
+            }
         ],
         "skipLibCheck": true,
         "strict": true,
         "target": "ESNext",
-        "types": ["@testing-library/jest-dom", "vitest/globals"],
-    },
+        "types": ["@testing-library/jest-dom", "vite/client", "vitest/globals"]
+    }
 }

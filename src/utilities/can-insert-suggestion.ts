@@ -4,7 +4,7 @@ import type { EditorState } from '@tiptap/pm/state'
 /**
  * Check if a suggestion can be inserted within the current editor selection.
  *
- * @return True if the suggestion can be inserted, false otherwise.
+ * @returns True if the suggestion can be inserted, false otherwise.
  */
 function canInsertSuggestion({ editor, state }: { editor: Editor; state: EditorState }) {
     const { selection } = state

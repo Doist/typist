@@ -57,31 +57,30 @@ export const Commands = meta.story({
                     .run()
             }, [])
 
-            function renderBottomFunctions() {
-                return (
-                    <>
-                        <Button variant="secondary" onClick={handleCreateParagraphEndClick}>
-                            createParagraphEnd
-                        </Button>
-                        <Button variant="secondary" onClick={handleExtendWordRangeClick}>
-                            extendWordRange
-                        </Button>
-                        <Button variant="secondary" onClick={handleInsertMarkdownContentClick}>
-                            insertMarkdownContent
-                        </Button>
-                        <Button variant="secondary" onClick={handleInsertMarkdownContentAtClick}>
-                            insertMarkdownContentAt
-                        </Button>
-                    </>
-                )
-            }
-
             return (
                 <TypistEditorDecorator
                     Story={Story}
-                    args={{ ...context.args }}
+                    args={context.args}
                     withToolbar={true}
-                    renderBottomFunctions={renderBottomFunctions}
+                    bottomFunctions={
+                        <>
+                            <Button variant="secondary" onClick={handleCreateParagraphEndClick}>
+                                createParagraphEnd
+                            </Button>
+                            <Button variant="secondary" onClick={handleExtendWordRangeClick}>
+                                extendWordRange
+                            </Button>
+                            <Button variant="secondary" onClick={handleInsertMarkdownContentClick}>
+                                insertMarkdownContent
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={handleInsertMarkdownContentAtClick}
+                            >
+                                insertMarkdownContentAt
+                            </Button>
+                        </>
+                    }
                     ref={typistEditorRef}
                 />
             )
@@ -109,31 +108,27 @@ export const Helpers = meta.story({
                 )
             }, [])
 
-            function renderBottomFunctions() {
-                return (
-                    <>
-                        <Button variant="secondary" onClick={handleGetEditorClick}>
-                            getEditor
-                        </Button>
-                        <Button variant="secondary" onClick={handleGetMarkdownClick}>
-                            getMarkdown
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            onClick={handleGetAllNodesAttributesByTypeClick}
-                        >
-                            {"getAllNodesAttributesByType('mentionSuggestion')"}
-                        </Button>
-                    </>
-                )
-            }
-
             return (
                 <TypistEditorDecorator
                     Story={Story}
-                    args={{ ...context.args }}
+                    args={context.args}
                     withToolbar={true}
-                    renderBottomFunctions={renderBottomFunctions}
+                    bottomFunctions={
+                        <>
+                            <Button variant="secondary" onClick={handleGetEditorClick}>
+                                getEditor
+                            </Button>
+                            <Button variant="secondary" onClick={handleGetMarkdownClick}>
+                                getMarkdown
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={handleGetAllNodesAttributesByTypeClick}
+                            >
+                                {"getAllNodesAttributesByType('mentionSuggestion')"}
+                            </Button>
+                        </>
+                    }
                     ref={typistEditorRef}
                 />
             )

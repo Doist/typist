@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { action } from 'storybook/actions'
 
@@ -67,15 +67,15 @@ export const Singleline = meta.story({
                 }
             }, [])
 
-            return (
-                <TypistEditorDecorator
-                    Story={Story}
-                    args={{
-                        ...context.args,
-                        onKeyDown: handleKeyDown,
-                    }}
-                />
+            const storyArgs = useMemo(
+                () => ({
+                    ...context.args,
+                    onKeyDown: handleKeyDown,
+                }),
+                [context.args, handleKeyDown],
             )
+
+            return <TypistEditorDecorator Story={Story} args={storyArgs} />
         },
     ],
 })

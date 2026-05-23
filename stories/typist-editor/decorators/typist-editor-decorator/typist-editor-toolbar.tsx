@@ -1,4 +1,7 @@
-import { useCallback, useEffect, useReducer } from 'react'
+import { useCallback, useSyncExternalStore } from 'react'
+
+import { Box, IconButton } from '@doist/reactist'
+
 import {
     RiArrowGoBackLine,
     RiArrowGoForwardLine,
@@ -26,37 +29,53 @@ import {
     RiTextWrap,
 } from 'react-icons/ri'
 
-import { Box, IconButton } from '@doist/reactist'
+import { isActive, type CoreEditor } from '../../../../src'
 
 import styles from './typist-editor-toolbar.module.css'
-
-import type { CoreEditor } from '../../../../src'
 
 type TypistEditorToolbarProps = {
     editor: CoreEditor
 }
 
+type ToolbarButtonProps = {
+    'aria-label': string
+    'aria-pressed'?: boolean
+    disabled: boolean
+    icon: React.ReactElement
+    onClick: () => void
+}
+
+type ToolbarButtonConfig = ToolbarButtonProps & {
+    withDividerBefore?: boolean
+}
+
+function ToolbarButton(props: ToolbarButtonProps) {
+    return <IconButton variant="quaternary" {...props} />
+}
+
 function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
-    const isCursorOverLink = Boolean(editor.getAttributes('link').href)
+    // The editor state lives outside React, so `useSyncExternalStore` is used to re-render this
+    // component on every editor transaction, keeping the toolbar buttons `pressed` state in sync
+    // with the current selection, applied marks, and stored marks. The `subscribe` callback is
+    // wrapped in `useCallback` so React doesn't tear down and re-attach the tiptap listener on
+    // every render (see https://react.dev/reference/react/useSyncExternalStore#my-subscribe-function-gets-called-after-every-re-render)
+    const editorState = useSyncExternalStore(
+        useCallback(
+            function subscribeToEditorState(callback: () => void) {
+                editor.on('transaction', callback)
 
-    const [, forceRerender] = useReducer((x: number) => x + 1, 0)
-
-    useEffect(
-        function initializeEventListeners() {
-            function handleTransactionUpdate() {
-                // Force a rerender for every transaction in the editor - an event that ocurrs
-                // outside of the React lifecycle - to update the toolbar buttons `pressed` state
-                forceRerender()
-            }
-
-            editor.on('transaction', handleTransactionUpdate)
-
-            return function cleanupEventListeners() {
-                editor.off('transaction', handleTransactionUpdate)
-            }
+                return function unsubscribeFromEditorState() {
+                    editor.off('transaction', callback)
+                }
+            },
+            [editor],
+        ),
+        function getEditorStateSnapshot() {
+            return editor.state
         },
-        [editor, forceRerender],
     )
+
+    const isCursorOverLink = Boolean(editor.getAttributes('link').href)
 
     const handleLinkButtonClick = useCallback(() => {
         const previousUrl = String(editor.getAttributes('link').href || '')
@@ -81,6 +100,176 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
         editor.chain().focus().insertImage({ src: newUrl }).run()
     }, [editor])
 
+    const buttonConfigs: ToolbarButtonConfig[] = [
+        {
+            'aria-label': 'Bold',
+            'aria-pressed': isActive(editorState, 'bold'),
+            disabled: false,
+            icon: <RiBold />,
+            onClick: () => editor.chain().focus().toggleBold().run(),
+        },
+        {
+            'aria-label': 'Italic',
+            'aria-pressed': isActive(editorState, 'italic'),
+            disabled: false,
+            icon: <RiItalic />,
+            onClick: () => editor.chain().focus().toggleItalic().run(),
+        },
+        {
+            'aria-label': 'Strikethrough',
+            'aria-pressed': isActive(editorState, 'strike'),
+            disabled: false,
+            icon: <RiStrikethrough />,
+            onClick: () => editor.chain().focus().toggleStrike().run(),
+        },
+        {
+            'aria-label': 'Code',
+            'aria-pressed': isActive(editorState, 'code'),
+            disabled: false,
+            icon: <RiCodeSSlashLine />,
+            onClick: () => editor.chain().focus().toggleCode().run(),
+        },
+        {
+            'aria-label': 'Heading 1',
+            'aria-pressed': isActive(editorState, 'heading', { level: 1 }),
+            disabled: false,
+            icon: <RiH1 />,
+            withDividerBefore: true,
+            onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+        },
+        {
+            'aria-label': 'Heading 2',
+            'aria-pressed': isActive(editorState, 'heading', { level: 2 }),
+            disabled: false,
+            icon: <RiH2 />,
+            onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
+        },
+        {
+            'aria-label': 'Heading 3',
+            'aria-pressed': isActive(editorState, 'heading', { level: 3 }),
+            disabled: false,
+            icon: <RiH3 />,
+            onClick: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+        },
+        {
+            'aria-label': 'Heading 4',
+            'aria-pressed': isActive(editorState, 'heading', { level: 4 }),
+            disabled: false,
+            icon: <RiH4 />,
+            onClick: () => editor.chain().focus().toggleHeading({ level: 4 }).run(),
+        },
+        {
+            'aria-label': 'Heading 5',
+            'aria-pressed': isActive(editorState, 'heading', { level: 5 }),
+            disabled: false,
+            icon: <RiH5 />,
+            onClick: () => editor.chain().focus().toggleHeading({ level: 5 }).run(),
+        },
+        {
+            'aria-label': 'Heading 6',
+            'aria-pressed': isActive(editorState, 'heading', { level: 6 }),
+            disabled: false,
+            icon: <RiH6 />,
+            onClick: () => editor.chain().focus().toggleHeading({ level: 6 }).run(),
+        },
+        {
+            'aria-label': 'Paragraph',
+            'aria-pressed': isActive(editorState, 'paragraph'),
+            disabled: false,
+            icon: <RiParagraph />,
+            onClick: () => editor.chain().focus().setParagraph().run(),
+        },
+        {
+            'aria-label': 'Bullet List',
+            'aria-pressed': isActive(editorState, 'bulletList'),
+            disabled: false,
+            icon: <RiListUnordered />,
+            onClick: () => editor.chain().focus().toggleBulletList().run(),
+        },
+        {
+            'aria-label': 'Ordered List',
+            'aria-pressed': isActive(editorState, 'orderedList'),
+            disabled: false,
+            icon: <RiListOrdered />,
+            onClick: () => editor.chain().focus().toggleOrderedList().run(),
+        },
+        {
+            'aria-label': 'Code Block',
+            'aria-pressed': isActive(editorState, 'codeBlock'),
+            disabled: false,
+            icon: <RiCodeBoxLine />,
+            onClick: () => editor.chain().focus().toggleCodeBlock().run(),
+        },
+        {
+            'aria-label': 'Insert/Edit Link',
+            'aria-pressed': isActive(editorState, 'link'),
+            disabled: !isCursorOverLink && editorState.selection.empty,
+            icon: <RiLink />,
+            withDividerBefore: true,
+            onClick: handleLinkButtonClick,
+        },
+        {
+            'aria-label': 'Remove Link',
+            disabled: !isCursorOverLink,
+            icon: <RiLinkUnlink />,
+            onClick: () => editor.chain().focus().unsetLink().run(),
+        },
+        {
+            'aria-label': 'Insert Image',
+            disabled: false,
+            icon: <RiImageLine />,
+            withDividerBefore: true,
+            onClick: handleImageButtonClick,
+        },
+        {
+            'aria-label': 'Blockquote',
+            'aria-pressed': isActive(editorState, 'blockquote'),
+            disabled: false,
+            icon: <RiDoubleQuotesL />,
+            onClick: () => editor.chain().focus().toggleBlockquote().run(),
+        },
+        {
+            'aria-label': 'Horizontal Rule',
+            'aria-pressed': isActive(editorState, 'horizontalRule'),
+            disabled: false,
+            icon: <RiSeparator />,
+            onClick: () => editor.chain().focus().setHorizontalRule().run(),
+        },
+        {
+            'aria-label': 'Hard Break',
+            disabled: false,
+            icon: <RiTextWrap />,
+            withDividerBefore: true,
+            onClick: () => editor.chain().focus().setHardBreak().run(),
+        },
+        {
+            'aria-label': 'Clear Format',
+            disabled: false,
+            icon: <RiFormatClear />,
+            onClick: () => editor.chain().focus().unsetAllMarks().clearNodes().run(),
+        },
+        {
+            'aria-label': 'Undo',
+            disabled: false,
+            icon: <RiArrowGoBackLine />,
+            withDividerBefore: true,
+            onClick: () => editor.chain().focus().undo().run(),
+        },
+        {
+            'aria-label': 'Redo',
+            disabled: false,
+            icon: <RiArrowGoForwardLine />,
+            onClick: () => editor.chain().focus().redo().run(),
+        },
+        {
+            'aria-label': 'Clear Document',
+            disabled: false,
+            icon: <RiDeleteBin2Line />,
+            withDividerBefore: true,
+            onClick: () => editor.chain().focus().clearContent(true).run(),
+        },
+    ]
+
     return (
         <Box
             className={styles.toolbarContainer}
@@ -90,197 +279,15 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
             marginX="large"
             padding="xsmall"
         >
-            <IconButton
-                aria-label="Bold"
-                aria-pressed={editor.isActive('bold')}
-                disabled={false}
-                icon={<RiBold />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleBold().run()}
-            />
-            <IconButton
-                aria-label="Italic"
-                aria-pressed={editor.isActive('italic')}
-                disabled={false}
-                icon={<RiItalic />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-            />
-            <IconButton
-                aria-label="Strikethrough"
-                aria-pressed={editor.isActive('strike')}
-                disabled={false}
-                icon={<RiStrikethrough />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleStrike().run()}
-            />
-            <IconButton
-                aria-label="Code"
-                aria-pressed={editor.isActive('code')}
-                disabled={false}
-                icon={<RiCodeSSlashLine />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleCode().run()}
-            />
-            <IconButton
-                aria-label="Heading 1"
-                aria-pressed={editor.isActive('heading', { level: 1 })}
-                disabled={false}
-                exceptionallySetClassName={styles.withLeftDivider}
-                icon={<RiH1 />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-            />
-            <IconButton
-                aria-label="Heading 2"
-                aria-pressed={editor.isActive('heading', { level: 2 })}
-                disabled={false}
-                icon={<RiH2 />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-            />
-            <IconButton
-                aria-label="Heading 3"
-                aria-pressed={editor.isActive('heading', { level: 3 })}
-                disabled={false}
-                icon={<RiH3 />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-            />
-            <IconButton
-                aria-label="Heading 4"
-                aria-pressed={editor.isActive('heading', { level: 4 })}
-                disabled={false}
-                icon={<RiH4 />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-            />
-            <IconButton
-                aria-label="Heading 5"
-                aria-pressed={editor.isActive('heading', { level: 5 })}
-                disabled={false}
-                icon={<RiH5 />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-            />
-            <IconButton
-                aria-label="Heading 6"
-                aria-pressed={editor.isActive('heading', { level: 6 })}
-                disabled={false}
-                icon={<RiH6 />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-            />
-            <IconButton
-                aria-label="Paragraph"
-                aria-pressed={editor.isActive('paragraph')}
-                disabled={false}
-                icon={<RiParagraph />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().setParagraph().run()}
-            />
-            <IconButton
-                aria-label="Bullet List"
-                aria-pressed={editor.isActive('bulletList')}
-                disabled={false}
-                icon={<RiListUnordered />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleBulletList().run()}
-            />
-            <IconButton
-                aria-label="Ordered List"
-                aria-pressed={editor.isActive('orderedList')}
-                disabled={false}
-                icon={<RiListOrdered />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            />
-            <IconButton
-                aria-label="Code Block"
-                aria-pressed={editor.isActive('codeBlock')}
-                disabled={false}
-                icon={<RiCodeBoxLine />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            />
-            <IconButton
-                aria-label="Insert/Edit Link"
-                aria-pressed={editor.isActive('link')}
-                disabled={!isCursorOverLink && editor.state.selection.empty}
-                exceptionallySetClassName={styles.withLeftDivider}
-                icon={<RiLink />}
-                variant="quaternary"
-                onClick={handleLinkButtonClick}
-            />
-            <IconButton
-                aria-label="Remove Link"
-                disabled={!isCursorOverLink}
-                icon={<RiLinkUnlink />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().unsetLink().run()}
-            />
-            <IconButton
-                aria-label="Insert Image"
-                disabled={false}
-                exceptionallySetClassName={styles.withLeftDivider}
-                icon={<RiImageLine />}
-                variant="quaternary"
-                onClick={handleImageButtonClick}
-            />
-            <IconButton
-                aria-label="Blockquote"
-                aria-pressed={editor.isActive('blockquote')}
-                disabled={false}
-                icon={<RiDoubleQuotesL />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            />
-            <IconButton
-                aria-label="Horizontal Rule"
-                aria-pressed={editor.isActive('horizontalRule')}
-                disabled={false}
-                icon={<RiSeparator />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().setHorizontalRule().run()}
-            />
-            <IconButton
-                aria-label="Hard Break"
-                disabled={false}
-                exceptionallySetClassName={styles.withLeftDivider}
-                icon={<RiTextWrap />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().setHardBreak().run()}
-            />
-            <IconButton
-                aria-label="Clear Format"
-                disabled={false}
-                icon={<RiFormatClear />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}
-            />
-            <IconButton
-                aria-label="Undo"
-                disabled={false}
-                exceptionallySetClassName={styles.withLeftDivider}
-                icon={<RiArrowGoBackLine />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().undo().run()}
-            />
-            <IconButton
-                aria-label="Redo"
-                disabled={false}
-                icon={<RiArrowGoForwardLine />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().redo().run()}
-            />
-            <IconButton
-                aria-label="Clear Document"
-                disabled={false}
-                exceptionallySetClassName={styles.withLeftDivider}
-                icon={<RiDeleteBin2Line />}
-                variant="quaternary"
-                onClick={() => editor.chain().focus().clearContent(true).run()}
-            />
+            {buttonConfigs.map(({ withDividerBefore, ...buttonProps }) =>
+                withDividerBefore ? (
+                    <Box key={buttonProps['aria-label']} className={styles.withDividerBefore}>
+                        <ToolbarButton {...buttonProps} />
+                    </Box>
+                ) : (
+                    <ToolbarButton key={buttonProps['aria-label']} {...buttonProps} />
+                ),
+            )}
         </Box>
     )
 }

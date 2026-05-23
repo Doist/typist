@@ -4,6 +4,7 @@ import { Suggestion as TiptapSuggestion } from '@tiptap/suggestion'
 import { camelCase, kebabCase } from 'lodash-es'
 
 import { SUGGESTION_EXTENSION_PRIORITY } from '../constants/extension-priorities'
+import { DEFAULT_SUGGESTION_TRIGGER_CHAR } from '../constants/suggestions'
 import { canInsertNodeAt } from '../utilities/can-insert-node-at'
 import { canInsertSuggestion } from '../utilities/can-insert-suggestion'
 
@@ -187,7 +188,7 @@ function createSuggestionExtension<
         atom: true,
         addOptions() {
             return {
-                triggerChar: '@',
+                triggerChar: DEFAULT_SUGGESTION_TRIGGER_CHAR,
                 // Disable option by default until the following Tiptap issue is fixed:
                 // https://github.com/ueberdosis/tiptap/issues/2159
                 allowSpaces: false,
@@ -198,10 +199,17 @@ function createSuggestionExtension<
         addStorage() {
             return {
                 items,
-                itemsById: items.reduce(
-                    (acc, item) => ({ ...acc, [String(item[idAttribute])]: item }),
-                    {},
+                itemsById: Object.fromEntries(
+                    items.map((item) => [String(item[idAttribute]), item]),
                 ),
+            }
+        },
+        // Expose the trigger character in the node spec so it can be read from the schema by
+        // serializers and renderers that need to reconstruct the visible text for a suggestion
+        // (e.g., `@username`, `#channel`), without depending on the editor instance.
+        extendNodeSchema(extension) {
+            return {
+                triggerChar: extension.options.triggerChar,
             }
         },
         addAttributes() {

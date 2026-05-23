@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { Box } from '@doist/reactist'
 
 import classNames from 'classnames'
@@ -23,9 +25,14 @@ function RichTextImageWrapper({ extension, node }: NodeViewProps) {
         [styles.noPointerEvents]: isAttachmentUploading,
     })
 
-    const progressOverlayStyle: React.CSSProperties = {
-        ['--image-upload-progress' as string]: `${100 - uploadProgress}%`,
-    }
+    const progressOverlayStyle = useMemo(
+        function buildProgressOverlayStyle() {
+            return {
+                '--image-upload-progress': `${100 - uploadProgress}%`,
+            } as React.CSSProperties
+        },
+        [uploadProgress],
+    )
 
     return (
         <NodeViewWrapper data-drag-handle="true" className={styles.richTextImageWrapper}>

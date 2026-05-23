@@ -22,7 +22,7 @@ function image(nodeType: NodeType): Turndown.Plugin {
         turndown.addRule(nodeType.name, {
             filter: 'img',
             replacement(_, node) {
-                const src = String((node as Element).getAttribute('src'))
+                const src = (node as Element).getAttribute('src') ?? ''
 
                 // Preserve Data URL image prefix with message about base64 being unsupported
                 const link = src.startsWith('data:') ? `${src.split(',')[0]},NOT_SUPPORTED` : src

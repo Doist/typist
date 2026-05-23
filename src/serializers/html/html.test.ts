@@ -200,6 +200,10 @@ const MARKDOWN_INPUT_CODE_BLOCK = `\`\`\`
 </html>
 \`\`\``
 
+const MARKDOWN_INPUT_CODE_BLOCK_WITH_LANGUAGE = `\`\`\`javascript
+console.log("hello")
+\`\`\``
+
 const MARKDOWN_INPUT_INDENTED_BLOCK_ELEMENTS = `1. Blockquote:
     > Dorothy followed her through many of the beautiful rooms in her castle.
 2. Image:
@@ -248,6 +252,28 @@ describe('HTML Serializer', () => {
                 expect(htmlSerializerA).not.toBe(htmlSerializerB)
             })
         })
+
+        describe('when two editor schemas differ only by suggestion `triggerChar`', () => {
+            test('`getHTMLSerializerInstance` returns different instances and outputs', () => {
+                const htmlSerializerA = getHTMLSerializerInstance(
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('mention').configure({ triggerChar: '@' }),
+                    ]),
+                )
+                const htmlSerializerB = getHTMLSerializerInstance(
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('mention').configure({ triggerChar: '#' }),
+                    ]),
+                )
+
+                expect(htmlSerializerA).not.toBe(htmlSerializerB)
+                expect(htmlSerializerA.serialize('[Alice](mention://1)')).not.toBe(
+                    htmlSerializerB.serialize('[Alice](mention://1)'),
+                )
+            })
+        })
     })
 
     describe('Plain-text Document', () => {
@@ -256,6 +282,10 @@ describe('HTML Serializer', () => {
 
             beforeEach(() => {
                 htmlSerializer = createHTMLSerializer(getSchema([PlainTextKit]))
+            })
+
+            test('empty string returns empty output', () => {
+                expect(htmlSerializer.serialize('')).toBe('')
             })
 
             test('special ASCII characters are converted to HTML entities', () => {
@@ -330,6 +360,12 @@ describe('HTML Serializer', () => {
                 )
             })
 
+            test('code block with language syntax is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_CODE_BLOCK_WITH_LANGUAGE)).toBe(
+                    '<p>```javascript</p><p>console.log(&quot;hello&quot;)</p><p>```</p>',
+                )
+            })
+
             test('indented block elements syntax is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_INDENTED_BLOCK_ELEMENTS)).toBe(
                     '<p>1. Blockquote:</p><p>    &gt; Dorothy followed her through many of the beautiful rooms in her castle.</p><p>2. Image:</p><p>    ![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)</p><p>3. Codeblock:</p><p>    ```</p><p>    &lt;html&gt;</p><p>      &lt;head&gt;</p><p>        &lt;title&gt;Test&lt;/title&gt;</p><p>      &lt;/head&gt;</p><p>    &lt;/html&gt;</p><p>    ```</p>',
@@ -365,20 +401,65 @@ describe('HTML Serializer', () => {
                     htmlSerializer.serialize(`Question: Who's the head of the Frontend team?
 Answer: [Henning M](mention://963827)`),
                 ).toBe(
-                    '<p>Question: Who&#39;s the head of the Frontend team?</p><p>Answer: <span data-mention data-id="963827" data-label="Henning M"></span></p>',
+                    '<p>Question: Who&#39;s the head of the Frontend team?</p><p>Answer: <span data-mention data-id="963827" data-label="Henning M">@Henning M</span></p>',
                 )
             })
 
             test('channel suggestion HTML output is correct', () => {
                 const htmlSerializer = createHTMLSerializer(
-                    getSchema([PlainTextKit, createSuggestionExtension('channel')]),
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('channel').configure({ triggerChar: '#' }),
+                    ]),
                 )
 
                 expect(
                     htmlSerializer.serialize(`Question: What's the best channel on Twist?
 Answer: [Doist Frontend](channel://190200)`),
                 ).toBe(
-                    '<p>Question: What&#39;s the best channel on Twist?</p><p>Answer: <span data-channel data-id="190200" data-label="Doist Frontend"></span></p>',
+                    '<p>Question: What&#39;s the best channel on Twist?</p><p>Answer: <span data-channel data-id="190200" data-label="Doist Frontend">#Doist Frontend</span></p>',
+                )
+            })
+
+            test('suggestion with alphanumeric ID is serialized', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([PlainTextKit, createSuggestionExtension('mention')]),
+                )
+
+                expect(
+                    htmlSerializer.serialize('[Henning M](mention://user:190200@doist.dev)'),
+                ).toBe(
+                    '<p><span data-mention data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span></p>',
+                )
+            })
+
+            test('suggestion inside parentheses does not absorb the trailing parenthesis', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([PlainTextKit, createSuggestionExtension('mention')]),
+                )
+
+                expect(
+                    htmlSerializer.serialize('([Henning M](mention://user:190200@doist.dev))'),
+                ).toBe(
+                    '<p>(<span data-mention data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span>)</p>',
+                )
+            })
+
+            test('multiple suggestion types in the same input are serialized', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('mention'),
+                        createSuggestionExtension('channel').configure({ triggerChar: '#' }),
+                    ]),
+                )
+
+                expect(
+                    htmlSerializer.serialize(
+                        'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
+                    ),
+                ).toBe(
+                    '<p>Hey <span data-mention data-id="123" data-label="Alice">@Alice</span> and <span data-mention data-id="456" data-label="Bob">@Bob</span>, check <span data-channel data-id="789" data-label="General">#General</span></p>',
                 )
             })
         })
@@ -390,6 +471,10 @@ Answer: [Doist Frontend](channel://190200)`),
 
             beforeEach(() => {
                 htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
+            })
+
+            test('empty string returns empty output', () => {
+                expect(htmlSerializer.serialize('')).toBe('')
             })
 
             test('special ASCII characters are converted to HTML entities', () => {
@@ -453,7 +538,7 @@ Answer: [Doist Frontend](channel://190200)`),
             })
 
             test('images HTML output is correct (inline mode)', () => {
-                const htmlSerializer = createHTMLSerializer(
+                const inlineHtmlSerializer = createHTMLSerializer(
                     getSchema([
                         RichTextKit.configure({
                             image: {
@@ -463,7 +548,7 @@ Answer: [Doist Frontend](channel://190200)`),
                     ]),
                 )
 
-                expect(htmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
+                expect(inlineHtmlSerializer.serialize(MARKDOWN_INPUT_IMAGES)).toBe(
                     '<p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><br><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></p><p><a href="https://octodex.github.com/octobiwan/"><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi" title="Octobi Wan Catnobi"></a></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""></p><p>Octobi Wan Catnobi: <img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p><p><img src="https://octodex.github.com/images/octobiwan.jpg" alt=""> - These are not the droids you\'re looking for!</p>',
                 )
             })
@@ -481,6 +566,12 @@ Answer: [Doist Frontend](channel://190200)`),
     &lt;title>Test&lt;/title>
   &lt;/head>
 &lt;/html></code></pre>`)
+            })
+
+            test('code block with language HTML output is correct', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_CODE_BLOCK_WITH_LANGUAGE)).toBe(
+                    '<pre><code class="language-javascript">console.log("hello")</code></pre>',
+                )
             })
 
             test('block elements HTML output is correct', () => {
@@ -653,6 +744,14 @@ I need to add another paragraph below the second list item.
                 )
             })
 
+            test('code block with language HTML output is preserved', () => {
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_CODE_BLOCK_WITH_LANGUAGE)).toBe(
+                    `<p>\`\`\`javascript
+console.log("hello")
+\`\`\`</p>`,
+                )
+            })
+
             test('block elements HTML output is preserved', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_INDENTED_BLOCK_ELEMENTS))
                     .toBe(`<p>1. Blockquote:
@@ -691,6 +790,48 @@ See the section on [\`code\`](#code).</p>`)
             })
         })
 
+        describe('with partially disabled extensions', () => {
+            test('disabling italic also disables bold syntax', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([RichTextKit.configure({ italic: false })]),
+                )
+
+                expect(htmlSerializer.serialize('I love **bold** and *italic*')).toBe(
+                    '<p>I love **bold** and *italic*</p>',
+                )
+            })
+
+            test('disabling bold also disables italic syntax', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([RichTextKit.configure({ bold: false })]),
+                )
+
+                expect(htmlSerializer.serialize('I love **bold** and *italic*')).toBe(
+                    '<p>I love **bold** and *italic*</p>',
+                )
+            })
+
+            test('disabling orderedList also disables bulletList syntax', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([RichTextKit.configure({ orderedList: false })]),
+                )
+
+                expect(
+                    htmlSerializer.serialize('- item one\n- item two\n\n1. first\n2. second'),
+                ).toBe('<p>- item one<br>- item two</p><p>1. first<br>2. second</p>')
+            })
+
+            test('disabling bulletList also disables orderedList syntax', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([RichTextKit.configure({ bulletList: false })]),
+                )
+
+                expect(
+                    htmlSerializer.serialize('- item one\n- item two\n\n1. first\n2. second'),
+                ).toBe('<p>- item one<br>- item two</p><p>1. first<br>2. second</p>')
+            })
+        })
+
         describe('with official `taskList`/`taskItem` extensions', () => {
             test('task lists HTML output is correct', () => {
                 const htmlSerializer = createHTMLSerializer(
@@ -711,7 +852,7 @@ See the section on [\`code\`](#code).</p>`)
                     getSchema([
                         RichTextKit,
                         createSuggestionExtension('mention'),
-                        createSuggestionExtension('channel'),
+                        createSuggestionExtension('channel').configure({ triggerChar: '#' }),
                     ]),
                 )
             })
@@ -721,7 +862,7 @@ See the section on [\`code\`](#code).</p>`)
                     htmlSerializer.serialize(`Question: Who's the head of the Frontend team?
 Answer: [Henning M](mention://user:190200@doist.dev)`),
                 ).toBe(
-                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="user:190200@doist.dev" data-label="Henning M"></span></p>',
+                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span></p>',
                 )
             })
 
@@ -730,7 +871,7 @@ Answer: [Henning M](mention://user:190200@doist.dev)`),
                     htmlSerializer.serialize(`Question: Who's the head of the Frontend team?
 Answer: [Henning M](mention://963827)`),
                 ).toBe(
-                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="963827" data-label="Henning M"></span></p>',
+                    '<p>Question: Who\'s the head of the Frontend team?<br>Answer: <span data-mention="" data-id="963827" data-label="Henning M">@Henning M</span></p>',
                 )
             })
 
@@ -739,7 +880,17 @@ Answer: [Henning M](mention://963827)`),
                     htmlSerializer.serialize(`Question: What's the best channel on Twist?
 Answer: [Doist Frontend](channel://190200)`),
                 ).toBe(
-                    '<p>Question: What\'s the best channel on Twist?<br>Answer: <span data-channel="" data-id="190200" data-label="Doist Frontend"></span></p>',
+                    '<p>Question: What\'s the best channel on Twist?<br>Answer: <span data-channel="" data-id="190200" data-label="Doist Frontend">#Doist Frontend</span></p>',
+                )
+            })
+
+            test('multiple suggestion types in the same input are serialized', () => {
+                expect(
+                    htmlSerializer.serialize(
+                        'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
+                    ),
+                ).toBe(
+                    '<p>Hey <span data-mention="" data-id="123" data-label="Alice">@Alice</span> and <span data-mention="" data-id="456" data-label="Bob">@Bob</span>, check <span data-channel="" data-id="789" data-label="General">#General</span></p>',
                 )
             })
         })

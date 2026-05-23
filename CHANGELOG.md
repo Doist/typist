@@ -1,3 +1,21 @@
+## [10.0.3](https://github.com/Doist/typist/compare/v10.0.2...v10.0.3) (2026-05-23)
+
+### Bug Fixes
+
+* **serializers:** follow-up fixes to suggestion HTML output ([#1342](https://github.com/Doist/typist/issues/1342)) ([86ebb2a](https://github.com/Doist/typist/commit/86ebb2af196630dab99c7508f08317cb664c3dbe))
+
+## [10.0.2](https://github.com/Doist/typist/compare/v10.0.1...v10.0.2) (2026-05-22)
+
+### Bug Fixes
+
+* **serializers:** include trigger character in suggestion HTML output ([#1341](https://github.com/Doist/typist/issues/1341)) ([82e04a3](https://github.com/Doist/typist/commit/82e04a38667fa6a3e93e670a2a95d3030d459161))
+
+## [10.0.1](https://github.com/Doist/typist/compare/v10.0.0...v10.0.1) (2026-04-08)
+
+### Bug Fixes
+
+- add contents read permission for CI validation workflow ([#1292](https://github.com/Doist/typist/issues/1292)) ([d3cb224](https://github.com/Doist/typist/commit/d3cb2243e7f6fc732b6a2c76b8f854ae4eda09dc))
+
 ## [10.0.0](https://github.com/Doist/typist/compare/v9.0.3...v10.0.0) (2026-03-12)
 
 ### ⚠ BREAKING CHANGES

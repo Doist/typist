@@ -1,4 +1,4 @@
-import { useImperativeHandle, useRef, useState } from 'react'
+import { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
 
 import { Box, Inline, Text } from '@doist/reactist'
 
@@ -6,10 +6,58 @@ import { SuggestionRendererRef } from '../../../../src'
 
 import styles from './base-suggestion-dropdown.module.css'
 
+type BaseSuggestionDropdownItemProps = {
+    index: number
+    isSelected: boolean
+    children: React.ReactNode
+    registerItemRef: (index: number, node: HTMLLIElement | null) => void
+    onItemSelect: (index: number) => void
+}
+
+function BaseSuggestionDropdownItem({
+    index,
+    isSelected,
+    children,
+    registerItemRef,
+    onItemSelect,
+}: BaseSuggestionDropdownItemProps) {
+    const handleClick = useCallback(
+        function handleClick() {
+            onItemSelect(index)
+        },
+        [index, onItemSelect],
+    )
+
+    const handleRef = useCallback(
+        function handleRef(node: HTMLLIElement | null) {
+            registerItemRef(index, node)
+        },
+        [index, registerItemRef],
+    )
+
+    return (
+        <Box
+            as="li"
+            id={`suggestion-${index}`}
+            role="option"
+            tabIndex={-1}
+            aria-selected={isSelected}
+            display="flex"
+            alignItems="center"
+            borderRadius="standard"
+            onClick={handleClick}
+            ref={handleRef}
+        >
+            {children}
+        </Box>
+    )
+}
+
 type BaseSuggestionDropdownProps<TSuggestionItem> = {
     forwardedRef: React.ForwardedRef<SuggestionRendererRef>
     items: TSuggestionItem[]
     itemSize?: number
+    getItemKey: (item: TSuggestionItem) => React.Key
     renderItem: (item: TSuggestionItem) => React.ReactElement
     onItemSelect: (index: number) => void
 }
@@ -18,6 +66,7 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
     forwardedRef,
     items,
     itemSize = 6,
+    getItemKey,
     renderItem,
     onItemSelect,
 }: BaseSuggestionDropdownProps<TSuggestionItem>) {
@@ -25,12 +74,28 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
 
     const [selectedIndex, setSelectedIndex] = useState(0)
 
-    const suggestionDropdownStyle: React.CSSProperties = {
-        ['--suggestion-dropdown-item-size' as string]: itemSize,
-    }
+    const suggestionDropdownStyle = useMemo(
+        function buildSuggestionDropdownStyle() {
+            return {
+                '--suggestion-dropdown-item-size': itemSize,
+            } as React.CSSProperties
+        },
+        [itemSize],
+    )
 
     const areSuggestionsLoading = items.length === 1 && 'isLoading' in items[0]
     const areSuggestionsEmpty = items.length === 0
+
+    const registerItemRef = useCallback(function registerItemRef(
+        index: number,
+        node: HTMLLIElement | null,
+    ) {
+        if (node) {
+            itemRefs.current.set(index, node)
+        } else {
+            itemRefs.current.delete(index)
+        }
+    }, [])
 
     function updateSelectedItem(index: number) {
         setSelectedIndex(index)
@@ -68,6 +133,7 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
         <Box
             borderRadius="standard"
             overflow="auto"
+            tabIndex={-1}
             className={styles.baseSuggestionDropdown}
             style={suggestionDropdownStyle}
         >
@@ -98,31 +164,21 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
             ) : (
                 <Box
                     as="ul"
+                    // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
                     role="listbox"
                     aria-multiselectable={false}
                     aria-activedescendant={`suggestion-${selectedIndex}`}
                 >
                     {items.map((item, index) => (
-                        <Box
-                            key={index}
-                            as="li"
-                            id={`suggestion-${index}`}
-                            role="option"
-                            aria-selected={index === selectedIndex}
-                            display="flex"
-                            alignItems="center"
-                            borderRadius="standard"
-                            onClick={() => onItemSelect(index)}
-                            ref={(node) => {
-                                if (node) {
-                                    itemRefs.current.set(index, node)
-                                } else {
-                                    itemRefs.current.delete(index)
-                                }
-                            }}
+                        <BaseSuggestionDropdownItem
+                            key={getItemKey(item)}
+                            index={index}
+                            isSelected={index === selectedIndex}
+                            registerItemRef={registerItemRef}
+                            onItemSelect={onItemSelect}
                         >
                             {renderItem(item)}
-                        </Box>
+                        </BaseSuggestionDropdownItem>
                     ))}
                 </Box>
             )}

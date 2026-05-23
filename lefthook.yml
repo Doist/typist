@@ -1,0 +1,17 @@
+pre-commit:
+    jobs:
+        - name: lint
+          run: npm run fix:lint -- {staged_files}
+          glob: '*.{js,jsx,ts,tsx,mts}'
+          stage_fixed: true
+        - name: format
+          run: npm run fix:format -- {staged_files}
+          glob: '*.{js,jsx,ts,tsx,mts,css,json,jsonc,md,mdx,yml,yaml,html,svg}'
+          stage_fixed: true
+        - name: typecheck
+          run: npm run check:types
+
+pre-push:
+    jobs:
+        - name: test
+          run: npm run test

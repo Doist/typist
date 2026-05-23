@@ -129,7 +129,7 @@ export const Default = meta.story({
 
                 const fileReader = new FileReader()
 
-                fileReader.onload = () => {
+                fileReader.addEventListener('load', () => {
                     const commands = typistEditorRef.current?.getEditor().commands
 
                     if (fileType === 'image') {
@@ -139,34 +139,37 @@ export const Default = meta.story({
                             metadata,
                         })
                     }
-                }
+                })
 
                 fileReader.readAsDataURL(file)
             }, [])
 
             const extensions = useMemo(
-                function configureExtensions() {
-                    return [
-                        RichTextKit.configure({
-                            ...DEFAULT_RICH_TEXT_KIT_OPTIONS,
-                            image: {
-                                NodeViewComponent: RichTextImageWrapper,
-                                onImageFilePaste: handleInlineFilePaste,
-                            },
-                        }),
-                        ...COMMON_STORY_EXTENSIONS,
-                    ]
-                },
+                () => [
+                    RichTextKit.configure({
+                        ...DEFAULT_RICH_TEXT_KIT_OPTIONS,
+                        image: {
+                            NodeViewComponent: RichTextImageWrapper,
+                            onImageFilePaste: handleInlineFilePaste,
+                        },
+                    }),
+                    ...COMMON_STORY_EXTENSIONS,
+                ],
                 [handleInlineFilePaste],
+            )
+
+            const storyArgs = useMemo(
+                () => ({
+                    ...context.args,
+                    extensions,
+                }),
+                [context.args, extensions],
             )
 
             return (
                 <TypistEditorDecorator
                     Story={Story}
-                    args={{
-                        ...context.args,
-                        extensions,
-                    }}
+                    args={storyArgs}
                     withToolbar={true}
                     ref={typistEditorRef}
                 />
@@ -207,16 +210,15 @@ export const Singleline = meta.story({
                 }
             }, [])
 
-            return (
-                <TypistEditorDecorator
-                    Story={Story}
-                    args={{
-                        ...context.args,
-                        onKeyDown: handleKeyDown,
-                    }}
-                    withToolbar={true}
-                />
+            const storyArgs = useMemo(
+                () => ({
+                    ...context.args,
+                    onKeyDown: handleKeyDown,
+                }),
+                [context.args, handleKeyDown],
             )
+
+            return <TypistEditorDecorator Story={Story} args={storyArgs} withToolbar={true} />
         },
     ],
 })

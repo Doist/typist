@@ -1,0 +1,110 @@
+{
+    "$schema": "./node_modules/oxfmt/configuration_schema.json",
+    "ignorePatterns": [
+        ".cache/*",
+        "dist/*",
+        "storybook-static/*",
+        "**/node_modules/*",
+        "CHANGELOG.md"
+    ],
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "embeddedLanguageFormatting": "auto",
+    "insertFinalNewline": true,
+    "jsxSingleQuote": false,
+    "printWidth": 100,
+    "proseWrap": "preserve",
+    "quoteProps": "as-needed",
+    "semi": false,
+    "singleAttributePerLine": false,
+    "singleQuote": true,
+    "sortImports": {
+        "customGroups": [
+            {
+                "groupName": "doist-side-effect-style",
+                "selector": "side_effect_style",
+                "elementNamePattern": ["@doist/**/*.{css,less}"]
+            },
+            {
+                "groupName": "scoped-side-effect-style",
+                "selector": "side_effect_style",
+                "elementNamePattern": ["@*/**/*.{css,less}"]
+            },
+            {
+                "groupName": "package-side-effect-style",
+                "selector": "side_effect_style",
+                "elementNamePattern": ["{[!@.]*,[!@.]*/**/*}.{css,less}"]
+            },
+            {
+                "groupName": "react",
+                "selector": "external",
+                "modifiers": ["value"],
+                "elementNamePattern": ["react", "react-*", "react-dom", "react-dom/**"]
+            },
+            {
+                "groupName": "doist",
+                "selector": "external",
+                "modifiers": ["value"],
+                "elementNamePattern": ["@doist/**"]
+            },
+            {
+                "groupName": "react-type",
+                "selector": "external",
+                "modifiers": ["type"],
+                "elementNamePattern": ["react", "react-*", "react-dom", "react-dom/**"]
+            },
+            {
+                "groupName": "doist-type",
+                "selector": "external",
+                "modifiers": ["type"],
+                "elementNamePattern": ["@doist/**"]
+            }
+        ],
+        "groups": [
+            "value-builtin",
+            "side_effect",
+            "doist-side-effect-style",
+            "scoped-side-effect-style",
+            "package-side-effect-style",
+            "side_effect_style",
+            "react",
+            "doist",
+            "value-external",
+            "value-internal",
+            "value-parent",
+            ["value-sibling", "value-index"],
+            "style",
+            "type-builtin",
+            {
+                "newlinesBetween": false
+            },
+            "react-type",
+            {
+                "newlinesBetween": false
+            },
+            "doist-type",
+            {
+                "newlinesBetween": false
+            },
+            "type-external",
+            {
+                "newlinesBetween": false
+            },
+            "type-internal",
+            {
+                "newlinesBetween": false
+            },
+            "type-parent",
+            {
+                "newlinesBetween": false
+            },
+            ["type-sibling", "type-index"],
+            "unknown"
+        ],
+        "newlinesBetween": true
+    },
+    "sortPackageJson": false,
+    "tabWidth": 4,
+    "trailingComma": "all",
+    "useTabs": false
+}

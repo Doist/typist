@@ -58,7 +58,7 @@ cd typist
 After cloning Typist and installing all dependencies, several commands are at your disposal:
 
 - `npm run build`: Builds the `@doist/typist` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/Doist/packages?repo_name=typist);
-- `npm run check`: Validates code quality with ESLint, styling with Prettier, and types with TypeScript;
+- `npm run check`: Validates code quality with Oxlint, formatting with Oxfmt, and types with TypeScript;
 - `npm run clean`: Removes temporary directories used for multiple caches;
 - `npm run storybook:build`: Builds Storybook as a static Web application;
 - `npm run storybook:start`: Starts Storybook Web application (available at http://localhost:6006/);
@@ -72,7 +72,7 @@ The release process for Typist is fully automated with [`semantic-release`](http
 
 To test features before publishing a stable release:
 
-1. **Sync `next` with `main`** if they are out of sync, before starting new work:
+1. **Sync `next` with `main`** before starting new work, and after each stable release (required for `semantic-release` to correctly initiate the next pre-release versioning cycle):
 
     ```sh
     git checkout next
@@ -85,14 +85,6 @@ To test features before publishing a stable release:
 3. **Automatic pre-release:** Each PR merge into `next` triggers CI → a pre-release version (e.g., `9.1.0-next.1`) is published to the `@next` dist-tag on npm and GitHub Packages.
 
 4. **Promote to stable:** When ready, open a PR to merge `next` into `main`. The PR title must follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g., `feat: ...`, `fix: ...`) as it determines the version bump for the stable release.
-
-5. **Sync `next` with `main`** after the stable release, to pull back the release commit:
-
-    ```sh
-    git checkout next
-    git merge main -m "chore: sync next with main [skip ci]"
-    git push origin next
-    ```
 
 > **Note:** The `CHANGELOG.md` is only updated for stable releases on `main`. Pre-releases still get GitHub release notes and npm publication.
 
@@ -146,7 +138,7 @@ A commit that has the text `BREAKING CHANGE:` at the beginning of its optional b
 
 #### How Commits Map to the CHANGELOG
 
-Only the commit **header** (subject line) and `BREAKING CHANGE:` **footer** are used to generate the `CHANGELOG.md`. The commit body is ignored by the changelog generator.
+The commit **header** (subject line) and footer metadata — including `BREAKING CHANGE:` notes and issue references (e.g., `Closes #123`) — are used to generate the `CHANGELOG.md`. The commit body is ignored by the changelog generator.
 
 When squash-merging a PR, GitHub lets you edit the commit message and extended description. Keep the following in mind:
 
