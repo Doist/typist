@@ -1,3 +1,9 @@
+## [10.0.3](https://github.com/Doist/typist/compare/v10.0.2...v10.0.3) (2026-05-23)
+
+### Bug Fixes
+
+* **serializers:** follow-up fixes to suggestion HTML output ([#1342](https://github.com/Doist/typist/issues/1342)) ([86ebb2a](https://github.com/Doist/typist/commit/86ebb2af196630dab99c7508f08317cb664c3dbe))
+
 ## [10.0.2](https://github.com/Doist/typist/compare/v10.0.1...v10.0.2) (2026-05-22)
 
 ### Bug Fixes
