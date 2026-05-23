@@ -252,6 +252,28 @@ describe('HTML Serializer', () => {
                 expect(htmlSerializerA).not.toBe(htmlSerializerB)
             })
         })
+
+        describe('when two editor schemas differ only by suggestion `triggerChar`', () => {
+            test('`getHTMLSerializerInstance` returns different instances and outputs', () => {
+                const htmlSerializerA = getHTMLSerializerInstance(
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('mention').configure({ triggerChar: '@' }),
+                    ]),
+                )
+                const htmlSerializerB = getHTMLSerializerInstance(
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('mention').configure({ triggerChar: '#' }),
+                    ]),
+                )
+
+                expect(htmlSerializerA).not.toBe(htmlSerializerB)
+                expect(htmlSerializerA.serialize('[Alice](mention://1)')).not.toBe(
+                    htmlSerializerB.serialize('[Alice](mention://1)'),
+                )
+            })
+        })
     })
 
     describe('Plain-text Document', () => {
