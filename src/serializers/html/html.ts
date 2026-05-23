@@ -6,9 +6,8 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
-import { DEFAULT_SUGGESTION_TRIGGER_CHAR } from '../../constants/suggestions'
 import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
-import { getSuggestionUrlScheme } from '../../helpers/serializer'
+import { buildSuggestionSchemaInfo } from '../../helpers/serializer'
 
 import { rehypeCodeBlock } from './plugins/rehype-code-block'
 import { rehypeImage } from './plugins/rehype-image'
@@ -57,22 +56,17 @@ function createHTMLSerializerForPlainTextEditor(schema: Schema) {
             let htmlResult = escape(markdown)
 
             // Serialize all suggestion links if any suggestion node exists in the schema
-            Object.values(schema.nodes)
-                .filter((node) => node.name.endsWith('Suggestion'))
-                .forEach((suggestionNode) => {
-                    const linkSchema = getSuggestionUrlScheme(suggestionNode)
+            const suggestionSchemaInfo = buildSuggestionSchemaInfo(schema)
 
-                    const triggerChar = String(
-                        (suggestionNode.spec as { triggerChar?: string }).triggerChar ??
-                            DEFAULT_SUGGESTION_TRIGGER_CHAR,
-                    )
-
+            if (suggestionSchemaInfo) {
+                for (const [linkSchema, triggerChar] of suggestionSchemaInfo.triggerCharByScheme) {
                     htmlResult = htmlResult.replace(
                         new RegExp(`\\[([^\\[]+)\\]\\((?:${linkSchema}):\\/\\/([^\\s)]+)\\)`, 'gm'),
                         (_, label, id) =>
                             `<span data-${linkSchema} data-id="${id}" data-label="${label}">${triggerChar}${label}</span>`,
                     )
-                })
+                }
+            }
 
             // Return the serialized HTML with every line wrapped in a paragraph element
             return htmlResult.replace(/^([^\n]+)\n?|\n+/gm, `<p>$1</p>`)
