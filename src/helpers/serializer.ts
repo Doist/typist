@@ -35,6 +35,18 @@ type SuggestionSchemaInfo = {
 }
 
 /**
+ * Returns all suggestion nodes available in the given editor schema (e.g. `mentionSuggestion`,
+ * `channelSuggestion`).
+ *
+ * @param schema The editor schema to be used for suggestion nodes detection.
+ *
+ * @returns An array of `NodeType` objects for the available suggestion nodes.
+ */
+function getSuggestionNodes(schema: Schema): NodeType[] {
+    return Object.values(schema.nodes).filter((node) => node.name.endsWith('Suggestion'))
+}
+
+/**
  * Builds the information derived from all the suggestion nodes available in the given editor
  * schema, in a single iteration. Returns `null` if there are no suggestion nodes in the schema.
  *
@@ -43,9 +55,7 @@ type SuggestionSchemaInfo = {
  * @returns A `SuggestionSchemaInfo` object, or `null` if there are no suggestion nodes.
  */
 function buildSuggestionSchemaInfo(schema: Schema): SuggestionSchemaInfo | null {
-    const suggestionNodes = Object.values(schema.nodes).filter((node) =>
-        node.name.endsWith('Suggestion'),
-    )
+    const suggestionNodes = getSuggestionNodes(schema)
 
     if (suggestionNodes.length === 0) {
         return null
@@ -113,5 +123,6 @@ export {
     buildSuggestionSchemaInfo,
     computeSuggestionTriggerCharsId,
     extractTagsFromParseRules,
+    getSuggestionNodes,
     getSuggestionUrlScheme,
 }
