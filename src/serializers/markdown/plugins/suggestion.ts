@@ -1,4 +1,4 @@
-import { kebabCase } from 'lodash-es'
+import { getSuggestionUrlScheme } from '../../../helpers/serializer'
 
 import type { NodeType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
@@ -10,7 +10,7 @@ import type Turndown from 'turndown'
  * @param nodeType The node object that matches this rule.
  */
 function suggestion(nodeType: NodeType): Turndown.Plugin {
-    const attributeType = kebabCase(nodeType.name.replace(/Suggestion$/, ''))
+    const attributeType = getSuggestionUrlScheme(nodeType)
 
     return (turndown: Turndown) => {
         turndown.addRule(nodeType.name, {

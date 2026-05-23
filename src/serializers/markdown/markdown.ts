@@ -2,6 +2,7 @@ import Turndown from 'turndown'
 
 import { REGEX_PUNCTUATION } from '../../constants/regular-expressions'
 import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
+import { getSuggestionNodes } from '../../helpers/serializer'
 
 import { image } from './plugins/image'
 import { listItem } from './plugins/list-item'
@@ -155,11 +156,9 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
     }
 
     // Add a custom rule for all suggestion nodes available in the schema
-    Object.values(schema.nodes)
-        .filter((node) => node.name.endsWith('Suggestion'))
-        .forEach((suggestionNode) => {
-            turndown.use(suggestion(suggestionNode))
-        })
+    getSuggestionNodes(schema).forEach((suggestionNode) => {
+        turndown.use(suggestion(suggestionNode))
+    })
 
     // Return a normalized `serialize` function
     return {

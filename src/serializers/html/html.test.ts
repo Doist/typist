@@ -252,6 +252,28 @@ describe('HTML Serializer', () => {
                 expect(htmlSerializerA).not.toBe(htmlSerializerB)
             })
         })
+
+        describe('when two editor schemas differ only by suggestion `triggerChar`', () => {
+            test('`getHTMLSerializerInstance` returns different instances and outputs', () => {
+                const htmlSerializerA = getHTMLSerializerInstance(
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('mention').configure({ triggerChar: '@' }),
+                    ]),
+                )
+                const htmlSerializerB = getHTMLSerializerInstance(
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('mention').configure({ triggerChar: '#' }),
+                    ]),
+                )
+
+                expect(htmlSerializerA).not.toBe(htmlSerializerB)
+                expect(htmlSerializerA.serialize('[Alice](mention://1)')).not.toBe(
+                    htmlSerializerB.serialize('[Alice](mention://1)'),
+                )
+            })
+        })
     })
 
     describe('Plain-text Document', () => {
@@ -379,20 +401,23 @@ describe('HTML Serializer', () => {
                     htmlSerializer.serialize(`Question: Who's the head of the Frontend team?
 Answer: [Henning M](mention://963827)`),
                 ).toBe(
-                    '<p>Question: Who&#39;s the head of the Frontend team?</p><p>Answer: <span data-mention data-id="963827" data-label="Henning M"></span></p>',
+                    '<p>Question: Who&#39;s the head of the Frontend team?</p><p>Answer: <span data-mention data-id="963827" data-label="Henning M">@Henning M</span></p>',
                 )
             })
 
             test('channel suggestion HTML output is correct', () => {
                 const htmlSerializer = createHTMLSerializer(
-                    getSchema([PlainTextKit, createSuggestionExtension('channel')]),
+                    getSchema([
+                        PlainTextKit,
+                        createSuggestionExtension('channel').configure({ triggerChar: '#' }),
+                    ]),
                 )
 
                 expect(
                     htmlSerializer.serialize(`Question: What's the best channel on Twist?
 Answer: [Doist Frontend](channel://190200)`),
                 ).toBe(
-                    '<p>Question: What&#39;s the best channel on Twist?</p><p>Answer: <span data-channel data-id="190200" data-label="Doist Frontend"></span></p>',
+                    '<p>Question: What&#39;s the best channel on Twist?</p><p>Answer: <span data-channel data-id="190200" data-label="Doist Frontend">#Doist Frontend</span></p>',
                 )
             })
 
@@ -404,7 +429,7 @@ Answer: [Doist Frontend](channel://190200)`),
                 expect(
                     htmlSerializer.serialize('[Henning M](mention://user:190200@doist.dev)'),
                 ).toBe(
-                    '<p><span data-mention data-id="user:190200@doist.dev" data-label="Henning M"></span></p>',
+                    '<p><span data-mention data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span></p>',
                 )
             })
 
@@ -416,7 +441,7 @@ Answer: [Doist Frontend](channel://190200)`),
                 expect(
                     htmlSerializer.serialize('([Henning M](mention://user:190200@doist.dev))'),
                 ).toBe(
-                    '<p>(<span data-mention data-id="user:190200@doist.dev" data-label="Henning M"></span>)</p>',
+                    '<p>(<span data-mention data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span>)</p>',
                 )
             })
 
@@ -425,7 +450,7 @@ Answer: [Doist Frontend](channel://190200)`),
                     getSchema([
                         PlainTextKit,
                         createSuggestionExtension('mention'),
-                        createSuggestionExtension('channel'),
+                        createSuggestionExtension('channel').configure({ triggerChar: '#' }),
                     ]),
                 )
 
@@ -434,7 +459,7 @@ Answer: [Doist Frontend](channel://190200)`),
                         'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
                     ),
                 ).toBe(
-                    '<p>Hey <span data-mention data-id="123" data-label="Alice"></span> and <span data-mention data-id="456" data-label="Bob"></span>, check <span data-channel data-id="789" data-label="General"></span></p>',
+                    '<p>Hey <span data-mention data-id="123" data-label="Alice">@Alice</span> and <span data-mention data-id="456" data-label="Bob">@Bob</span>, check <span data-channel data-id="789" data-label="General">#General</span></p>',
                 )
             })
         })
@@ -827,7 +852,7 @@ See the section on [\`code\`](#code).</p>`)
                     getSchema([
                         RichTextKit,
                         createSuggestionExtension('mention'),
-                        createSuggestionExtension('channel'),
+                        createSuggestionExtension('channel').configure({ triggerChar: '#' }),
                     ]),
                 )
             })
@@ -855,7 +880,7 @@ Answer: [Henning M](mention://963827)`),
                     htmlSerializer.serialize(`Question: What's the best channel on Twist?
 Answer: [Doist Frontend](channel://190200)`),
                 ).toBe(
-                    '<p>Question: What\'s the best channel on Twist?<br>Answer: <span data-channel="" data-id="190200" data-label="Doist Frontend">@Doist Frontend</span></p>',
+                    '<p>Question: What\'s the best channel on Twist?<br>Answer: <span data-channel="" data-id="190200" data-label="Doist Frontend">#Doist Frontend</span></p>',
                 )
             })
 
@@ -865,7 +890,7 @@ Answer: [Doist Frontend](channel://190200)`),
                         'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
                     ),
                 ).toBe(
-                    '<p>Hey <span data-mention="" data-id="123" data-label="Alice">@Alice</span> and <span data-mention="" data-id="456" data-label="Bob">@Bob</span>, check <span data-channel="" data-id="789" data-label="General">@General</span></p>',
+                    '<p>Hey <span data-mention="" data-id="123" data-label="Alice">@Alice</span> and <span data-mention="" data-id="456" data-label="Bob">@Bob</span>, check <span data-channel="" data-id="789" data-label="General">#General</span></p>',
                 )
             })
         })

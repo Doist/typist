@@ -2,7 +2,19 @@ import { kebabCase } from 'lodash-es'
 
 import { DEFAULT_SUGGESTION_TRIGGER_CHAR } from '../constants/suggestions'
 
-import type { ParseRule, Schema } from '@tiptap/pm/model'
+import type { NodeType, ParseRule, Schema } from '@tiptap/pm/model'
+
+/**
+ * Extracts the URL scheme used by a suggestion node (e.g. `mention`, `channel`) from its node
+ * name (e.g. `mentionSuggestion`, `channelSuggestion`).
+ *
+ * @param node The suggestion node type.
+ *
+ * @returns The URL scheme as a kebab-case string.
+ */
+function getSuggestionUrlScheme(node: NodeType): string {
+    return kebabCase(node.name.replace(/Suggestion$/, ''))
+}
 
 /**
  * Information derived from the suggestion nodes available in the editor schema, used by the
@@ -23,6 +35,18 @@ type SuggestionSchemaInfo = {
 }
 
 /**
+ * Returns all suggestion nodes available in the given editor schema (e.g. `mentionSuggestion`,
+ * `channelSuggestion`).
+ *
+ * @param schema The editor schema to be used for suggestion nodes detection.
+ *
+ * @returns An array of `NodeType` objects for the available suggestion nodes.
+ */
+function getSuggestionNodes(schema: Schema): NodeType[] {
+    return Object.values(schema.nodes).filter((node) => node.name.endsWith('Suggestion'))
+}
+
+/**
  * Builds the information derived from all the suggestion nodes available in the given editor
  * schema, in a single iteration. Returns `null` if there are no suggestion nodes in the schema.
  *
@@ -31,9 +55,7 @@ type SuggestionSchemaInfo = {
  * @returns A `SuggestionSchemaInfo` object, or `null` if there are no suggestion nodes.
  */
 function buildSuggestionSchemaInfo(schema: Schema): SuggestionSchemaInfo | null {
-    const suggestionNodes = Object.values(schema.nodes).filter((node) =>
-        node.name.endsWith('Suggestion'),
-    )
+    const suggestionNodes = getSuggestionNodes(schema)
 
     if (suggestionNodes.length === 0) {
         return null
@@ -41,7 +63,7 @@ function buildSuggestionSchemaInfo(schema: Schema): SuggestionSchemaInfo | null 
 
     const triggerCharByScheme = new Map(
         suggestionNodes.map((node) => [
-            kebabCase(node.name.replace(/Suggestion$/, '')),
+            getSuggestionUrlScheme(node),
             String(
                 (node.spec as { triggerChar?: string }).triggerChar ??
                     DEFAULT_SUGGESTION_TRIGGER_CHAR,
@@ -55,6 +77,27 @@ function buildSuggestionSchemaInfo(schema: Schema): SuggestionSchemaInfo | null 
         urlSchemeRegex: `(?:${urlSchemes.join('|')})://`,
         triggerCharByScheme,
     }
+}
+
+/**
+ * Computes a string ID that identifies the configured trigger characters of all the suggestion
+ * nodes in the given editor schema. Used to discriminate cache keys for serializers whose output
+ * depends on the trigger character (e.g. the HTML serializer).
+ *
+ * @param schema The current editor document schema.
+ *
+ * @returns A string ID matching the suggestion trigger characters in the schema.
+ */
+function computeSuggestionTriggerCharsId(schema: Schema): string {
+    const suggestionSchemaInfo = buildSuggestionSchemaInfo(schema)
+
+    if (!suggestionSchemaInfo) {
+        return ''
+    }
+
+    return [...suggestionSchemaInfo.triggerCharByScheme]
+        .map(([scheme, triggerChar]) => `${scheme}=${triggerChar}`)
+        .join()
 }
 
 /**
@@ -76,4 +119,10 @@ function extractTagsFromParseRules(
         .map((rule) => rule.tag as keyof HTMLElementTagNameMap)
 }
 
-export { buildSuggestionSchemaInfo, extractTagsFromParseRules }
+export {
+    buildSuggestionSchemaInfo,
+    computeSuggestionTriggerCharsId,
+    extractTagsFromParseRules,
+    getSuggestionNodes,
+    getSuggestionUrlScheme,
+}

@@ -1,4 +1,4 @@
-import { escape, kebabCase } from 'lodash-es'
+import { escape } from 'lodash-es'
 import rehypeMinifyWhitespace from 'rehype-minify-whitespace'
 import rehypeStringify from 'rehype-stringify'
 import remarkBreaks from 'remark-breaks'
@@ -7,6 +7,10 @@ import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
 import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
+import {
+    buildSuggestionSchemaInfo,
+    computeSuggestionTriggerCharsId,
+} from '../../helpers/serializer'
 
 import { rehypeCodeBlock } from './plugins/rehype-code-block'
 import { rehypeImage } from './plugins/rehype-image'
@@ -55,16 +59,17 @@ function createHTMLSerializerForPlainTextEditor(schema: Schema) {
             let htmlResult = escape(markdown)
 
             // Serialize all suggestion links if any suggestion node exists in the schema
-            Object.values(schema.nodes)
-                .filter((node) => node.name.endsWith('Suggestion'))
-                .forEach((suggestionNode) => {
-                    const linkSchema = kebabCase(suggestionNode.name.replace(/Suggestion$/, ''))
+            const suggestionSchemaInfo = buildSuggestionSchemaInfo(schema)
 
+            if (suggestionSchemaInfo) {
+                for (const [linkSchema, triggerChar] of suggestionSchemaInfo.triggerCharByScheme) {
                     htmlResult = htmlResult.replace(
                         new RegExp(`\\[([^\\[]+)\\]\\((?:${linkSchema}):\\/\\/([^\\s)]+)\\)`, 'gm'),
-                        `<span data-${linkSchema} data-id="$2" data-label="$1"></span>`,
+                        (_, label, id) =>
+                            `<span data-${linkSchema} data-id="${id}" data-label="${label}">${triggerChar}${label}</span>`,
                     )
-                })
+                }
+            }
 
             // Return the serialized HTML with every line wrapped in a paragraph element
             return htmlResult.replace(/^([^\n]+)\n?|\n+/gm, `<p>$1</p>`)
@@ -177,7 +182,10 @@ const htmlSerializerInstanceById: HTMLSerializerInstanceById = {}
  * @returns The HTML serializer instance for the given editor schema.
  */
 function getHTMLSerializerInstance(schema: Schema) {
-    const id = computeSchemaId(schema)
+    const schemaId = computeSchemaId(schema)
+    const triggerCharsId = computeSuggestionTriggerCharsId(schema)
+
+    const id = [schemaId, triggerCharsId].join('|')
 
     if (!htmlSerializerInstanceById[id]) {
         htmlSerializerInstanceById[id] = createHTMLSerializer(schema)
