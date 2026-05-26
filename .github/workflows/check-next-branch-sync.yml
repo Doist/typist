@@ -24,11 +24,6 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Fetch `main` and `next`
-              run: |
-                  git fetch origin main:refs/remotes/origin/main
-                  git fetch origin next:refs/remotes/origin/next
-
             - name: Verify `main` is merged into `next`
               run: |
                   if ! git merge-base --is-ancestor origin/main origin/next; then
