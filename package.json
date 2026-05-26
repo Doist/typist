@@ -154,7 +154,7 @@
     },
     "peerDependencies": {
         "emoji-regex": "^10.2.1",
-        "linkifyjs": "^4.1.1",
+        "linkifyjs": "^4.3.2",
         "lodash-es": "^4.17.21",
         "react": "^18.0.0",
         "react-dom": "^18.0.0"
