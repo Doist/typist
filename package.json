@@ -103,7 +103,7 @@
         "@testing-library/react": "16.3.2",
         "@types/hast": "3.0.4",
         "@types/lodash-es": "4.17.12",
-        "@types/react": "18.3.28",
+        "@types/react": "18.3.29",
         "@types/react-dom": "18.3.7",
         "@types/react-syntax-highlighter": "15.5.13",
         "@types/turndown": "5.0.6",
@@ -115,10 +115,10 @@
         "emoji-regex": "10.6.0",
         "github-markdown-css": "5.9.0",
         "jsdom": "29.1.1",
-        "lefthook": "2.1.6",
+        "lefthook": "2.1.8",
         "npm-run-all-next": "1.4.2",
-        "oxfmt": "0.50.0",
-        "oxlint": "1.65.0",
+        "oxfmt": "0.51.0",
+        "oxlint": "1.66.0",
         "publint": "0.3.21",
         "react": "18.3.1",
         "react-dom": "18.3.1",
@@ -137,7 +137,7 @@
         "type-fest": "5.6.0",
         "typescript": "6.0.3",
         "typescript-plugin-css-modules": "5.2.0",
-        "vitest": "4.1.6"
+        "vitest": "4.1.7"
     },
     "peerDependencies": {
         "emoji-regex": "^10.2.1",
