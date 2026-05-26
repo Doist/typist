@@ -1,3 +1,10 @@
+## [11.0.1](https://github.com/Doist/typist/compare/v11.0.0...v11.0.1) (2026-05-26)
+
+### Bug Fixes
+
+* **deps:** update dependency linkifyjs to v4.3.3 ([#1352](https://github.com/Doist/typist/issues/1352)) ([7024a5b](https://github.com/Doist/typist/commit/7024a5b3349445354a1c483736e141d94200305a))
+* **deps:** update dependency turndown to v7.2.4 ([#1353](https://github.com/Doist/typist/issues/1353)) ([2f83d11](https://github.com/Doist/typist/commit/2f83d11721881d0e5d607c40fdb148c0baf8ad94))
+
 ## [11.0.0](https://github.com/Doist/typist/compare/v10.0.3...v11.0.0) (2026-05-26)
 
 ### ⚠ BREAKING CHANGES
