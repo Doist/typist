@@ -1,0 +1,48 @@
+name: Next Branch Sync
+
+on:
+    pull_request:
+        branches:
+            - next
+        types:
+            - opened
+            - reopened
+            - synchronize
+
+permissions:
+    contents: read
+
+jobs:
+    verify-next-contains-main:
+        name: Verify `next` contains `main`
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+
+            - name: Fetch `main` and `next`
+              run: |
+                  git fetch origin main:refs/remotes/origin/main
+                  git fetch origin next:refs/remotes/origin/next
+
+            - name: Verify `main` is merged into `next`
+              run: |
+                  if ! git merge-base --is-ancestor origin/main origin/next; then
+                      echo "::error::'next' is behind 'main'. Sync 'next' with 'main' before merging this PR."
+                      {
+                          echo "### ❌ \`next\` is behind \`main\`"
+                          echo ""
+                          echo "Sync \`next\` with \`main\` before merging this PR:"
+                          echo ""
+                          echo '```sh'
+                          echo "git checkout next"
+                          echo "git merge main -m 'chore: sync next with main [skip ci]'"
+                          echo "git push origin next"
+                          echo '```'
+                      } >> "$GITHUB_STEP_SUMMARY"
+                      exit 1
+                  fi
