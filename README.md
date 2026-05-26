@@ -32,16 +32,6 @@ Typist is the mighty [Tiptap](https://tiptap.dev/)-based rich-text editor React 
 npm install --save @doist/typist
 ```
 
-### Peer Dependencies
-
-If you are using **npm 7+** and the `legacy-peer-deps` options is not enabled, peer dependencies should have been automatically installed for you with the command above. Otherwise, you can install them with:
-
-```sh
-npm info @doist/typist peerDependencies --json \
-    | command sed 's/[\{\},]//g ; s/: /@/g' \
-    | xargs npm install --save
-```
-
 ## Usage
 
 ```tsx
