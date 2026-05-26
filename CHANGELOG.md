@@ -1,3 +1,25 @@
+## [12.0.0](https://github.com/Doist/typist/compare/v11.0.1...v12.0.0) (2026-05-26)
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** linkifyjs, emoji-regex, and lodash-es must be declared
+by consumers as direct dependencies. npm 7+ auto-installs peer deps, so
+fresh installs work transparently; existing installs need to add the
+three packages explicitly to satisfy strict resolution (pnpm, etc.).
+
+* chore(deps): raise linkifyjs peer floor to ^4.3.2
+
+@tiptap/extension-link, which ships in Typist's dependencies, requires
+linkifyjs ^4.3.2 at runtime. The previous ^4.1.1 peer range let
+consumers satisfy Typist's peer with 4.1.x or 4.2.x, which would force
+npm to install a nested second copy of linkifyjs for Tiptap, defeating
+the dedup goal of moving linkifyjs back to a peer dep in the first
+place.
+
+### Features
+
+* **deps:** move shared application utilities back to peer dependencies ([#1354](https://github.com/Doist/typist/issues/1354)) ([08a8fd8](https://github.com/Doist/typist/commit/08a8fd83b42592ad1a2441d88817ea01029fc9b8)), closes [#1351](https://github.com/Doist/typist/issues/1351)
+
 ## [11.0.1](https://github.com/Doist/typist/compare/v11.0.0...v11.0.1) (2026-05-26)
 
 ### Bug Fixes
