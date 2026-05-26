@@ -1,3 +1,22 @@
+## [11.0.0](https://github.com/Doist/typist/compare/v10.0.3...v11.0.0) (2026-05-26)
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** react and react-dom 17 are no longer supported. Consumers
+must be on react/react-dom ^18.0.0.
+
+* chore(deps): keep storybook-only deps as dev and drop unused entries
+
+Address doistbot review:
+- Move rehype-raw and remark-gfm back to devDependencies (only used in
+  stories/, which is not part of the published files).
+- Drop rehype, remark, and hast-util-is-element entirely (no import sites
+  anywhere in the repo).
+
+### Miscellaneous Chores
+
+* **deps:** drop React 17 support and move runtime peer deps into dependencies ([#1351](https://github.com/Doist/typist/issues/1351)) ([6bdd2fc](https://github.com/Doist/typist/commit/6bdd2fcfcbdd57ae4a811c20a6997a3573e62e3e))
+
 ## [10.0.3](https://github.com/Doist/typist/compare/v10.0.2...v10.0.3) (2026-05-23)
 
 ### Bug Fixes
