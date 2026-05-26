@@ -9,7 +9,7 @@ import type { Transformer } from 'unified'
  * A rehype plugin to add support for Tiptap task lists (i.e., `* [ ] Task`).
  */
 function rehypeTaskList(): Transformer {
-    return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
+    return (tree: HastNode) => {
         visit(tree, 'element', (node: HastNode) => {
             if (isHastElementNode(node, 'ul')) {
                 const areAllChildrenTaskItems = node.children.every(

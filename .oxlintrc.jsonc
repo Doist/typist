@@ -49,7 +49,10 @@
         {
             // Unified plugins are invoked by the processor via `.use()`, which binds `this` to
             // the Processor instance; the bundler-`undefined`-`this` concern doesn't apply here
-            "files": ["src/serializers/html/plugins/*.ts"],
+            "files": [
+                "src/serializers/html/plugins/remark-*.ts",
+                "src/serializers/markdown/plugins/remark-*.ts",
+            ],
             "rules": {
                 "oxc/no-this-in-exported-function": "off",
             },

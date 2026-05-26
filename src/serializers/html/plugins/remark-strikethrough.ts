@@ -15,17 +15,17 @@ import type { Processor } from 'unified'
  * `micromark-extension-gfm-strikethrough` packages, and the implementation is inspired by the
  * third-party `remark-gfm` plugin.
  *
- * The reason why we don't use `remark-gfm` directly is because we don't want to support all other
- * GFM features (footnotes, tables, tagfilter, and tasklists).
+ * The reason why we don't use `remark-gfm` directly is because we only want to opt into the
+ * specific GFM features the editor supports, rather than enabling all of them at once.
  *
  * @param options Configuration options for the plugin.
  */
 function remarkStrikethrough(this: Processor, options: Options = {}) {
     const data = this.data()
 
-    const micromarkExtensions = data.micromarkExtensions || (data.micromarkExtensions = [])
-    const fromMarkdownExtensions = data.fromMarkdownExtensions || (data.fromMarkdownExtensions = [])
-    const toMarkdownExtensions = data.toMarkdownExtensions || (data.toMarkdownExtensions = [])
+    const micromarkExtensions = data.micromarkExtensions ?? (data.micromarkExtensions = [])
+    const fromMarkdownExtensions = data.fromMarkdownExtensions ?? (data.fromMarkdownExtensions = [])
+    const toMarkdownExtensions = data.toMarkdownExtensions ?? (data.toMarkdownExtensions = [])
 
     micromarkExtensions.push(gfmStrikethrough(options))
     fromMarkdownExtensions.push(gfmStrikethroughFromMarkdown())

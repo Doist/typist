@@ -48,7 +48,7 @@ function remarkDisableConstructs(this: Processor, schema: Schema) {
         disabledConstructs.push('labelStartLink')
     }
 
-    const micromarkExtensions = data.micromarkExtensions || (data.micromarkExtensions = [])
+    const micromarkExtensions = data.micromarkExtensions ?? (data.micromarkExtensions = [])
 
     // https://github.com/micromark/micromark#case-turn-off-constructs
     micromarkExtensions.push({

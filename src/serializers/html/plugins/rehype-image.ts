@@ -21,7 +21,7 @@ function rehypeImage(schema: Schema): Transformer {
         return (tree) => tree
     }
 
-    return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
+    return (tree: HastNode) => {
         visit(tree, 'element', (node: HastNode, index: number, parent: HastParent) => {
             if (isHastElementNode(node, 'p')) {
                 const areAllChildrenImages = node.children.every((c) => isHastElementNode(c, 'img'))

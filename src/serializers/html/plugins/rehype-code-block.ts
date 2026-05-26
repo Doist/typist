@@ -12,7 +12,7 @@ import type { Transformer } from 'unified'
  * the end of the code block.
  */
 function rehypeCodeBlock(): Transformer {
-    return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
+    return (tree: HastNode) => {
         visit(tree, 'element', (node: HastNode) => {
             if (
                 isHastElementNode(node, 'pre') &&
