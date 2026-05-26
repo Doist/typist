@@ -49,10 +49,6 @@ cd typist
 
 3. Install all dependencies by running `npm install`;
 
-    > **Note**
-    >
-    > If you're not using **npm 7+**, install peer dependencies with `npx npm-install-peers`.
-
 ## Development Workflow
 
 After cloning Typist and installing all dependencies, several commands are at your disposal:
