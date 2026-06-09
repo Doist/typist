@@ -1,3 +1,14 @@
+## [13.0.0](https://github.com/Doist/typist/compare/v12.0.0...v13.0.0) (2026-06-09)
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** the minimum supported Node.js on the 24.x line is now 24.11.0
+(was 24.10.0). The 22.x LTS floor is unchanged.
+
+### Miscellaneous Chores
+
+* **deps:** update dependency tsdown to v0.22.2 ([#1370](https://github.com/Doist/typist/issues/1370)) ([0924428](https://github.com/Doist/typist/commit/0924428973e7b2aea29b0b144c3730cf7fc26be5))
+
 ## [12.0.0](https://github.com/Doist/typist/compare/v11.0.1...v12.0.0) (2026-05-26)
 
 ### ⚠ BREAKING CHANGES
