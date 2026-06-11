@@ -1,3 +1,9 @@
+## [13.0.1](https://github.com/Doist/typist/compare/v13.0.0...v13.0.1) (2026-06-11)
+
+### Bug Fixes
+
+* replace wrapping empty textblock when inserting block-only Markdown content ([#1372](https://github.com/Doist/typist/issues/1372)) ([9ed9697](https://github.com/Doist/typist/commit/9ed969732647541c15c4548df4da20af92ccfe31))
+
 ## [13.0.0](https://github.com/Doist/typist/compare/v12.0.0...v13.0.0) (2026-06-09)
 
 ### ⚠ BREAKING CHANGES
