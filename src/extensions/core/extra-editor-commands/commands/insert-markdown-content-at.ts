@@ -62,7 +62,7 @@ function insertMarkdownContentAt(
             }
 
             // Get the start and end positions from the provided position
-            const { from, to } =
+            let { from, to } =
                 typeof position === 'number'
                     ? { from: position, to: position }
                     : { from: position.from, to: position.to }
@@ -73,6 +73,30 @@ function insertMarkdownContentAt(
                 parseHtmlToElement(htmlContent),
                 options.parseOptions,
             )
+
+            // Check if the parsed content is non-empty and composed of block nodes only (the
+            // initial value guards against an empty insert deleting the wrapping textblock below)
+            let isOnlyBlockContent = content.content.childCount > 0
+
+            content.content.forEach((node) => {
+                isOnlyBlockContent = isOnlyBlockContent ? node.isBlock : false
+            })
+
+            // Expand the insertion range to replace the wrapping empty textblock when only block
+            // content is inserted at a cursor position, mirroring the official `insertContentAt`
+            // command behaviour (e.g., a table pasted into an empty paragraph should replace the
+            // paragraph, instead of keeping the empty paragraph below the table)
+            if (from === to && isOnlyBlockContent) {
+                const { parent } = tr.doc.resolve(from)
+
+                const isEmptyTextBlock =
+                    parent.isTextblock && !parent.type.spec.code && !parent.childCount
+
+                if (isEmptyTextBlock) {
+                    from -= 1
+                    to += 1
+                }
+            }
 
             // Inserts the content into the editor while preserving the current selection
             tr.replaceRange(from, to, content)
