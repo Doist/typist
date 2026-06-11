@@ -188,6 +188,52 @@ div + .editorContainer {
 }
 
 /*
+ * GapCursor (used when the cursor is at a position without text, e.g. after a trailing image or
+ * table): the default `position: absolute` from the Tiptap injected styles makes browsers render
+ * the cursor at the static position of the previous block (e.g. the top-left corner of a table),
+ * while `position: relative` keeps the zero-height cursor element in the normal document flow,
+ * rendering it exactly at the gap it represents. The selector is scoped to the editor element to
+ * win in specificity over the Tiptap injected styles, which are appended to `<head>` after these.
+ */
+:global(div[data-typist-editor] .ProseMirror-gapcursor) {
+    position: relative;
+}
+
+/* Tables */
+:global(div[data-typist-editor] table) {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0 0 1rem;
+}
+
+:global(div[data-typist-editor] :is(th, td)) {
+    border: 1px solid hsl(193, 6%, 80%);
+    box-sizing: border-box;
+    padding: 4px 8px;
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+}
+
+:global(div[data-typist-editor] th) {
+    background: hsl(187, 15%, 93%);
+}
+
+:global(div[data-typist-editor] :is(th, td) p) {
+    margin: 0;
+}
+
+:global(div[data-typist-editor] .selectedCell::after) {
+    background: hsl(193, 50%, 70%, 0.25);
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+}
+
+/*
  * Global custom styles for the `CurvenoteCodemark` extension.
  */
 

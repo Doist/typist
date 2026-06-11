@@ -233,6 +233,27 @@ This is the *[Markdown Guide](https://www.markdownguide.org)*.
 This is the *https://www.markdownguide.org*.
 See the section on [\`code\`](#code).`
 
+const MARKDOWN_INPUT_TABLES = `| Name | Role |
+| --- | --- |
+| Henning | Frontend Head |
+| Ricardo | Frontend Engineer |`
+
+const MARKDOWN_INPUT_TABLES_WITH_STYLED_CELLS = `| Priority | Task |
+| --- | --- |
+| **High** | Fix the *urgent* bug |`
+
+const MARKDOWN_INPUT_TABLES_WITH_ESCAPED_PIPES = `| Shortcut |
+| --- |
+| Cmd \\| Ctrl |`
+
+const MARKDOWN_INPUT_TABLES_WITH_COLUMN_ALIGNMENT = `| Name | Amount |
+| :-- | --: |
+| Apples | 42 |`
+
+const MARKDOWN_INPUT_TABLES_WITH_HARD_BREAKS = `| Name |
+| --- |
+| First line<br>Second line |`
+
 describe('HTML Serializer', () => {
     describe('Singleton Instances', () => {
         describe('when the editor schema for two HTML serializers are the same', () => {
@@ -840,6 +861,58 @@ See the section on [\`code\`](#code).</p>`)
 
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_TASK_LISTS)).toBe(
                     '<ul data-type="taskList"><li data-type="taskItem" data-checked="false">First item</li><li data-type="taskItem" data-checked="true">Second item</li><li data-type="taskItem" data-checked="true">Third item</li><li data-type="taskItem" data-checked="false">Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="true">First item</li><li data-type="taskItem" data-checked="false">Second item</li><li data-type="taskItem" data-checked="false">Third item</li><li data-type="taskItem" data-checked="true">Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="true">First item</li><li data-type="taskItem" data-checked="false">Second item</li><li data-type="taskItem" data-checked="true">Third item</li><li data-type="taskItem" data-checked="false">Fourth item</li></ul><hr><ul><li>First item</li><li>Second item</li><li>Third item<ul data-type="taskList"><li data-type="taskItem" data-checked="false">Indented item</li><li data-type="taskItem" data-checked="false">Indented item</li></ul></li><li>Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="false">1968. A great year!</li><li data-type="taskItem" data-checked="true">I think 1969 was second best.</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="false">This is the first list item.</li><li data-type="taskItem" data-checked="false">Here\'s the second list item.<br>I need to add another paragraph below the second list item.</li><li data-type="taskItem" data-checked="false">And here\'s the third list item.</li></ul>',
+                )
+            })
+        })
+
+        describe('with the default `table` extension', () => {
+            test('tables HTML output is correct', () => {
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
+
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES)).toBe(
+                    '<table><thead><tr><th>Name</th><th>Role</th></tr></thead><tbody><tr><td>Henning</td><td>Frontend Head</td></tr><tr><td>Ricardo</td><td>Frontend Engineer</td></tr></tbody></table>',
+                )
+            })
+
+            test('tables with styled cells HTML output is correct', () => {
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
+
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES_WITH_STYLED_CELLS)).toBe(
+                    '<table><thead><tr><th>Priority</th><th>Task</th></tr></thead><tbody><tr><td><strong>High</strong></td><td>Fix the <em>urgent</em> bug</td></tr></tbody></table>',
+                )
+            })
+
+            test('escaped pipe characters within table cells HTML output is correct', () => {
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
+
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES_WITH_ESCAPED_PIPES)).toBe(
+                    '<table><thead><tr><th>Shortcut</th></tr></thead><tbody><tr><td>Cmd | Ctrl</td></tr></tbody></table>',
+                )
+            })
+
+            test('tables with column alignment HTML output is correct', () => {
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
+
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES_WITH_COLUMN_ALIGNMENT)).toBe(
+                    '<table><thead><tr><th align="left">Name</th><th align="right">Amount</th></tr></thead><tbody><tr><td align="left">Apples</td><td align="right">42</td></tr></tbody></table>',
+                )
+            })
+
+            test('hard breaks within table cells HTML output is correct', () => {
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
+
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES_WITH_HARD_BREAKS)).toBe(
+                    '<table><thead><tr><th>Name</th></tr></thead><tbody><tr><td>First line<br>Second line</td></tr></tbody></table>',
+                )
+            })
+
+            test('tables Markdown syntax is ignored when the `table` extension is disabled', () => {
+                const htmlSerializer = createHTMLSerializer(
+                    getSchema([RichTextKit.configure({ table: false })]),
+                )
+
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES)).toBe(
+                    '<p>| Name | Role |<br>| --- | --- |<br>| Henning | Frontend Head |<br>| Ricardo | Frontend Engineer |</p>',
                 )
             })
         })

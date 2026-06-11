@@ -9,6 +9,7 @@ import { listItem } from './plugins/list-item'
 import { paragraph } from './plugins/paragraph'
 import { strikethrough } from './plugins/strikethrough'
 import { suggestion } from './plugins/suggestion'
+import { table } from './plugins/table'
 import { taskItem } from './plugins/task-item'
 
 import type { Schema } from '@tiptap/pm/model'
@@ -148,6 +149,23 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
     // Add a rule for `strikethrough` if the corresponding node exists in the schema
     if (schema.marks.strike) {
         turndown.use(strikethrough(schema.marks.strike))
+    }
+
+    // Add rules for `table` if the corresponding nodes exists in the schema
+    if (
+        schema.nodes.table &&
+        schema.nodes.tableRow &&
+        schema.nodes.tableHeader &&
+        schema.nodes.tableCell
+    ) {
+        turndown.use(
+            table({
+                table: schema.nodes.table,
+                tableRow: schema.nodes.tableRow,
+                tableHeader: schema.nodes.tableHeader,
+                tableCell: schema.nodes.tableCell,
+            }),
+        )
     }
 
     // Add a rule for `taskItem` if the corresponding nodes exists in the schema

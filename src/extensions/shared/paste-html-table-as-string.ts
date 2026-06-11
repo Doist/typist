@@ -52,11 +52,10 @@ function transformPastedHTML(html: string): string {
 /**
  * The `PasteHTMLTableAsString` extension adds the ability to paste a table copied from a spreadsheet
  * web app (e.g., Google Sheets, Microsoft Excel), along with tables rendered by GitHub Flavored
- * Markdown (GFM), into the editor.
+ * Markdown (GFM), into a plain-text editor.
  *
- * Since Typist does not yet support tables, this extension simply pastes the table as a string of
- * paragraphs (one paragraph per row), with each cell separated by a space character. However,
- * whenever we do add support for tables, this extension will need to be completely rewritten.
+ * Since plain-text documents cannot represent tables, this extension simply pastes the table as a
+ * string of paragraphs (one paragraph per row), with each cell separated by a space character.
  *
  * Lastly, please note that formatting is lost when the copied table comes from Google Sheets or
  * Microsoft Excel, because unfortunately, these apps style the cell contents using CSS.

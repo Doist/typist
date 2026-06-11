@@ -242,6 +242,20 @@ const HTML_INPUT_PONCTUATION_CHARACTERS = `<p>\\' text \\'</p>
 <p>\\} text \\}</p>
 <p>\\~ text \\~</p>`
 
+const HTML_INPUT_TABLES = `<table style="min-width: 50px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th><p>Name</p></th><th><p>Role</p></th></tr><tr><td><p>Henning</p></td><td><p>Frontend Head</p></td></tr><tr><td><p>Ricardo</p></td><td><p>Frontend Engineer</p></td></tr></tbody></table>`
+
+const HTML_INPUT_TABLES_WITH_STYLED_CELLS = `<table><tbody><tr><th><p>Priority</p></th><th><p>Task</p></th></tr><tr><td><p><strong>High</strong></p></td><td><p>Fix the <em>urgent</em> bug</p></td></tr></tbody></table>`
+
+const HTML_INPUT_TABLES_WITH_PIPES = `<table><tbody><tr><th><p>Shortcut</p></th></tr><tr><td><p>Cmd | Ctrl</p></td></tr></tbody></table>`
+
+const HTML_INPUT_TABLES_WITH_COLUMN_ALIGNMENT = `<table><thead><tr><th align="left">Name</th><th align="right">Amount</th></tr></thead><tbody><tr><td align="left">Apples</td><td align="right">42</td></tr></tbody></table>`
+
+const HTML_INPUT_TABLES_WITH_THEAD = `<table><thead><tr><th>Name</th><th>Role</th></tr></thead><tbody><tr><td>Henning</td><td>Frontend Head</td></tr></tbody></table>`
+
+const HTML_INPUT_TABLES_WITHOUT_HEADING_ROW = `<table><tbody><tr><td><p>One</p><p>Two</p></td><td></td></tr></tbody></table>`
+
+const HTML_INPUT_TABLES_WITH_HARD_BREAKS = `<table><tbody><tr><th><p>Name</p></th></tr><tr><td><p>First line<br>Second line</p></td></tr></tbody></table>`
+
 describe('Markdown Serializer', () => {
     describe('Singleton Instances', () => {
         describe('when the editor schema for two Markdown serializers are the same', () => {
@@ -940,6 +954,71 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
 - [ ] Here's the second list item.
     I need to add another paragraph below the second list item.
 - [ ] And here's the third list item.`,
+                )
+            })
+        })
+
+        describe('with the default `table` extension', () => {
+            let markdownSerializer: MarkdownSerializerReturnType
+
+            beforeEach(() => {
+                markdownSerializer = createMarkdownSerializer(getSchema([RichTextKit]))
+            })
+
+            test('tables Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_TABLES)).toBe(
+                    `| Name | Role |
+| --- | --- |
+| Henning | Frontend Head |
+| Ricardo | Frontend Engineer |`,
+                )
+            })
+
+            test('tables with styled cells Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_STYLED_CELLS)).toBe(
+                    `| Priority | Task |
+| --- | --- |
+| **High** | Fix the *urgent* bug |`,
+                )
+            })
+
+            test('pipe characters within table cells are escaped', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_PIPES)).toBe(
+                    `| Shortcut |
+| --- |
+| Cmd \\| Ctrl |`,
+                )
+            })
+
+            test('column alignment attributes are ignored in the Markdown output', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_COLUMN_ALIGNMENT)).toBe(
+                    `| Name | Amount |
+| --- | --- |
+| Apples | 42 |`,
+                )
+            })
+
+            test('tables with a heading row inside a `<thead>` element Markdown output is correct', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_THEAD)).toBe(
+                    `| Name | Role |
+| --- | --- |
+| Henning | Frontend Head |`,
+                )
+            })
+
+            test('tables without a heading row are serialized with an empty heading row', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITHOUT_HEADING_ROW)).toBe(
+                    `|  |  |
+| --- | --- |
+| One Two |  |`,
+                )
+            })
+
+            test('hard breaks within table cells are serialized as `<br>` elements', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_HARD_BREAKS)).toBe(
+                    `| Name |
+| --- |
+| First line<br>Second line |`,
                 )
             })
         })
