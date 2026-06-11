@@ -67,7 +67,8 @@ type RichTextKitOptions = {
     bold: Partial<BoldOptions> | false
 
     /**
-     * Set options for the `BulletList` extension, or `false` to disable.
+     * Set options for the `BulletList` extension, or `false` to disable. This extension is always
+     * disabled when the `paragraph` option is disabled.
      */
     bulletList: Partial<RichTextBulletListOptions> | false
 
@@ -132,17 +133,20 @@ type RichTextKitOptions = {
     link: Partial<RichTextLinkOptions> | false
 
     /**
-     * Set options for the `ListItem` extension, or `false` to disable.
+     * Set options for the `ListItem` extension, or `false` to disable. This extension is always
+     * disabled when the `paragraph` option is disabled.
      */
     listItem: Partial<ListItemOptions> | false
 
     /**
-     * Set options for the `ListKeymap` extension, or `false` to disable.
+     * Set options for the `ListKeymap` extension, or `false` to disable. This extension is always
+     * disabled when the `paragraph` option is disabled.
      */
     listKeymap: Partial<ListKeymapOptions> | false
 
     /**
-     * Set options for the `OrderedList` extension, or `false` to disable.
+     * Set options for the `OrderedList` extension, or `false` to disable. This extension is always
+     * disabled when the `paragraph` option is disabled.
      */
     orderedList: Partial<RichTextOrderedListOptions> | false
 
@@ -209,7 +213,10 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
             extensions.push(Bold.configure(this.options?.bold))
         }
 
-        if (this.options.bulletList !== false) {
+        // List items are restricted to paragraph-first content (i.e. `'paragraph block*'`), so a
+        // schema with list nodes but no `paragraph` node would throw during schema creation, which
+        // is why all list extensions are skipped when the `Paragraph` extension is disabled
+        if (this.options.bulletList !== false && this.options.paragraph !== false) {
             extensions.push(RichTextBulletList.configure(this.options?.bulletList))
         }
 
@@ -301,15 +308,15 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
             extensions.push(RichTextLink.configure(this.options?.link))
         }
 
-        if (this.options.listItem !== false) {
+        if (this.options.listItem !== false && this.options.paragraph !== false) {
             extensions.push(ListItem.configure(this.options?.listItem))
         }
 
-        if (this.options.listKeymap !== false) {
+        if (this.options.listKeymap !== false && this.options.paragraph !== false) {
             extensions.push(ListKeymap.configure(this.options?.listKeymap))
         }
 
-        if (this.options.orderedList !== false) {
+        if (this.options.orderedList !== false && this.options.paragraph !== false) {
             extensions.push(RichTextOrderedList.configure(this.options?.orderedList))
         }
 

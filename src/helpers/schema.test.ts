@@ -64,5 +64,11 @@ describe('Helper: Schema', () => {
                 'link,bold,italic,boldAndItalics,strike,code,paragraph,blockquote,bulletList,codeBlock,doc,hardBreak,heading,horizontalRule,image,listItem,orderedList,text',
             )
         })
+
+        test('returns a string ID without the list extensions when the `Paragraph` extension is disabled', () => {
+            expect(computeSchemaId(getSchema([RichTextKit.configure({ paragraph: false })]))).toBe(
+                'link,bold,italic,boldAndItalics,strike,code,blockquote,codeBlock,doc,hardBreak,heading,horizontalRule,image,text',
+            )
+        })
     })
 })
