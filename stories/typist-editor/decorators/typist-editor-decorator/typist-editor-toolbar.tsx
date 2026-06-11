@@ -254,7 +254,9 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
         },
         {
             'aria-label': 'Insert Table',
-            disabled: !editor.schema.nodes.table,
+            // Disabled when the editor doesn't support tables at all (e.g., singleline
+            // documents), or when the cursor is inside a table (tables cannot be nested)
+            disabled: !editor.schema.nodes.table || isActive(editorState, 'table'),
             icon: <RiTableLine />,
             onClick: handleTableButtonClick,
         },
