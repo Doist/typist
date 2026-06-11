@@ -74,9 +74,10 @@ function insertMarkdownContentAt(
                 options.parseOptions,
             )
 
-            let isOnlyBlockContent = true
+            // Check if the parsed content is non-empty and composed of block nodes only (the
+            // initial value guards against an empty insert deleting the wrapping textblock below)
+            let isOnlyBlockContent = content.content.childCount > 0
 
-            // Check if the parsed content is composed of block nodes only
             content.content.forEach((node) => {
                 isOnlyBlockContent = isOnlyBlockContent ? node.isBlock : false
             })
