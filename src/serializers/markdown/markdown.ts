@@ -164,6 +164,7 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
                 tableRow: schema.nodes.tableRow,
                 tableHeader: schema.nodes.tableHeader,
                 tableCell: schema.nodes.tableCell,
+                hardBreak: schema.nodes.hardBreak,
             }),
         )
     }

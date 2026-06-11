@@ -5,12 +5,17 @@ import type Turndown from 'turndown'
 
 /**
  * The node types required by the table rules for tags and names detection.
+ *
+ * The `hardBreak` node type is optional because hard breaks may not be available in the editor
+ * schema, in which case hard breaks within table cells are serialized with the built-in Turndown
+ * rule.
  */
 type TableNodeTypes = {
     table: NodeType
     tableRow: NodeType
     tableHeader: NodeType
     tableCell: NodeType
+    hardBreak?: NodeType
 }
 
 /**
@@ -157,17 +162,21 @@ function table(nodeTypes: TableNodeTypes): Turndown.Plugin {
         // Serialize hard breaks inside table cells as literal `<br>` elements (instead of the
         // built-in trailing double space followed by a newline), since the GFM table syntax
         // cannot represent multiple lines within a cell, while raw `<br>` elements are rendered
-        // as line breaks by GFM, and parsed back into hard breaks by the HTML serializer
-        const cellSelector = [...headerTags, ...cellTags].join(', ')
+        // as line breaks by GFM, and parsed back into hard breaks by the HTML serializer (the
+        // rule is skipped when the schema doesn't support hard breaks, matching the HTML
+        // serializer, which only restores `<br>` elements when the schema supports them)
+        if (nodeTypes.hardBreak) {
+            const cellSelector = [...headerTags, ...cellTags].join(', ')
 
-        turndown.addRule('tableCellHardBreak', {
-            filter(node) {
-                return node.nodeName === 'BR' && node.closest(cellSelector) !== null
-            },
-            replacement() {
-                return '<br>'
-            },
-        })
+            turndown.addRule('tableCellHardBreak', {
+                filter(node) {
+                    return node.nodeName === 'BR' && node.closest(cellSelector) !== null
+                },
+                replacement() {
+                    return '<br>'
+                },
+            })
+        }
     }
 }
 
