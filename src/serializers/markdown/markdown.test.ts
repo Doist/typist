@@ -258,6 +258,8 @@ const HTML_INPUT_TABLES_WITH_HARD_BREAKS = `<table><tbody><tr><th><p>Name</p></t
 
 const HTML_INPUT_TABLES_WITH_STYLED_HARD_BREAKS = `<table><tbody><tr><th><p>Name</p></th></tr><tr><td><p><strong>First line<br>Second line</strong></p></td></tr></tbody></table>`
 
+const HTML_INPUT_TABLES_WITH_BR_TEXT = `<table><tbody><tr><th><p>Tip</p></th></tr><tr><td><p>Use &lt;br&gt; to break</p></td></tr></tbody></table>`
+
 describe('Markdown Serializer', () => {
     describe('Singleton Instances', () => {
         describe('when the editor schema for two Markdown serializers are the same', () => {
@@ -1031,6 +1033,14 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
                     `| Name |
 | --- |
 | **First line<br>Second line** |`,
+                )
+            })
+
+            test('literal `<br>` text within table cells is escaped', () => {
+                expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_BR_TEXT)).toBe(
+                    `| Tip |
+| --- |
+| Use \\<br> to break |`,
                 )
             })
         })

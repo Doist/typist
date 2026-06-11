@@ -258,6 +258,10 @@ const MARKDOWN_INPUT_TABLES_WITH_STYLED_HARD_BREAKS = `| Name |
 | --- |
 | **First line<br>Second line** |`
 
+const MARKDOWN_INPUT_TABLES_WITH_BR_TEXT = `| Tip |
+| --- |
+| Use \\<br> to break |`
+
 describe('HTML Serializer', () => {
     describe('Singleton Instances', () => {
         describe('when the editor schema for two HTML serializers are the same', () => {
@@ -917,6 +921,14 @@ See the section on [\`code\`](#code).</p>`)
                     htmlSerializer.serialize(MARKDOWN_INPUT_TABLES_WITH_STYLED_HARD_BREAKS),
                 ).toBe(
                     '<table><thead><tr><th>Name</th></tr></thead><tbody><tr><td><strong>First line<br>Second line</strong></td></tr></tbody></table>',
+                )
+            })
+
+            test('escaped `<br>` text within table cells HTML output is correct', () => {
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
+
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES_WITH_BR_TEXT)).toBe(
+                    '<table><thead><tr><th>Tip</th></tr></thead><tbody><tr><td>Use &lt;br> to break</td></tr></tbody></table>',
                 )
             })
 

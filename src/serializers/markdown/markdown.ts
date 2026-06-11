@@ -128,6 +128,11 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
                     // make sure that text context that matches the ordered list syntax is
                     // correctly escaped in order to be interpreted as text.
                     .replace(/^(\d+)\.(\s.+|$)/, '$1\\.$2')
+
+                    // Escape text that looks like a `<br>` element so that it isn't confused
+                    // with the literal `<br>` elements the table plugin emits for hard breaks
+                    // within table cells (which the HTML serializer restores into hard breaks)
+                    .replace(/<(br\s*\/?)>/gi, '\\<$1>')
             )
         }
     }
