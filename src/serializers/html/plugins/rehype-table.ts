@@ -21,16 +21,25 @@ function rehypeTable(): Transformer {
                 return
             }
 
-            // Replace raw `<br>` nodes (which would otherwise be output as escaped text) with
-            // actual hard break elements
-            node.children = node.children.map((child) =>
-                child.type === 'raw' &&
-                'value' in child &&
-                typeof child.value === 'string' &&
-                /^<br\s*\/?>$/.test(child.value)
-                    ? { type: 'element', tagName: 'br', properties: {}, children: [] }
-                    : child,
-            )
+            // Replace raw `<br>` nodes at any depth within the cell (which would otherwise be
+            // output as escaped text) with actual hard break elements (e.g., a hard break inside
+            // styled text is nested within the mark element), mutating only the matching nodes
+            visit(node, 'raw', (raw, index, parent) => {
+                if (
+                    parent &&
+                    typeof index === 'number' &&
+                    'value' in raw &&
+                    typeof raw.value === 'string' &&
+                    /^<br\s*\/?>$/.test(raw.value)
+                ) {
+                    parent.children[index] = {
+                        type: 'element',
+                        tagName: 'br',
+                        properties: {},
+                        children: [],
+                    }
+                }
+            })
         })
 
         return tree

@@ -256,6 +256,8 @@ const HTML_INPUT_TABLES_WITHOUT_HEADING_ROW = `<table><tbody><tr><td><p>One</p><
 
 const HTML_INPUT_TABLES_WITH_HARD_BREAKS = `<table><tbody><tr><th><p>Name</p></th></tr><tr><td><p>First line<br>Second line</p></td></tr></tbody></table>`
 
+const HTML_INPUT_TABLES_WITH_STYLED_HARD_BREAKS = `<table><tbody><tr><th><p>Name</p></th></tr><tr><td><p><strong>First line<br>Second line</strong></p></td></tr></tbody></table>`
+
 describe('Markdown Serializer', () => {
     describe('Singleton Instances', () => {
         describe('when the editor schema for two Markdown serializers are the same', () => {
@@ -1019,6 +1021,16 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
                     `| Name |
 | --- |
 | First line<br>Second line |`,
+                )
+            })
+
+            test('hard breaks within styled table cells are serialized as `<br>` elements', () => {
+                expect(
+                    markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_STYLED_HARD_BREAKS),
+                ).toBe(
+                    `| Name |
+| --- |
+| **First line<br>Second line** |`,
                 )
             })
         })
