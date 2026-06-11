@@ -180,7 +180,8 @@ type RichTextKitOptions = {
      *
      * Note that table cells are restricted to a single paragraph of content, since the GFM table
      * syntax cannot represent multiple blocks within a cell. Additionally, tables are always
-     * disabled in singleline documents, since they serialize to multiple lines of Markdown.
+     * disabled in singleline documents (since they serialize to multiple lines of Markdown), and
+     * when the `paragraph` option is disabled (since table cells require paragraph content).
      */
     table: Partial<RichTextTableOptions> | false
 
@@ -330,7 +331,14 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         const isSinglelineDocument =
             this.options.document !== false && this.options.document?.multiline === false
 
-        if (this.options.table !== false && !isSinglelineDocument) {
+        // Tables also require the `Paragraph` extension because table cells are restricted to
+        // paragraph content, and a schema with table nodes referencing a missing `paragraph`
+        // node would throw during schema creation
+        if (
+            this.options.table !== false &&
+            this.options.paragraph !== false &&
+            !isSinglelineDocument
+        ) {
             extensions.push(
                 RichTextTable.configure(this.options?.table),
                 TableRow,
