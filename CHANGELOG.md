@@ -1,3 +1,36 @@
+## [14.0.0](https://github.com/Doist/typist/compare/v13.0.1...v14.0.0) (2026-06-12)
+
+### ⚠ BREAKING CHANGES
+
+* Tables are now enabled by default in the RichTextKit
+(disable with `table: false`), which means Markdown content with GFM
+pipe-table syntax now renders as native tables in the editor.
+Additionally, the `PasteHTMLTableAsString` extension is no longer
+registered by the RichTextKit (pasted tables become native tables),
+and as such the `pasteHTMLTableAsString` option was removed from
+`RichTextKitOptions` (the extension is still registered by the
+PlainTextKit, where its option remains available).
+
+* fix: do not register table extensions when the paragraph extension is disabled
+
+* fix: restore hard breaks nested within styled text in table cells
+
+* fix: skip the table cell hard break rule for schemas without hard breaks
+
+* fix: escape text that looks like a br element in the Markdown output
+
+* fix: disable the table toolbar button when the cursor is inside a table
+
+* test: cover the table extensions exclusion in singleline documents
+
+* fix: add a heading row to pasted tables without one
+
+* fix: keep table extensions registered when the paragraph option is disabled
+
+### Features
+
+* add GFM table support to the rich-text editor ([#1373](https://github.com/Doist/typist/issues/1373)) ([bdcab2d](https://github.com/Doist/typist/commit/bdcab2d7184daefd8a6fdb430be9eb0b7624b431))
+
 ## [13.0.1](https://github.com/Doist/typist/compare/v13.0.0...v13.0.1) (2026-06-11)
 
 ### Bug Fixes
