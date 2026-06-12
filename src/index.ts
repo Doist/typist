@@ -34,6 +34,7 @@ export { isMultilineDocument, isPlainTextDocument } from './helpers/schema'
 export { createHTMLSerializer, getHTMLSerializerInstance } from './serializers/html/html'
 export { remarkAutolinkLiteral } from './serializers/html/plugins/remark-autolink-literal'
 export { remarkStrikethrough } from './serializers/html/plugins/remark-strikethrough'
+export { remarkTable } from './serializers/html/plugins/remark-table'
 export {
     createMarkdownSerializer,
     getMarkdownSerializerInstance,
