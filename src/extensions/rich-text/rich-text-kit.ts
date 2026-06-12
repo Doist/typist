@@ -11,12 +11,14 @@ import { Italic } from '@tiptap/extension-italic'
 import { ListItem } from '@tiptap/extension-list-item'
 import { ListKeymap } from '@tiptap/extension-list-keymap'
 import { Paragraph } from '@tiptap/extension-paragraph'
+import { TableCell } from '@tiptap/extension-table-cell'
+import { TableHeader } from '@tiptap/extension-table-header'
+import { TableRow } from '@tiptap/extension-table-row'
 import { Text } from '@tiptap/extension-text'
 import { Typography } from '@tiptap/extension-typography'
 
 import { BLOCKQUOTE_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
 import { CopyMarkdownSource } from '../shared/copy-markdown-source'
-import { PasteHTMLTableAsString } from '../shared/paste-html-table-as-string'
 import { PasteSinglelineText } from '../shared/paste-singleline-text'
 
 import { BoldAndItalics } from './bold-and-italics'
@@ -31,6 +33,7 @@ import { RichTextImage } from './rich-text-image'
 import { RichTextLink } from './rich-text-link'
 import { RichTextOrderedList } from './rich-text-ordered-list'
 import { RichTextStrikethrough } from './rich-text-strikethrough'
+import { RichTextTable } from './rich-text-table'
 
 import type { Extensions } from '@tiptap/core'
 import type { BlockquoteOptions } from '@tiptap/extension-blockquote'
@@ -51,6 +54,7 @@ import type { RichTextImageOptions } from './rich-text-image'
 import type { RichTextLinkOptions } from './rich-text-link'
 import type { RichTextOrderedListOptions } from './rich-text-ordered-list'
 import type { RichTextStrikethroughOptions } from './rich-text-strikethrough'
+import type { RichTextTableOptions } from './rich-text-table'
 
 /**
  * The options available to customize the `RichTextKit` extension.
@@ -167,14 +171,19 @@ type RichTextKitOptions = {
     pasteSinglelineText: false
 
     /**
-     * Set to `false` to disable the `PasteHTMLTableAsString` extension.
-     */
-    pasteHTMLTableAsString: false
-
-    /**
      * Set options for the `Strike` extension, or `false` to disable.
      */
     strike: Partial<RichTextStrikethroughOptions> | false
+
+    /**
+     * Set options for the `Table` extension, or `false` to disable.
+     *
+     * Note that table cells are restricted to a single paragraph of content, since the GFM table
+     * syntax cannot represent multiple blocks within a cell (which also means that tables require
+     * a `paragraph` node in the editor schema). Additionally, tables are always disabled in
+     * singleline documents, since they serialize to multiple lines of Markdown.
+     */
+    table: Partial<RichTextTableOptions> | false
 
     /**
      * Set to `false` to disable the `Text` extension.
@@ -254,11 +263,6 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
                 // pasted lines together
                 extensions.push(PasteSinglelineText)
             }
-
-            if (this.options?.pasteHTMLTableAsString !== false) {
-                // Supports pasting tables (from spreadsheets and websites) into the editor
-                extensions.push(PasteHTMLTableAsString)
-            }
         }
 
         if (this.options.dropCursor !== false) {
@@ -319,6 +323,25 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
 
         if (this.options.strike !== false) {
             extensions.push(RichTextStrikethrough.configure(this.options?.strike))
+        }
+
+        // Tables are not supported in singleline documents because, although a table is a single
+        // block node (which would technically fit the singleline schema), it serializes to
+        // multiple lines of Markdown, breaking the singleline contract
+        const isSinglelineDocument =
+            this.options.document !== false && this.options.document?.multiline === false
+
+        if (this.options.table !== false && !isSinglelineDocument) {
+            extensions.push(
+                RichTextTable.configure(this.options?.table),
+                TableRow,
+
+                // Restrict cells to a single paragraph (instead of one or more blocks), since the
+                // GFM table syntax cannot represent multiple blocks within a cell, ensuring the
+                // editor cannot produce tables that lose content when serialized to Markdown
+                TableHeader.extend({ content: 'paragraph' }),
+                TableCell.extend({ content: 'paragraph' }),
+            )
         }
 
         if (this.options.text !== false) {

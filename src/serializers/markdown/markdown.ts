@@ -9,6 +9,7 @@ import { listItem } from './plugins/list-item'
 import { paragraph } from './plugins/paragraph'
 import { strikethrough } from './plugins/strikethrough'
 import { suggestion } from './plugins/suggestion'
+import { table } from './plugins/table'
 import { taskItem } from './plugins/task-item'
 
 import type { Schema } from '@tiptap/pm/model'
@@ -127,6 +128,11 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
                     // make sure that text context that matches the ordered list syntax is
                     // correctly escaped in order to be interpreted as text.
                     .replace(/^(\d+)\.(\s.+|$)/, '$1\\.$2')
+
+                    // Escape text that looks like a `<br>` element so that it isn't confused
+                    // with the literal `<br>` elements the table plugin emits for hard breaks
+                    // within table cells (which the HTML serializer restores into hard breaks)
+                    .replace(/<(br\s*\/?)>/gi, '\\<$1>')
             )
         }
     }
@@ -148,6 +154,24 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
     // Add a rule for `strikethrough` if the corresponding node exists in the schema
     if (schema.marks.strike) {
         turndown.use(strikethrough(schema.marks.strike))
+    }
+
+    // Add rules for `table` if the corresponding nodes exists in the schema
+    if (
+        schema.nodes.table &&
+        schema.nodes.tableRow &&
+        schema.nodes.tableHeader &&
+        schema.nodes.tableCell
+    ) {
+        turndown.use(
+            table({
+                table: schema.nodes.table,
+                tableRow: schema.nodes.tableRow,
+                tableHeader: schema.nodes.tableHeader,
+                tableCell: schema.nodes.tableCell,
+                hardBreak: schema.nodes.hardBreak,
+            }),
+        )
     }
 
     // Add a rule for `taskItem` if the corresponding nodes exists in the schema

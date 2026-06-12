@@ -54,6 +54,20 @@ div[data-typist-editor] > p.is-editor-empty:first-child::before {
 }
 ```
 
+## Gap Cursor
+
+The `RichTextKit` includes the `Gapcursor` extension, which renders a cursor at positions that don't allow regular text selection (e.g., after a trailing image or table). However, with the default styles, browsers render the gap cursor at the static position of the previous block (e.g., the top-left corner of a table), instead of at the gap it represents. To render the gap cursor in the correct position, the default `position` needs to be overridden:
+
+```css
+div[data-typist-editor] .ProseMirror-gapcursor {
+    position: relative;
+}
+```
+
+> **Note**
+>
+> The selector must be scoped to the editor element to win in specificity over the Tiptap injected styles, which are appended to `<head>` after your application styles.
+
 ## Plain-text Editor
 
 The `PlainTextKit` works by forcing every content node to be a paragraph, and as you know, browsers usually add a default margin to paragraph elements. To make the editor look and feel more like a true plain-text editor, you may want to reset the paragraph margins:
@@ -119,5 +133,48 @@ div[data-typist-editor] span[data-mention] {
     font-size: 0.9rem;
     font-weight: bold;
     padding: 2px 4px;
+}
+```
+
+### Tables
+
+The `RichTextKit` includes the `Table` extension, although tables are rendered completely unstyled by default. The following is the styling implemented in this Storybook, which should be tweaked to match your application styling:
+
+```css
+div[data-typist-editor] table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0 0 1rem;
+}
+
+div[data-typist-editor] :is(th, td) {
+    border: 1px solid hsl(193, 6%, 80%);
+    box-sizing: border-box;
+    padding: 4px 8px;
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+}
+
+div[data-typist-editor] th {
+    background: hsl(187, 15%, 93%);
+}
+
+div[data-typist-editor] :is(th, td) p {
+    margin: 0;
+}
+```
+
+Additionally, when selecting multiple cells (e.g., by clicking and dragging across them), the selected cells are marked with a `selectedCell` class, which requires some styling for the selection to be visible:
+
+```css
+div[data-typist-editor] .selectedCell::after {
+    background: hsl(193, 50%, 70%, 0.25);
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
 }
 ```

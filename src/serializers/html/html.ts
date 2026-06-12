@@ -15,10 +15,12 @@ import {
 import { rehypeCodeBlock } from './plugins/rehype-code-block'
 import { rehypeImage } from './plugins/rehype-image'
 import { rehypeSuggestions } from './plugins/rehype-suggestions'
+import { rehypeTable } from './plugins/rehype-table'
 import { rehypeTaskList } from './plugins/rehype-task-list'
 import { remarkAutolinkLiteral } from './plugins/remark-autolink-literal'
 import { remarkDisableConstructs } from './plugins/remark-disable-constructs'
 import { remarkStrikethrough } from './plugins/remark-strikethrough'
+import { remarkTable } from './plugins/remark-table'
 
 import type { Schema } from '@tiptap/pm/model'
 
@@ -118,6 +120,12 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
         unifiedProcessor.use(remarkAutolinkLiteral)
     }
 
+    // Configure the unified processor to use a custom plugin to add support for the table
+    // extension from the GitHub Flavored Markdown (GFM) specification
+    if (schema.nodes.table) {
+        unifiedProcessor.use(remarkTable)
+    }
+
     // Configure the unified processor with an official plugin to convert Markdown into HTML to
     // support rehype (a tool that transforms HTML with plugins), followed by another official
     // plugin to minify whitespace between tags (prevents line feeds from appearing as blank)
@@ -143,6 +151,12 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     // images and to remove all inline images based on inline images support in the editor schema
     if (schema.nodes.paragraph && schema.nodes.image) {
         unifiedProcessor.use(rehypeImage, schema)
+    }
+
+    // Configure the unified processor with a custom plugin to restore raw `<br>` elements within
+    // table cells into actual hard break elements
+    if (schema.nodes.table && schema.nodes.hardBreak) {
+        unifiedProcessor.use(rehypeTable)
     }
 
     // Configure the unified processor with a custom plugin to add support Tiptap task lists

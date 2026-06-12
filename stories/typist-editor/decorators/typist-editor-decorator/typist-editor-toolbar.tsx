@@ -26,6 +26,7 @@ import {
     RiParagraph,
     RiSeparator,
     RiStrikethrough,
+    RiTableLine,
     RiTextWrap,
 } from 'react-icons/ri'
 
@@ -98,6 +99,36 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
         }
 
         editor.chain().focus().insertImage({ src: newUrl }).run()
+    }, [editor])
+
+    const handleTableButtonClick = useCallback(() => {
+        const colsInput = window.prompt('Number of columns', '3')
+
+        if (colsInput === null) {
+            editor.commands.focus()
+            return
+        }
+
+        const rowsInput = window.prompt('Number of rows', '3')
+
+        if (rowsInput === null) {
+            editor.commands.focus()
+            return
+        }
+
+        // Fall back to the default size for invalid input (e.g. zero, negative, or non-integer)
+        const cols = Number(colsInput)
+        const rows = Number(rowsInput)
+
+        editor
+            .chain()
+            .focus()
+            .insertTable({
+                rows: Number.isInteger(rows) && rows >= 1 ? rows : 3,
+                cols: Number.isInteger(cols) && cols >= 1 ? cols : 3,
+                withHeaderRow: true,
+            })
+            .run()
     }, [editor])
 
     const buttonConfigs: ToolbarButtonConfig[] = [
@@ -220,6 +251,14 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
             icon: <RiImageLine />,
             withDividerBefore: true,
             onClick: handleImageButtonClick,
+        },
+        {
+            'aria-label': 'Insert Table',
+            // Disabled when the editor doesn't support tables at all (e.g., singleline
+            // documents), or when the cursor is inside a table (tables cannot be nested)
+            disabled: !editor.schema.nodes.table || isActive(editorState, 'table'),
+            icon: <RiTableLine />,
+            onClick: handleTableButtonClick,
         },
         {
             'aria-label': 'Blockquote',
