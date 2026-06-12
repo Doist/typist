@@ -11,22 +11,6 @@ and as such the `pasteHTMLTableAsString` option was removed from
 `RichTextKitOptions` (the extension is still registered by the
 PlainTextKit, where its option remains available).
 
-* fix: do not register table extensions when the paragraph extension is disabled
-
-* fix: restore hard breaks nested within styled text in table cells
-
-* fix: skip the table cell hard break rule for schemas without hard breaks
-
-* fix: escape text that looks like a br element in the Markdown output
-
-* fix: disable the table toolbar button when the cursor is inside a table
-
-* test: cover the table extensions exclusion in singleline documents
-
-* fix: add a heading row to pasted tables without one
-
-* fix: keep table extensions registered when the paragraph option is disabled
-
 ### Features
 
 * add GFM table support to the rich-text editor ([#1373](https://github.com/Doist/typist/issues/1373)) ([bdcab2d](https://github.com/Doist/typist/commit/bdcab2d7184daefd8a6fdb430be9eb0b7624b431))
