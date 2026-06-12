@@ -1,3 +1,9 @@
+## [14.1.0](https://github.com/Doist/typist/compare/v14.0.0...v14.1.0) (2026-06-12)
+
+### Features
+
+* export the `remarkTable` plugin from the package entry point ([#1376](https://github.com/Doist/typist/issues/1376)) ([cd5987f](https://github.com/Doist/typist/commit/cd5987f0c73d75a465c488e38221097db3046f1b))
+
 ## [14.0.0](https://github.com/Doist/typist/compare/v13.0.1...v14.0.0) (2026-06-12)
 
 ### ⚠ BREAKING CHANGES
