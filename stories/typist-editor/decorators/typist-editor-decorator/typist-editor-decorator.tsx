@@ -20,13 +20,13 @@ type TypistEditorPropsWithRef = Partial<
 type TypistEditorDecoratorProps = {
     Story: StoryFunction<Renderer, TypistEditorPropsWithRef>
     args: TypistEditorProps
-    withToolbar?: boolean
+    withRichTextFeatures?: boolean
     bottomFunctions?: React.ReactNode
 }
 
 const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorProps>(
     function TypistEditorDecorator(
-        { Story, args, withToolbar = false, bottomFunctions },
+        { Story, args, withRichTextFeatures = false, bottomFunctions },
         forwardedRef,
     ) {
         const [typistEditor, setTypistEditor] = useState<CoreEditor | null>(null)
@@ -34,7 +34,7 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
 
         const storyClassName = classNames('markdown-body', args.className)
 
-        const shouldRenderToolbar = typistEditor && withToolbar
+        const shouldRenderToolbar = typistEditor && withRichTextFeatures
 
         const handleUpdate = useCallback((props: UpdateProps) => {
             setMarkdownOutput(props.getMarkdown())
