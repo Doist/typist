@@ -61,7 +61,7 @@ export const Commands = meta.story({
                 <TypistEditorDecorator
                     Story={Story}
                     args={context.args}
-                    withToolbar={true}
+                    withRichTextFeatures={true}
                     bottomFunctions={
                         <>
                             <Button variant="secondary" onClick={handleCreateParagraphEndClick}>
@@ -112,7 +112,7 @@ export const Helpers = meta.story({
                 <TypistEditorDecorator
                     Story={Story}
                     args={context.args}
-                    withToolbar={true}
+                    withRichTextFeatures={true}
                     bottomFunctions={
                         <>
                             <Button variant="secondary" onClick={handleGetEditorClick}>

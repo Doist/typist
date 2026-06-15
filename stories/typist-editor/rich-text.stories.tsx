@@ -170,7 +170,7 @@ export const Default = meta.story({
                 <TypistEditorDecorator
                     Story={Story}
                     args={storyArgs}
-                    withToolbar={true}
+                    withRichTextFeatures={true}
                     ref={typistEditorRef}
                 />
             )
@@ -218,7 +218,9 @@ export const Singleline = meta.story({
                 [context.args, handleKeyDown],
             )
 
-            return <TypistEditorDecorator Story={Story} args={storyArgs} withToolbar={true} />
+            return (
+                <TypistEditorDecorator Story={Story} args={storyArgs} withRichTextFeatures={true} />
+            )
         },
     ],
 })
