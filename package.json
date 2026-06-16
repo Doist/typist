@@ -110,7 +110,7 @@
         "unist-util-visit": "5.1.0"
     },
     "devDependencies": {
-        "@doist/reactist": "33.0.1",
+        "@doist/reactist": "33.1.0",
         "@mdx-js/react": "3.1.1",
         "@semantic-release/changelog": "6.0.3",
         "@semantic-release/exec": "7.1.0",
