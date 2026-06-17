@@ -1,3 +1,9 @@
+## [14.1.1](https://github.com/Doist/typist/compare/v14.1.0...v14.1.1) (2026-06-17)
+
+### Bug Fixes
+
+* **serializers:** preserve inline Markdown characters in suggestion labels ([#1384](https://github.com/Doist/typist/issues/1384)) ([b29bb3d](https://github.com/Doist/typist/commit/b29bb3d6a607ce1a5555e3e99e374f3e2e16ba1d))
+
 ## [14.1.0](https://github.com/Doist/typist/compare/v14.0.0...v14.1.0) (2026-06-12)
 
 ### Features
