@@ -416,6 +416,18 @@ Answer: [Doist Frontend](channel://190200)`)
                     'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
                 )
             })
+
+            test('inline Markdown characters in a suggestion label are not escaped', () => {
+                const markdownSerializer = createMarkdownSerializer(
+                    getSchema([PlainTextKit, createSuggestionExtension('channel')]),
+                )
+
+                expect(
+                    markdownSerializer.serialize(
+                        '<p><span data-channel data-id="1" data-label="The future of `code`">#The future of `code`</span></p>',
+                    ),
+                ).toBe('[The future of `code`](channel://1)')
+            })
         })
     })
 
@@ -1100,6 +1112,30 @@ Answer: [Doist Frontend](channel://190200)`)
                 ).toBe(
                     'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
                 )
+            })
+
+            test('inline Markdown characters in a suggestion label are escaped', () => {
+                const markdownSerializer = createMarkdownSerializer(
+                    getSchema([RichTextKit, createSuggestionExtension('channel')]),
+                )
+
+                expect(
+                    markdownSerializer.serialize(
+                        '<p><span data-channel data-id="1" data-label="Use *bold* and _more_">#Use *bold* and _more_</span></p>',
+                    ),
+                ).toBe('[Use \\*bold\\* and \\_more\\_](channel://1)')
+
+                expect(
+                    markdownSerializer.serialize(
+                        '<p><span data-channel data-id="1" data-label="~~struck~~ label">#~~struck~~ label</span></p>',
+                    ),
+                ).toBe('[\\~\\~struck\\~\\~ label](channel://1)')
+
+                expect(
+                    markdownSerializer.serialize(
+                        '<p><span data-channel data-id="1" data-label="a[b]c &lt;x&gt;">#a[b]c &lt;x&gt;</span></p>',
+                    ),
+                ).toBe('[a\\[b\\]c \\<x>](channel://1)')
             })
         })
     })

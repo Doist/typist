@@ -1,7 +1,7 @@
 import { visit } from 'unist-util-visit'
 
 import { buildSuggestionSchemaInfo } from '../../../helpers/serializer'
-import { isHastElementNode, isHastTextNode } from '../../../helpers/unified'
+import { getHastTextContent, isHastElementNode } from '../../../helpers/unified'
 
 import type { Schema } from '@tiptap/pm/model'
 import type { Node as HastNode } from 'hast'
@@ -31,12 +31,16 @@ function rehypeSuggestions(schema: Schema): Transformer {
                 const [, urlScheme, id] =
                     /^([a-z-]+):\/\/(\S+)$/i.exec(String(node.properties?.href)) || []
 
+                // The label is always meant to be plain text, so we flatten the full text content
+                // of the link instead of reading a single child. This keeps the label intact when
+                // the Markdown parser splits it into multiple inline nodes (e.g. a backtick code
+                // span or emphasis within the label).
+                const label = getHastTextContent(node)
+
                 // Replace the link element with a span containing the suggestion attributes,
                 // keeping the visible label (prefixed with the trigger character) as text content
                 // so the span renders correctly when used outside of an editor.
-                if (urlScheme && id && isHastTextNode(node.children[0])) {
-                    const label = node.children[0].value
-
+                if (urlScheme && id && label) {
                     // The URL scheme was matched against the regex built from the same map of
                     // suggestion nodes, so the trigger character is guaranteed to exist
                     const triggerChar = suggestionSchemaInfo.triggerCharByScheme.get(
@@ -49,7 +53,7 @@ function rehypeSuggestions(schema: Schema): Transformer {
                         'data-id': id,
                         'data-label': label,
                     }
-                    node.children[0].value = `${triggerChar}${label}`
+                    node.children = [{ type: 'text', value: `${triggerChar}${label}` }]
                 }
             }
         })
