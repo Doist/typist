@@ -1127,6 +1127,12 @@ Answer: [Doist Frontend](channel://190200)`)
 
                 expect(
                     markdownSerializer.serialize(
+                        '<p><span data-channel data-id="1" data-label="The future of `code`">#The future of `code`</span></p>',
+                    ),
+                ).toBe('[The future of \\`code\\`](channel://1)')
+
+                expect(
+                    markdownSerializer.serialize(
                         '<p><span data-channel data-id="1" data-label="~~struck~~ label">#~~struck~~ label</span></p>',
                     ),
                 ).toBe('[\\~\\~struck\\~\\~ label](channel://1)')
@@ -1136,6 +1142,12 @@ Answer: [Doist Frontend](channel://190200)`)
                         '<p><span data-channel data-id="1" data-label="a[b]c &lt;x&gt;">#a[b]c &lt;x&gt;</span></p>',
                     ),
                 ).toBe('[a\\[b\\]c \\<x>](channel://1)')
+
+                expect(
+                    markdownSerializer.serialize(
+                        '<p><span data-channel data-id="1" data-label="back\\slash">#back\\slash</span></p>',
+                    ),
+                ).toBe('[back\\\\slash](channel://1)')
             })
         })
     })
