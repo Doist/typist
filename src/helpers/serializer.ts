@@ -17,6 +17,22 @@ function getSuggestionUrlScheme(node: NodeType): string {
 }
 
 /**
+ * Backslash-escapes the inline Markdown characters in a suggestion label so that a serialized
+ * suggestion link (e.g. `[label](mention://id)`) parses back to the exact same label. Without it,
+ * characters such as backticks or asterisks in the label would be re-interpreted as Markdown and
+ * truncate the label when the content is parsed again. The escaped characters are backtick code
+ * spans, emphasis, strikethrough, autolinks, and the link brackets themselves. The backslash is
+ * matched first so it is never misread as an escape sequence for the character that follows it.
+ *
+ * @param label The raw suggestion label.
+ *
+ * @returns The label with all inline Markdown characters backslash-escaped.
+ */
+function escapeSuggestionLabel(label: string): string {
+    return label.replace(/[\\`*_~[\]<]/g, '\\$&')
+}
+
+/**
  * Information derived from the suggestion nodes available in the editor schema, used by the
  * HTML serializer to identify and transform suggestion links into spans.
  */
@@ -122,6 +138,7 @@ function extractTagsFromParseRules(
 export {
     buildSuggestionSchemaInfo,
     computeSuggestionTriggerCharsId,
+    escapeSuggestionLabel,
     extractTagsFromParseRules,
     getSuggestionNodes,
     getSuggestionUrlScheme,

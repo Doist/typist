@@ -1,4 +1,4 @@
-import { getSuggestionUrlScheme } from '../../../helpers/serializer'
+import { escapeSuggestionLabel, getSuggestionUrlScheme } from '../../../helpers/serializer'
 
 import type { NodeType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
@@ -8,8 +8,9 @@ import type Turndown from 'turndown'
  * extension factory function.
  *
  * @param nodeType The node object that matches this rule.
+ * @param isPlainText Specifies if the schema represents a plain-text document.
  */
-function suggestion(nodeType: NodeType): Turndown.Plugin {
+function suggestion(nodeType: NodeType, isPlainText: boolean): Turndown.Plugin {
     const attributeType = getSuggestionUrlScheme(nodeType)
 
     return (turndown: Turndown) => {
@@ -21,7 +22,13 @@ function suggestion(nodeType: NodeType): Turndown.Plugin {
                 const label = String((node as Element).getAttribute('data-label'))
                 const id = String((node as Element).getAttribute('data-id'))
 
-                return `[${label}](${attributeType}://${id})`
+                // Rich-text editors parse the label back as inline Markdown, so its Markdown
+                // characters are escaped to keep the label intact across a serialize then parse
+                // round-trip. Plain-text editors keep the label verbatim when parsing it back, so
+                // it must not be escaped.
+                const serializedLabel = isPlainText ? label : escapeSuggestionLabel(label)
+
+                return `[${serializedLabel}](${attributeType}://${id})`
             },
         })
     }

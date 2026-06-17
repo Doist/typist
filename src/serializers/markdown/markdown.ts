@@ -181,7 +181,7 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
 
     // Add a custom rule for all suggestion nodes available in the schema
     getSuggestionNodes(schema).forEach((suggestionNode) => {
-        turndown.use(suggestion(suggestionNode))
+        turndown.use(suggestion(suggestionNode, isPlainTextDocument(schema)))
     })
 
     // Return a normalized `serialize` function

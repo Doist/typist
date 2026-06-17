@@ -992,6 +992,38 @@ Answer: [Doist Frontend](channel://190200)`),
                     '<p>Hey <span data-mention="" data-id="123" data-label="Alice">@Alice</span> and <span data-mention="" data-id="456" data-label="Bob">@Bob</span>, check <span data-channel="" data-id="789" data-label="General">#General</span></p>',
                 )
             })
+
+            test('suggestion label with inline Markdown characters is not truncated', () => {
+                expect(htmlSerializer.serialize('[Use *bold* please](channel://1)')).toBe(
+                    '<p><span data-channel="" data-id="1" data-label="Use bold please">#Use bold please</span></p>',
+                )
+
+                expect(htmlSerializer.serialize('[Use _italic_ please](channel://1)')).toBe(
+                    '<p><span data-channel="" data-id="1" data-label="Use italic please">#Use italic please</span></p>',
+                )
+            })
+
+            test('suggestion label starting with inline Markdown is still converted', () => {
+                expect(htmlSerializer.serialize('[`code` first](channel://1)')).toBe(
+                    '<p><span data-channel="" data-id="1" data-label="code first">#code first</span></p>',
+                )
+
+                expect(htmlSerializer.serialize('[~~struck~~ start](channel://1)')).toBe(
+                    '<p><span data-channel="" data-id="1" data-label="struck start">#struck start</span></p>',
+                )
+            })
+
+            test('suggestion label with an autolink keeps the full text', () => {
+                expect(htmlSerializer.serialize('[mail <a@b.com> here](channel://1)')).toBe(
+                    '<p><span data-channel="" data-id="1" data-label="mail a@b.com here">#mail a@b.com here</span></p>',
+                )
+            })
+
+            test('escaped inline Markdown characters in a suggestion label are preserved', () => {
+                expect(htmlSerializer.serialize('[The future of \\`code\\`](channel://1)')).toBe(
+                    '<p><span data-channel="" data-id="1" data-label="The future of &#x60;code&#x60;">#The future of `code`</span></p>',
+                )
+            })
         })
     })
 })
