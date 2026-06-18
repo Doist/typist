@@ -8,6 +8,12 @@ import { parseHtmlToElement } from '../../helpers/dom'
  * Transforms pasted HTML by converting tables to paragraphs while preserving surrounding content.
  */
 function transformPastedHTML(html: string): string {
+    // Cheap guard so non-table HTML pastes skip the full `DOMParser` parse below, which matters now
+    // that this extension is also registered for singleline and `table: false` rich-text editors.
+    if (!/<table[\s>]/i.test(html)) {
+        return html
+    }
+
     const body = parseHtmlToElement(html)
     const tables = body.querySelectorAll('table')
 
