@@ -1,3 +1,9 @@
+## [14.1.2](https://github.com/Doist/typist/compare/v14.1.1...v14.1.2) (2026-06-18)
+
+### Bug Fixes
+
+* **rich-text:** Degrade pasted HTML tables to string when tables unavailable ([#1386](https://github.com/Doist/typist/issues/1386)) ([f2111fd](https://github.com/Doist/typist/commit/f2111fd340102739ec201aeb1f193d9ecf65b103))
+
 ## [14.1.1](https://github.com/Doist/typist/compare/v14.1.0...v14.1.1) (2026-06-17)
 
 ### Bug Fixes
