@@ -19,6 +19,7 @@ import { Typography } from '@tiptap/extension-typography'
 
 import { BLOCKQUOTE_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
 import { CopyMarkdownSource } from '../shared/copy-markdown-source'
+import { PasteHTMLTableAsString } from '../shared/paste-html-table-as-string'
 import { PasteSinglelineText } from '../shared/paste-singleline-text'
 
 import { BoldAndItalics } from './bold-and-italics'
@@ -159,6 +160,16 @@ type RichTextKitOptions = {
      * Set to `false` to disable the `PasteEmojis` extension.
      */
     pasteEmojis: false
+
+    /**
+     * Set to `false` to disable the `PasteHTMLTableAsString` extension, which converts pasted HTML
+     * tables (e.g. from spreadsheets or GitHub Flavored Markdown) into space-separated paragraphs.
+     *
+     * This extension is only registered when native table support is unavailable (i.e. `table` is
+     * `false`, or the document is singleline). When tables are enabled, pasted tables become native
+     * tables instead, so this option has no effect.
+     */
+    pasteHTMLTableAsString: false
 
     /**
      * Set to `false` to disable the `PasteMarkdown` extension.
@@ -342,6 +353,12 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
                 TableHeader.extend({ content: 'paragraph' }),
                 TableCell.extend({ content: 'paragraph' }),
             )
+        } else if (this.options.pasteHTMLTableAsString !== false) {
+            // When native tables aren't available (disabled, or a singleline document), gracefully
+            // degrade pasted HTML tables (from spreadsheets or GFM) into space-separated paragraphs
+            // instead of letting the cell contents run together. This mirrors the `PlainTextKit`,
+            // which always registers this extension since it never supports native tables
+            extensions.push(PasteHTMLTableAsString)
         }
 
         if (this.options.text !== false) {

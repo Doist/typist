@@ -80,5 +80,29 @@ describe('Extension: PasteHTMLTableAsString', () => {
 
             expect(result).toBe('<p><span>A</span> <strong>B</strong></p>')
         })
+
+        describe('cheap table guard (skips DOMParser for non-table HTML)', () => {
+            test('returns non-table HTML verbatim instead of re-serializing it', () => {
+                // Unclosed/non-normalized markup that the DOMParser path would rewrite; the guard
+                // short-circuits before parsing, so it must come back byte-for-byte unchanged.
+                const html = '<p>Hello<br>world<p>unclosed'
+                expect(transformPastedHTML(html)).toBe(html)
+            })
+
+            test('does not treat the literal word "table" in text as a table', () => {
+                const html = '<p>Reserve a table for dinner</p>'
+                expect(transformPastedHTML(html)).toBe(html)
+            })
+
+            test('matches a table element with attributes', () => {
+                const html = '<table class="data"><tr><td>A</td><td>B</td></tr></table>'
+                expect(transformPastedHTML(html)).toBe('<p>A B</p>')
+            })
+
+            test('matches a table element regardless of tag casing', () => {
+                const html = '<TABLE><TR><TD>A</TD><TD>B</TD></TR></TABLE>'
+                expect(transformPastedHTML(html)).toBe('<p>A B</p>')
+            })
+        })
     })
 })
