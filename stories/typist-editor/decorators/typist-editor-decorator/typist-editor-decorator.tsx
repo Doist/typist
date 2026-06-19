@@ -22,11 +22,12 @@ type TypistEditorDecoratorProps = {
     args: TypistEditorProps
     withRichTextFeatures?: boolean
     bottomFunctions?: React.ReactNode
+    editorMounted?: boolean
 }
 
 const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorProps>(
     function TypistEditorDecorator(
-        { Story, args, withRichTextFeatures = false, bottomFunctions },
+        { Story, args, withRichTextFeatures = false, bottomFunctions, editorMounted = true },
         forwardedRef,
     ) {
         const [typistEditor, setTypistEditor] = useState<CoreEditor | null>(null)
@@ -36,14 +37,22 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
 
         const shouldRenderToolbar = typistEditor && withRichTextFeatures
 
-        const handleUpdate = useCallback((props: UpdateProps) => {
-            setMarkdownOutput(props.getMarkdown())
-        }, [])
+        const handleUpdate = useCallback(
+            (props: UpdateProps) => {
+                setMarkdownOutput(props.getMarkdown())
+                args.onUpdate?.(props)
+            },
+            [args],
+        )
 
         const handleRef = useCallback(
             (instance: TypistEditorRef | null) => {
                 setMarkdownOutput(instance?.getMarkdown() || '')
-                setTypistEditor(instance?.getEditor() || null)
+
+                // Keep the last editor when it unmounts, so the toolbar stays visible
+                if (instance) {
+                    setTypistEditor(instance.getEditor())
+                }
 
                 if (typeof forwardedRef === 'function') {
                     forwardedRef(instance)
@@ -66,16 +75,27 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
 
         return (
             <Box display="flex" flexDirection="column" height="full">
-                <Columns exceptionallySetClassName={styles.topContainer}>
+                <Columns
+                    exceptionallySetClassName={classNames(styles.topContainer, {
+                        [styles.topContainerUnmounted]: !editorMounted,
+                    })}
+                >
                     <Column width="1/2">
                         <h3>Typist Editor</h3>
                         {shouldRenderToolbar ? <TypistEditorToolbar editor={typistEditor} /> : null}
                         <Box
-                            className={styles.editorContainer}
+                            className={classNames(styles.editorContainer, {
+                                [styles.editorContainerUnmounted]: !editorMounted,
+                            })}
                             marginX="large"
                             marginBottom="large"
                         >
-                            <Story args={storyArgs} />
+                            {editorMounted ? (
+                                <Story
+                                    key={`${args.content}-${args.placeholder}`}
+                                    args={storyArgs}
+                                />
+                            ) : null}
                         </Box>
                     </Column>
                     <Column width="1/2">

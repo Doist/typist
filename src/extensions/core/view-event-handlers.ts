@@ -6,7 +6,7 @@ import { VIEW_EVENT_HANDLERS_PRIORITY } from '../../constants/extension-prioriti
 import type { EditorView } from '@tiptap/pm/view'
 
 /**
- * The options available to customize the `ViewEventHandlers` extension.
+ * The set of view event handlers that can be provided to the editor.
  *
  * If more view handlers are needed, please look into the available event handlers in
  * [`prosemirror-view`](https://prosemirror.net/docs/ref/#view.Props), and add them below.
@@ -23,6 +23,14 @@ type ViewEventHandlersOptions = {
     onKeyDown?: (event: KeyboardEvent, view: EditorView) => boolean | void
 }
 
+type ViewEventHandlersStorage = ViewEventHandlersOptions & {
+    /**
+     * Updates the handlers the plugin invokes. The editor component calls this as its handler
+     * props change, since the editor and its plugins are created only once.
+     */
+    setHandlers: (handlers: ViewEventHandlersOptions) => void
+}
+
 /**
  * The `ViewEventHandlers` extension allows handling of various ProseMirror view events.
  *
@@ -34,21 +42,31 @@ type ViewEventHandlersOptions = {
  * These event handlers should be used sparingly, please consider if a reusable extension would be
  * more appropriate for your use case.
  */
-const ViewEventHandlers = Extension.create<ViewEventHandlersOptions>({
+const ViewEventHandlers = Extension.create<ViewEventHandlersOptions, ViewEventHandlersStorage>({
     name: 'viewEventHandlers',
     priority: VIEW_EVENT_HANDLERS_PRIORITY,
+    addStorage() {
+        return {
+            onClick: this.options.onClick,
+            onKeyDown: this.options.onKeyDown,
+            setHandlers(handlers) {
+                this.onClick = handlers.onClick
+                this.onKeyDown = handlers.onKeyDown
+            },
+        }
+    },
     addProseMirrorPlugins() {
-        const { options } = this
+        const { editor } = this
 
         return [
             new Plugin({
                 key: new PluginKey('viewEventHandlers'),
                 props: {
                     handleClick(view, pos, event) {
-                        return options.onClick?.(event, view, pos) || false
+                        return editor.storage.viewEventHandlers.onClick?.(event, view, pos) || false
                     },
                     handleKeyDown(view, event) {
-                        return options.onKeyDown?.(event, view) || false
+                        return editor.storage.viewEventHandlers.onKeyDown?.(event, view) || false
                     },
                 },
             }),
