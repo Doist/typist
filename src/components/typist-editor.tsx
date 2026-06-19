@@ -305,28 +305,45 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         [autoFocus, contentSelection, onCreate],
     )
 
+    // Keep these option objects memoized so they preserve a stable reference across renders. The
+    // built-in `useEditor` compares options by reference and reconfigures the editor in place when
+    // they differ, so passing inline objects would trigger that work on every parent re-render.
+    const editorProps = useMemo(
+        function initializeEditorProps() {
+            return {
+                attributes: {
+                    'data-typist-editor': 'true',
+                    ...(isPlainTextDocument(schema)
+                        ? { 'data-plain-text': 'true' }
+                        : { 'data-rich-text': 'true' }),
+                    'aria-readonly': String(!editable),
+                    'aria-multiline': String(isMultilineDocument(schema)),
+                    ...(ariaDescribedBy ? { 'aria-describedby': ariaDescribedBy } : {}),
+                    ...(ariaLabel ? { 'aria-label': ariaLabel } : {}),
+                    ...(ariaLabelledBy ? { 'aria-labelledby': ariaLabelledBy } : {}),
+                    role: 'textbox',
+                },
+            }
+        },
+        [schema, editable, ariaDescribedBy, ariaLabel, ariaLabelledBy],
+    )
+
+    const parseOptions = useMemo(
+        function initializeParseOptions() {
+            return {
+                preserveWhitespace: isPlainTextDocument(schema),
+            }
+        },
+        [schema],
+    )
+
     const editor = useEditor({
         autofocus: autoFocus ? 'end' : false,
         content: htmlContent,
         editable,
-        editorProps: {
-            attributes: {
-                'data-typist-editor': 'true',
-                ...(isPlainTextDocument(schema)
-                    ? { 'data-plain-text': 'true' }
-                    : { 'data-rich-text': 'true' }),
-                'aria-readonly': String(!editable),
-                'aria-multiline': String(isMultilineDocument(schema)),
-                ...(ariaDescribedBy ? { 'aria-describedby': ariaDescribedBy } : {}),
-                ...(ariaLabel ? { 'aria-label': ariaLabel } : {}),
-                ...(ariaLabelledBy ? { 'aria-labelledby': ariaLabelledBy } : {}),
-                role: 'textbox',
-            },
-        },
+        editorProps,
         extensions: allExtensions,
-        parseOptions: {
-            preserveWhitespace: isPlainTextDocument(schema),
-        },
+        parseOptions,
 
         // Tiptap's `useEditor` returns `null` by default on the first render to support SSR.
         // Typist has no need for SSR, so we opt into immediate rendering to guarantee a
