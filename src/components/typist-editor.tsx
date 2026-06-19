@@ -1,13 +1,12 @@
-import { forwardRef, useCallback, useImperativeHandle, useMemo } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react'
 
 import { getSchema } from '@tiptap/core'
 import { Placeholder } from '@tiptap/extension-placeholder'
-import { EditorContent } from '@tiptap/react'
+import { EditorContent, useEditor } from '@tiptap/react'
 
 import { ExtraEditorCommands } from '../extensions/core/extra-editor-commands/extra-editor-commands'
 import { ViewEventHandlers, ViewEventHandlersOptions } from '../extensions/core/view-event-handlers'
 import { isMultilineDocument, isPlainTextDocument } from '../helpers/schema'
-import { useEditor } from '../hooks/use-editor'
 import { getHTMLSerializerInstance } from '../serializers/html/html'
 import { getMarkdownSerializerInstance } from '../serializers/markdown/markdown'
 
@@ -96,6 +95,9 @@ type TypistEditorProps = {
 
     /**
      * The initial Markdown content for the editor.
+     *
+     * This value is only used when the editor is first mounted, subsequent changes to this prop are
+     * ignored. Use `editor.commands.setContent()` to update content at runtime.
      */
     content?: string
 
@@ -110,70 +112,60 @@ type TypistEditorProps = {
     editable?: boolean
 
     /**
-     * The list of required extensions to initialize the editor.
+     * The list of extensions to initialize the editor with.
      *
-     * You may consider wrapping this prop with `useMemo` to prevent unnecessary re-renders.
+     * This value is only used when the editor is first mounted, subsequent changes to this prop are
+     * ignored. Extensions that depend on data that changes over time should read the current value
+     * at the moment it's needed from a mutable source you update from outside (a ref or a store),
+     * rather than capturing the value when the extension is created.
      */
     extensions: Extensions
 
     /**
      * A short hint that gives users an idea what can be entered in the editor.
+     *
+     * This value is only used when the editor is first mounted, subsequent changes to this prop are
+     * ignored.
      */
     placeholder?: string
 
     /**
      * The event handler that is fired before the editor view is created.
-     *
-     * You may consider wrapping this prop with `useCallback` to prevent unnecessary re-renders.
      */
     onBeforeCreate?: (props: BeforeCreateProps) => void
 
     /**
      * The event handler that is fired when the editor view is ready.
-     *
-     * You may consider wrapping this prop with `useCallback` to prevent unnecessary re-renders.
      */
     onCreate?: (props: CreateProps) => void
 
     /**
      * The event handler that is fired when the editor content has changed.
-     *
-     * You may consider wrapping this prop with `useCallback` to prevent unnecessary re-renders.
      */
     onUpdate?: (props: UpdateProps) => void
 
     /**
      * The event handler that is fired when the editor selection has changed.
-     *
-     * You may consider wrapping this prop with `useCallback` to prevent unnecessary re-renders.
      */
     onSelectionUpdate?: (props: SelectionUpdateProps) => void
 
     /**
      * The event handler that is fired when the editor state has changed.
-     *
-     * You may consider wrapping this prop with `useCallback` to prevent unnecessary re-renders.
      */
     onTransaction?: (props: TransacationProps) => void
 
     /**
      * The event handler that is fired when the editor view gains focus.
-     *
-     * You may consider wrapping this prop with `useCallback` to prevent unnecessary re-renders.
      */
     onFocus?: (props: FocusProps) => void
 
     /**
      * The event handler that is fired when the editor view loses focus.
-     *
-     * You may consider wrapping this prop with `useCallback` to prevent unnecessary re-renders.
      */
     onBlur?: (props: BlurProps) => void
 
     /**
      * The event handler that is fired when the editor view is being destroyed.
-     *
-     * You may consider wrapping this prop with `useCallback` to prevent unnecessary re-renders.
      */
     onDestroy?: (props: DestroyProps) => void
 
@@ -238,27 +230,41 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
     },
     ref,
 ) {
+    // Extensions and content are captured once at mount. Subsequent changes to these props are
+    // ignored because recreating the editor is expensive and unnecessary for runtime updates.
+    // Use `editor.commands.setContent()` to update content, and design extensions to handle
+    // dynamic data internally (e.g., via stores or refs) rather than requiring reconfiguration.
+    const [initialExtensions] = useState(() => extensions)
+    const [initialContent] = useState(() => content)
+    const [initialPlaceholder] = useState(() => placeholder)
+
+    // Capture the initial click and keydown handlers so they are configured on the extension from
+    // the first render. Unlike content and extensions, they stay reactive, so later changes are
+    // synced at runtime.
+    const [initialOnClick] = useState(() => onClick)
+    const [initialOnKeyDown] = useState(() => onKeyDown)
+
     const allExtensions = useMemo(
         function initializeExtensions() {
             return [
-                ...(placeholder
+                ...(initialPlaceholder
                     ? [
                           Placeholder.configure({
-                              placeholder,
+                              placeholder: initialPlaceholder,
                           }),
                       ]
                     : []),
                 ExtraEditorCommands,
                 ViewEventHandlers.configure({
-                    onClick,
-                    onKeyDown,
+                    onClick: initialOnClick,
+                    onKeyDown: initialOnKeyDown,
                 }),
                 // Always register external extensions at the end so they get a higher priority and
                 // are loaded earlier (necessary to override behaviors from built-in extensions)
-                ...extensions,
+                ...initialExtensions,
             ]
         },
-        [extensions, onClick, onKeyDown, placeholder],
+        [initialExtensions, initialPlaceholder, initialOnClick, initialOnKeyDown],
     )
 
     const schema = useMemo(
@@ -284,22 +290,9 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
 
     const htmlContent = useMemo(
         function generateHTMLContent() {
-            return htmlSerializer.serialize(content)
+            return htmlSerializer.serialize(initialContent)
         },
-        [content, htmlSerializer],
-    )
-
-    const ariaAttributes = useMemo(
-        function initializeAriaAttributes() {
-            return {
-                'aria-readonly': String(!editable),
-                'aria-multiline': String(isMultilineDocument(schema)),
-                ...(ariaDescribedBy ? { 'aria-describedby': ariaDescribedBy } : {}),
-                ...(ariaLabel ? { 'aria-label': ariaLabel } : {}),
-                ...(ariaLabelledBy ? { 'aria-labelledby': ariaLabelledBy } : {}),
-            }
-        },
-        [ariaDescribedBy, ariaLabel, ariaLabelledBy, editable, schema],
+        [initialContent, htmlSerializer],
     )
 
     const handleCreate = useCallback(
@@ -321,62 +314,91 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         [autoFocus, contentSelection, onCreate],
     )
 
-    const editor = useEditor(
-        {
-            autofocus: autoFocus ? 'end' : false,
-            content: htmlContent,
-            editable,
-            editorProps: {
+    // Keep these option objects memoized so they preserve a stable reference across renders. The
+    // built-in `useEditor` compares options by reference and reconfigures the editor in place when
+    // they differ, so passing inline objects would trigger that work on every parent re-render.
+    const editorProps = useMemo(
+        function initializeEditorProps() {
+            return {
                 attributes: {
                     'data-typist-editor': 'true',
                     ...(isPlainTextDocument(schema)
                         ? { 'data-plain-text': 'true' }
                         : { 'data-rich-text': 'true' }),
+                    'aria-readonly': String(!editable),
+                    'aria-multiline': String(isMultilineDocument(schema)),
+                    ...(ariaDescribedBy ? { 'aria-describedby': ariaDescribedBy } : {}),
+                    ...(ariaLabel ? { 'aria-label': ariaLabel } : {}),
+                    ...(ariaLabelledBy ? { 'aria-labelledby': ariaLabelledBy } : {}),
                     role: 'textbox',
-                    ...ariaAttributes,
                 },
-            },
-            extensions: allExtensions,
-            parseOptions: {
-                preserveWhitespace: isPlainTextDocument(schema),
-            },
-            ...(onBeforeCreate ? { onBeforeCreate } : {}),
-            onCreate: handleCreate,
-            ...(onUpdate
-                ? {
-                      onUpdate(props) {
-                          onUpdate({
-                              ...props,
-                              getMarkdown() {
-                                  return markdownSerializer.serialize(props.editor.getHTML())
-                              },
-                          })
-                      },
-                  }
-                : {}),
-            ...(onSelectionUpdate ? { onSelectionUpdate } : {}),
-            ...(onTransaction ? { onTransaction } : {}),
-            ...(onFocus ? { onFocus } : {}),
-            ...(onBlur ? { onBlur } : {}),
-            ...(onDestroy ? { onDestroy } : {}),
+            }
         },
-        [
-            allExtensions,
-            ariaAttributes,
-            autoFocus,
-            editable,
-            handleCreate,
-            htmlContent,
-            markdownSerializer,
-            onBeforeCreate,
-            onBlur,
-            onDestroy,
-            onFocus,
-            onSelectionUpdate,
-            onTransaction,
-            onUpdate,
-            schema,
-        ],
+        [schema, editable, ariaDescribedBy, ariaLabel, ariaLabelledBy],
+    )
+
+    const parseOptions = useMemo(
+        function initializeParseOptions() {
+            return {
+                preserveWhitespace: isPlainTextDocument(schema),
+            }
+        },
+        [schema],
+    )
+
+    const editor = useEditor({
+        autofocus: autoFocus ? 'end' : false,
+        content: htmlContent,
+        editable,
+        editorProps,
+        extensions: allExtensions,
+        parseOptions,
+
+        // Tiptap's `useEditor` returns `null` by default on the first render to support SSR.
+        // Typist has no need for SSR, so we opt into immediate rendering to guarantee a
+        // non-null editor instance from the first render.
+        immediatelyRender: true,
+
+        // Opt-out of the legacy behavior that re-renders the component on every ProseMirror
+        // transaction (e.g. keystrokes, selection changes). Typist doesn't read reactive editor
+        // state during render, so these re-renders would be wasteful. Consumers that need
+        // reactive state (e.g. toolbars) should subscribe directly via `useSyncExternalStore`.
+        shouldRerenderOnTransaction: false,
+
+        ...(onBeforeCreate ? { onBeforeCreate } : {}),
+        onCreate: handleCreate,
+        ...(onUpdate
+            ? {
+                  onUpdate(props) {
+                      onUpdate({
+                          ...props,
+                          getMarkdown() {
+                              return markdownSerializer.serialize(props.editor.getHTML())
+                          },
+                      })
+                  },
+              }
+            : {}),
+        ...(onSelectionUpdate ? { onSelectionUpdate } : {}),
+        ...(onTransaction ? { onTransaction } : {}),
+        ...(onFocus ? { onFocus } : {}),
+        ...(onBlur ? { onBlur } : {}),
+        ...(onDestroy ? { onDestroy } : {}),
+    })
+
+    useEffect(
+        function syncEditableState() {
+            editor.setEditable(editable)
+        },
+        [editor, editable],
+    )
+
+    // The editor is created once, so push the latest handlers into the extension as they change
+    useEffect(
+        function syncViewEventHandlers() {
+            editor.storage.viewEventHandlers.setHandlers({ onClick, onKeyDown })
+        },
+        [editor, onClick, onKeyDown],
     )
 
     useImperativeHandle(

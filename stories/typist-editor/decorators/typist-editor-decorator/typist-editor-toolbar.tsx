@@ -56,17 +56,37 @@ function ToolbarButton(props: ToolbarButtonProps) {
 
 function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
     // The editor state lives outside React, so `useSyncExternalStore` is used to re-render this
-    // component on every editor transaction, keeping the toolbar buttons `pressed` state in sync
+    // component when the editor state changes, keeping the toolbar buttons `pressed` state in sync
     // with the current selection, applied marks, and stored marks. The `subscribe` callback is
     // wrapped in `useCallback` so React doesn't tear down and re-attach the tiptap listener on
     // every render (see https://react.dev/reference/react/useSyncExternalStore#my-subscribe-function-gets-called-after-every-re-render)
     const editorState = useSyncExternalStore(
         useCallback(
             function subscribeToEditorState(callback: () => void) {
-                editor.on('transaction', callback)
+                let previousState = editor.state
+
+                function handleTransaction() {
+                    const { state } = editor
+
+                    // We listen for `transaction` rather than `selectionUpdate` + `update` so the
+                    // toolbar also reflects stored marks toggled on an empty selection (e.g. pressing
+                    // Bold with a collapsed caret, before typing), which neither of those events fire
+                    // for. To avoid re-rendering on transactions that can't change the buttons, only
+                    // notify React when the document, selection, or stored marks actually change.
+                    if (
+                        state.doc !== previousState.doc ||
+                        state.selection !== previousState.selection ||
+                        state.storedMarks !== previousState.storedMarks
+                    ) {
+                        previousState = state
+                        callback()
+                    }
+                }
+
+                editor.on('transaction', handleTransaction)
 
                 return function unsubscribeFromEditorState() {
-                    editor.off('transaction', callback)
+                    editor.off('transaction', handleTransaction)
                 }
             },
             [editor],

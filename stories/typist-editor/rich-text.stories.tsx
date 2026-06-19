@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
+import { Button } from '@doist/reactist'
+
 import { clamp, random } from 'lodash-es'
 import { action } from 'storybook/actions'
 
@@ -220,6 +222,50 @@ export const Singleline = meta.story({
 
             return (
                 <TypistEditorDecorator Story={Story} args={storyArgs} withRichTextFeatures={true} />
+            )
+        },
+    ],
+})
+
+export const EventHandlers = meta.story({
+    parameters: {
+        controls: {
+            disable: true,
+        },
+    },
+    args: {
+        ...Default.composed.args,
+        onBeforeCreate: action('onBeforeCreate'),
+        onCreate: action('onCreate'),
+        onUpdate: action('onUpdate'),
+        onSelectionUpdate: action('onSelectionUpdate'),
+        onTransaction: action('onTransaction'),
+        onFocus: action('onFocus'),
+        onBlur: action('onBlur'),
+        onDestroy: action('onDestroy'),
+        onClick: action('onClick'),
+        onKeyDown: action('onKeyDown'),
+    },
+    decorators: [
+        (Story, context) => {
+            const [isMounted, setIsMounted] = useState(true)
+
+            const toggleMounted = useCallback(() => setIsMounted((mounted) => !mounted), [])
+
+            return (
+                <TypistEditorDecorator
+                    Story={Story}
+                    args={context.args}
+                    withRichTextFeatures={true}
+                    editorMounted={isMounted}
+                    bottomFunctions={
+                        <>
+                            <Button variant="secondary" onClick={toggleMounted}>
+                                {isMounted ? 'Unmount editor' : 'Mount editor'}
+                            </Button>
+                        </>
+                    }
+                />
             )
         },
     ],

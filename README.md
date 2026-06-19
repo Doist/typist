@@ -48,6 +48,10 @@ function TypistEditorContainer({ content }) {
 }
 ```
 
+> **Note**
+>
+> `content`, `extensions`, and `placeholder` are initialization-only: they're read when the editor first mounts, and later changes to these props are ignored. See the [Component Lifecycle](https://typist.doist.dev/?path=/docs/documentation-tips-tricks-component-lifecycle--docs) documentation for how to handle runtime changes.
+
 If you're looking for additional documentation, in-depth examples, or a live demo, please check out our [Storybook](https://typist.doist.dev/).
 
 ## Resources
