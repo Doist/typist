@@ -238,6 +238,12 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
     const [initialContent] = useState(() => content)
     const [initialPlaceholder] = useState(() => placeholder)
 
+    // Capture the initial click and keydown handlers so they are configured on the extension from
+    // the first render. Unlike content and extensions, they stay reactive, so later changes are
+    // synced at runtime.
+    const [initialOnClick] = useState(() => onClick)
+    const [initialOnKeyDown] = useState(() => onKeyDown)
+
     const allExtensions = useMemo(
         function initializeExtensions() {
             return [
@@ -249,13 +255,16 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
                       ]
                     : []),
                 ExtraEditorCommands,
-                ViewEventHandlers,
+                ViewEventHandlers.configure({
+                    onClick: initialOnClick,
+                    onKeyDown: initialOnKeyDown,
+                }),
                 // Always register external extensions at the end so they get a higher priority and
                 // are loaded earlier (necessary to override behaviors from built-in extensions)
                 ...initialExtensions,
             ]
         },
-        [initialExtensions, initialPlaceholder],
+        [initialExtensions, initialPlaceholder, initialOnClick, initialOnKeyDown],
     )
 
     const schema = useMemo(
