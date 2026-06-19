@@ -275,4 +275,28 @@ describe('<TypistEditor />', () => {
             expect(updatedOnClick).toHaveBeenCalled()
         })
     })
+
+    // The editor is created once and never recreated, so toggling `editable` at runtime must update
+    // the existing editor in place rather than relying on a fresh instance.
+    describe('Editable State', () => {
+        test('toggles editability in place when the `editable` prop changes', () => {
+            const extensions = [RichTextKit]
+
+            const typistEditorRef = createRef<TypistEditorRef>()
+
+            const { rerender } = render(
+                <TypistEditor editable={true} extensions={extensions} ref={typistEditorRef} />,
+            )
+
+            expect(screen.getByRole('textbox')).toHaveAttribute('contenteditable', 'true')
+            expect(typistEditorRef.current?.getEditor().isEditable).toBe(true)
+
+            rerender(
+                <TypistEditor editable={false} extensions={extensions} ref={typistEditorRef} />,
+            )
+
+            expect(screen.getByRole('textbox')).toHaveAttribute('contenteditable', 'false')
+            expect(typistEditorRef.current?.getEditor().isEditable).toBe(false)
+        })
+    })
 })
