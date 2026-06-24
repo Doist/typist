@@ -93,7 +93,7 @@ type SuggestionOptions<TSuggestionItem> = {
      */
     onSearchChange?: (
         query: string,
-        storage: SuggestionStorage<TSuggestionItem>,
+        items: TSuggestionItem[],
     ) => TSuggestionItem[] | Promise<TSuggestionItem[]>
 
     /**
@@ -101,21 +101,6 @@ type SuggestionOptions<TSuggestionItem> = {
      */
     onItemSelect?: (item: TSuggestionItem) => void
 }
-
-/**
- * The storage holding the suggestion items original array, and a collection indexed by the item id.
- */
-type SuggestionStorage<TSuggestionItem> = Readonly<{
-    /**
-     * The original array of suggestion items.
-     */
-    items: TSuggestionItem[]
-
-    /**
-     * A collection of suggestion items indexed by the item id.
-     */
-    itemsById: { readonly [id: SuggestionNodeAttributes['id']]: TSuggestionItem | undefined }
-}>
 
 /**
  * The return type for a suggestion extension created by the factory function.
@@ -133,15 +118,15 @@ type SuggestionExtensionResult<TSuggestionItem> = Node<SuggestionOptions<TSugges
  * specify the source item type, and use the optional `attributesMapping` option to map the
  * source properties to the internal `data-id` and `data-label` attributes.
  *
- * This factory function also stores the suggestion items internally in the editor storage (as-is,
- * and indexed by an identifier), as a way to make sure that if a previously referenced suggestion
- * changes its label, the editor will always render the most up-to-date label for the suggestion by
- * reading it from the storage. An example use case for this is when a user mention is added to the
- * editor, and the user changed its name afterwards, the editor will always render the most
- * up-to-date user name for the mention.
+ * When an already-inserted suggestion is rendered, its label is resolved by id from the current
+ * items, so it always reflects the latest label, falling back to the saved `data-label` attribute
+ * when the id is no longer present in the items.
  *
  * @param type A unique identifier for the suggestion extension type.
- * @param items An array of suggestion items to be stored in the editor storage.
+ * @param items The suggestion items, provided either as a static array or as a getter returning the
+ * current items. The editor is created once and the extension is never rebuilt, so a static array
+ * stays fixed for the lifetime of the extension; provide a getter when the items can change over
+ * time, so they are read on demand instead of captured once.
  * @param attributesMapping An object to map the `data-id` and `data-label` attributes with the
  * source item type properties.
  *
@@ -153,7 +138,7 @@ function createSuggestionExtension<
     } = SuggestionNodeAttributes,
 >(
     type: string,
-    items: TSuggestionItem[] = [],
+    items: TSuggestionItem[] | (() => TSuggestionItem[]) = [],
 
     // This type makes sure that if a generic type variable is specified, the `attributesMapping`
     // is also defined (and vice versa) along with making sure that at least one attribute is
@@ -178,8 +163,18 @@ function createSuggestionExtension<
     const idAttribute = String(attributesMapping[0]?.id ?? 'id')
     const labelAttribute = String(attributesMapping[0]?.label ?? 'label')
 
+    // Normalize the items into a getter, so a static array and a getter source are handled the
+    // same way internally. The getter is the single source of truth for the current items.
+    const getItems = typeof items === 'function' ? items : () => items
+
+    // Resolve a single item by its id from the current items. Used to look up the selected item
+    // and to resolve an inserted suggestion's label on demand, without keeping a stored index.
+    function findItemById(id: string): TSuggestionItem | undefined {
+        return getItems().find((item) => String(item[idAttribute]) === id)
+    }
+
     // Create a personalized suggestion extension
-    return Node.create<SuggestionOptions<TSuggestionItem>, SuggestionStorage<TSuggestionItem>>({
+    return Node.create<SuggestionOptions<TSuggestionItem>>({
         name: nodeType,
         priority: SUGGESTION_EXTENSION_PRIORITY,
         inline: true,
@@ -194,14 +189,6 @@ function createSuggestionExtension<
                 allowSpaces: false,
                 allowedPrefixes: [' '],
                 startOfLine: false,
-            }
-        },
-        addStorage() {
-            return {
-                items,
-                itemsById: Object.fromEntries(
-                    items.map((item) => [String(item[idAttribute]), item]),
-                ),
             }
         },
         // Expose the trigger character in the node spec so it can be read from the schema by
@@ -225,14 +212,14 @@ function createSuggestionExtension<
                     default: null,
                     parseHTML: (element: Element) => {
                         const id = String(element.getAttribute('data-id'))
-                        const item = this.storage.itemsById[id]
+                        const item = findItemById(id)
 
-                        // Attempt to read the item label from the storage first (as a way to make
-                        // sure that a previously referenced suggestion always renders the most
-                        // up-to-date label for the suggestion), and fallback to the `data-label`
-                        // attribute if the item is not found in the storage
+                        // Resolve the label from the current items so a previously inserted
+                        // suggestion always renders the most up-to-date label, and fall back to
+                        // the `data-label` attribute when the item is no longer present
                         const labelValue =
                             item?.[labelAttribute] ?? element.getAttribute('data-label')
+
                         return typeof labelValue === 'string' ? labelValue : ''
                     },
                     renderHTML: (attributes) => ({
@@ -274,7 +261,6 @@ function createSuggestionExtension<
                     onItemSelect,
                     dropdownRenderFn,
                 },
-                storage,
             } = this
 
             return [
@@ -285,13 +271,10 @@ function createSuggestionExtension<
                     allowedPrefixes,
                     allowSpaces,
                     startOfLine,
-                    items({ query, editor }) {
-                        return (
-                            onSearchChange?.(
-                                query,
-                                editor.storage[nodeType] as SuggestionStorage<TSuggestionItem>,
-                            ) || []
-                        )
+                    items({ query }) {
+                        // Read the current items on each query so the results reflect the latest
+                        // source instead of values captured when the extension was created.
+                        return onSearchChange?.(query, getItems()) || []
                     },
                     allow({ editor, range, state }) {
                         return (
@@ -322,7 +305,7 @@ function createSuggestionExtension<
                             ])
                             .run()
 
-                        const item = storage.itemsById[props.id]
+                        const item = findItemById(String(props.id))
 
                         if (item) {
                             onItemSelect?.(item)
@@ -342,5 +325,4 @@ export type {
     SuggestionOptions,
     SuggestionRendererProps,
     SuggestionRendererRef,
-    SuggestionStorage,
 }
