@@ -26,12 +26,12 @@ const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
         renderAriaLabel({ label }) {
             return `Hashtag: #${label}`
         },
-        async onSearchChange(query, storage) {
-            const storageItems = await new Promise((resolve) =>
+        async onSearchChange(query, items) {
+            const delayedItems = await new Promise((resolve) =>
                 setTimeout(resolve, random(500, 1500)),
-            ).then(() => storage.items)
+            ).then(() => items)
 
-            return storageItems.filter((item) => {
+            return delayedItems.filter((item) => {
                 return item.name.toLowerCase().includes(query.toLowerCase())
             })
         },

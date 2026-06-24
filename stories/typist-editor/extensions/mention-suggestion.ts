@@ -26,8 +26,8 @@ const MentionSuggestion: SuggestionExtensionResult<MentionSuggestionItem> =
         renderAriaLabel({ label }) {
             return `Name: ${label}`
         },
-        onSearchChange(query, storage) {
-            return storage.items.filter((item) => {
+        onSearchChange(query, items) {
+            return items.filter((item) => {
                 return item.name.toLowerCase().includes(query.toLowerCase())
             })
         },
