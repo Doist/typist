@@ -23,12 +23,22 @@ type ViewEventHandlersOptions = {
     onKeyDown?: (event: KeyboardEvent, view: EditorView) => boolean | void
 }
 
-type ViewEventHandlersStorage = ViewEventHandlersOptions & {
-    /**
-     * Updates the handlers the plugin invokes. The editor component calls this as its handler
-     * props change, since the editor and its plugins are created only once.
-     */
-    setHandlers: (handlers: ViewEventHandlersOptions) => void
+type ViewEventHandlersStorage = ViewEventHandlersOptions
+
+/**
+ * Augment the official `@tiptap/core` module with extra commands, relevant for this extension, so
+ * that the compiler knows about them.
+ */
+declare module '@tiptap/core' {
+    interface Commands<ReturnType> {
+        viewEventHandlers: {
+            /**
+             * Updates the handlers the plugin invokes. The editor component calls this as its
+             * handler props change, since the editor and its plugins are created only once.
+             */
+            setViewEventHandlers: (handlers: ViewEventHandlersOptions) => ReturnType
+        }
+    }
 }
 
 /**
@@ -49,9 +59,15 @@ const ViewEventHandlers = Extension.create<ViewEventHandlersOptions, ViewEventHa
         return {
             onClick: this.options.onClick,
             onKeyDown: this.options.onKeyDown,
-            setHandlers(handlers) {
-                this.onClick = handlers.onClick
-                this.onKeyDown = handlers.onKeyDown
+        }
+    },
+    addCommands() {
+        return {
+            setViewEventHandlers: (handlers) => () => {
+                this.storage.onClick = handlers.onClick
+                this.storage.onKeyDown = handlers.onKeyDown
+
+                return true
             },
         }
     },
