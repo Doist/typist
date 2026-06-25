@@ -76,4 +76,4 @@ const ViewEventHandlers = Extension.create<ViewEventHandlersOptions, ViewEventHa
 
 export { ViewEventHandlers }
 
-export type { ViewEventHandlersOptions }
+export type { ViewEventHandlersOptions, ViewEventHandlersStorage }

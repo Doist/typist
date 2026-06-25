@@ -5,7 +5,11 @@ import { Placeholder } from '@tiptap/extension-placeholder'
 import { EditorContent, useEditor } from '@tiptap/react'
 
 import { ExtraEditorCommands } from '../extensions/core/extra-editor-commands/extra-editor-commands'
-import { ViewEventHandlers, ViewEventHandlersOptions } from '../extensions/core/view-event-handlers'
+import {
+    ViewEventHandlers,
+    ViewEventHandlersOptions,
+    ViewEventHandlersStorage,
+} from '../extensions/core/view-event-handlers'
 import { isMultilineDocument, isPlainTextDocument } from '../helpers/schema'
 import { getHTMLSerializerInstance } from '../serializers/html/html'
 import { getMarkdownSerializerInstance } from '../serializers/markdown/markdown'
@@ -396,7 +400,10 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
     // The editor is created once, so push the latest handlers into the extension as they change
     useEffect(
         function syncViewEventHandlers() {
-            editor.storage.viewEventHandlers.setHandlers({ onClick, onKeyDown })
+            ;(editor.storage.viewEventHandlers as ViewEventHandlersStorage).setHandlers({
+                onClick,
+                onKeyDown,
+            })
         },
         [editor, onClick, onKeyDown],
     )
