@@ -398,10 +398,16 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         ...(onDestroy ? { onDestroy } : {}),
     })
 
-    // Apply editability before paint so a read-only editor can't process a queued edit first
+    // Sync editability in a layout effect so it applies before the browser paints, closing the gap
+    // where a read-only editor could still process a queued keystroke or paste
     useLayoutEffect(
         function syncEditableState() {
-            editor.setEditable(editable)
+            // On mount the editor already has the correct editability, so this guard skips setting
+            // it again. The redundant call would emit an update event before the editor finishes
+            // initializing (a tick later), breaking extensions that initialize with it.
+            if (editor.isEditable !== editable) {
+                editor.setEditable(editable)
+            }
         },
         [editor, editable],
     )
