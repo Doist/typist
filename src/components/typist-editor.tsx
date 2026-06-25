@@ -1,4 +1,12 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react'
+import {
+    forwardRef,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useLayoutEffect,
+    useMemo,
+    useState,
+} from 'react'
 
 import { getSchema } from '@tiptap/core'
 import { Placeholder } from '@tiptap/extension-placeholder'
@@ -390,7 +398,8 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         ...(onDestroy ? { onDestroy } : {}),
     })
 
-    useEffect(
+    // Apply editability before paint so a read-only editor can't process a queued edit first
+    useLayoutEffect(
         function syncEditableState() {
             editor.setEditable(editable)
         },
