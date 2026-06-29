@@ -214,9 +214,10 @@ function createSuggestionExtension<
                         const id = String(element.getAttribute('data-id'))
                         const item = findItemById(id)
 
-                        // Resolve the label from the current items so a previously inserted
-                        // suggestion always renders the most up-to-date label, and fall back to
-                        // the `data-label` attribute when the item is no longer present
+                        // Resolve the label from the current items when content is parsed so
+                        // reparsed content shows the latest label, falling back to the saved
+                        // `data-label` when the item is gone from the source. Already-mounted
+                        // nodes keep their inserted label until the next parse.
                         const labelValue =
                             item?.[labelAttribute] ?? element.getAttribute('data-label')
 
