@@ -263,6 +263,12 @@ function createSuggestionExtension<
                 },
             } = this
 
+            // Holds the items from the dropdown's most recent render
+            let renderedItems: TSuggestionItem[] = []
+
+            // Identifies each search so a slow async result can't overwrite a newer one
+            let latestRequestId = 0
+
             return [
                 TiptapSuggestion<TSuggestionItem, SuggestionNodeAttributes>({
                     pluginKey: new PluginKey(nodeType),
@@ -272,9 +278,21 @@ function createSuggestionExtension<
                     allowSpaces,
                     startOfLine,
                     items({ query }) {
+                        const requestId = ++latestRequestId
+
                         // Read the current items on each query so the results reflect the latest
-                        // source instead of values captured when the extension was created.
-                        return onSearchChange?.(query, getItems()) || []
+                        // source. Remember the rendered list, awaiting an async source, so a
+                        // selection can resolve the picked item from exactly what was shown.
+                        const result = onSearchChange?.(query, getItems()) || []
+
+                        void Promise.resolve(result).then((resolvedItems) => {
+                            // Ignore a stale result that resolved after a newer search started
+                            if (requestId === latestRequestId) {
+                                renderedItems = resolvedItems
+                            }
+                        })
+
+                        return result
                     },
                     allow({ editor, range, state }) {
                         return (
@@ -305,7 +323,15 @@ function createSuggestionExtension<
                             ])
                             .run()
 
-                        const item = findItemById(String(props.id))
+                        // Resolve the picked item from the list the dropdown showed, so the item
+                        // passed to the consumer matches the user's click even if the source
+                        // changed while it was open. Fall back to the current items when the id
+                        // isn't in that shown list.
+                        const item =
+                            renderedItems.find(
+                                (renderedItem) =>
+                                    String(renderedItem[idAttribute]) === String(props.id),
+                            ) ?? findItemById(String(props.id))
 
                         if (item) {
                             onItemSelect?.(item)
