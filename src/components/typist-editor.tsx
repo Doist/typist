@@ -1,7 +1,6 @@
 import {
     forwardRef,
     useCallback,
-    useEffect,
     useImperativeHandle,
     useLayoutEffect,
     useMemo,
@@ -408,8 +407,10 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         [editor, editable],
     )
 
-    // The editor is created once, so push the latest handlers into the extension as they change
-    useEffect(
+    // The editor is created once, so push the latest handlers into the extension as they change.
+    // Use a layout effect so they apply before paint, closing the gap where a click or keystroke
+    // could still reach the previous handlers.
+    useLayoutEffect(
         function syncViewEventHandlers() {
             editor.commands.setViewEventHandlers({ onClick, onKeyDown })
         },
