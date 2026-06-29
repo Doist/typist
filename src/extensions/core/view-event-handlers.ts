@@ -63,12 +63,19 @@ const ViewEventHandlers = Extension.create<ViewEventHandlersOptions, ViewEventHa
     },
     addCommands() {
         return {
-            setViewEventHandlers: (handlers) => () => {
-                this.storage.onClick = handlers.onClick
-                this.storage.onKeyDown = handlers.onKeyDown
+            setViewEventHandlers:
+                (handlers) =>
+                ({ tr }) => {
+                    // Skip dispatching the transaction since this only updates plugin storage and
+                    // doesn't change the document. Dispatching it would fire a needless transaction
+                    // on every handler sync.
+                    tr.setMeta('preventDispatch', true)
 
-                return true
-            },
+                    this.storage.onClick = handlers.onClick
+                    this.storage.onKeyDown = handlers.onKeyDown
+
+                    return true
+                },
         }
     },
     addProseMirrorPlugins() {
