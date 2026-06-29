@@ -1,3 +1,25 @@
+## [15.0.0](https://github.com/Doist/typist/compare/v14.1.2...v15.0.0) (2026-06-29)
+
+### ⚠ BREAKING CHANGES
+
+* **typist-editor:** `content`, `extensions`, and `placeholder` are now
+initialization-only (read once when the editor mounts; later prop changes are
+ignored). To migrate:
+
+- `content`: update at runtime via `editor.commands.setContent()` instead of the
+  prop (`clearContent()` and other imperative resets are unaffected).
+- `extensions`: extensions whose config depends on data that changes over time
+  (e.g. a mention list) must read it reactively from a ref or store, since
+  rebuilding the array no longer recreates the editor.
+- `placeholder`: remount the editor with a React `key` if it must change.
+* **typist-editor:** `onSearchChange` receives the current items array as its second
+argument instead of a `storage` object, and the `SuggestionStorage` type is no
+longer exported.
+
+### Features
+
+* **typist-editor:** adopt Tiptap's built-in `useEditor` hook ([#1401](https://github.com/Doist/typist/issues/1401)) ([c201e2b](https://github.com/Doist/typist/commit/c201e2bc0ba7bc13ba81736c8c97892aa9b7519a)), closes [#1387](https://github.com/Doist/typist/issues/1387) [#1394](https://github.com/Doist/typist/issues/1394) [#1396](https://github.com/Doist/typist/issues/1396)
+
 ## [14.1.2](https://github.com/Doist/typist/compare/v14.1.1...v14.1.2) (2026-06-18)
 
 ### Bug Fixes
