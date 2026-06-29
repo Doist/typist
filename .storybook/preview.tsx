@@ -27,7 +27,7 @@ export default definePreview({
                         'Reference',
                         ['Components', 'Utilities'],
                         'Tips & Tricks',
-                        ['Styling', 'Performance'],
+                        ['Styling', 'Component Lifecycle', 'Reactive Editor State'],
                     ],
                     'Typist Editor',
                 ],

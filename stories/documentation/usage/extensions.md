@@ -50,8 +50,8 @@ function TypistEditorContainer({ content }) {
                     onExit(props) {},
                 }
             },
-            onSearchChange(query, storage) {
-                return storage.items.filter((item) => {
+            onSearchChange(query, items) {
+                return items.filter((item) => {
                     return item.name.toLowerCase().includes(query.toLowerCase())
                 })
             },
@@ -64,7 +64,4 @@ function TypistEditorContainer({ content }) {
 }
 ```
 
-A few observations about the example above:
-
-- The example takes advantage of the built-in storage to store the suggestion items internally, and use them to render the suggestions based on always up-to-date data. However, the storage is not mandatory, you can use the extension without it.
-- You may have noticed that the `createSuggestionExtension` function is called within a functional component, which means it will be re-created with every render. You may need to optimize this with `useMemo` to avoid re-creating the extension on every render.
+In the example, `onSearchChange` receives the current `items` and filters them against the query. You can provide `items` as a static array or as a getter (`() => MentionUser[]`). Because the editor is created only once, a getter is what keeps the suggestions in sync with a source that changes over time: it's read on demand whenever the current items are needed, rather than captured at mount.

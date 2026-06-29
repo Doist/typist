@@ -1,4 +1,6 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+
+import { Button } from '@doist/reactist'
 
 import { action } from 'storybook/actions'
 
@@ -76,6 +78,49 @@ export const Singleline = meta.story({
             )
 
             return <TypistEditorDecorator Story={Story} args={storyArgs} />
+        },
+    ],
+})
+
+export const EventHandlers = meta.story({
+    parameters: {
+        controls: {
+            disable: true,
+        },
+    },
+    args: {
+        ...Default.composed.args,
+        onBeforeCreate: action('onBeforeCreate'),
+        onCreate: action('onCreate'),
+        onUpdate: action('onUpdate'),
+        onSelectionUpdate: action('onSelectionUpdate'),
+        onTransaction: action('onTransaction'),
+        onFocus: action('onFocus'),
+        onBlur: action('onBlur'),
+        onDestroy: action('onDestroy'),
+        onClick: action('onClick'),
+        onKeyDown: action('onKeyDown'),
+    },
+    decorators: [
+        (Story, context) => {
+            const [isMounted, setIsMounted] = useState(true)
+
+            const toggleMounted = useCallback(() => setIsMounted((mounted) => !mounted), [])
+
+            return (
+                <TypistEditorDecorator
+                    Story={Story}
+                    args={context.args}
+                    editorMounted={isMounted}
+                    bottomFunctions={
+                        <>
+                            <Button variant="secondary" onClick={toggleMounted}>
+                                {isMounted ? 'Unmount editor' : 'Mount editor'}
+                            </Button>
+                        </>
+                    }
+                />
+            )
         },
     ],
 })

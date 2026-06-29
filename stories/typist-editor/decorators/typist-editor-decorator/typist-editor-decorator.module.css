@@ -9,6 +9,11 @@
     flex-grow: 1;
 }
 
+.topContainerUnmounted {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .topContainer > div {
     display: flex;
     flex-direction: column;
@@ -39,6 +44,10 @@
 div + .editorContainer {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+.editorContainerUnmounted {
+    border-style: dashed;
 }
 
 .editorContainer > div {

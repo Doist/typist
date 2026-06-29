@@ -27,7 +27,6 @@ export type {
     SuggestionOptions,
     SuggestionRendererProps,
     SuggestionRendererRef,
-    SuggestionStorage,
 } from './factories/create-suggestion-extension'
 export { createSuggestionExtension } from './factories/create-suggestion-extension'
 export { isMultilineDocument, isPlainTextDocument } from './helpers/schema'
