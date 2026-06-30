@@ -83,22 +83,21 @@ const extensions = useMemo(function configureExtensions() {
 }, [])
 ```
 
-Both the store getter and the seeded ref read fine while the editor is being created (in `onBeforeCreate` or `onCreate`): the store is readable at any time, and the ref already holds its seeded initial value.
+Both the store getter and the seeded ref can be read while the editor is being created, since the store is readable at any time and the ref already holds its seeded initial value.
 
 To skip maintaining the ref and effect yourself, you can reach for a `useEvent`-style hook (such as the [`react-use-event-hook`](https://npmx.dev/package/react-use-event-hook) package). It folds the same ref-and-effect mechanism into one stable function whose body always sees the latest props and state, and you pass it straight in as the getter.
 
-That convenience has one limit, though. A `useEvent`-style hook fills its internal ref from an effect, so unlike the store getter or the seeded ref it throws if called before mount. Typist sets `immediatelyRender: true`, so the editor is constructed during render, before that effect runs. If an extension reads the getter during editor construction, pass the initial value as a plain config option to cover that read and use the getter afterward. Reads after mount are safe: for example, `onCreate` is emitted from a `setTimeout` after the effect has filled the ref. Otherwise the getter alone is enough:
+It comes with one limit, though. The hook fills its internal ref from an effect, so it can't be read while the editor is being created. Typist sets `immediatelyRender: true`, so the editor is constructed during render, before that effect runs. Reach for a `useEvent`-style getter only when the extension reads the value after mount, and stick with the store or ref getter when it reads during construction:
 
 ```tsx
-// `initialCollaborators` covers the `onBeforeCreate` read; `getCollaborators` takes over afterwards.
-const [initialCollaborators] = useState(() => collaborators)
+// Do: a `useEvent` getter works for an extension that reads the value only after mount.
 const getCollaborators = useEvent(() => collaborators)
 
 const extensions = useMemo(
     function configureExtensions() {
-        return [MentionExtension.configure({ initialCollaborators, getCollaborators })]
+        return [MentionExtension.configure({ getCollaborators })]
     },
-    [initialCollaborators, getCollaborators],
+    [getCollaborators],
 )
 ```
 
