@@ -91,18 +91,14 @@ That convenience has one limit, though. A `useEvent`-style hook fills its intern
 
 ```tsx
 // `initialCollaborators` covers the `onBeforeCreate` read; `getCollaborators` takes over afterwards.
+const [initialCollaborators] = useState(() => collaborators)
 const getCollaborators = useEvent(() => collaborators)
 
 const extensions = useMemo(
     function configureExtensions() {
-        return [
-            MentionExtension.configure({
-                initialCollaborators: collaborators,
-                getCollaborators,
-            }),
-        ]
+        return [MentionExtension.configure({ initialCollaborators, getCollaborators })]
     },
-    [getCollaborators],
+    [initialCollaborators, getCollaborators],
 )
 ```
 
