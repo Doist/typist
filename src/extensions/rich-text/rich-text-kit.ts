@@ -8,7 +8,6 @@ import { HardBreak } from '@tiptap/extension-hard-break'
 import { History } from '@tiptap/extension-history'
 import { HorizontalRule } from '@tiptap/extension-horizontal-rule'
 import { Italic } from '@tiptap/extension-italic'
-import { ListItem } from '@tiptap/extension-list-item'
 import { ListKeymap } from '@tiptap/extension-list-keymap'
 import { Paragraph } from '@tiptap/extension-paragraph'
 import { TableCell } from '@tiptap/extension-table-cell'
@@ -32,6 +31,7 @@ import { RichTextDocument } from './rich-text-document'
 import { RichTextHeading, RichTextHeadingOptions } from './rich-text-heading'
 import { RichTextImage } from './rich-text-image'
 import { RichTextLink } from './rich-text-link'
+import { RichTextListItem } from './rich-text-list-item'
 import { RichTextOrderedList } from './rich-text-ordered-list'
 import { RichTextStrikethrough } from './rich-text-strikethrough'
 import { RichTextTable } from './rich-text-table'
@@ -317,7 +317,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         }
 
         if (this.options.listItem !== false) {
-            extensions.push(ListItem.configure(this.options?.listItem))
+            extensions.push(RichTextListItem.configure(this.options?.listItem))
         }
 
         if (this.options.listKeymap !== false) {
