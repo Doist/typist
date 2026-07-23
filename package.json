@@ -137,7 +137,7 @@
         "jsdom": "29.1.1",
         "lefthook": "2.1.10",
         "npm-run-all-next": "1.4.2",
-        "oxfmt": "0.57.0",
+        "oxfmt": "0.59.0",
         "oxlint": "1.74.0",
         "publint": "0.3.21",
         "react": "18.3.1",
