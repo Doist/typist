@@ -149,7 +149,7 @@
         "rehype-raw": "7.0.0",
         "remark-gfm": "4.0.1",
         "rimraf": "6.1.3",
-        "semantic-release": "25.0.7",
+        "semantic-release": "25.0.8",
         "storybook": "10.5.2",
         "storybook-css-modules": "1.0.8",
         "tippy.js": "6.3.7",
