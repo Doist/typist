@@ -1,3 +1,9 @@
+## [16.1.0](https://github.com/Doist/typist/compare/v16.0.0...v16.1.0) (2026-07-27)
+
+### Features
+
+* support React 19 ([#1441](https://github.com/Doist/typist/issues/1441)) ([a3c6d80](https://github.com/Doist/typist/commit/a3c6d8032ea3bf5adb24612f330096e4aa447cec))
+
 ## [16.0.0](https://github.com/Doist/typist/compare/v15.0.0...v16.0.0) (2026-07-27)
 
 ### ⚠ BREAKING CHANGES
