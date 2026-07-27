@@ -122,6 +122,52 @@ jobs:
               run: |
                   npm run test
 
+    react-18-compatibility:
+        name: React 18 Compatibility
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+
+        needs:
+            - prepare-workflow
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v6
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            # The cache is only restored, and never saved, because this job replaces
+            # React with an older version that the other jobs must not inherit.
+            - name: Restore project 'node_modules' directory
+              id: node-modules-cache
+              uses: actions/cache/restore@v5
+              with:
+                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+            # React 18 is frozen at its final release, while its types still receive
+            # patches, so only the runtime packages are pinned to an exact version
+            - name: Downgrade React to the oldest supported version
+              run: |
+                  npm install --no-save react@18.3.1 react-dom@18.3.1 @types/react@18 @types/react-dom@18
+
+            - name: Perform type checking with TypeScript
+              run: |
+                  npm run check:types
+
+            - name: Test codebase correctness
+              run: |
+                  npm run test
+
     build-package:
         name: Build Package
         runs-on: ubuntu-latest
