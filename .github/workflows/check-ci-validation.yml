@@ -154,9 +154,11 @@ jobs:
               run: |
                   npm ci
 
+            # React 18 is frozen at its final release, while its types still receive
+            # patches, so only the runtime packages are pinned to an exact version
             - name: Downgrade React to the oldest supported version
               run: |
-                  npm install --no-save react@18 react-dom@18 @types/react@18 @types/react-dom@18
+                  npm install --no-save react@18.3.1 react-dom@18.3.1 @types/react@18 @types/react-dom@18
 
             - name: Perform type checking with TypeScript
               run: |
