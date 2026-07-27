@@ -80,9 +80,7 @@ function isTask(value: unknown): value is Task {
 
 // Discriminated union
 type Result<T> =
-    | { kind: 'success'; data: T }
-    | { kind: 'error'; error: Error }
-    | { kind: 'loading' }
+    { kind: 'success'; data: T } | { kind: 'error'; error: Error } | { kind: 'loading' }
 
 function handleResult<T>(result: Result<T>) {
     switch (result.kind) {
