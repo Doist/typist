@@ -112,9 +112,9 @@
     "devDependencies": {
         "@doist/reactist": "33.4.0",
         "@mdx-js/react": "3.1.1",
-        "@semantic-release/changelog": "6.0.3",
+        "@semantic-release/changelog": "7.0.0",
         "@semantic-release/exec": "7.1.0",
-        "@semantic-release/git": "10.0.1",
+        "@semantic-release/git": "11.0.0",
         "@storybook/addon-a11y": "10.5.3",
         "@storybook/addon-docs": "10.5.3",
         "@storybook/react-vite": "10.5.3",
