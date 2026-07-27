@@ -15,6 +15,11 @@
             "matchPackageNames": ["/gfm-strikethrough$/"]
         },
         {
+            "description": "Keep v9 until semantic-release supports v10.",
+            "matchPackageNames": ["conventional-changelog-conventionalcommits"],
+            "allowedVersions": "<10"
+        },
+        {
             "matchPackageNames": ["/eslint/"],
             "enabled": false
         }
