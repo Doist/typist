@@ -1,3 +1,13 @@
+## [16.0.0](https://github.com/Doist/typist/compare/v15.0.0...v16.0.0) (2026-07-27)
+
+### ⚠ BREAKING CHANGES
+
+* update minimum Node.js version to 24.13.0 (#1439)
+
+### Miscellaneous Chores
+
+* update minimum Node.js version to 24.13.0 ([#1439](https://github.com/Doist/typist/issues/1439)) ([6c4fdd2](https://github.com/Doist/typist/commit/6c4fdd2861583fd33427972b82248b6821b690da))
+
 ## [15.0.0](https://github.com/Doist/typist/compare/v14.1.2...v15.0.0) (2026-06-29)
 
 ### ⚠ BREAKING CHANGES
