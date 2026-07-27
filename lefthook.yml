@@ -7,6 +7,8 @@ pre-commit:
         - name: format
           run: npm run fix:format -- {staged_files}
           glob: '*.{js,jsx,ts,tsx,mts,css,json,jsonc,md,mdx,yml,yaml,html,svg}'
+          exclude:
+              - package-lock.json
           stage_fixed: true
         - name: typecheck
           run: npm run check:types
