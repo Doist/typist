@@ -55,6 +55,17 @@ describe('Extension: RichTextListItem', () => {
             expect(editor.getHTML()).toBe('<p>17. Juli</p>')
         })
 
+        test('preserves the marker of an explicitly decimal ordered list', () => {
+            const editor = createEditorWithCaretAfter(
+                '<ol start="17" type="1"><li><p>Juli</p></li></ol>',
+                'Juli',
+            )
+
+            pressShiftTab(editor)
+
+            expect(editor.getHTML()).toBe('<p>17. Juli</p>')
+        })
+
         test('preserves the rendered marker matching the item position within the list', () => {
             const editor = createEditorWithCaretAfter(
                 '<ol><li><p>one</p></li><li><p>two</p></li><li><p>three</p></li></ol>',

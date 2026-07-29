@@ -1,3 +1,4 @@
+import { findParentNode } from '@tiptap/core'
 import { ListItem } from '@tiptap/extension-list-item'
 
 import type { Editor } from '@tiptap/core'
@@ -30,20 +31,13 @@ function liftOutOfOrderedListPreservingMarker(
 
     const { $from } = selection
 
-    // Find the innermost list item the caret is placed within
-    let itemDepth: number | null = null
-    for (let depth = $from.depth; depth >= 2; depth--) {
-        if ($from.node(depth).type.name === itemTypeName) {
-            itemDepth = depth
-            break
-        }
-    }
+    const item = findParentNode((node) => node.type.name === itemTypeName)(selection)
 
-    if (itemDepth === null) {
+    if (!item || item.depth < 2) {
         return false
     }
 
-    const list = $from.node(itemDepth - 1)
+    const list = $from.node(item.depth - 1)
 
     if (list.type.name !== orderedListTypeName) {
         return false
@@ -51,12 +45,12 @@ function liftOutOfOrderedListPreservingMarker(
 
     // When the list is nested within another list item, lifting only unindents the item into the
     // parent list (it remains a list item, and no marker is lost)
-    if ($from.node(itemDepth - 2).type.name === itemTypeName) {
+    if ($from.node(item.depth - 2).type.name === itemTypeName) {
         return false
     }
 
     // Non-decimal markers (e.g. `<ol type="a">`) cannot be reconstructed as `<number>.` text
-    if (list.attrs.type) {
+    if (list.attrs.type && list.attrs.type !== '1') {
         return false
     }
 
@@ -65,10 +59,10 @@ function liftOutOfOrderedListPreservingMarker(
     }
 
     // The number the item is rendered with, given the list start and the item's position
-    const marker = `${Number(list.attrs.start ?? 1) + $from.index(itemDepth - 1)}. `
+    const marker = `${Number(list.attrs.start ?? 1) + $from.index(item.depth - 1)}. `
 
     // The position at the start of the item's first paragraph, where the marker text belongs
-    const markerPosition = $from.start(itemDepth) + 1
+    const markerPosition = item.start + 1
 
     return editor
         .chain()
