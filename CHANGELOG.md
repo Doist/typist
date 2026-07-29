@@ -1,3 +1,9 @@
+## [16.2.0](https://github.com/Doist/typist/compare/v16.1.0...v16.2.0) (2026-07-29)
+
+### Features
+
+* **rich-text:** preserve ordered list markers when unindenting out of a list ([#1415](https://github.com/Doist/typist/issues/1415)) ([4408c72](https://github.com/Doist/typist/commit/4408c72f0febce7cc98dc3e9137ae0e44f1696a5))
+
 ## [16.1.0](https://github.com/Doist/typist/compare/v16.0.0...v16.1.0) (2026-07-27)
 
 ### Features
