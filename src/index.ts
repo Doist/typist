@@ -5,7 +5,7 @@ export type {
     DestroyProps,
     FocusProps,
     SelectionUpdateProps,
-    TransacationProps,
+    TransactionProps,
     TypistEditorProps,
     TypistEditorRef,
     UpdateProps,

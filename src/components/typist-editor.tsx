@@ -68,7 +68,7 @@ type SelectionUpdateProps = EditorEvents['selectionUpdate']
 /**
  * The properties that describe the `transaction` editor event.
  */
-type TransacationProps = EditorEvents['transaction']
+type TransactionProps = EditorEvents['transaction']
 
 /**
  * The properties that describe the `focus` editor event.
@@ -159,7 +159,7 @@ type TypistEditorProps = {
     /**
      * The event handler that is fired when the editor state has changed.
      */
-    onTransaction?: (props: TransacationProps) => void
+    onTransaction?: (props: TransactionProps) => void
 
     /**
      * The event handler that is fired when the editor view gains focus.
@@ -447,7 +447,7 @@ export type {
     DestroyProps,
     FocusProps,
     SelectionUpdateProps,
-    TransacationProps,
+    TransactionProps,
     TypistEditorProps,
     TypistEditorRef,
     UpdateProps,
