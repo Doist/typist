@@ -1,3 +1,13 @@
+## [17.0.0](https://github.com/Doist/typist/compare/v16.2.0...v17.0.0) (2026-08-05)
+
+### ⚠ BREAKING CHANGES
+
+* The exported `TransacationProps` type has been renamed to `TransactionProps`. Update imports to use `TransactionProps`.
+
+### Bug Fixes
+
+* correct TransactionProps typo ([#1457](https://github.com/Doist/typist/issues/1457)) ([5c4efe0](https://github.com/Doist/typist/commit/5c4efe0a248bda07ae7a0f9a3931970c2798af1c))
+
 ## [16.2.0](https://github.com/Doist/typist/compare/v16.1.0...v16.2.0) (2026-07-29)
 
 ### Features
