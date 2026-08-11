@@ -1,15 +1,15 @@
 import { visit } from 'unist-util-visit'
 
+import type { Root } from 'mdast'
 import type { Transformer } from 'unified'
-import type { Parent } from 'unist'
 
 /**
  * Treats angle-bracket HTTP(S) autolinks as plain text because they are not a supported rich-text
  * Markdown shortcut.
  */
-function remarkIgnoreAngleBracketAutolinks(): Transformer {
+function remarkIgnoreAngleBracketAutolinks(): Transformer<Root> {
     return (tree, file) => {
-        visit(tree as Parent, (node, index, parent) => {
+        visit(tree, 'link', (node, index, parent) => {
             const startOffset = node.position?.start.offset
             const endOffset = node.position?.end.offset
 
@@ -26,8 +26,7 @@ function remarkIgnoreAngleBracketAutolinks(): Transformer {
             const source = String(file.value).slice(startOffset, endOffset)
 
             if (/^<https?:\/\/\S+>$/i.test(source)) {
-                const textNode = { type: 'text', value: source }
-                parent.children[index] = textNode
+                parent.children[index] = { type: 'text', value: source }
             }
         })
     }
