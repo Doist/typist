@@ -622,6 +622,12 @@ Answer: [Doist Frontend](channel://190200)`),
                 )
             })
 
+            test('angle-bracket URLs are preserved as text', () => {
+                expect(htmlSerializer.serialize('<https://duckduckgo.com>')).toBe(
+                    '<p>&lt;https://duckduckgo.com></p>',
+                )
+            })
+
             test('styled links HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_LINKS)).toBe(
                     '<p>I love supporting the <strong><a href="https://eff.org">EFF</a></strong>.<br>I love supporting the <strong><a href="https://eff.org">https://eff.org</a></strong>.<br>This is the <em><a href="https://www.markdownguide.org">Markdown Guide</a></em>.<br>This is the <em><a href="https://www.markdownguide.org">https://www.markdownguide.org</a></em>.<br>See the section on <a href="#code"><code>code</code></a>.</p>',
@@ -807,6 +813,12 @@ console.log("hello")
                     .toBe(`<p>My favorite search engine is [Duck Duck Go](https://duckduckgo.com).
 My favorite search engine is [Duck Duck Go](https://duckduckgo.com "The best search engine for privacy").
 My favorite search engine is https://duckduckgo.com.</p>`)
+            })
+
+            test('angle-bracket URLs are preserved as text without the link extension', () => {
+                expect(htmlSerializer.serialize('<https://duckduckgo.com>')).toBe(
+                    '<p>&lt;https://duckduckgo.com></p>',
+                )
             })
 
             test('styled links HTML output is preserved', () => {
