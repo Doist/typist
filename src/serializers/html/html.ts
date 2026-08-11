@@ -19,6 +19,7 @@ import { rehypeTable } from './plugins/rehype-table'
 import { rehypeTaskList } from './plugins/rehype-task-list'
 import { remarkAutolinkLiteral } from './plugins/remark-autolink-literal'
 import { remarkDisableConstructs } from './plugins/remark-disable-constructs'
+import { remarkIgnoreAngleBracketAutolinks } from './plugins/remark-ignore-angle-bracket-autolinks'
 import { remarkStrikethrough } from './plugins/remark-strikethrough'
 import { remarkTable } from './plugins/remark-table'
 
@@ -100,6 +101,9 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     // Configure the unified processor to use a custom plugin to disable constructs based on the
     // supported extensions that are enabled in the editor schema
     unifiedProcessor.use(remarkDisableConstructs, schema)
+
+    // Ignore angle-bracket autolinks because they are not a supported rich-text Markdown shortcut
+    unifiedProcessor.use(remarkIgnoreAngleBracketAutolinks)
 
     // Configure the unified processor to use a third-party plugin to turn soft line endings into
     // hard breaks (i.e. `<br>`), which will display user content closer to how it was authored
