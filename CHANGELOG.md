@@ -1,3 +1,9 @@
+## [17.0.1](https://github.com/Doist/typist/compare/v17.0.0...v17.0.1) (2026-08-11)
+
+### Bug Fixes
+
+* **serializers:** preserve angle-bracket URLs as text ([#1466](https://github.com/Doist/typist/issues/1466)) ([7ecfc21](https://github.com/Doist/typist/commit/7ecfc21d104631ab8d254d24331be9ad7ba79034))
+
 ## [17.0.0](https://github.com/Doist/typist/compare/v16.2.0...v17.0.0) (2026-08-05)
 
 ### ⚠ BREAKING CHANGES
