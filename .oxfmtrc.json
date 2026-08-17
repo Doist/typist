@@ -3,8 +3,10 @@
     "ignorePatterns": [
         ".cache/*",
         "dist/*",
-        "storybook-static/*",
+        "docs/*",
         "**/node_modules/*",
+        "storybook-static/*",
+        "AGENTS.md",
         "CHANGELOG.md"
     ],
     "arrowParens": "always",
