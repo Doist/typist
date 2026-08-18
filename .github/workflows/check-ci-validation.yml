@@ -38,7 +38,7 @@ jobs:
               id: node-modules-cache
               uses: actions/cache@v5
               with:
-                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
                   path: node_modules/
 
             - name: Install project npm dependencies
@@ -68,7 +68,7 @@ jobs:
               id: node-modules-cache
               uses: actions/cache@v5
               with:
-                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
                   path: node_modules/
 
             - name: Install project npm dependencies
@@ -110,7 +110,7 @@ jobs:
               id: node-modules-cache
               uses: actions/cache@v5
               with:
-                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
                   path: node_modules/
 
             - name: Install project npm dependencies
@@ -146,7 +146,7 @@ jobs:
               id: node-modules-cache
               uses: actions/cache/restore@v5
               with:
-                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
                   path: node_modules/
 
             - name: Install project npm dependencies
@@ -190,7 +190,7 @@ jobs:
               id: node-modules-cache
               uses: actions/cache@v5
               with:
-                  key: node-modules-cache-${{ hashFiles('**/package-lock.json', '**/.node-version') }}
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
                   path: node_modules/
 
             - name: Install project npm dependencies
