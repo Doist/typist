@@ -22,7 +22,7 @@ function renderMentionItem(item: MentionSuggestionItem) {
     return (
         <Inline space="small" exceptionallySetClassName={styles.mentionSuggestionItem}>
             <Avatar size={20} name={item.name} variant="bauhaus" colors={MENTION_AVATAR_COLORS} />
-            <Text size="copy" lineClamp={1}>
+            <Text variant="callout-2" lineClamp={1}>
                 {item.name}
             </Text>
         </Inline>
