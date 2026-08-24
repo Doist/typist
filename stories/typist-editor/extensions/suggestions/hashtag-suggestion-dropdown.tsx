@@ -22,7 +22,7 @@ function renderHashtagItem(item: HashtagSuggestionItem) {
     return (
         <Inline space="small" exceptionallySetClassName={styles.hashtagSuggestionItem}>
             <Avatar size={20} name={item.name} variant="marble" colors={HASHTAG_AVATAR_COLORS} />
-            <Text size="copy" lineClamp={1}>
+            <Text variant="callout-2" lineClamp={1}>
                 #{item.name}
             </Text>
         </Inline>
