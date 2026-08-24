@@ -16,6 +16,7 @@ function createEditorWithCaretAfter(content: string, text: string): Editor {
         extensions: [RichTextKit.configure({ code: false })],
         content,
     })
+    onTestFinished(() => editor.destroy())
 
     let caretPosition: number | null = null
     editor.state.doc.descendants((node, position) => {
