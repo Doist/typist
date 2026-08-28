@@ -125,7 +125,7 @@
         "@types/hast": "3.0.5",
         "@types/lodash-es": "4.17.12",
         "@types/react": "19.2.18",
-        "@types/react-dom": "19.2.4",
+        "@types/react-dom": "19.2.5",
         "@types/react-syntax-highlighter": "15.5.13",
         "@types/turndown": "5.0.6",
         "@types/unist": "3.0.3",
