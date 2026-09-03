@@ -1,7 +1,5 @@
 import { useCallback, useSyncExternalStore } from 'react'
 
-import { Box, IconButton } from '@doist/reactist'
-
 import {
     RiArrowGoBackLine,
     RiArrowGoForwardLine,
@@ -51,7 +49,13 @@ type ToolbarButtonConfig = ToolbarButtonProps & {
 }
 
 function ToolbarButton(props: ToolbarButtonProps) {
-    return <IconButton variant="quaternary" {...props} />
+    const { icon, ...buttonProps } = props
+
+    return (
+        <button {...buttonProps} type="button" className={styles.toolbarButton}>
+            {icon}
+        </button>
+    )
 }
 
 function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
@@ -330,24 +334,17 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
     ]
 
     return (
-        <Box
-            className={styles.toolbarContainer}
-            display="flex"
-            flexWrap="wrap"
-            justifyContent="center"
-            marginX="large"
-            padding="xsmall"
-        >
+        <div className={styles.toolbarContainer}>
             {buttonConfigs.map(({ withDividerBefore, ...buttonProps }) =>
                 withDividerBefore ? (
-                    <Box key={buttonProps['aria-label']} className={styles.withDividerBefore}>
+                    <div key={buttonProps['aria-label']} className={styles.withDividerBefore}>
                         <ToolbarButton {...buttonProps} />
-                    </Box>
+                    </div>
                 ) : (
                     <ToolbarButton key={buttonProps['aria-label']} {...buttonProps} />
                 ),
             )}
-        </Box>
+        </div>
     )
 }
 

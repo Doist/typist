@@ -1,12 +1,11 @@
 import { useCallback, useRef } from 'react'
 
-import { Button } from '@doist/reactist'
-
 import { Selection } from '@tiptap/pm/state'
 import { action } from 'storybook/actions'
 
 import preview from '../../.storybook/preview'
 import { TypistEditor, TypistEditorRef } from '../../src'
+import { Button } from '../components/button'
 
 import { DEFAULT_ARG_TYPES } from './constants/defaults'
 import { MARKDOWN_PLACEHOLDER_LONG, MARKDOWN_PLACEHOLDER_SHORT } from './constants/markdown'
@@ -63,19 +62,14 @@ export const Commands = meta.story({
                     args={context.args}
                     bottomFunctions={
                         <>
-                            <Button variant="secondary" onClick={handleCreateParagraphEndClick}>
+                            <Button onClick={handleCreateParagraphEndClick}>
                                 createParagraphEnd
                             </Button>
-                            <Button variant="secondary" onClick={handleExtendWordRangeClick}>
-                                extendWordRange
-                            </Button>
-                            <Button variant="secondary" onClick={handleInsertMarkdownContentClick}>
+                            <Button onClick={handleExtendWordRangeClick}>extendWordRange</Button>
+                            <Button onClick={handleInsertMarkdownContentClick}>
                                 insertMarkdownContent
                             </Button>
-                            <Button
-                                variant="secondary"
-                                onClick={handleInsertMarkdownContentAtClick}
-                            >
+                            <Button onClick={handleInsertMarkdownContentAtClick}>
                                 insertMarkdownContentAt
                             </Button>
                         </>
@@ -113,16 +107,9 @@ export const Helpers = meta.story({
                     args={context.args}
                     bottomFunctions={
                         <>
-                            <Button variant="secondary" onClick={handleGetEditorClick}>
-                                getEditor
-                            </Button>
-                            <Button variant="secondary" onClick={handleGetMarkdownClick}>
-                                getMarkdown
-                            </Button>
-                            <Button
-                                variant="secondary"
-                                onClick={handleGetAllNodesAttributesByTypeClick}
-                            >
+                            <Button onClick={handleGetEditorClick}>getEditor</Button>
+                            <Button onClick={handleGetMarkdownClick}>getMarkdown</Button>
+                            <Button onClick={handleGetAllNodesAttributesByTypeClick}>
                                 {"getAllNodesAttributesByType('mentionSuggestion')"}
                             </Button>
                         </>

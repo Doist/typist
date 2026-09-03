@@ -1,0 +1,38 @@
+.button {
+    align-items: center;
+    background-color: var(--storybook-theme-actionBackground);
+    border: 1px solid transparent;
+    border-radius: var(--storybook-theme-appBorderRadius);
+    color: var(--storybook-theme-actionColor);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: inherit;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    height: 32px;
+    justify-content: center;
+    line-height: 32px;
+    max-width: 100%;
+    min-width: 68px;
+    padding: 0 var(--storybook-theme-spacingMedium);
+    text-decoration: none;
+    transition:
+        color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    white-space: nowrap;
+}
+
+.button:hover:not(:disabled),
+.button:focus-visible:not(:disabled) {
+    background-color: var(--storybook-theme-actionHoverBackground);
+}
+
+.button:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.button:disabled {
+    color: var(--storybook-theme-actionDisabledColor);
+    cursor: not-allowed;
+}

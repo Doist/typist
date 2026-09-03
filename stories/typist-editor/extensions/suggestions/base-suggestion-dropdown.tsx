@@ -1,6 +1,6 @@
+/* oxlint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/prefer-tag-over-role */
+// The editor owns keyboard focus and delegates arrow/Enter handling to this listbox.
 import { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
-
-import { Box, Inline, Text } from '@doist/reactist'
 
 import { SuggestionRendererRef } from '../../../../src'
 
@@ -36,20 +36,17 @@ function BaseSuggestionDropdownItem({
     )
 
     return (
-        <Box
-            as="li"
+        <li
             id={`suggestion-${index}`}
             role="option"
             tabIndex={-1}
             aria-selected={isSelected}
-            display="flex"
-            alignItems="center"
-            borderRadius="standard"
+            className={styles.option}
             onClick={handleClick}
             ref={handleRef}
         >
             {children}
-        </Box>
+        </li>
     )
 }
 
@@ -130,20 +127,16 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
     )
 
     return (
-        <Box
-            borderRadius="standard"
-            overflow="auto"
+        <div
             tabIndex={-1}
             className={styles.baseSuggestionDropdown}
             style={suggestionDropdownStyle}
         >
             {areSuggestionsEmpty ? (
-                <Inline paddingX="small">
-                    <Text>No results found…</Text>
-                </Inline>
+                <div className={styles.status}>No results found…</div>
             ) : areSuggestionsLoading ? (
-                <Inline paddingX="small" space="xsmall">
-                    <svg width="20" height="20" viewBox="0 0 50 50">
+                <div className={styles.status}>
+                    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 50 50">
                         <path
                             fill="currentColor"
                             d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
@@ -159,15 +152,15 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
                             />
                         </path>
                     </svg>
-                    <Text>Loading…</Text>
-                </Inline>
+                    <span>Loading…</span>
+                </div>
             ) : (
-                <Box
-                    as="ul"
-                    // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
+                <ul
                     role="listbox"
+                    tabIndex={-1}
                     aria-multiselectable={false}
                     aria-activedescendant={`suggestion-${selectedIndex}`}
+                    className={styles.list}
                 >
                     {items.map((item, index) => (
                         <BaseSuggestionDropdownItem
@@ -180,9 +173,9 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
                             {renderItem(item)}
                         </BaseSuggestionDropdownItem>
                     ))}
-                </Box>
+                </ul>
             )}
-        </Box>
+        </div>
     )
 }
 

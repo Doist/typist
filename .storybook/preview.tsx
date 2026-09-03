@@ -1,5 +1,3 @@
-import '@doist/reactist/styles/reactist.css'
-
 import 'github-markdown-css/github-markdown-light.css'
 
 import './preview.style.css'

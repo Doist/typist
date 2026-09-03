@@ -1,28 +1,57 @@
 .toolbarContainer {
-    box-shadow: var(--typist-editor-decorator-default-shadow);
     border: solid 1px var(--storybook-theme-appBorderColor);
     border-bottom: 0;
     border-radius: var(--storybook-theme-appBorderRadius) var(--storybook-theme-appBorderRadius) 0 0;
-    gap: var(--reactist-spacing-xsmall);
+    box-shadow: var(--typist-editor-decorator-default-shadow);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--storybook-theme-spacingXsmall);
+    justify-content: center;
+    margin: 0 var(--storybook-theme-spacingLarge);
+    padding: var(--storybook-theme-spacingXsmall);
 }
 
-.toolbarContainer button[aria-disabled] {
+.toolbarButton {
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--storybook-theme-appBorderRadius);
+    color: var(--storybook-theme-actionColor);
+    cursor: pointer;
+    display: flex;
     width: 26px;
     height: 26px;
+    justify-content: center;
+    padding: 0;
+    transition:
+        color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.toolbarContainer button[aria-pressed='true'] {
-    background-color: var(--reactist-btn-hover-fill);
+.toolbarButton:hover:not(:disabled),
+.toolbarButton:focus-visible:not(:disabled),
+.toolbarButton[aria-pressed='true'] {
+    background-color: var(--storybook-theme-actionHoverBackground);
 }
 
-.toolbarContainer button[aria-disabled] > svg {
+.toolbarButton:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.toolbarButton:disabled {
+    color: var(--storybook-theme-actionDisabledColor);
+    cursor: not-allowed;
+}
+
+.toolbarButton > svg {
     width: 16px;
     height: 16px;
+    pointer-events: none;
 }
 
 .withDividerBefore {
     position: relative;
-    margin-left: calc(var(--reactist-spacing-xsmall) * 2 + 1px);
+    margin-left: calc(var(--storybook-theme-spacingXsmall) * 2 + 1px);
 }
 
 .withDividerBefore::before {
@@ -30,7 +59,7 @@
     background-color: var(--storybook-theme-appBorderColor);
     position: absolute;
     top: 0;
-    left: calc(var(--reactist-spacing-xsmall) * -2);
+    left: calc(var(--storybook-theme-spacingXsmall) * -2);
     width: 1px;
     height: 100%;
 }

@@ -15,16 +15,14 @@
     --storybook-theme-barBg: #f6f7f3;
     --storybook-theme-barTextColor: #9ba399;
 
-    /*
-     * Overwritten Reactist CSS variables to match the Storybook theme.
-     */
-    --reactist-actionable-secondary-idle-tint: #706e67;
-    --reactist-actionable-secondary-idle-fill: #f1f0ee;
-    --reactist-actionable-secondary-hover-tint: #706e67;
-    --reactist-actionable-secondary-hover-fill: #eaeae5;
-    --reactist-actionable-quaternary-idle-tint: #706e67;
-    --reactist-actionable-quaternary-hover-fill: #eaeae5;
-    --reactist-actionable-quaternary-disabled-tint: #c6c6b8;
+    --storybook-theme-actionColor: #706e67;
+    --storybook-theme-actionBackground: #f1f0ee;
+    --storybook-theme-actionHoverBackground: #eaeae5;
+    --storybook-theme-actionDisabledColor: #c6c6b8;
+    --storybook-theme-spacingXsmall: 4px;
+    --storybook-theme-spacingSmall: 8px;
+    --storybook-theme-spacingMedium: 12px;
+    --storybook-theme-spacingLarge: 16px;
 }
 
 html {
