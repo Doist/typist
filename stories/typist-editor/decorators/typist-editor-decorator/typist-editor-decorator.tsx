@@ -1,7 +1,5 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 
-import { Box, Column, Columns } from '@doist/reactist'
-
 import classNames from 'classnames'
 
 import { TypistEditorToolbar } from './typist-editor-toolbar'
@@ -74,21 +72,19 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
         )
 
         return (
-            <Box display="flex" flexDirection="column" height="full">
-                <Columns
-                    exceptionallySetClassName={classNames(styles.topContainer, {
+            <div className={styles.decorator}>
+                <div
+                    className={classNames(styles.topContainer, {
                         [styles.topContainerUnmounted]: !editorMounted,
                     })}
                 >
-                    <Column width="1/2">
+                    <section className={styles.column}>
                         <h3>Typist Editor</h3>
                         {shouldRenderToolbar ? <TypistEditorToolbar editor={typistEditor} /> : null}
-                        <Box
+                        <div
                             className={classNames(styles.editorContainer, {
                                 [styles.editorContainerUnmounted]: !editorMounted,
                             })}
-                            marginX="large"
-                            marginBottom="large"
                         >
                             {editorMounted ? (
                                 <Story
@@ -96,30 +92,19 @@ const TypistEditorDecorator = forwardRef<TypistEditorRef, TypistEditorDecoratorP
                                     args={storyArgs}
                                 />
                             ) : null}
-                        </Box>
-                    </Column>
-                    <Column width="1/2">
+                        </div>
+                    </section>
+                    <section className={styles.column}>
                         <h3>Markdown Output</h3>
-                        <Box
-                            className={styles.outputContainer}
-                            marginX="large"
-                            marginBottom="large"
-                        >
+                        <div className={styles.outputContainer}>
                             <pre>{markdownOutput}</pre>
-                        </Box>
-                    </Column>
-                </Columns>
+                        </div>
+                    </section>
+                </div>
                 {bottomFunctions ? (
-                    <Box
-                        display="flex"
-                        justifyContent="center"
-                        flexWrap="wrap"
-                        className={styles.bottomFunctionsContainer}
-                    >
-                        {bottomFunctions}
-                    </Box>
+                    <div className={styles.bottomFunctionsContainer}>{bottomFunctions}</div>
                 ) : null}
-            </Box>
+            </div>
         )
     },
 )

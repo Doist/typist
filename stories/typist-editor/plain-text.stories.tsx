@@ -1,11 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
 
-import { Button } from '@doist/reactist'
-
 import { action } from 'storybook/actions'
 
 import preview from '../../.storybook/preview'
 import { PlainTextKit, TypistEditor } from '../../src'
+import { Button } from '../components/button'
 
 import { DEFAULT_ARG_TYPES, DEFAULT_STORY_ARGS } from './constants/defaults'
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
@@ -114,7 +113,7 @@ export const EventHandlers = meta.story({
                     editorMounted={isMounted}
                     bottomFunctions={
                         <>
-                            <Button variant="secondary" onClick={toggleMounted}>
+                            <Button onClick={toggleMounted}>
                                 {isMounted ? 'Unmount editor' : 'Mount editor'}
                             </Button>
                         </>

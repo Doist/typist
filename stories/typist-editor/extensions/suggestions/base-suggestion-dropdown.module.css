@@ -9,43 +9,78 @@
 
 .baseSuggestionDropdown {
     background-color: var(--suggestion-dropdown-background-color);
-    box-shadow: var(--typist-editor-decorator-default-shadow);
     border: solid 1px var(--storybook-theme-appBorderColor);
-    width: var(--suggestion-dropdown-width);
+    border-radius: var(--storybook-theme-appBorderRadius);
+    box-shadow: var(--typist-editor-decorator-default-shadow);
+    color: var(--storybook-theme-textColor);
     max-height: calc(
         var(--suggestion-dropdown-option-height) * var(--suggestion-dropdown-item-size) +
             var(--suggestion-dropdown-spacing) * (var(--suggestion-dropdown-item-size) + 1) + 2px
     );
-    padding: var(--suggestion-dropdown-spacing) 0;
     overflow-x: hidden;
+    overflow-y: auto;
+    padding: var(--suggestion-dropdown-spacing) 0;
+    width: var(--suggestion-dropdown-width);
 }
 
-.baseSuggestionDropdown > div {
+.status {
+    align-items: center;
+    display: flex;
+    font-size: 0.8125rem;
+    gap: var(--storybook-theme-spacingXsmall);
+    line-height: 20px;
     opacity: 0.8;
+    padding: 0 var(--storybook-theme-spacingSmall);
 }
 
-.baseSuggestionDropdown [role='option'] {
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.option {
+    align-items: center;
+    border-radius: var(--storybook-theme-appBorderRadius);
+    cursor: pointer;
+    display: flex;
     min-height: var(--suggestion-dropdown-option-height);
     padding: 0 var(--suggestion-dropdown-spacing);
     margin: 0 var(--suggestion-dropdown-spacing);
     scroll-margin: var(--suggestion-dropdown-spacing) 0;
-    cursor: pointer;
 }
 
-.baseSuggestionDropdown [role='option'] + [role='option'] {
+.option + .option {
     margin-top: var(--suggestion-dropdown-spacing);
 }
 
-.baseSuggestionDropdown [role='option']:first-of-type {
+.option:first-of-type {
     scroll-margin-top: calc(
         var(--suggestion-dropdown-option-height) + var(--suggestion-dropdown-spacing)
     );
 }
 
-.baseSuggestionDropdown [role='option']:hover {
+.option:hover {
     background-color: var(--suggestion-dropdown-option-hover-background-color);
 }
 
-.baseSuggestionDropdown [role='option'][aria-selected='true'] {
+.option[aria-selected='true'] {
     background-color: var(--suggestion-dropdown-option-selected-background-color);
+}
+
+.suggestionItem {
+    align-items: center;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--storybook-theme-spacingSmall);
+    overflow-x: hidden;
+}
+
+.suggestionLabel {
+    font-size: 0.8125rem;
+    line-height: 20px;
+    overflow: hidden;
+    padding-right: var(--storybook-theme-spacingXsmall);
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

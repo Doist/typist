@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 
-import { Box } from '@doist/reactist'
-
 import classNames from 'classnames'
 
 import { NodeViewWrapper } from '../../../src'
@@ -38,7 +36,7 @@ function RichTextImageWrapper({ extension, node }: NodeViewProps) {
         <NodeViewWrapper data-drag-handle="true" className={styles.richTextImageWrapper}>
             <img {...imageAttributes} className={imageClasses} alt={alt} title={title} src={src} />
             {isAttachmentUploading ? (
-                <Box className={styles.progressOverlay} style={progressOverlayStyle} />
+                <div className={styles.progressOverlay} style={progressOverlayStyle} />
             ) : null}
         </NodeViewWrapper>
     )

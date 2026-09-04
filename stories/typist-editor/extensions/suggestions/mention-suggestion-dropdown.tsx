@@ -1,13 +1,11 @@
 import { forwardRef } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
-import { Inline, Text } from '@doist/reactist'
-
 import Avatar from 'boring-avatars'
 
 import { BaseSuggestionDropdown } from './base-suggestion-dropdown'
 
-import styles from './mention-suggestion-dropdown.module.css'
+import styles from './base-suggestion-dropdown.module.css'
 
 import type { SuggestionRendererProps, SuggestionRendererRef } from '../../../../src'
 import type { MentionSuggestionItem } from '../../constants/suggestions'
@@ -20,12 +18,10 @@ function getMentionItemKey(item: MentionSuggestionItem) {
 
 function renderMentionItem(item: MentionSuggestionItem) {
     return (
-        <Inline space="small" exceptionallySetClassName={styles.mentionSuggestionItem}>
+        <div className={styles.suggestionItem}>
             <Avatar size={20} name={item.name} variant="bauhaus" colors={MENTION_AVATAR_COLORS} />
-            <Text variant="callout-2" lineClamp={1}>
-                {item.name}
-            </Text>
-        </Inline>
+            <span className={styles.suggestionLabel}>{item.name}</span>
+        </div>
     )
 }
 
