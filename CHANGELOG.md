@@ -1,3 +1,9 @@
+## [17.0.3](https://github.com/Doist/typist/compare/v17.0.2...v17.0.3) (2026-09-16)
+
+### Bug Fixes
+
+* **deps:** update dependency micromark-extension-gfm-table to v2.1.2 ([#1512](https://github.com/Doist/typist/issues/1512)) ([5fb4d40](https://github.com/Doist/typist/commit/5fb4d408a5ee8138189fa1e5b63ca953714958dd))
+
 ## [17.0.2](https://github.com/Doist/typist/compare/v17.0.1...v17.0.2) (2026-09-04)
 
 ### Bug Fixes
