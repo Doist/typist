@@ -134,7 +134,7 @@
         "classnames": "2.5.1",
         "conventional-changelog-conventionalcommits": "9.3.1",
         "github-markdown-css": "5.9.0",
-        "jsdom": "30.0.1",
+        "jsdom": "30.1.0",
         "lefthook": "2.1.14",
         "npm-run-all-next": "1.4.2",
         "oxfmt": "0.68.0",
