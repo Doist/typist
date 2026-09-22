@@ -1,11 +1,17 @@
 :root {
-    --reactist-content-primary: var(--storybook-theme-textColor);
     --typist-editor-decorator-default-shadow: 1px 1px 2px 0 #f3f3f1;
     --typist-editor-media-border-radius: calc(var(--storybook-theme-appBorderRadius) / 2);
 }
 
+.decorator {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .topContainer {
     color: var(--storybook-theme-textColor);
+    display: flex;
     flex-grow: 1;
 }
 
@@ -14,18 +20,22 @@
     pointer-events: none;
 }
 
-.topContainer > div {
+.column {
     display: flex;
     flex-direction: column;
+    flex-grow: 0;
+    height: 100%;
+    min-width: 0;
+    width: 50%;
 }
 
-.topContainer > div > h3 {
-    margin: var(--reactist-spacing-large) 0 var(--reactist-spacing-medium)
-        var(--reactist-spacing-large);
+.column > h3 {
+    margin: var(--storybook-theme-spacingLarge) 0 var(--storybook-theme-spacingMedium)
+        var(--storybook-theme-spacingLarge);
     opacity: 0.85;
 }
 
-.topContainer > :first-of-type {
+.column:first-of-type {
     border-right: 1px solid var(--storybook-theme-appBorderColor);
 }
 
@@ -37,6 +47,7 @@
     flex-direction: column;
     flex-wrap: wrap;
     flex-grow: 1;
+    margin: 0 var(--storybook-theme-spacingLarge) var(--storybook-theme-spacingLarge);
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -65,10 +76,11 @@ div + .editorContainer {
     border: solid 1px var(--storybook-theme-appBorderColor);
     border-radius: var(--storybook-theme-appBorderRadius);
     flex-grow: 1;
-    padding: var(--reactist-spacing-medium);
+    margin: 0 var(--storybook-theme-spacingLarge) var(--storybook-theme-spacingLarge);
     overflow-x: hidden;
     overflow-y: auto;
     overflow-wrap: break-word;
+    padding: var(--storybook-theme-spacingMedium);
 }
 
 .outputContainer pre {
@@ -80,13 +92,16 @@ div + .editorContainer {
 .bottomFunctionsContainer {
     background-color: var(--storybook-theme-appContentBg);
     border-top: solid 1px var(--storybook-theme-appBorderColor);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--storybook-theme-spacingXsmall);
+    justify-content: center;
     position: sticky;
     bottom: 0;
-    padding: var(--reactist-spacing-medium);
-    gap: var(--reactist-spacing-xsmall);
+    padding: var(--storybook-theme-spacingMedium);
 }
 
-.bottomFunctionsContainer button[aria-disabled] {
+.bottomFunctionsContainer button {
     font-family: var(--storybook-theme-fontCode);
     font-weight: normal;
     font-size: 0.75rem;
@@ -101,7 +116,7 @@ div + .editorContainer {
     flex-direction: column;
     font-size: 0.875rem;
     height: 100%;
-    padding: var(--reactist-spacing-medium);
+    padding: var(--storybook-theme-spacingMedium);
     outline: none;
 }
 

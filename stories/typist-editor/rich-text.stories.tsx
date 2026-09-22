@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { Button } from '@doist/reactist'
-
 import { clamp, random } from 'lodash-es'
 import { action } from 'storybook/actions'
 
 import preview from '../../.storybook/preview'
 import { RichTextKit, TypistEditor } from '../../src'
+import { Button } from '../components/button'
 
 import {
     DEFAULT_ARG_TYPES,
@@ -260,7 +259,7 @@ export const EventHandlers = meta.story({
                     editorMounted={isMounted}
                     bottomFunctions={
                         <>
-                            <Button variant="secondary" onClick={toggleMounted}>
+                            <Button onClick={toggleMounted}>
                                 {isMounted ? 'Unmount editor' : 'Mount editor'}
                             </Button>
                         </>

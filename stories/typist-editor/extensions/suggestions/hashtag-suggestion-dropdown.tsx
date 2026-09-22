@@ -1,13 +1,11 @@
 import { forwardRef } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
-import { Inline, Text } from '@doist/reactist'
-
 import Avatar from 'boring-avatars'
 
 import { BaseSuggestionDropdown } from './base-suggestion-dropdown'
 
-import styles from './hashtag-suggestion-dropdown.module.css'
+import styles from './base-suggestion-dropdown.module.css'
 
 import type { SuggestionRendererProps, SuggestionRendererRef } from '../../../../src'
 import type { HashtagSuggestionItem } from '../../constants/suggestions'
@@ -20,12 +18,10 @@ function getHashtagItemKey(item: HashtagSuggestionItem) {
 
 function renderHashtagItem(item: HashtagSuggestionItem) {
     return (
-        <Inline space="small" exceptionallySetClassName={styles.hashtagSuggestionItem}>
+        <div className={styles.suggestionItem}>
             <Avatar size={20} name={item.name} variant="marble" colors={HASHTAG_AVATAR_COLORS} />
-            <Text variant="callout-2" lineClamp={1}>
-                #{item.name}
-            </Text>
-        </Inline>
+            <span className={styles.suggestionLabel}>#{item.name}</span>
+        </div>
     )
 }
 
