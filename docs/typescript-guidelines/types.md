@@ -88,8 +88,10 @@ function handleResult<T>(result: Result<T>) {
     switch (result.kind) {
         case 'success':
             return result.data
+
         case 'error':
             throw result.error
+
         case 'loading':
             return null
     }
