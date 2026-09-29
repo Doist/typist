@@ -1,6 +1,7 @@
-import { createRef } from 'react'
+import { createRef, lazy, Suspense } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { PlainTextKit } from '../extensions/plain-text/plain-text-kit'
@@ -8,7 +9,7 @@ import { RichTextKit } from '../extensions/rich-text/rich-text-kit'
 
 import { TypistEditor } from './typist-editor'
 
-import type { TypistEditorProps, TypistEditorRef } from './typist-editor'
+import type { CreateProps, TypistEditorProps, TypistEditorRef } from './typist-editor'
 
 type TypistEditorRendererProps = Partial<
     TypistEditorProps & {
@@ -62,6 +63,71 @@ function renderPlainTextEditor(props: TypistEditorRendererProps = {}) {
 }
 
 describe('<TypistEditor />', () => {
+    test('creates the editor only after a suspended initial render commits', async () => {
+        vi.useFakeTimers()
+
+        try {
+            const { promise, resolve } = Promise.withResolvers<{ default: () => null }>()
+            const SuspendedSibling = lazy(() => promise)
+            const typistEditorRef = createRef<TypistEditorRef>()
+            const onBeforeCreate = vi.fn<NonNullable<TypistEditorProps['onBeforeCreate']>>()
+            const onCreate = vi.fn<(content: string) => void>()
+
+            function SuspendedEditor() {
+                const handleCreate = useEvent(({ editor }: CreateProps) => {
+                    onCreate(editor.getText())
+                })
+
+                return (
+                    <>
+                        <TypistEditor
+                            content="Original text"
+                            extensions={[PlainTextKit]}
+                            onBeforeCreate={onBeforeCreate}
+                            onCreate={handleCreate}
+                            ref={typistEditorRef}
+                        />
+                        <SuspendedSibling />
+                    </>
+                )
+            }
+
+            render(
+                <Suspense fallback="Loading editor">
+                    <SuspendedEditor />
+                </Suspense>,
+            )
+
+            expect(screen.getByText('Loading editor')).toBeInTheDocument()
+
+            await act(() => vi.advanceTimersByTimeAsync(0))
+
+            expect(onBeforeCreate).not.toHaveBeenCalled()
+            expect(onCreate).not.toHaveBeenCalled()
+            expect(typistEditorRef.current).toBeNull()
+
+            await act(async () => {
+                resolve({ default: () => null })
+                await promise
+            })
+            await act(() => vi.advanceTimersByTimeAsync(0))
+
+            expect(screen.getByRole('textbox')).toHaveTextContent('Original text')
+            expect(onBeforeCreate).toHaveBeenCalledTimes(1)
+            expect(onCreate).toHaveBeenCalledExactlyOnceWith('Original text')
+            expect(typistEditorRef.current?.getMarkdown()).toBe('Original text')
+
+            act(() => {
+                typistEditorRef.current?.getEditor().commands.setContent('Updated text')
+            })
+
+            expect(screen.getByRole('textbox')).toHaveTextContent('Updated text')
+            expect(typistEditorRef.current?.getMarkdown()).toBe('Updated text')
+        } finally {
+            vi.useRealTimers()
+        }
+    })
+
     describe('Plain-text Document', () => {
         test('validate HTML attributes defined by Tiptap/ProseMirror', () => {
             renderPlainTextEditor()
