@@ -361,10 +361,7 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
         extensions: allExtensions,
         parseOptions,
 
-        // Tiptap's `useEditor` returns `null` by default on the first render to support SSR.
-        // Typist has no need for SSR, so we opt into immediate rendering to guarantee a
-        // non-null editor instance from the first render.
-        immediatelyRender: true,
+        immediatelyRender: false,
 
         // Opt-out of the legacy behavior that re-renders the component on every ProseMirror
         // transaction (e.g. keystrokes, selection changes). Typist doesn't read reactive editor
@@ -397,6 +394,8 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
     // where a read-only editor could still process a queued keystroke or paste
     useLayoutEffect(
         function syncEditableState() {
+            if (!editor) return
+
             // On mount the editor already has the correct editability, so this guard skips setting
             // it again. The redundant call would emit an update event before the editor finishes
             // initializing (a tick later), breaking extensions that initialize with it.
@@ -412,14 +411,18 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
     // could still reach the previous handlers.
     useLayoutEffect(
         function syncViewEventHandlers() {
+            if (!editor) return
+
             editor.commands.setViewEventHandlers({ onClick, onKeyDown })
         },
         [editor, onClick, onKeyDown],
     )
 
-    useImperativeHandle(
+    useImperativeHandle<TypistEditorRef | null, TypistEditorRef | null>(
         ref,
         function exposeHelperFunctionsToParent() {
+            if (!editor) return null
+
             return {
                 getEditor() {
                     return editor

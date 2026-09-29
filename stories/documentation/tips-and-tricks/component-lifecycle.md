@@ -1,5 +1,21 @@
 # Component Lifecycle
 
+## Mounting
+
+Typist creates its Tiptap editor after React commits. A suspended or abandoned initial render does not create an editor or invoke its lifecycle callbacks.
+
+The forwarded ref stays `null` until the editor exists. Once available, `getEditor()` returns the editor instance. Do not assume the ref is ready in a parent's mount-only effect. Use the `editor` supplied to `onCreate` for setup that needs an initialized editor:
+
+```tsx
+<TypistEditor
+    content="Hello"
+    extensions={[PlainTextKit]}
+    onCreate={({ editor }) => {
+        editor.commands.focus('end')
+    }}
+/>
+```
+
 ## Re-rendering
 
 The `<TypistEditor>` component tries to keep its internal state as stable as possible without triggering unnecessary re-renders, however, it's still not immune to re-renders from the parent component. If you measured performance and found this to be a problem, you may consider wrapping the `<TypistEditor>` component with `React.memo`:
@@ -87,10 +103,9 @@ Both the store getter and the seeded ref can be read while the editor is being c
 
 To skip maintaining the ref and effect yourself, you can reach for a `useEvent`-style hook (such as the [`react-use-event-hook`](https://npmx.dev/package/react-use-event-hook) package). It folds the same ref-and-effect mechanism into one stable function whose body always sees the latest props and state, and you pass it straight in as the getter.
 
-It comes with one limit, though. The hook fills its internal ref from an effect, so it can't be read while the editor is being created. Typist sets `immediatelyRender: true`, so the editor is constructed during render, before that effect runs. Reach for a `useEvent`-style getter only when the extension reads the value after mount, and stick with the store or ref getter when it reads during construction:
+The `react-use-event-hook` package initializes its callback in React's insertion effect, before Typist creates the editor. Its getter can therefore be used in extension lifecycle callbacks and commands. Typist still builds its schema during render, so configuration code that runs then must use a store or seeded ref. Other `useEvent`-style hooks may initialize their callback later; check their lifecycle guarantees before using them during editor creation.
 
 ```tsx
-// Do: a `useEvent` getter works for an extension that reads the value only after mount.
 const getCollaborators = useEvent(() => collaborators)
 
 const extensions = useMemo(
