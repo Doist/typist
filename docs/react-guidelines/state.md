@@ -17,7 +17,7 @@ Always use typed hooks instead of the base `useDispatch`, `useSelector`, or `use
 
 ```typescript
 // Good: typed hooks
-import { useAppDispatch, useAppSelector } from 'src/reducers/typed-redux-hooks'
+import { useAppDispatch, useAppSelector } from '@state/typed-redux-hooks'
 
 function TaskList() {
     const tasks = useAppSelector((state) => state.tasks)
@@ -63,7 +63,7 @@ const tasksSlice = createSlice({
 Use `createAppAsyncThunk` (typed alias of RTK's `createAsyncThunk`) for async operations. If your project doesn't have this defined, create it alongside the typed hooks. Reducers can only access their own slice — when an action affects multiple slices, compute updates in the thunk.
 
 ```typescript
-import { createAppAsyncThunk } from 'src/reducers/typed-redux-hooks'
+import { createAppAsyncThunk } from '@state/typed-redux-hooks'
 
 export const projectFetch = createAppAsyncThunk(
     'projects/fetch',
