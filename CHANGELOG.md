@@ -1,3 +1,9 @@
+## [17.0.4](https://github.com/Doist/typist/compare/v17.0.3...v17.0.4) (2026-10-02)
+
+### Bug Fixes
+
+* **deps:** update dependency mdast-util-gfm-strikethrough to v2.0.1 ([#1530](https://github.com/Doist/typist/issues/1530)) ([38027f5](https://github.com/Doist/typist/commit/38027f534fe9d1b1e8267d1dbf2beb2627257aa1))
+
 ## [17.0.3](https://github.com/Doist/typist/compare/v17.0.2...v17.0.3) (2026-09-16)
 
 ### Bug Fixes
