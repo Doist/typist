@@ -41,6 +41,7 @@ describe('Command: extendWordRange', () => {
             ['hel[lo ]world', 4, 7, 1, 7],
             ['hello[ wor]ld', 6, 10, 6, 12],
             ['[hello] world', 1, 6, 1, 6],
+            ['hello [world]', 7, 12, 7, 12],
             ['[hello world]', 1, 12, 1, 12],
             ['hello[ ]world', 6, 7, 6, 7],
         ])(
