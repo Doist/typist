@@ -1,3 +1,9 @@
+## [17.0.5](https://github.com/Doist/typist/compare/v17.0.4...v17.0.5) (2026-10-09)
+
+### Bug Fixes
+
+* preserve selections when extending word ranges ([#1538](https://github.com/Doist/typist/issues/1538)) ([7b4ff49](https://github.com/Doist/typist/commit/7b4ff4970faa236d91793f35e448adee0c8712ae))
+
 ## [17.0.4](https://github.com/Doist/typist/compare/v17.0.3...v17.0.4) (2026-10-02)
 
 ### Bug Fixes
