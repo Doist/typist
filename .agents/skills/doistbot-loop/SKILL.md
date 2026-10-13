@@ -31,10 +31,10 @@ doistbot setup
 Then rerun the skill.
 ```
 
-Require `doistbot >= 1.0.3`, because earlier versions do not include the internal JSON review output this skill uses. Parse the semantic version from `doistbot --version`; if the installed version is `1.0.2` or older, stop. Do not upgrade it automatically. Tell the user:
+Require `doistbot >= 1.0.12`. Earlier versions lack the JSON review output this skill uses (before 1.0.3), `--base` (before 1.0.4), or untracked files in local reviews (before 1.0.12). Parse the semantic version from `doistbot --version`; if the installed version is `1.0.11` or older, stop. Do not upgrade it automatically. Tell the user:
 
 ```text
-Doistbot CLI 1.0.3 or newer is required for this skill. Upgrade it first:
+Doistbot CLI 1.0.12 or newer is required for this skill. Upgrade it first:
 
 brew update && brew upgrade doistbot-cli
 
@@ -69,50 +69,41 @@ While a Doistbot review command is running, keep updates quiet. Post at most one
 
 ## Review Loop
 
-Start by checking the local change shape:
+Review the whole change in every round. `doistbot review --json` compares the branch's merge base with the working tree, so it covers the branch's commits, staged and unstaged edits, and untracked files that aren't ignored. Nothing needs to be staged.
+
+Before every review round, check the local change shape:
 
 ```bash
 git status --short
 ```
 
-Choose the initial review scope from `git status --short`:
+Untracked files that aren't ignored are part of the review, so they are sent to the configured model providers. Checks, builds, and the user's own work can create them between rounds.
 
-- If the output is empty, the working tree is clean. Review the branch's committed changes against the repository base with:
+- If it lists untracked files that don't belong to the current change, stop and ask the user to move, delete, or ignore them first.
+- If any file in the review, untracked or not, holds credentials, tokens, keys, or real user data, stop and ask the user to remove it. It shouldn't be committed either.
+- Do not stage, unstage, move, or delete the user's files yourself.
+
+Then review the change:
 
 ```bash
 doistbot review --json
 ```
 
-- If there are unstaged or untracked files, stage all local files first, then review the staged snapshot:
+If the branch is stacked on another branch instead of the repository's default branch, review against that branch, so the review covers only this branch's work:
 
 ```bash
-git add -A
-doistbot review staged --json
+doistbot review --base <parent-branch> --json
 ```
 
-- If there are already staged files and no unstaged or untracked files, review the staged snapshot:
+Find the parent branch from the branch's open pull request (`gh pr view --json baseRefName --jq .baseRefName`) or, in a GitHub stack, from `gh stack view`. Don't use the branch's upstream (`@{u}`): it is usually the same branch on the remote. If neither source answers, ask the user.
 
-```bash
-doistbot review staged --json
-```
+Do not stage files for a review, and never use `git add -A` or `git add .`. Do not use `doistbot review staged --json` either: it reviews only the staged edits against `HEAD`, skips the branch's commits, and can still report a verified review.
 
 When operating inside a sandboxed or approval-gated agent environment, request the approval needed for Doistbot review to reach its configured model providers before the first review command. Tell the user that the review may send the local diff/code to configured providers. Do not first run Doistbot in a restricted sandbox if that environment is expected to block provider access. If approval is denied, stop and ask the user to run the selected Doistbot JSON review command locally and share the output; do not substitute a manual/local-only review for the Doistbot loop.
 
 Doistbot reviews can take several minutes. After starting a Doistbot JSON review command, wait for the CLI to exit naturally and rely on the CLI's own timeout. Do not interrupt, cancel, or kill the review process while it is still running. Keep posting concise status updates while waiting. If the CLI exits with its own timeout or another error, stop and report that exact failure.
 
-After making any code, test, config, or documentation change, stage the changed files before continuing:
-
-```bash
-git add -A
-```
-
-Once the agent has edited, created, or deleted even one file during the loop, every following Doistbot round must review the staged snapshot:
-
-```bash
-doistbot review staged --json
-```
-
-Do not run another Doistbot review while agent-made edits remain unstaged. Do not keep rerunning `doistbot review staged --json` against an outdated staged snapshot after editing files.
+After making any code, test, config, or documentation change, rerun the same review command, with the same `--base` if you used one. It picks up edited, created, and deleted files without staging. Check `git status --short` again before each round.
 
 In JSON mode, treat `review.findings` as the canonical feedback list and `review.count` as the derived finding total for reporting.
 
@@ -147,7 +138,7 @@ Fix only `address` findings. Omit `defer`, `dismiss`, and `nit` findings from th
 
 When several fixes are possible, choose the smallest conservative fix that preserves existing ownership, safety, and behavior. Do not introduce custom wrappers, broad ownership changes, cross-cutting refactors, or clever abstractions just to satisfy a finding. If a finding can only be addressed with a larger redesign, defer it and explain the tradeoff instead of expanding the loop.
 
-After making edits, stage all changes and run targeted checks that match the touched files and repository conventions. If checks require follow-up edits, stage those edits too before the next Doistbot round. Then rerun Doistbot with `doistbot review staged --json`.
+After making edits, run the repository's verification command if its AGENTS.md names one, or targeted checks that match the touched files and repository conventions. Then rerun the same Doistbot review command.
 
 There is no fixed round cap, but the loop must stay surgical. Stop when no clearly addressable findings remain, even if Doistbot still reports feedback. A branch can be ready when the remaining findings are nits, deferred items, dismissed items, disputed tradeoffs, or scope-expanding suggestions.
 
