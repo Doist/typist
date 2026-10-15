@@ -98,7 +98,7 @@ When asked to create a pull request, follow this mandatory process:
     - Follow the exact template structure from `.github/PULL_REQUEST_TEMPLATE.md`.
     - Pay special attention to changelog format if it's parsed by automation.
     - Include appropriate testing information (e.g., "Smoke tested", unit tests added).
-    - Add relevant labels (e.g., "👀 Show PR" for small, obvious changes).
+    - Add relevant labels. For the review label, use "🚢 Ship" for low-risk changes that CI and the author can verify alone, "👀 Show" for low-risk changes that benefit from a review after merging, and "🙋 Ask" for everything else.
     - Link related issues and PRs in the Reference section.
 
 ## Enforcement
