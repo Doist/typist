@@ -1,23 +1,23 @@
 {
     "compilerOptions": {
-        "declaration": true,
-        "declarationMap": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "isolatedModules": true,
-        "jsx": "react-jsx",
+        "target": "ESNext",
         "lib": ["DOM", "ES2024"],
+        "types": ["@testing-library/jest-dom", "vite/client", "vitest/globals"],
+
         "module": "ESNext",
         "moduleResolution": "bundler",
+
+        "jsx": "react-jsx",
+
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "forceConsistentCasingInFileNames": true,
+
         "noEmit": true,
-        "plugins": [
-            {
-                "name": "typescript-plugin-css-modules"
-            }
-        ],
-        "skipLibCheck": true,
+        "declaration": true,
+        "declarationMap": true,
+
         "strict": true,
-        "target": "ESNext",
-        "types": ["@testing-library/jest-dom", "vite/client", "vitest/globals"]
+        "skipLibCheck": true
     }
 }
