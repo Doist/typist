@@ -2,16 +2,19 @@ import { useCallback, useRef } from 'react'
 
 import { Button } from '@doist/reactist'
 
-import { Selection } from '@tiptap/pm/state'
 import { action } from 'storybook/actions'
 
+import { Selection } from '@tiptap/pm/state'
+
 import preview from '../../.storybook/preview'
-import { TypistEditor, TypistEditorRef } from '../../src'
+import { TypistEditor } from '../../src'
 
 import { DEFAULT_ARG_TYPES } from './constants/defaults'
 import { MARKDOWN_PLACEHOLDER_LONG, MARKDOWN_PLACEHOLDER_SHORT } from './constants/markdown'
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { Default } from './plain-text.stories'
+
+import type { TypistEditorRef } from '../../src'
 
 const meta = preview.meta({
     title: 'Typist Editor/Plain-text/Functions',
@@ -72,10 +75,7 @@ export const Commands = meta.story({
                             <Button variant="secondary" onClick={handleInsertMarkdownContentClick}>
                                 insertMarkdownContent
                             </Button>
-                            <Button
-                                variant="secondary"
-                                onClick={handleInsertMarkdownContentAtClick}
-                            >
+                            <Button variant="secondary" onClick={handleInsertMarkdownContentAtClick}>
                                 insertMarkdownContentAt
                             </Button>
                         </>
@@ -119,10 +119,7 @@ export const Helpers = meta.story({
                             <Button variant="secondary" onClick={handleGetMarkdownClick}>
                                 getMarkdown
                             </Button>
-                            <Button
-                                variant="secondary"
-                                onClick={handleGetAllNodesAttributesByTypeClick}
-                            >
+                            <Button variant="secondary" onClick={handleGetAllNodesAttributesByTypeClick}>
                                 {"getAllNodesAttributesByType('mentionSuggestion')"}
                             </Button>
                         </>

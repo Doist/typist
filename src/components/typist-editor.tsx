@@ -1,18 +1,11 @@
-import {
-    forwardRef,
-    useCallback,
-    useImperativeHandle,
-    useLayoutEffect,
-    useMemo,
-    useState,
-} from 'react'
+import { forwardRef, useCallback, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react'
 
 import { getSchema } from '@tiptap/core'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { EditorContent, useEditor } from '@tiptap/react'
 
 import { ExtraEditorCommands } from '../extensions/core/extra-editor-commands/extra-editor-commands'
-import { ViewEventHandlers, ViewEventHandlersOptions } from '../extensions/core/view-event-handlers'
+import { ViewEventHandlers } from '../extensions/core/view-event-handlers'
 import { isMultilineDocument, isPlainTextDocument } from '../helpers/schema'
 import { getHTMLSerializerInstance } from '../serializers/html/html'
 import { getMarkdownSerializerInstance } from '../serializers/markdown/markdown'
@@ -21,6 +14,7 @@ import { getAllNodesAttributesByType, resolveContentSelection } from './typist-e
 
 import type { Editor as CoreEditor, EditorEvents, Extensions } from '@tiptap/core'
 import type { Selection } from '@tiptap/pm/state'
+import type { ViewEventHandlersOptions } from '../extensions/core/view-event-handlers'
 
 /**
  * The forwarded ref that describes the helper methods that the `TypistEditor` parent component
@@ -40,9 +34,7 @@ type TypistEditorRef = {
     /**
      * Returns the attributes of a given node type for all the nodes in the editor document.
      */
-    getAllNodesAttributesByType: (
-        nodeType: string,
-    ) => ReturnType<typeof getAllNodesAttributesByType>
+    getAllNodesAttributesByType: (nodeType: string) => ReturnType<typeof getAllNodesAttributesByType>
 }
 
 /**
@@ -329,9 +321,7 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
             return {
                 attributes: {
                     'data-typist-editor': 'true',
-                    ...(isPlainTextDocument(schema)
-                        ? { 'data-plain-text': 'true' }
-                        : { 'data-rich-text': 'true' }),
+                    ...(isPlainTextDocument(schema) ? { 'data-plain-text': 'true' } : { 'data-rich-text': 'true' }),
                     'aria-readonly': String(!editable),
                     'aria-multiline': String(isMultilineDocument(schema)),
                     ...(ariaDescribedBy ? { 'aria-describedby': ariaDescribedBy } : {}),

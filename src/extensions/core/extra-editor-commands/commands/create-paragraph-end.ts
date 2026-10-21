@@ -1,5 +1,6 @@
-import { RawCommands } from '@tiptap/core'
 import { TextSelection } from '@tiptap/pm/state'
+
+import type { RawCommands } from '@tiptap/core'
 
 /**
  * Augment the official `@tiptap/core` module with extra commands so that the compiler knows about
@@ -28,13 +29,7 @@ function createParagraphEnd(): ReturnType<RawCommands['createParagraphEnd']> {
         if (dispatch) {
             return chain()
                 .command(() => {
-                    tr.setSelection(
-                        TextSelection.create(
-                            tr.doc,
-                            state.doc.content.size,
-                            state.doc.content.size,
-                        ),
-                    )
+                    tr.setSelection(TextSelection.create(tr.doc, state.doc.content.size, state.doc.content.size))
 
                     return true
                 })

@@ -5,15 +5,7 @@ import type { Editor, Range } from '@tiptap/core'
  *
  * @returns True if the node can be inserted, false otherwise.
  */
-function canInsertNodeAt({
-    editor,
-    nodeType,
-    range,
-}: {
-    editor: Editor
-    nodeType: string
-    range: Range
-}) {
+function canInsertNodeAt({ editor, nodeType, range }: { editor: Editor; nodeType: string; range: Range }) {
     return editor.can().insertContentAt(range, {
         type: nodeType,
     })

@@ -66,11 +66,7 @@ describe('Helper: Schema', () => {
         })
 
         test('returns a string ID without table nodes for singleline documents', () => {
-            expect(
-                computeSchemaId(
-                    getSchema([RichTextKit.configure({ document: { multiline: false } })]),
-                ),
-            ).toBe(
+            expect(computeSchemaId(getSchema([RichTextKit.configure({ document: { multiline: false } })]))).toBe(
                 'link,bold,italic,boldAndItalics,strike,code,paragraph,blockquote,bulletList,codeBlock,doc,hardBreak,heading,horizontalRule,image,listItem,orderedList,text',
             )
         })

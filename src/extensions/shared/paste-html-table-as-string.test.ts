@@ -51,8 +51,7 @@ describe('Extension: PasteHTMLTableAsString', () => {
         })
 
         test('preserves HTML formatting within cells', () => {
-            const html =
-                '<table><tr><td><strong>Bold</strong></td><td><em>Italic</em></td></tr></table>'
+            const html = '<table><tr><td><strong>Bold</strong></td><td><em>Italic</em></td></tr></table>'
             const result = transformPastedHTML(html)
 
             expect(result).toBe('<p><strong>Bold</strong> <em>Italic</em></p>')
@@ -74,8 +73,7 @@ describe('Extension: PasteHTMLTableAsString', () => {
         })
 
         test('unwraps paragraphs inside cells while preserving inline formatting', () => {
-            const html =
-                '<table><tr><td><p><span>A</span></p></td><td><p><strong>B</strong></p></td></tr></table>'
+            const html = '<table><tr><td><p><span>A</span></p></td><td><p><strong>B</strong></p></td></tr></table>'
             const result = transformPastedHTML(html)
 
             expect(result).toBe('<p><span>A</span> <strong>B</strong></p>')

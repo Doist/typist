@@ -37,9 +37,7 @@
 }
 
 .baseSuggestionDropdown [role='option']:first-of-type {
-    scroll-margin-top: calc(
-        var(--suggestion-dropdown-option-height) + var(--suggestion-dropdown-spacing)
-    );
+    scroll-margin-top: calc(var(--suggestion-dropdown-option-height) + var(--suggestion-dropdown-spacing));
 }
 
 .baseSuggestionDropdown [role='option']:hover {

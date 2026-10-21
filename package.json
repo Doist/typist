@@ -46,10 +46,9 @@
         "clean:cache": "rimraf .cache/",
         "clean:dist": "rimraf dist/",
         "clean:storybook-static": "rimraf storybook-static/",
-        "fix": "run-s fix:*",
+        "fix": "run-s fix:lint fix:format",
         "fix:format": "oxfmt",
         "fix:lint": "oxlint --fix",
-        "prepare": "lefthook install",
         "start": "run-s clean:* start:storybook",
         "start:storybook": "storybook dev --port 6006 --ci",
         "test": "vitest run",
@@ -156,7 +155,6 @@
         "tsdown": "0.23.1",
         "type-fest": "5.10.0",
         "typescript": "7.0.2",
-        "typescript-plugin-css-modules": "5.2.0",
         "vitest": "5.0.5"
     },
     "peerDependencies": {

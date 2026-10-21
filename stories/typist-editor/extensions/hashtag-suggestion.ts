@@ -15,21 +15,17 @@ const HASHTAG_SUGGESTION_TYPE = 'hashtag'
 const HASHTAG_SUGGESTION_NODE_TYPE = `${HASHTAG_SUGGESTION_TYPE}Suggestion`
 
 const HashtagSuggestion: SuggestionExtensionResult<HashtagSuggestionItem> =
-    createSuggestionExtension<HashtagSuggestionItem>(
-        HASHTAG_SUGGESTION_TYPE,
-        HASHTAG_SUGGESTION_ITEMS,
-        {
-            label: 'name',
-        },
-    ).configure({
+    createSuggestionExtension<HashtagSuggestionItem>(HASHTAG_SUGGESTION_TYPE, HASHTAG_SUGGESTION_ITEMS, {
+        label: 'name',
+    }).configure({
         triggerChar: '#',
         renderAriaLabel({ label }) {
             return `Hashtag: #${label}`
         },
         async onSearchChange(query, items) {
-            const delayedItems = await new Promise((resolve) =>
-                setTimeout(resolve, random(500, 1500)),
-            ).then(() => items)
+            const delayedItems = await new Promise((resolve) => setTimeout(resolve, random(500, 1500))).then(
+                () => items,
+            )
 
             return delayedItems.filter((item) => {
                 return item.name.toLowerCase().includes(query.toLowerCase())

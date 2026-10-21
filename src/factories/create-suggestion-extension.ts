@@ -1,19 +1,20 @@
+import { camelCase, kebabCase } from 'lodash-es'
+
 import { mergeAttributes, Node } from '@tiptap/core'
 import { PluginKey } from '@tiptap/pm/state'
 import { Suggestion as TiptapSuggestion } from '@tiptap/suggestion'
-import { camelCase, kebabCase } from 'lodash-es'
 
 import { SUGGESTION_EXTENSION_PRIORITY } from '../constants/extension-priorities'
 import { DEFAULT_SUGGESTION_TRIGGER_CHAR } from '../constants/suggestions'
 import { canInsertNodeAt } from '../utilities/can-insert-node-at'
 import { canInsertSuggestion } from '../utilities/can-insert-suggestion'
 
+import type { ConditionalKeys, RequireAtLeastOne } from 'type-fest'
 import type {
     SuggestionKeyDownProps as CoreSuggestionKeyDownProps,
     SuggestionOptions as CoreSuggestionOptions,
     SuggestionProps as CoreSuggestionProps,
 } from '@tiptap/suggestion'
-import type { ConditionalKeys, RequireAtLeastOne } from 'type-fest'
 
 /**
  * A type that describes the suggestion node attributes.
@@ -91,10 +92,7 @@ type SuggestionOptions<TSuggestionItem> = {
     /**
      * The event handler that is fired when the search string has changed.
      */
-    onSearchChange?: (
-        query: string,
-        items: TSuggestionItem[],
-    ) => TSuggestionItem[] | Promise<TSuggestionItem[]>
+    onSearchChange?: (query: string, items: TSuggestionItem[]) => TSuggestionItem[] | Promise<TSuggestionItem[]>
 
     /**
      * The event handler that is fired when a suggestion item is selected.
@@ -218,8 +216,7 @@ function createSuggestionExtension<
                         // reparsed content shows the latest label, falling back to the saved
                         // `data-label` when the item is gone from the source. Already-mounted
                         // nodes keep their inserted label until the next parse.
-                        const labelValue =
-                            item?.[labelAttribute] ?? element.getAttribute('data-label')
+                        const labelValue = item?.[labelAttribute] ?? element.getAttribute('data-label')
 
                         return typeof labelValue === 'string' ? labelValue : ''
                     },
@@ -296,10 +293,7 @@ function createSuggestionExtension<
                         return result
                     },
                     allow({ editor, range, state }) {
-                        return (
-                            canInsertNodeAt({ editor, nodeType, range }) &&
-                            canInsertSuggestion({ editor, state })
-                        )
+                        return canInsertNodeAt({ editor, nodeType, range }) && canInsertSuggestion({ editor, state })
                     },
                     command({ editor, range, props }) {
                         const nodeAfter = editor.view.state.selection.$to.nodeAfter
@@ -330,8 +324,7 @@ function createSuggestionExtension<
                         // isn't in that shown list.
                         const item =
                             renderedItems.find(
-                                (renderedItem) =>
-                                    String(renderedItem[idAttribute]) === String(props.id),
+                                (renderedItem) => String(renderedItem[idAttribute]) === String(props.id),
                             ) ?? findItemById(String(props.id))
 
                         if (item) {
@@ -347,9 +340,4 @@ function createSuggestionExtension<
 
 export { createSuggestionExtension }
 
-export type {
-    SuggestionExtensionResult,
-    SuggestionOptions,
-    SuggestionRendererProps,
-    SuggestionRendererRef,
-}
+export type { SuggestionExtensionResult, SuggestionOptions, SuggestionRendererProps, SuggestionRendererRef }

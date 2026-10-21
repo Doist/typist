@@ -47,8 +47,7 @@ declare module '@tiptap/core' {
              * Updates the attributes for an existing image in the editor.
              */
             updateImage: (
-                attributes: Partial<RichTextImageAttributes> &
-                    Required<Pick<RichTextImageAttributes, 'metadata'>>,
+                attributes: Partial<RichTextImageAttributes> & Required<Pick<RichTextImageAttributes, 'metadata'>>,
             ) => ReturnType
         }
     }
@@ -122,9 +121,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                             attrs: attributes,
                         },
                         // Insert a blank paragraph after the image when at the end of the document
-                        ...(editor.state.selection.to === selectionAtEnd.to
-                            ? [{ type: 'paragraph' }]
-                            : []),
+                        ...(editor.state.selection.to === selectionAtEnd.to ? [{ type: 'paragraph' }] : []),
                     ])
                 }
             },

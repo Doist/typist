@@ -1,5 +1,6 @@
-import { Extension } from '@tiptap/core'
 import codemark from 'prosemirror-codemark'
+
+import { Extension } from '@tiptap/core'
 
 /**
  * The `CurvenoteCodemark` extension adds a plugin for ProseMirror that makes it easier to handle,

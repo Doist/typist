@@ -1,5 +1,5 @@
-import type { NodeType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
+import type { NodeType } from '@tiptap/pm/model'
 
 /**
  * Cleans an attribute value by replacing multiple newlines with a single one.

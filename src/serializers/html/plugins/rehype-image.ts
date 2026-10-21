@@ -3,9 +3,9 @@ import { visit } from 'unist-util-visit'
 
 import { isHastElementNode } from '../../../helpers/unified'
 
-import type { Schema } from '@tiptap/pm/model'
 import type { Node as HastNode, Parent as HastParent } from 'hast'
 import type { Transformer } from 'unified'
+import type { Schema } from '@tiptap/pm/model'
 
 /**
  * A rehype plugin to remove the wrapping paragraph from images and to remove all inline images if

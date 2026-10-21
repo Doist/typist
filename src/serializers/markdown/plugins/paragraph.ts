@@ -1,5 +1,5 @@
-import type { NodeType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
+import type { NodeType } from '@tiptap/pm/model'
 
 /**
  * A Turndown plugin which adds a custom rule for paragraphs. This custom rule is required to avoid

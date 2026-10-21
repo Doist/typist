@@ -20,8 +20,7 @@
 }
 
 .topContainer > div > h3 {
-    margin: var(--reactist-spacing-large) 0 var(--reactist-spacing-medium)
-        var(--reactist-spacing-large);
+    margin: var(--reactist-spacing-large) 0 var(--reactist-spacing-medium) var(--reactist-spacing-large);
     opacity: 0.85;
 }
 

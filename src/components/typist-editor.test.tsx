@@ -81,18 +81,9 @@ describe('<TypistEditor />', () => {
                     'aria-labelledby': 'labeledByElementId',
                 })
 
-                expect(screen.getByRole('textbox')).toHaveAttribute(
-                    'aria-describedby',
-                    'describedByElementId',
-                )
-                expect(screen.getByRole('textbox')).toHaveAttribute(
-                    'aria-label',
-                    'The Element Label',
-                )
-                expect(screen.getByRole('textbox')).toHaveAttribute(
-                    'aria-labelledby',
-                    'labeledByElementId',
-                )
+                expect(screen.getByRole('textbox')).toHaveAttribute('aria-describedby', 'describedByElementId')
+                expect(screen.getByRole('textbox')).toHaveAttribute('aria-label', 'The Element Label')
+                expect(screen.getByRole('textbox')).toHaveAttribute('aria-labelledby', 'labeledByElementId')
             })
 
             describe('with multi-line document (default)', () => {
@@ -159,18 +150,9 @@ describe('<TypistEditor />', () => {
                     'aria-labelledby': 'labeledByElementId',
                 })
 
-                expect(screen.getByRole('textbox')).toHaveAttribute(
-                    'aria-describedby',
-                    'describedByElementId',
-                )
-                expect(screen.getByRole('textbox')).toHaveAttribute(
-                    'aria-label',
-                    'The Element Label',
-                )
-                expect(screen.getByRole('textbox')).toHaveAttribute(
-                    'aria-labelledby',
-                    'labeledByElementId',
-                )
+                expect(screen.getByRole('textbox')).toHaveAttribute('aria-describedby', 'describedByElementId')
+                expect(screen.getByRole('textbox')).toHaveAttribute('aria-label', 'The Element Label')
+                expect(screen.getByRole('textbox')).toHaveAttribute('aria-labelledby', 'labeledByElementId')
             })
 
             describe('with multi-line document (default)', () => {
@@ -235,9 +217,7 @@ describe('<TypistEditor />', () => {
             const initialOnKeyDown = vi.fn<NonNullable<TypistEditorProps['onKeyDown']>>()
             const updatedOnKeyDown = vi.fn<NonNullable<TypistEditorProps['onKeyDown']>>()
 
-            const { rerender } = render(
-                <TypistEditor extensions={extensions} onKeyDown={initialOnKeyDown} />,
-            )
+            const { rerender } = render(<TypistEditor extensions={extensions} onKeyDown={initialOnKeyDown} />)
 
             rerender(<TypistEditor extensions={extensions} onKeyDown={updatedOnKeyDown} />)
 
@@ -257,9 +237,7 @@ describe('<TypistEditor />', () => {
             const initialOnClick = vi.fn<NonNullable<TypistEditorProps['onClick']>>()
             const updatedOnClick = vi.fn<NonNullable<TypistEditorProps['onClick']>>()
 
-            const { rerender } = render(
-                <TypistEditor extensions={extensions} onClick={initialOnClick} />,
-            )
+            const { rerender } = render(<TypistEditor extensions={extensions} onClick={initialOnClick} />)
 
             rerender(<TypistEditor extensions={extensions} onClick={updatedOnClick} />)
 
@@ -284,16 +262,12 @@ describe('<TypistEditor />', () => {
 
             const typistEditorRef = createRef<TypistEditorRef>()
 
-            const { rerender } = render(
-                <TypistEditor editable={true} extensions={extensions} ref={typistEditorRef} />,
-            )
+            const { rerender } = render(<TypistEditor editable={true} extensions={extensions} ref={typistEditorRef} />)
 
             expect(screen.getByRole('textbox')).toHaveAttribute('contenteditable', 'true')
             expect(typistEditorRef.current?.getEditor().isEditable).toBe(true)
 
-            rerender(
-                <TypistEditor editable={false} extensions={extensions} ref={typistEditorRef} />,
-            )
+            rerender(<TypistEditor editable={false} extensions={extensions} ref={typistEditorRef} />)
 
             expect(screen.getByRole('textbox')).toHaveAttribute('contenteditable', 'false')
             expect(typistEditorRef.current?.getEditor().isEditable).toBe(false)

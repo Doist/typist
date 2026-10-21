@@ -1,5 +1,5 @@
 import { Extension } from '@tiptap/core'
-import { History, HistoryOptions } from '@tiptap/extension-history'
+import { History } from '@tiptap/extension-history'
 import { Text } from '@tiptap/extension-text'
 import { Typography } from '@tiptap/extension-typography'
 
@@ -13,6 +13,7 @@ import { PlainTextParagraph } from './plain-text-paragraph'
 import { SmartMarkdownTyping } from './smart-markdown-typing/smart-markdown-typing'
 
 import type { Extensions } from '@tiptap/core'
+import type { HistoryOptions } from '@tiptap/extension-history'
 import type { PlainTextDocumentOptions } from './plain-text-document'
 import type { PlainTextParagraphOptions } from './plain-text-paragraph'
 
@@ -74,9 +75,7 @@ const PlainTextKit = Extension.create<PlainTextKitOptions>({
                 CopyMarkdownSource,
 
                 // Supports pasting plain-text into both a singleline and multiline editor
-                this.options?.document?.multiline === false
-                    ? PasteSinglelineText
-                    : PasteMultilineText,
+                this.options?.document?.multiline === false ? PasteSinglelineText : PasteMultilineText,
             )
 
             if (this.options?.pasteHTMLTableAsString !== false) {

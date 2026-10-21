@@ -8,11 +8,7 @@ import { action } from 'storybook/actions'
 import preview from '../../.storybook/preview'
 import { RichTextKit, TypistEditor } from '../../src'
 
-import {
-    DEFAULT_ARG_TYPES,
-    DEFAULT_RICH_TEXT_KIT_OPTIONS,
-    DEFAULT_STORY_ARGS,
-} from './constants/defaults'
+import { DEFAULT_ARG_TYPES, DEFAULT_RICH_TEXT_KIT_OPTIONS, DEFAULT_STORY_ARGS } from './constants/defaults'
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { HashtagSuggestion } from './extensions/hashtag-suggestion'
 import { MentionSuggestion } from './extensions/mention-suggestion'
@@ -37,10 +33,7 @@ export const Default = meta.story({
     args: {
         ...DEFAULT_STORY_ARGS,
         placeholder: 'A full rich-text editor, be creative…',
-        extensions: [
-            RichTextKit.configure(DEFAULT_RICH_TEXT_KIT_OPTIONS),
-            ...COMMON_STORY_EXTENSIONS,
-        ],
+        extensions: [RichTextKit.configure(DEFAULT_RICH_TEXT_KIT_OPTIONS), ...COMMON_STORY_EXTENSIONS],
     },
     decorators: [
         (Story, context) => {
@@ -66,15 +59,13 @@ export const Default = meta.story({
                         () => {
                             setInlineAttachments((prevState) => {
                                 return Object.fromEntries(
-                                    Object.entries(prevState).map(
-                                        ([attachmentId, { progress, type }]) => [
-                                            attachmentId,
-                                            {
-                                                progress: clamp(progress + random(1, 8), 0, 100),
-                                                type,
-                                            },
-                                        ],
-                                    ),
+                                    Object.entries(prevState).map(([attachmentId, { progress, type }]) => [
+                                        attachmentId,
+                                        {
+                                            progress: clamp(progress + random(1, 8), 0, 100),
+                                            type,
+                                        },
+                                    ]),
                                 )
                             })
                         },
@@ -90,9 +81,7 @@ export const Default = meta.story({
                         const commands = typistEditorRef.current?.getEditor().commands
 
                         const updateInlineAttachmentAttributes =
-                            inlineAttachments[attachmentId].type === 'image'
-                                ? commands?.updateImage
-                                : () => {}
+                            inlineAttachments[attachmentId].type === 'image' ? commands?.updateImage : () => {}
 
                         updateInlineAttachmentAttributes?.({
                             metadata: {
@@ -220,9 +209,7 @@ export const Singleline = meta.story({
                 [context.args, handleKeyDown],
             )
 
-            return (
-                <TypistEditorDecorator Story={Story} args={storyArgs} withRichTextFeatures={true} />
-            )
+            return <TypistEditorDecorator Story={Story} args={storyArgs} withRichTextFeatures={true} />
         },
     ],
 })

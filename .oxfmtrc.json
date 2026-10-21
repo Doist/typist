@@ -14,7 +14,7 @@
     "embeddedLanguageFormatting": "auto",
     "insertFinalNewline": true,
     "jsxSingleQuote": false,
-    "printWidth": 100,
+    "printWidth": 120,
     "proseWrap": "preserve",
     "quoteProps": "as-needed",
     "semi": false,
@@ -50,6 +50,12 @@
                 "elementNamePattern": ["@doist/**"]
             },
             {
+                "groupName": "scoped",
+                "selector": "external",
+                "modifiers": ["value"],
+                "elementNamePattern": ["@*/**"]
+            },
+            {
                 "groupName": "react-type",
                 "selector": "external",
                 "modifiers": ["type"],
@@ -60,6 +66,12 @@
                 "selector": "external",
                 "modifiers": ["type"],
                 "elementNamePattern": ["@doist/**"]
+            },
+            {
+                "groupName": "scoped-type",
+                "selector": "external",
+                "modifiers": ["type"],
+                "elementNamePattern": ["@*/**"]
             }
         ],
         "groups": [
@@ -72,6 +84,7 @@
             "react",
             "doist",
             "value-external",
+            "scoped",
             "value-internal",
             "value-parent",
             ["value-sibling", "value-index"],
@@ -89,6 +102,10 @@
                 "newlinesBetween": false
             },
             "type-external",
+            {
+                "newlinesBetween": false
+            },
+            "scoped-type",
             {
                 "newlinesBetween": false
             },

@@ -7,10 +7,7 @@ import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
 import { computeSchemaId, isPlainTextDocument } from '../../helpers/schema'
-import {
-    buildSuggestionSchemaInfo,
-    computeSuggestionTriggerCharsId,
-} from '../../helpers/serializer'
+import { buildSuggestionSchemaInfo, computeSuggestionTriggerCharsId } from '../../helpers/serializer'
 
 import { rehypeCodeBlock } from './plugins/rehype-code-block'
 import { rehypeImage } from './plugins/rehype-image'

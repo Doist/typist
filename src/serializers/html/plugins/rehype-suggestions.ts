@@ -3,9 +3,9 @@ import { visit } from 'unist-util-visit'
 import { buildSuggestionSchemaInfo } from '../../../helpers/serializer'
 import { getHastTextContent, isHastElementNode } from '../../../helpers/unified'
 
-import type { Schema } from '@tiptap/pm/model'
 import type { Node as HastNode } from 'hast'
 import type { Transformer } from 'unified'
+import type { Schema } from '@tiptap/pm/model'
 
 /**
  * A rehype plugin to add support for suggestions nodes (e.g., `@username` or `#channel).
@@ -24,12 +24,8 @@ function rehypeSuggestions(schema: Schema): Transformer {
 
     return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
         visit(tree, 'element', (node: HastNode) => {
-            if (
-                isHastElementNode(node, 'a') &&
-                suggestionSchemaRegex.test(String(node.properties?.href))
-            ) {
-                const [, urlScheme, id] =
-                    /^([a-z-]+):\/\/(\S+)$/i.exec(String(node.properties?.href)) || []
+            if (isHastElementNode(node, 'a') && suggestionSchemaRegex.test(String(node.properties?.href))) {
+                const [, urlScheme, id] = /^([a-z-]+):\/\/(\S+)$/i.exec(String(node.properties?.href)) || []
 
                 // The label is always meant to be plain text, so we flatten the full text content
                 // of the link instead of reading a single child. This keeps the label intact when
@@ -43,9 +39,7 @@ function rehypeSuggestions(schema: Schema): Transformer {
                 if (urlScheme && id && label) {
                     // The URL scheme was matched against the regex built from the same map of
                     // suggestion nodes, so the trigger character is guaranteed to exist
-                    const triggerChar = suggestionSchemaInfo.triggerCharByScheme.get(
-                        urlScheme,
-                    ) as string
+                    const triggerChar = suggestionSchemaInfo.triggerCharByScheme.get(urlScheme) as string
 
                     node.tagName = 'span'
                     node.properties = {

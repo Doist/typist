@@ -1,7 +1,7 @@
 import { extractTagsFromParseRules } from '../../../helpers/serializer'
 
-import type { MarkType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
+import type { MarkType } from '@tiptap/pm/model'
 
 /**
  * A Turndown plugin which adds a rule for strikethrough text, based on the original plugin. This

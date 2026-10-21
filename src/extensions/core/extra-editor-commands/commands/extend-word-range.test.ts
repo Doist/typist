@@ -14,16 +14,7 @@ import { ExtraEditorCommands } from '../extra-editor-commands'
  */
 function createTestEditor(content = '<p>hello world</p>'): Editor {
     const editor = new Editor({
-        extensions: [
-            Document,
-            Paragraph,
-            Text,
-            HardBreak,
-            Code,
-            CodeBlock,
-            Link,
-            ExtraEditorCommands,
-        ],
+        extensions: [Document, Paragraph, Text, HardBreak, Code, CodeBlock, Link, ExtraEditorCommands],
         content,
         parseOptions: { preserveWhitespace: 'full' },
     })
@@ -44,27 +35,24 @@ describe('Command: extendWordRange', () => {
             ['hello [world]', 7, 12, 7, 12],
             ['[hello world]', 1, 12, 1, 12],
             ['hello[ ]world', 6, 7, 6, 7],
-        ])(
-            'expands only partial-word boundaries in %s',
-            (_, from, to, expectedFrom, expectedTo) => {
-                const editor = createTestEditor()
+        ])('expands only partial-word boundaries in %s', (_, from, to, expectedFrom, expectedTo) => {
+            const editor = createTestEditor()
 
-                const backward = direction === 'backward'
+            const backward = direction === 'backward'
 
-                expect(
-                    editor
-                        .chain()
-                        .setTextSelection({ from: backward ? to : from, to: backward ? from : to })
-                        .extendWordRange()
-                        .run(),
-                ).toBe(true)
+            expect(
+                editor
+                    .chain()
+                    .setTextSelection({ from: backward ? to : from, to: backward ? from : to })
+                    .extendWordRange()
+                    .run(),
+            ).toBe(true)
 
-                expect(editor.state.selection).toMatchObject({
-                    anchor: backward ? expectedTo : expectedFrom,
-                    head: backward ? expectedFrom : expectedTo,
-                })
-            },
-        )
+            expect(editor.state.selection).toMatchObject({
+                anchor: backward ? expectedTo : expectedFrom,
+                head: backward ? expectedFrom : expectedTo,
+            })
+        })
     })
 
     test.each([

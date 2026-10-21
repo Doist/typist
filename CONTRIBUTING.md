@@ -84,14 +84,6 @@ To test features before publishing a stable release:
 
 > **Note:** The `CHANGELOG.md` is only updated for stable releases on `main`. Pre-releases still get GitHub release notes and npm publication.
 
-### Visual Studio Code
-
-#### CSS Modules for Storybook
-
-Typist Storybook makes use of [`typescript-plugin-css-modules`](https://github.com/mrmckeb/typescript-plugin-css-modules), a [TypeScript language service plugin](https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin) for [CSS Modules](https://github.com/css-modules/css-modules), which provides type information to IDEs and any other tools that work with TypeScript language service plugins.
-
-To use this plugin with Visual Studio Code, you should set your workspace's version of TypeScript, which will load plugins from your tsconfig.json file. For instructions, please see: [Using the workspace version of TypeScript](https://code.visualstudio.com/docs/typescript/typescript-compiling#_using-the-workspace-version-of-typescript).
-
 ## Sending a Pull Request
 
 Pull requests are actively monitored, and only need the approval of one or more core team members. We will review your pull request and either merge it, request changes to it, or close it with an explanation.

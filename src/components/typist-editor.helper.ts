@@ -1,5 +1,6 @@
-import { Selection, TextSelection } from '@tiptap/pm/state'
 import { clamp } from 'lodash-es'
+
+import { Selection, TextSelection } from '@tiptap/pm/state'
 
 import type { Node as ProseMirrorNode } from '@tiptap/pm/model'
 
@@ -11,11 +12,7 @@ function resolveContentSelection(doc: ProseMirrorNode, selection: Selection): Se
     const minPos = Selection.atStart(doc).from
     const maxPos = Selection.atEnd(doc).to
 
-    return TextSelection.create(
-        doc,
-        clamp(selection.anchor, minPos, maxPos),
-        clamp(selection.head, minPos, maxPos),
-    )
+    return TextSelection.create(doc, clamp(selection.anchor, minPos, maxPos), clamp(selection.head, minPos, maxPos))
 }
 
 /**
@@ -30,10 +27,7 @@ type NodeAttributes = {
  * all the nodes in the document. This is based on the official implementation for the
  * `findChildren` helper function.
  */
-function getAllNodesAttributesByType(
-    doc: ProseMirrorNode,
-    nodeType: string,
-): Array<NodeAttributes> {
+function getAllNodesAttributesByType(doc: ProseMirrorNode, nodeType: string): Array<NodeAttributes> {
     const result: Array<NodeAttributes> = []
 
     doc.descendants((node) => {

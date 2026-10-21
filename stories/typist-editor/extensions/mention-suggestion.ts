@@ -14,14 +14,10 @@ const MENTION_SUGGESTION_TYPE = 'mention'
 const MENTION_SUGGESTION_NODE_TYPE = `${MENTION_SUGGESTION_TYPE}Suggestion`
 
 const MentionSuggestion: SuggestionExtensionResult<MentionSuggestionItem> =
-    createSuggestionExtension<MentionSuggestionItem>(
-        MENTION_SUGGESTION_TYPE,
-        MENTION_SUGGESTION_ITEMS,
-        {
-            id: 'uid',
-            label: 'name',
-        },
-    ).configure({
+    createSuggestionExtension<MentionSuggestionItem>(MENTION_SUGGESTION_TYPE, MENTION_SUGGESTION_ITEMS, {
+        id: 'uid',
+        label: 'name',
+    }).configure({
         triggerChar: '@',
         renderAriaLabel({ label }) {
             return `Name: ${label}`

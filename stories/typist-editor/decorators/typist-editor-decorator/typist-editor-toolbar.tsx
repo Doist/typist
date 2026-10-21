@@ -30,9 +30,11 @@ import {
     RiTextWrap,
 } from 'react-icons/ri'
 
-import { isActive, type CoreEditor } from '../../../../src'
+import { isActive } from '../../../../src'
 
 import styles from './typist-editor-toolbar.module.css'
+
+import type { CoreEditor } from '../../../../src'
 
 type TypistEditorToolbarProps = {
     editor: CoreEditor

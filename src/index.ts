@@ -17,10 +17,7 @@ export * from './extensions/core/extra-editor-commands/commands/extend-word-rang
 export * from './extensions/core/extra-editor-commands/commands/insert-markdown-content'
 export * from './extensions/core/extra-editor-commands/commands/insert-markdown-content-at'
 export { PlainTextKit } from './extensions/plain-text/plain-text-kit'
-export type {
-    RichTextImageAttributes,
-    RichTextImageOptions,
-} from './extensions/rich-text/rich-text-image'
+export type { RichTextImageAttributes, RichTextImageOptions } from './extensions/rich-text/rich-text-image'
 export { RichTextKit } from './extensions/rich-text/rich-text-kit'
 export type {
     SuggestionExtensionResult,
@@ -34,10 +31,7 @@ export { createHTMLSerializer, getHTMLSerializerInstance } from './serializers/h
 export { remarkAutolinkLiteral } from './serializers/html/plugins/remark-autolink-literal'
 export { remarkStrikethrough } from './serializers/html/plugins/remark-strikethrough'
 export { remarkTable } from './serializers/html/plugins/remark-table'
-export {
-    createMarkdownSerializer,
-    getMarkdownSerializerInstance,
-} from './serializers/markdown/markdown'
+export { createMarkdownSerializer, getMarkdownSerializerInstance } from './serializers/markdown/markdown'
 export { canInsertNodeAt } from './utilities/can-insert-node-at'
 export { canInsertSuggestion } from './utilities/can-insert-suggestion'
 export type { AnyConfig, Editor as CoreEditor, EditorEvents, MarkRange, Range } from '@tiptap/core'
@@ -82,8 +76,5 @@ export * as ProseMirrorState from '@tiptap/pm/state'
 export * as ProseMirrorView from '@tiptap/pm/view'
 export type { Editor, NodeViewProps, ReactRendererOptions } from '@tiptap/react'
 export { NodeViewWrapper, ReactRenderer } from '@tiptap/react'
-export type {
-    SuggestionKeyDownProps,
-    SuggestionOptions as TiptapSuggestionOptions,
-} from '@tiptap/suggestion'
+export type { SuggestionKeyDownProps, SuggestionOptions as TiptapSuggestionOptions } from '@tiptap/suggestion'
 export { Suggestion } from '@tiptap/suggestion'

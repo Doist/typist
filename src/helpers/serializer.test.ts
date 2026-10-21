@@ -28,9 +28,11 @@ describe('Helper: Serializer', () => {
 
     describe('#extractTagsFromParseRules', () => {
         test('returns an array of all tags from the given parse rules', () => {
-            expect(
-                extractTagsFromParseRules(getSchema([RichTextKit]).marks.strike.spec.parseDOM),
-            ).toStrictEqual(['s', 'del', 'strike'])
+            expect(extractTagsFromParseRules(getSchema([RichTextKit]).marks.strike.spec.parseDOM)).toStrictEqual([
+                's',
+                'del',
+                'strike',
+            ])
         })
     })
 })

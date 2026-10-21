@@ -1,7 +1,7 @@
 import { extractTagsFromParseRules } from '../../../helpers/serializer'
 
-import type { NodeType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
+import type { NodeType } from '@tiptap/pm/model'
 
 /**
  * The node types required by the table rules for tags and names detection.
@@ -65,9 +65,7 @@ function isHeadingRow(row: Node, headerTags: string[]): boolean {
 
     return (
         tableElement?.rows[0] === rowElement &&
-        Array.from(rowElement.children).every((cell) =>
-            headerTags.some((tag) => tag.toUpperCase() === cell.nodeName),
-        )
+        Array.from(rowElement.children).every((cell) => headerTags.some((tag) => tag.toUpperCase() === cell.nodeName))
     )
 }
 
@@ -106,9 +104,7 @@ function table(nodeTypes: TableNodeTypes): Turndown.Plugin {
                 if (firstRow && !isHeadingRow(firstRow, headerTags)) {
                     const cells = Array.from(firstRow.children)
                     const emptyRow = cells.map((cell) => serializeTableCell('', cell)).join('')
-                    const delimiterRow = cells
-                        .map((cell) => serializeTableCell('---', cell))
-                        .join('')
+                    const delimiterRow = cells.map((cell) => serializeTableCell('---', cell)).join('')
 
                     headingRows = `${emptyRow}\n${delimiterRow}\n`
                 }

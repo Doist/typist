@@ -37,9 +37,7 @@ function handleTextInputOrPaste(view: EditorView, text: string): boolean {
 
     // Inserts the new paragraph nodes at the current cursor position
     // (takes into account if a selection needs to be replaced)
-    view.dispatch(
-        tr.replaceSelection(Slice.maxOpen(Fragment.fromArray(paragraphNodes))).scrollIntoView(),
-    )
+    view.dispatch(tr.replaceSelection(Slice.maxOpen(Fragment.fromArray(paragraphNodes))).scrollIntoView())
 
     // Suppress the default handling behaviour
     return true
@@ -62,9 +60,7 @@ const PasteMultilineText = Extension.create({
                         return handleTextInputOrPaste(view, inputText)
                     },
                     handlePaste(view: EditorView, event) {
-                        const clipboardText = event.clipboardData
-                            ?.getData(ClipboardDataType.Text)
-                            .trim()
+                        const clipboardText = event.clipboardData?.getData(ClipboardDataType.Text).trim()
 
                         // Do not handle the event if the clipboard doesn't contain text
                         if (!clipboardText) {

@@ -29,10 +29,7 @@ const CopyMarkdownSource = Extension.create<CopyMarkdownSourceOptions>({
         return {
             [this.options.keyboardShortcut]: ({ editor }) => {
                 // Get a fragment of the editor's content based on the selection
-                const nodeSelection = editor.state.doc.cut(
-                    editor.state.selection.from,
-                    editor.state.selection.to,
-                )
+                const nodeSelection = editor.state.doc.cut(editor.state.selection.from, editor.state.selection.to)
 
                 // Serialize the selected content HTML to Markdown
                 const markdownContent = getMarkdownSerializerInstance(editor.schema).serialize(

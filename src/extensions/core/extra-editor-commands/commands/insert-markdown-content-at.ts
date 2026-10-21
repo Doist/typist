@@ -1,10 +1,10 @@
-import { RawCommands, selectionToInsertionEnd } from '@tiptap/core'
+import { selectionToInsertionEnd } from '@tiptap/core'
 import { DOMParser } from '@tiptap/pm/model'
 
 import { parseHtmlToElement } from '../../../../helpers/dom'
 import { getHTMLSerializerInstance } from '../../../../serializers/html/html'
 
-import type { Range } from '@tiptap/core'
+import type { Range, RawCommands } from '@tiptap/core'
 import type { ParseOptions } from '@tiptap/pm/model'
 
 /**
@@ -89,8 +89,7 @@ function insertMarkdownContentAt(
             if (from === to && isOnlyBlockContent) {
                 const { parent } = tr.doc.resolve(from)
 
-                const isEmptyTextBlock =
-                    parent.isTextblock && !parent.type.spec.code && !parent.childCount
+                const isEmptyTextBlock = parent.isTextblock && !parent.type.spec.code && !parent.childCount
 
                 if (isEmptyTextBlock) {
                     from -= 1

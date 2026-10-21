@@ -1,6 +1,7 @@
+import { escape } from 'lodash-es'
+
 import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-import { escape } from 'lodash-es'
 
 import { REGEX_LINE_BREAKS } from '../../constants/regular-expressions'
 import { parseHtmlToElement } from '../../helpers/dom'
