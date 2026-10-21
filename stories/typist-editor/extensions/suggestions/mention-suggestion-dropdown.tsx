@@ -29,30 +29,29 @@ function renderMentionItem(item: MentionSuggestionItem) {
     )
 }
 
-const MentionSuggestionDropdown = forwardRef<
-    SuggestionRendererRef,
-    SuggestionRendererProps<MentionSuggestionItem>
->(function MentionSuggestionDropdown({ items, command }, ref) {
-    const handleItemSelect = useEvent((index: number) => {
-        const item = items[index] as MentionSuggestionItem | undefined
+const MentionSuggestionDropdown = forwardRef<SuggestionRendererRef, SuggestionRendererProps<MentionSuggestionItem>>(
+    function MentionSuggestionDropdown({ items, command }, ref) {
+        const handleItemSelect = useEvent((index: number) => {
+            const item = items[index] as MentionSuggestionItem | undefined
 
-        if (item) {
-            command({
-                id: item.uid,
-                label: item.name,
-            })
-        }
-    })
+            if (item) {
+                command({
+                    id: item.uid,
+                    label: item.name,
+                })
+            }
+        })
 
-    return (
-        <BaseSuggestionDropdown
-            forwardedRef={ref}
-            items={items}
-            getItemKey={getMentionItemKey}
-            onItemSelect={handleItemSelect}
-            renderItem={renderMentionItem}
-        />
-    )
-})
+        return (
+            <BaseSuggestionDropdown
+                forwardedRef={ref}
+                items={items}
+                getItemKey={getMentionItemKey}
+                onItemSelect={handleItemSelect}
+                renderItem={renderMentionItem}
+            />
+        )
+    },
+)
 
 export { MentionSuggestionDropdown }

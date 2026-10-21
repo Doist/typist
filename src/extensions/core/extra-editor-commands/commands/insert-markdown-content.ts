@@ -1,5 +1,4 @@
-import { RawCommands } from '@tiptap/core'
-
+import type { RawCommands } from '@tiptap/core'
 import type { ParseOptions } from '@tiptap/pm/model'
 
 /**
@@ -42,11 +41,7 @@ function insertMarkdownContent(
     },
 ): ReturnType<RawCommands['insertMarkdownContent']> {
     return ({ commands, tr }) => {
-        return commands.insertMarkdownContentAt(
-            { from: tr.selection.from, to: tr.selection.to },
-            markdown,
-            options,
-        )
+        return commands.insertMarkdownContentAt({ from: tr.selection.from, to: tr.selection.to }, markdown, options)
     }
 }
 

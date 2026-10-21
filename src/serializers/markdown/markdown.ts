@@ -69,10 +69,7 @@ const INITIAL_TURNDOWN_OPTIONS: Turndown.Options = {
 
         // Return the list marker for empty ordered list items
         if (node.nodeName === 'OL' || (parentNode?.nodeName === 'OL' && node.nodeName === 'LI')) {
-            const start =
-                node.nodeName === 'LI'
-                    ? parentNode.getAttribute('start')
-                    : node.getAttribute('start')
+            const start = node.nodeName === 'LI' ? parentNode.getAttribute('start') : node.getAttribute('start')
             const index = Array.prototype.indexOf.call(parentNode.children, node)
 
             return `${start ? Number(start) + index : index + 1}. \n`
@@ -157,12 +154,7 @@ function createMarkdownSerializer(schema: Schema): MarkdownSerializerReturnType 
     }
 
     // Add rules for `table` if the corresponding nodes exists in the schema
-    if (
-        schema.nodes.table &&
-        schema.nodes.tableRow &&
-        schema.nodes.tableHeader &&
-        schema.nodes.tableCell
-    ) {
+    if (schema.nodes.table && schema.nodes.tableRow && schema.nodes.tableHeader && schema.nodes.tableCell) {
         turndown.use(
             table({
                 table: schema.nodes.table,

@@ -2,9 +2,9 @@ import { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'rea
 
 import { Box, Inline, Text } from '@doist/reactist'
 
-import { SuggestionRendererRef } from '../../../../src'
-
 import styles from './base-suggestion-dropdown.module.css'
+
+import type { SuggestionRendererRef } from '../../../../src'
 
 type BaseSuggestionDropdownItemProps = {
     index: number
@@ -86,10 +86,7 @@ function BaseSuggestionDropdown<TSuggestionItem extends object>({
     const areSuggestionsLoading = items.length === 1 && 'isLoading' in items[0]
     const areSuggestionsEmpty = items.length === 0
 
-    const registerItemRef = useCallback(function registerItemRef(
-        index: number,
-        node: HTMLLIElement | null,
-    ) {
+    const registerItemRef = useCallback(function registerItemRef(index: number, node: HTMLLIElement | null) {
         if (node) {
             itemRefs.current.set(index, node)
         } else {

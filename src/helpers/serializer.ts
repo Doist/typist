@@ -80,10 +80,7 @@ function buildSuggestionSchemaInfo(schema: Schema): SuggestionSchemaInfo | null 
     const triggerCharByScheme = new Map(
         suggestionNodes.map((node) => [
             getSuggestionUrlScheme(node),
-            String(
-                (node.spec as { triggerChar?: string }).triggerChar ??
-                    DEFAULT_SUGGESTION_TRIGGER_CHAR,
-            ),
+            String((node.spec as { triggerChar?: string }).triggerChar ?? DEFAULT_SUGGESTION_TRIGGER_CHAR),
         ]),
     )
 
@@ -123,16 +120,12 @@ function computeSuggestionTriggerCharsId(schema: Schema): string {
  *
  * @returns An array of tags extracted from the parse rules.
  */
-function extractTagsFromParseRules(
-    parseRules?: readonly ParseRule[],
-): (keyof HTMLElementTagNameMap)[] {
+function extractTagsFromParseRules(parseRules?: readonly ParseRule[]): (keyof HTMLElementTagNameMap)[] {
     if (!parseRules || parseRules.length === 0) {
         return []
     }
 
-    return parseRules
-        .filter((rule) => rule.tag)
-        .map((rule) => rule.tag as keyof HTMLElementTagNameMap)
+    return parseRules.filter((rule) => rule.tag).map((rule) => rule.tag as keyof HTMLElementTagNameMap)
 }
 
 export {

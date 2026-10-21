@@ -19,10 +19,7 @@ function rehypeCodeBlock(): Transformer {
                 isHastElementNode(node.children[0], 'code') &&
                 isHastTextNode(node.children[0].children[0])
             ) {
-                node.children[0].children[0].value = node.children[0].children[0].value.replace(
-                    /\n$/,
-                    '',
-                )
+                node.children[0].children[0].value = node.children[0].children[0].value.replace(/\n$/, '')
             }
         })
 

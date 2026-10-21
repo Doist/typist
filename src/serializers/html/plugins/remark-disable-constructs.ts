@@ -1,5 +1,5 @@
-import type { Schema } from '@tiptap/pm/model'
 import type { Processor } from 'unified'
+import type { Schema } from '@tiptap/pm/model'
 
 /**
  * A remark plugin to disable multiple language constructs based on the availability of marks and/or

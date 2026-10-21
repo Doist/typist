@@ -1,6 +1,9 @@
-import { isActive, isTextSelection, RawCommands } from '@tiptap/core'
-import { TextSelection } from '@tiptap/pm/state'
 import { clamp } from 'lodash-es'
+
+import { isActive, isTextSelection } from '@tiptap/core'
+import { TextSelection } from '@tiptap/pm/state'
+
+import type { RawCommands } from '@tiptap/core'
 
 /**
  * Augment the official `@tiptap/core` module with extra commands so that the compiler knows about
@@ -35,11 +38,7 @@ function extendWordRange(): ReturnType<RawCommands['extendWordRange']> {
         const { $from, $to, empty } = selection
 
         // Do nothing if cursor position is not valid for a text selection
-        if (
-            !isTextSelection(selection) ||
-            isActive(state, 'code') ||
-            isActive(state, 'codeBlock')
-        ) {
+        if (!isTextSelection(selection) || isActive(state, 'code') || isActive(state, 'codeBlock')) {
             return false
         }
 
@@ -56,9 +55,7 @@ function extendWordRange(): ReturnType<RawCommands['extendWordRange']> {
             // At a caret, include the word fragment on the right. For a selection, check its last
             // character so trailing whitespace doesn't pull in the following word
             const textAfter =
-                empty || /\S$/.test($to.nodeBefore?.text ?? '')
-                    ? ($to.nodeAfter?.text?.match(/^\S+/)?.[0] ?? '')
-                    : ''
+                empty || /\S$/.test($to.nodeBefore?.text ?? '') ? ($to.nodeAfter?.text?.match(/^\S+/)?.[0] ?? '') : ''
 
             const minPos = TextSelection.atStart(doc).from
             const maxPos = TextSelection.atEnd(doc).to

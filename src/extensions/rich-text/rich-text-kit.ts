@@ -28,7 +28,7 @@ import { PasteMarkdown } from './paste-markdown'
 import { RichTextBulletList } from './rich-text-bullet-list'
 import { RichTextCode } from './rich-text-code'
 import { RichTextDocument } from './rich-text-document'
-import { RichTextHeading, RichTextHeadingOptions } from './rich-text-heading'
+import { RichTextHeading } from './rich-text-heading'
 import { RichTextImage } from './rich-text-image'
 import { RichTextLink } from './rich-text-link'
 import { RichTextListItem } from './rich-text-list-item'
@@ -51,6 +51,7 @@ import type { ListKeymapOptions } from '@tiptap/extension-list-keymap'
 import type { ParagraphOptions } from '@tiptap/extension-paragraph'
 import type { RichTextBulletListOptions } from './rich-text-bullet-list'
 import type { RichTextDocumentOptions } from './rich-text-document'
+import type { RichTextHeadingOptions } from './rich-text-heading'
 import type { RichTextImageOptions } from './rich-text-image'
 import type { RichTextLinkOptions } from './rich-text-link'
 import type { RichTextOrderedListOptions } from './rich-text-ordered-list'
@@ -266,10 +267,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
                 extensions.push(PasteMarkdown)
             }
 
-            if (
-                this.options?.document?.multiline === false &&
-                this.options?.pasteSinglelineText !== false
-            ) {
+            if (this.options?.document?.multiline === false && this.options?.pasteSinglelineText !== false) {
                 // Supports pasting multiple lines into a singleline editor, by joining all the
                 // pasted lines together
                 extensions.push(PasteSinglelineText)
@@ -339,8 +337,7 @@ const RichTextKit = Extension.create<RichTextKitOptions>({
         // Tables are not supported in singleline documents because, although a table is a single
         // block node (which would technically fit the singleline schema), it serializes to
         // multiple lines of Markdown, breaking the singleline contract
-        const isSinglelineDocument =
-            this.options.document !== false && this.options.document?.multiline === false
+        const isSinglelineDocument = this.options.document !== false && this.options.document?.multiline === false
 
         if (this.options.table !== false && !isSinglelineDocument) {
             extensions.push(

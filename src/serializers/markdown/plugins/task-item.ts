@@ -1,8 +1,8 @@
 import { extractTagsFromParseRules } from '../../../helpers/serializer'
 import { BULLET_LIST_MARKER } from '../markdown'
 
-import type { NodeType } from '@tiptap/pm/model'
 import type Turndown from 'turndown'
+import type { NodeType } from '@tiptap/pm/model'
 
 /**
  * A Turndown plugin which adds a rule for task list items (i.e., `* [ ] Task`), based on the

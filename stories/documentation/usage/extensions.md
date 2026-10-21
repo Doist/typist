@@ -34,31 +34,34 @@ function TypistEditorContainer({ content }) {
         { id: '6606640946', name: 'Willem Dafoe' },
     ]
 
-    const MentionExtension: SuggestionExtensionResult<MentionUser> =
-        createSuggestionExtension<MentionUser>('mention', MENTION_USERS, {
+    const MentionExtension: SuggestionExtensionResult<MentionUser> = createSuggestionExtension<MentionUser>(
+        'mention',
+        MENTION_USERS,
+        {
             label: 'name',
-        }).configure({
-            triggerChar: '@',
-            renderAriaLabel({ label }) {
-                return `Name: ${label}`
-            },
-            dropdownRenderFn() {
-                return {
-                    onStart(props) {},
-                    onUpdate(props) {},
-                    onKeyDown(props) {},
-                    onExit(props) {},
-                }
-            },
-            onSearchChange(query, items) {
-                return items.filter((item) => {
-                    return item.name.toLowerCase().includes(query.toLowerCase())
-                })
-            },
-            onItemSelect(item) {
-                console.log(item)
-            },
-        })
+        },
+    ).configure({
+        triggerChar: '@',
+        renderAriaLabel({ label }) {
+            return `Name: ${label}`
+        },
+        dropdownRenderFn() {
+            return {
+                onStart(props) {},
+                onUpdate(props) {},
+                onKeyDown(props) {},
+                onExit(props) {},
+            }
+        },
+        onSearchChange(query, items) {
+            return items.filter((item) => {
+                return item.name.toLowerCase().includes(query.toLowerCase())
+            })
+        },
+        onItemSelect(item) {
+            console.log(item)
+        },
+    })
 
     return <TypistEditor content={content} extensions={[RichTextKit, MentionExtension]} />
 }

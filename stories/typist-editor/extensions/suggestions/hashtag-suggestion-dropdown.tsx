@@ -29,30 +29,29 @@ function renderHashtagItem(item: HashtagSuggestionItem) {
     )
 }
 
-const HashtagSuggestionDropdown = forwardRef<
-    SuggestionRendererRef,
-    SuggestionRendererProps<HashtagSuggestionItem>
->(function HashtagSuggestionDropdown({ items, command }, ref) {
-    const handleItemSelect = useEvent((index: number) => {
-        const item = items[index] as HashtagSuggestionItem | undefined
+const HashtagSuggestionDropdown = forwardRef<SuggestionRendererRef, SuggestionRendererProps<HashtagSuggestionItem>>(
+    function HashtagSuggestionDropdown({ items, command }, ref) {
+        const handleItemSelect = useEvent((index: number) => {
+            const item = items[index] as HashtagSuggestionItem | undefined
 
-        if (item) {
-            command({
-                id: item.id,
-                label: item.name,
-            })
-        }
-    })
+            if (item) {
+                command({
+                    id: item.id,
+                    label: item.name,
+                })
+            }
+        })
 
-    return (
-        <BaseSuggestionDropdown
-            forwardedRef={ref}
-            items={items}
-            getItemKey={getHashtagItemKey}
-            onItemSelect={handleItemSelect}
-            renderItem={renderHashtagItem}
-        />
-    )
-})
+        return (
+            <BaseSuggestionDropdown
+                forwardedRef={ref}
+                items={items}
+                getItemKey={getHashtagItemKey}
+                onItemSelect={handleItemSelect}
+                renderItem={renderHashtagItem}
+            />
+        )
+    },
+)
 
 export { HashtagSuggestionDropdown }

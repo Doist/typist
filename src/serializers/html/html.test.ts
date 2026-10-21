@@ -285,16 +285,10 @@ describe('HTML Serializer', () => {
         describe('when two editor schemas differ only by suggestion `triggerChar`', () => {
             test('`getHTMLSerializerInstance` returns different instances and outputs', () => {
                 const htmlSerializerA = getHTMLSerializerInstance(
-                    getSchema([
-                        PlainTextKit,
-                        createSuggestionExtension('mention').configure({ triggerChar: '@' }),
-                    ]),
+                    getSchema([PlainTextKit, createSuggestionExtension('mention').configure({ triggerChar: '@' })]),
                 )
                 const htmlSerializerB = getHTMLSerializerInstance(
-                    getSchema([
-                        PlainTextKit,
-                        createSuggestionExtension('mention').configure({ triggerChar: '#' }),
-                    ]),
+                    getSchema([PlainTextKit, createSuggestionExtension('mention').configure({ triggerChar: '#' })]),
                 )
 
                 expect(htmlSerializerA).not.toBe(htmlSerializerB)
@@ -436,10 +430,7 @@ Answer: [Henning M](mention://963827)`),
 
             test('channel suggestion HTML output is correct', () => {
                 const htmlSerializer = createHTMLSerializer(
-                    getSchema([
-                        PlainTextKit,
-                        createSuggestionExtension('channel').configure({ triggerChar: '#' }),
-                    ]),
+                    getSchema([PlainTextKit, createSuggestionExtension('channel').configure({ triggerChar: '#' })]),
                 )
 
                 expect(
@@ -455,9 +446,7 @@ Answer: [Doist Frontend](channel://190200)`),
                     getSchema([PlainTextKit, createSuggestionExtension('mention')]),
                 )
 
-                expect(
-                    htmlSerializer.serialize('[Henning M](mention://user:190200@doist.dev)'),
-                ).toBe(
+                expect(htmlSerializer.serialize('[Henning M](mention://user:190200@doist.dev)')).toBe(
                     '<p><span data-mention data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span></p>',
                 )
             })
@@ -467,9 +456,7 @@ Answer: [Doist Frontend](channel://190200)`),
                     getSchema([PlainTextKit, createSuggestionExtension('mention')]),
                 )
 
-                expect(
-                    htmlSerializer.serialize('([Henning M](mention://user:190200@doist.dev))'),
-                ).toBe(
+                expect(htmlSerializer.serialize('([Henning M](mention://user:190200@doist.dev))')).toBe(
                     '<p>(<span data-mention data-id="user:190200@doist.dev" data-label="Henning M">@Henning M</span>)</p>',
                 )
             })
@@ -589,8 +576,7 @@ Answer: [Doist Frontend](channel://190200)`),
             })
 
             test('code block HTML output is correct', () => {
-                expect(htmlSerializer.serialize(MARKDOWN_INPUT_CODE_BLOCK))
-                    .toBe(`<pre><code>&lt;html>
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_CODE_BLOCK)).toBe(`<pre><code>&lt;html>
   &lt;head>
     &lt;title>Test&lt;/title>
   &lt;/head>
@@ -623,9 +609,7 @@ Answer: [Doist Frontend](channel://190200)`),
             })
 
             test('angle-bracket URLs are preserved as text', () => {
-                expect(htmlSerializer.serialize('<https://duckduckgo.com>')).toBe(
-                    '<p>&lt;https://duckduckgo.com></p>',
-                )
+                expect(htmlSerializer.serialize('<https://duckduckgo.com>')).toBe('<p>&lt;https://duckduckgo.com></p>')
             })
 
             test('styled links HTML output is correct', () => {
@@ -688,8 +672,7 @@ And this is the second line.</p>`,
             })
 
             test('styled text HTML output is preserved', () => {
-                expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_TEXT))
-                    .toBe(`<p>I just love **bold text**.
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_TEXT)).toBe(`<p>I just love **bold text**.
 I just love __bold text__.</p><p>Italicized text is the *cat's meow*.
 Italicized text is the _cat's meow_.</p><p>This text is ***really important***.
 This text is ___really important___.
@@ -715,8 +698,7 @@ Strikethrough with a single tilde: ~not scratched~</p>`)
             })
 
             test('ordered lists HTML output is preserved', () => {
-                expect(htmlSerializer.serialize(MARKDOWN_INPUT_ORDERED_LISTS))
-                    .toBe(`<p>1. First item
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_ORDERED_LISTS)).toBe(`<p>1. First item
 2. Second item
 3. Third item
 4. Fourth item</p><p>---</p><p>1. First item
@@ -734,8 +716,7 @@ Strikethrough with a single tilde: ~not scratched~</p>`)
             })
 
             test('unordered lists HTML output is preserved', () => {
-                expect(htmlSerializer.serialize(MARKDOWN_INPUT_UNORDERED_LISTS))
-                    .toBe(`<p>- First item
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_UNORDERED_LISTS)).toBe(`<p>- First item
 - Second item
 - Third item
 - Fourth item</p><p>---</p><p>* First item
@@ -788,8 +769,7 @@ console.log("hello")
             })
 
             test('block elements HTML output is preserved', () => {
-                expect(htmlSerializer.serialize(MARKDOWN_INPUT_INDENTED_BLOCK_ELEMENTS))
-                    .toBe(`<p>1. Blockquote:
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_INDENTED_BLOCK_ELEMENTS)).toBe(`<p>1. Blockquote:
 > Dorothy followed her through many of the beautiful rooms in her castle.
 2. Image:
 ![Octobi Wan Catnobi](https://octodex.github.com/images/octobiwan.jpg)
@@ -816,9 +796,7 @@ My favorite search engine is https://duckduckgo.com.</p>`)
             })
 
             test('angle-bracket URLs are preserved as text without the link extension', () => {
-                expect(htmlSerializer.serialize('<https://duckduckgo.com>')).toBe(
-                    '<p>&lt;https://duckduckgo.com></p>',
-                )
+                expect(htmlSerializer.serialize('<https://duckduckgo.com>')).toBe('<p>&lt;https://duckduckgo.com></p>')
             })
 
             test('styled links HTML output is preserved', () => {
@@ -833,9 +811,7 @@ See the section on [\`code\`](#code).</p>`)
 
         describe('with partially disabled extensions', () => {
             test('disabling italic also disables bold syntax', () => {
-                const htmlSerializer = createHTMLSerializer(
-                    getSchema([RichTextKit.configure({ italic: false })]),
-                )
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit.configure({ italic: false })]))
 
                 expect(htmlSerializer.serialize('I love **bold** and *italic*')).toBe(
                     '<p>I love **bold** and *italic*</p>',
@@ -843,9 +819,7 @@ See the section on [\`code\`](#code).</p>`)
             })
 
             test('disabling bold also disables italic syntax', () => {
-                const htmlSerializer = createHTMLSerializer(
-                    getSchema([RichTextKit.configure({ bold: false })]),
-                )
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit.configure({ bold: false })]))
 
                 expect(htmlSerializer.serialize('I love **bold** and *italic*')).toBe(
                     '<p>I love **bold** and *italic*</p>',
@@ -853,31 +827,25 @@ See the section on [\`code\`](#code).</p>`)
             })
 
             test('disabling orderedList also disables bulletList syntax', () => {
-                const htmlSerializer = createHTMLSerializer(
-                    getSchema([RichTextKit.configure({ orderedList: false })]),
-                )
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit.configure({ orderedList: false })]))
 
-                expect(
-                    htmlSerializer.serialize('- item one\n- item two\n\n1. first\n2. second'),
-                ).toBe('<p>- item one<br>- item two</p><p>1. first<br>2. second</p>')
+                expect(htmlSerializer.serialize('- item one\n- item two\n\n1. first\n2. second')).toBe(
+                    '<p>- item one<br>- item two</p><p>1. first<br>2. second</p>',
+                )
             })
 
             test('disabling bulletList also disables orderedList syntax', () => {
-                const htmlSerializer = createHTMLSerializer(
-                    getSchema([RichTextKit.configure({ bulletList: false })]),
-                )
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit.configure({ bulletList: false })]))
 
-                expect(
-                    htmlSerializer.serialize('- item one\n- item two\n\n1. first\n2. second'),
-                ).toBe('<p>- item one<br>- item two</p><p>1. first<br>2. second</p>')
+                expect(htmlSerializer.serialize('- item one\n- item two\n\n1. first\n2. second')).toBe(
+                    '<p>- item one<br>- item two</p><p>1. first<br>2. second</p>',
+                )
             })
         })
 
         describe('with official `taskList`/`taskItem` extensions', () => {
             test('task lists HTML output is correct', () => {
-                const htmlSerializer = createHTMLSerializer(
-                    getSchema([RichTextKit, TaskList, TaskItem]),
-                )
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit, TaskList, TaskItem]))
 
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_TASK_LISTS)).toBe(
                     '<ul data-type="taskList"><li data-type="taskItem" data-checked="false">First item</li><li data-type="taskItem" data-checked="true">Second item</li><li data-type="taskItem" data-checked="true">Third item</li><li data-type="taskItem" data-checked="false">Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="true">First item</li><li data-type="taskItem" data-checked="false">Second item</li><li data-type="taskItem" data-checked="false">Third item</li><li data-type="taskItem" data-checked="true">Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="true">First item</li><li data-type="taskItem" data-checked="false">Second item</li><li data-type="taskItem" data-checked="true">Third item</li><li data-type="taskItem" data-checked="false">Fourth item</li></ul><hr><ul><li>First item</li><li>Second item</li><li>Third item<ul data-type="taskList"><li data-type="taskItem" data-checked="false">Indented item</li><li data-type="taskItem" data-checked="false">Indented item</li></ul></li><li>Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="false">1968. A great year!</li><li data-type="taskItem" data-checked="true">I think 1969 was second best.</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="false">This is the first list item.</li><li data-type="taskItem" data-checked="false">Here\'s the second list item.<br>I need to add another paragraph below the second list item.</li><li data-type="taskItem" data-checked="false">And here\'s the third list item.</li></ul>',
@@ -929,9 +897,7 @@ See the section on [\`code\`](#code).</p>`)
             test('hard breaks within styled table cells HTML output is correct', () => {
                 const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit]))
 
-                expect(
-                    htmlSerializer.serialize(MARKDOWN_INPUT_TABLES_WITH_STYLED_HARD_BREAKS),
-                ).toBe(
+                expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES_WITH_STYLED_HARD_BREAKS)).toBe(
                     '<table><thead><tr><th>Name</th></tr></thead><tbody><tr><td><strong>First line<br>Second line</strong></td></tr></tbody></table>',
                 )
             })
@@ -945,9 +911,7 @@ See the section on [\`code\`](#code).</p>`)
             })
 
             test('tables Markdown syntax is ignored when the `table` extension is disabled', () => {
-                const htmlSerializer = createHTMLSerializer(
-                    getSchema([RichTextKit.configure({ table: false })]),
-                )
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit.configure({ table: false })]))
 
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_TABLES)).toBe(
                     '<p>| Name | Role |<br>| --- | --- |<br>| Henning | Frontend Head |<br>| Ricardo | Frontend Engineer |</p>',

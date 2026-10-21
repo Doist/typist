@@ -20,14 +20,7 @@ function TypistEditorContainer({ content }) {
         console.log(typistEditorRef.current?.getMarkdown() || '')
     }, [])
 
-    return (
-        <TypistEditor
-            content={content}
-            extensions={[RichTextKit]}
-            onUpdate={handleUpdate}
-            ref={typistEditorRef}
-        />
-    )
+    return <TypistEditor content={content} extensions={[RichTextKit]} onUpdate={handleUpdate} ref={typistEditorRef} />
 }
 ```
 

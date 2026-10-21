@@ -1,7 +1,4 @@
-import {
-    gfmAutolinkLiteralFromMarkdown,
-    gfmAutolinkLiteralToMarkdown,
-} from 'mdast-util-gfm-autolink-literal'
+import { gfmAutolinkLiteralFromMarkdown, gfmAutolinkLiteralToMarkdown } from 'mdast-util-gfm-autolink-literal'
 import { gfmAutolinkLiteral } from 'micromark-extension-gfm-autolink-literal'
 
 import type { Processor } from 'unified'

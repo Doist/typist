@@ -1,4 +1,6 @@
-import { Paragraph, ParagraphOptions } from '@tiptap/extension-paragraph'
+import { Paragraph } from '@tiptap/extension-paragraph'
+
+import type { ParagraphOptions } from '@tiptap/extension-paragraph'
 
 /**
  * Custom extension that extends the built-in `Paragraph` extension to add an additional keyboard

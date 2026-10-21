@@ -1,7 +1,8 @@
+import * as linkify from 'linkifyjs'
+
 import { Extension } from '@tiptap/core'
 import { Fragment, Slice } from '@tiptap/pm/model'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-import * as linkify from 'linkifyjs'
 
 import { ClipboardDataType } from '../../constants/common'
 import { PASTE_MARKDOWN_EXTENSION_PRIORITY } from '../../constants/extension-priorities'
@@ -41,8 +42,7 @@ const PasteMarkdown = Extension.create({
                         return Slice.maxOpen(Fragment.from(editor.schema.text(text)))
                     },
                     handlePaste(_, event, slice) {
-                        const isInsideCodeBlockNode =
-                            editor.state.selection.$from.parent.type.name === 'codeBlock'
+                        const isInsideCodeBlockNode = editor.state.selection.$from.parent.type.name === 'codeBlock'
 
                         // The clipboard contains text if the slice content size is greater than
                         // zero, otherwise it contains other data types (like files or images)
@@ -66,9 +66,7 @@ const PasteMarkdown = Extension.create({
                         }
 
                         const clipboardContainsHTML = Boolean(
-                            event.clipboardData?.types.some(
-                                (type) => type === ClipboardDataType.HTML,
-                            ),
+                            event.clipboardData?.types.some((type) => type === ClipboardDataType.HTML),
                         )
 
                         // Unfortunately, the VS Code clipboard data type is not supported by
@@ -77,21 +75,17 @@ const PasteMarkdown = Extension.create({
                         //  * The Markdown syntax is not fully converted to rich-text
                         //  * Code is not detected nor converted to a code-block
                         const clipboardContainsVSCodeMetadata = Boolean(
-                            event.clipboardData?.types.some(
-                                (type) => type === ClipboardDataType.VSCode,
-                            ),
+                            event.clipboardData?.types.some((type) => type === ClipboardDataType.VSCode),
                         )
 
                         const clipboardContainsHTMLFromUnknownSource =
                             clipboardContainsHTML && !clipboardContainsVSCodeMetadata
 
-                        const vsCodeClipboardMetadata: VSCodeClipboardMetadata =
-                            clipboardContainsVSCodeMetadata
-                                ? (JSON.parse(
-                                      event.clipboardData?.getData(ClipboardDataType.VSCode) ||
-                                          '{}',
-                                  ) as VSCodeClipboardMetadata)
-                                : {}
+                        const vsCodeClipboardMetadata: VSCodeClipboardMetadata = clipboardContainsVSCodeMetadata
+                            ? (JSON.parse(
+                                  event.clipboardData?.getData(ClipboardDataType.VSCode) || '{}',
+                              ) as VSCodeClipboardMetadata)
+                            : {}
 
                         const clipboardContainsHTMLFromVSCodeOtherThanTextOrMarkdown =
                             clipboardContainsVSCodeMetadata &&

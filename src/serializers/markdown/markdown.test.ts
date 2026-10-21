@@ -294,8 +294,7 @@ describe('Markdown Serializer', () => {
             })
 
             test('special HTML entities are converted to ASCII characters', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_HTML_CHARS))
-                    .toBe(`Ambition & Balance
+                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_HTML_CHARS)).toBe(`Ambition & Balance
 <doist>
 </doist>
 <doist></doist>
@@ -311,8 +310,7 @@ I think I'll use it to format all of my documents from now on.`,
             })
 
             test('leading whitespace is preserved', () => {
-                expect(markdownSerializer.serialize('<p>1. First</p><p>    1. Indented</p>'))
-                    .toBe(`1. First
+                expect(markdownSerializer.serialize('<p>1. First</p><p>    1. Indented</p>')).toBe(`1. First
     1. Indented`)
             })
 
@@ -323,8 +321,7 @@ I think I'll use it to format all of my documents from now on.`,
 <p>- I think 1969 was second best.</p>`),
                     ).toBe(`- 1968. A great year!
 - I think 1969 was second best.`)
-                    expect(markdownSerializer.serialize(HTML_INPUT_PONCTUATION_CHARACTERS))
-                        .toBe(`\\' text \\'
+                    expect(markdownSerializer.serialize(HTML_INPUT_PONCTUATION_CHARACTERS)).toBe(`\\' text \\'
 \\! text \\!
 \\" text \\"
 \\# text \\#
@@ -412,9 +409,7 @@ Answer: [Doist Frontend](channel://190200)`)
                     markdownSerializer.serialize(
                         '<p>Hey <span data-mention data-id="123" data-label="Alice">@Alice</span> and <span data-mention data-id="456" data-label="Bob">@Bob</span>, check <span data-channel data-id="789" data-label="General">#General</span></p>',
                     ),
-                ).toBe(
-                    'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
-                )
+                ).toBe('Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)')
             })
 
             test('inline Markdown characters in a suggestion label are not escaped', () => {
@@ -444,8 +439,7 @@ Answer: [Doist Frontend](channel://190200)`)
             })
 
             test('special HTML entities are converted to ASCII characters', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_HTML_CHARS))
-                    .toBe(`Ambition & Balance
+                expect(markdownSerializer.serialize(HTML_INPUT_SPECIAL_HTML_CHARS)).toBe(`Ambition & Balance
 <doist>
 </doist>
 <doist></doist>
@@ -468,8 +462,7 @@ I think I'll use it to format all of my documents from now on.`,
             })
 
             test('line breaks Markdown output is correct', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_LINE_BREAKS))
-                    .toBe(`This is the first line.
+                expect(markdownSerializer.serialize(HTML_INPUT_LINE_BREAKS)).toBe(`This is the first line.
 And this is the second line.`)
             })
 
@@ -699,8 +692,7 @@ console.log("hello")
             })
 
             test('block elements Markdown output is correct', () => {
-                expect(markdownSerializer.serialize(HTML_INPUT_INDENTED_BLOCK_ELEMENTS))
-                    .toBe(`1. Blockquote:
+                expect(markdownSerializer.serialize(HTML_INPUT_INDENTED_BLOCK_ELEMENTS)).toBe(`1. Blockquote:
 
     > Dorothy followed her through many of the beautiful rooms in her castle.
 2. Image:
@@ -743,8 +735,7 @@ See the section on [\`code\`](#code).`,
 
             describe('with overridden `escape` function', () => {
                 test('backslash characters preceding punctuation characters are escaped correctly', () => {
-                    expect(markdownSerializer.serialize(HTML_INPUT_PONCTUATION_CHARACTERS))
-                        .toBe(`\\\\' text \\\\'
+                    expect(markdownSerializer.serialize(HTML_INPUT_PONCTUATION_CHARACTERS)).toBe(`\\\\' text \\\\'
 
 \\\\! text \\\\!
 
@@ -922,18 +913,14 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
 
             test('strikethrough Markdown output is ignored', () => {
                 expect(
-                    markdownSerializer.serialize(
-                        '<p>Strikethrough uses two tildes: <del>scratch this</del></p>',
-                    ),
+                    markdownSerializer.serialize('<p>Strikethrough uses two tildes: <del>scratch this</del></p>'),
                 ).toBe('Strikethrough uses two tildes: scratch this')
             })
         })
 
         describe('with official `taskList`/`taskItem` extensions', () => {
             test('task lists Markdown output is correct', () => {
-                const markdownSerializer = createMarkdownSerializer(
-                    getSchema([RichTextKit, TaskList, TaskItem]),
-                )
+                const markdownSerializer = createMarkdownSerializer(getSchema([RichTextKit, TaskList, TaskItem]))
 
                 expect(markdownSerializer.serialize(HTML_INPUT_TASK_LISTS)).toBe(
                     `- [ ] First item
@@ -1039,9 +1026,7 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
             })
 
             test('hard breaks within styled table cells are serialized as `<br>` elements', () => {
-                expect(
-                    markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_STYLED_HARD_BREAKS),
-                ).toBe(
+                expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_STYLED_HARD_BREAKS)).toBe(
                     `| Name |
 | --- |
 | **First line<br>Second line** |`,
@@ -1109,9 +1094,7 @@ Answer: [Doist Frontend](channel://190200)`)
                     markdownSerializer.serialize(
                         '<p>Hey <span data-mention data-id="123" data-label="Alice">@Alice</span> and <span data-mention data-id="456" data-label="Bob">@Bob</span>, check <span data-channel data-id="789" data-label="General">#General</span></p>',
                     ),
-                ).toBe(
-                    'Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)',
-                )
+                ).toBe('Hey [Alice](mention://123) and [Bob](mention://456), check [General](channel://789)')
             })
 
             test('inline Markdown characters in a suggestion label are escaped', () => {

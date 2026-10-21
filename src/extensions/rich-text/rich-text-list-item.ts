@@ -86,11 +86,8 @@ const RichTextListItem = ListItem.extend({
             ...this.parent?.(),
             'Shift-Tab': () => {
                 return (
-                    liftOutOfOrderedListPreservingMarker(
-                        this.editor,
-                        this.name,
-                        this.options.orderedListTypeName,
-                    ) || this.editor.commands.liftListItem(this.name)
+                    liftOutOfOrderedListPreservingMarker(this.editor, this.name, this.options.orderedListTypeName) ||
+                    this.editor.commands.liftListItem(this.name)
                 )
             },
         }

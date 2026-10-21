@@ -67,9 +67,7 @@ const smartLists = new Plugin({
 
                     view.dispatch(
                         tr
-                            .replaceSelectionWith(
-                                schema.node('paragraph', {}, schema.text(nextListItemMarker)),
-                            )
+                            .replaceSelectionWith(schema.node('paragraph', {}, schema.text(nextListItemMarker)))
                             .scrollIntoView(),
                     )
                 } else {
@@ -88,11 +86,7 @@ const smartLists = new Plugin({
                 // Indent the list item forward or backward?
                 if (!event.shiftKey) {
                     // Indent the list item forward
-                    view.dispatch(
-                        tr
-                            .insertText(INDENT_SPACES, selection.from - match[0].length)
-                            .scrollIntoView(),
-                    )
+                    view.dispatch(tr.insertText(INDENT_SPACES, selection.from - match[0].length).scrollIntoView())
                 } else {
                     // Indent the list item backward if the whole match starts with a whitespace,
                     // otherwise do nothing as the list item is already at the start of the line

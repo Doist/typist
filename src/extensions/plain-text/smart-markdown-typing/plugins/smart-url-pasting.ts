@@ -44,9 +44,7 @@ const smartUrlPasting = new Plugin({
                 tr
                     .insertText('[', selection.from, selection.from)
                     .insertText(`](${clipboardText})`, selection.to + 1, selection.to + 1)
-                    .setSelection(
-                        TextSelection.create(tr.doc, selection.from + 1, selection.to + 1),
-                    )
+                    .setSelection(TextSelection.create(tr.doc, selection.from + 1, selection.to + 1))
                     .scrollIntoView(),
             )
 

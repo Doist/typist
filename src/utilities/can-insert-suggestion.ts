@@ -19,15 +19,11 @@ function canInsertSuggestion({ editor, state }: { editor: Editor; state: EditorS
         selection.$from.parentOffset - 1,
     ).content.firstChild
 
-    const hasCodeMarkBefore = (nodeBeforeSelection?.marks ?? []).some(
-        (mark) => mark.type.name === 'code',
-    )
+    const hasCodeMarkBefore = (nodeBeforeSelection?.marks ?? []).some((mark) => mark.type.name === 'code')
 
     const isComposingInlineCode = wordsBeforeSelection.some((word) => word.startsWith('`'))
 
-    return (
-        !isInsideCodeMark && !isInsideCodeBlockNode && !hasCodeMarkBefore && !isComposingInlineCode
-    )
+    return !isInsideCodeMark && !isInsideCodeBlockNode && !hasCodeMarkBefore && !isComposingInlineCode
 }
 
 export { canInsertSuggestion }
