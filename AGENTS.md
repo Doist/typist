@@ -76,6 +76,10 @@ When asked to write new code or implement features, follow this mandatory proces
     - Appropriate error handling and validation.
     - Inclusion of necessary tests (unit, integration, etc.).
 
+### Testing
+
+For feature work, bug fixes, refactors, and test reviews, read `.agents/skills/focused-testing/SKILL.md` when present. Reuse sufficient coverage unchanged. Extend tests only for behavior changes or important gaps within the task, and consolidate overlapping checks before adding coverage. Run the required repository checks.
+
 ### PR Creation
 
 When asked to create a pull request, follow this mandatory process:
