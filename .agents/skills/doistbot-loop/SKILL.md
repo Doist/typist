@@ -99,7 +99,9 @@ Find the parent branch from the branch's open pull request (`gh pr view --json b
 
 Do not stage files for a review, and never use `git add -A` or `git add .`. Do not use `doistbot review staged --json` either: it reviews only the staged edits against `HEAD`, skips the branch's commits, and can still report a verified review.
 
-When operating inside a sandboxed or approval-gated agent environment, request the approval needed for Doistbot review to reach its configured model providers before the first review command. Tell the user that the review may send the local diff/code to configured providers. Do not first run Doistbot in a restricted sandbox if that environment is expected to block provider access. If approval is denied, stop and ask the user to run the selected Doistbot JSON review command locally and share the output; do not substitute a manual/local-only review for the Doistbot loop.
+Before the first review command, reuse existing user authorization, including applicable standing authorization, to send the selected diff/code to Doistbot's configured model providers. Proceed without asking for confirmation again when that review is covered. If authorization is missing, tell the user that the review sends the selected diff/code to configured providers and request the missing consent.
+
+In a sandboxed or approval-gated agent environment, request any runtime escalation required for provider access and state the existing user authorization in that request. Do not first run Doistbot in a restricted sandbox if that environment is expected to block provider access. If access remains denied, stop and ask the user to run the selected Doistbot JSON review command locally and share the output; do not substitute a manual/local-only review for the Doistbot loop.
 
 Doistbot reviews can take several minutes. After starting a Doistbot JSON review command, wait for the CLI to exit naturally and rely on the CLI's own timeout. Do not interrupt, cancel, or kill the review process while it is still running. Keep posting concise status updates while waiting. If the CLI exits with its own timeout or another error, stop and report that exact failure.
 
