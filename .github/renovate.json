@@ -30,6 +30,11 @@
             "allowedVersions": "<11"
         },
         {
+            "description": "Keep tsdown compatible with TypeScript 7.0 until compatibility is restored or TypeScript 7.1 is stable.",
+            "matchPackageNames": ["tsdown"],
+            "allowedVersions": "<=0.23.1"
+        },
+        {
             "matchPackageNames": ["/eslint/"],
             "enabled": false
         }
