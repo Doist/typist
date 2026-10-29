@@ -1,3 +1,9 @@
+## [17.0.6](https://github.com/Doist/typist/compare/v17.0.5...v17.0.6) (2026-10-29)
+
+### Bug Fixes
+
+* **deps:** update dependency unist-util-visit to v5.2.0 ([#1569](https://github.com/Doist/typist/issues/1569)) ([f213c18](https://github.com/Doist/typist/commit/f213c187a7b482e024f6aca64394b530ec775cfd))
+
 ## [17.0.5](https://github.com/Doist/typist/compare/v17.0.4...v17.0.5) (2026-10-09)
 
 ### Bug Fixes
