@@ -102,7 +102,7 @@ Violations are recorded in a [`.react-compiler.rec.json`](https://github.com/Doi
 }
 ```
 
-We leverage [lint-staged](https://github.com/lint-staged/lint-staged) to automatically update the records file on commit. If the numbers of errors are increased, the commit is blocked until the errors either go back to their previous levels, or if the records file is explicitly re-created. The same check is also run on CI.
+We leverage the repository's pre-commit hook ([lefthook](https://github.com/evilmartians/lefthook), [lint-staged](https://github.com/lint-staged/lint-staged), or [husky](https://github.com/typicode/husky), depending on the repository) to automatically update the records file on commit. If the numbers of errors are increased, the commit is blocked until the errors either go back to their previous levels, or if the records file is explicitly re-created. The same check is also run on CI.
 
 Once all violations in a file are fixed, the file's entry will be removed from `.react-compiler.rec.json`.
 
