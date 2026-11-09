@@ -1,50 +1,9 @@
-import { Editor } from '@tiptap/core'
-
-import { RichTextKit } from './rich-text-kit'
-
-/**
- * Creates a rich-text editor with inline images support and the given initial content, and places
- * the caret right after the first occurrence of the given text within the document (or selects
- * the text itself, with `selectText`).
- *
- * The `Code` extension is disabled because `prosemirror-codemark` (which it registers) loads a
- * second CJS copy of `prosemirror-state` in the Vitest environment, crashing `Editor`
- * instantiation with "Adding different instances of a keyed plugin"; it has no bearing on the
- * image behavior under test.
- */
-function createEditorWithCaretAfter(
-    content: string,
-    text: string,
-    { hardBreak, selectText = false }: { hardBreak?: false; selectText?: boolean } = {},
-): Editor {
-    const editor = new Editor({
-        extensions: [RichTextKit.configure({ code: false, hardBreak, image: { inline: true } })],
-        content,
-    })
-    onTestFinished(() => editor.destroy())
-
-    let caretPosition: number | null = null
-    editor.state.doc.descendants((node, position) => {
-        if (caretPosition === null && node.isText && node.text?.includes(text)) {
-            caretPosition = position + node.text.indexOf(text) + text.length
-        }
-    })
-
-    if (caretPosition === null) {
-        throw new Error(`Text "${text}" was not found in the document`)
-    }
-
-    editor.commands.setTextSelection(
-        selectText ? { from: caretPosition - text.length, to: caretPosition } : caretPosition,
-    )
-
-    return editor
-}
+import { createEditorWithCaretAfter } from '../../../test-utils/rich-text-editor'
 
 describe('Extension: RichTextImage', () => {
     describe('when inline images are enabled', () => {
         test('`insertImage` splits the paragraph to place the image on its own line', () => {
-            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'Hello')
+            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'Hello', { image: { inline: true } })
 
             editor.commands.insertImage({ src: 'image.png' })
 
@@ -52,7 +11,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` adds a blank paragraph below the image at the end of a paragraph', () => {
-            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'world')
+            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'world', { image: { inline: true } })
 
             editor.commands.insertImage({ src: 'image.png' })
 
@@ -64,6 +23,7 @@ describe('Extension: RichTextImage', () => {
             const editor = createEditorWithCaretAfter(
                 '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello world</p></td></tr></table>',
                 'Hello',
+                { image: { inline: true } },
             )
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -92,6 +52,7 @@ describe('Extension: RichTextImage', () => {
             const editor = createEditorWithCaretAfter(
                 '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello world</p></td></tr></table>',
                 'world',
+                { image: { inline: true } },
             )
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -120,7 +81,7 @@ describe('Extension: RichTextImage', () => {
             const editor = createEditorWithCaretAfter(
                 '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello world</p></td></tr></table>',
                 'Hello',
-                { hardBreak: false, selectText: true },
+                { image: { inline: true }, hardBreak: false, selectText: true },
             )
 
             expect(editor.commands.insertImage({ src: 'image.png' })).toBe(false)
@@ -128,7 +89,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` with the `inline` option places the image within the text', () => {
-            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'Hello')
+            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'Hello', { image: { inline: true } })
 
             editor.commands.insertImage({ src: 'image.png' }, { inline: true })
 
@@ -138,11 +99,7 @@ describe('Extension: RichTextImage', () => {
 
     describe('when inline images are disabled', () => {
         test('`insertImage` with the `inline` option fails without changing the document', () => {
-            const editor = new Editor({
-                extensions: [RichTextKit.configure({ code: false })],
-                content: '<p>Hello world</p>',
-            })
-            onTestFinished(() => editor.destroy())
+            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'Hello')
 
             expect(editor.commands.insertImage({ src: 'image.png' }, { inline: true })).toBe(false)
             expect(editor.getHTML()).toBe('<p>Hello world</p>')
