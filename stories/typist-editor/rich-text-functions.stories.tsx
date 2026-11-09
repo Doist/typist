@@ -1,16 +1,11 @@
-import { useCallback, useRef } from 'react'
-
-import { Button } from '@doist/reactist'
-
-import { action } from 'storybook/actions'
-
-import { Selection } from '@tiptap/pm/state'
+import { useRef } from 'react'
 
 import preview from '../../.storybook/preview'
 import { TypistEditor } from '../../src'
 
+import { EditorRefHelperButtons } from './components/editor-ref-helper-buttons'
+import { ExtraEditorCommandButtons } from './components/extra-editor-command-buttons'
 import { DEFAULT_ARG_TYPES } from './constants/defaults'
-import { MARKDOWN_PLACEHOLDER_LONG, MARKDOWN_PLACEHOLDER_SHORT } from './constants/markdown'
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { Default } from './rich-text.stories'
 
@@ -31,56 +26,12 @@ export const Commands = meta.story({
         (Story, context) => {
             const typistEditorRef = useRef<TypistEditorRef>(null)
 
-            const handleCreateParagraphEndClick = useCallback(() => {
-                typistEditorRef.current?.getEditor().chain().focus().createParagraphEnd().run()
-            }, [])
-
-            const handleExtendWordRangeClick = useCallback(() => {
-                typistEditorRef.current?.getEditor().chain().focus().extendWordRange().run()
-            }, [])
-
-            const handleInsertMarkdownContentClick = useCallback(() => {
-                typistEditorRef.current
-                    ?.getEditor()
-                    .chain()
-                    .focus()
-                    .insertMarkdownContent(MARKDOWN_PLACEHOLDER_LONG)
-                    .run()
-            }, [])
-
-            const handleInsertMarkdownContentAtClick = useCallback(() => {
-                typistEditorRef.current
-                    ?.getEditor()
-                    .chain()
-                    .focus()
-                    .insertMarkdownContentAt(
-                        Selection.atEnd(typistEditorRef.current?.getEditor().state.doc),
-                        MARKDOWN_PLACEHOLDER_SHORT,
-                    )
-                    .run()
-            }, [])
-
             return (
                 <TypistEditorDecorator
                     Story={Story}
                     args={context.args}
                     withRichTextFeatures={true}
-                    bottomFunctions={
-                        <>
-                            <Button variant="secondary" onClick={handleCreateParagraphEndClick}>
-                                createParagraphEnd
-                            </Button>
-                            <Button variant="secondary" onClick={handleExtendWordRangeClick}>
-                                extendWordRange
-                            </Button>
-                            <Button variant="secondary" onClick={handleInsertMarkdownContentClick}>
-                                insertMarkdownContent
-                            </Button>
-                            <Button variant="secondary" onClick={handleInsertMarkdownContentAtClick}>
-                                insertMarkdownContentAt
-                            </Button>
-                        </>
-                    }
+                    bottomFunctions={<ExtraEditorCommandButtons editorRef={typistEditorRef} />}
                     ref={typistEditorRef}
                 />
             )
@@ -94,38 +45,12 @@ export const Helpers = meta.story({
         (Story, context) => {
             const typistEditorRef = useRef<TypistEditorRef>(null)
 
-            const handleGetEditorClick = useCallback(() => {
-                action('getEditor')(typistEditorRef.current?.getEditor())
-            }, [])
-
-            const handleGetMarkdownClick = useCallback(() => {
-                action('getMarkdown')(typistEditorRef.current?.getMarkdown() || '<empty>')
-            }, [])
-
-            const handleGetAllNodesAttributesByTypeClick = useCallback(() => {
-                action('getAllNodesAttributesByType')(
-                    typistEditorRef.current?.getAllNodesAttributesByType('mentionSuggestion'),
-                )
-            }, [])
-
             return (
                 <TypistEditorDecorator
                     Story={Story}
                     args={context.args}
                     withRichTextFeatures={true}
-                    bottomFunctions={
-                        <>
-                            <Button variant="secondary" onClick={handleGetEditorClick}>
-                                getEditor
-                            </Button>
-                            <Button variant="secondary" onClick={handleGetMarkdownClick}>
-                                getMarkdown
-                            </Button>
-                            <Button variant="secondary" onClick={handleGetAllNodesAttributesByTypeClick}>
-                                {"getAllNodesAttributesByType('mentionSuggestion')"}
-                            </Button>
-                        </>
-                    }
+                    bottomFunctions={<EditorRefHelperButtons editorRef={typistEditorRef} />}
                     ref={typistEditorRef}
                 />
             )
