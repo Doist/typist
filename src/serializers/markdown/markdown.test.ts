@@ -546,6 +546,13 @@ Strikethrough uses two tildes: ~~scratch this~~`,
 7. Third item`)
             })
 
+            test('list items with multiple paragraphs Markdown output is correct', () => {
+                expect(markdownSerializer.serialize('<ul><li><p>First paragraph</p><p>Second paragraph</p></li></ul>'))
+                    .toBe(`- First paragraph
+
+    Second paragraph`)
+            })
+
             test('unordered lists Markdown output is correct', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_UNORDERED_LISTS)).toBe(
                     `- First item

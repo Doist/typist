@@ -20,6 +20,14 @@ function paragraph(nodeType: NodeType, isPlainText: boolean): Turndown.Plugin {
                     // maintain proper list formatting in rich-text documents.
                     (!isPlainText && node.parentNode?.nodeName === 'LI')
 
+                // Paragraphs that follow other content within list items need a blank line before
+                // them, otherwise they're parsed back as part of the previous paragraph
+                const useBlankLineBefore = !isPlainText && useSingleLineSpacing && node.previousSibling !== null
+
+                if (useBlankLineBefore) {
+                    return `\n\n${content}\n`
+                }
+
                 return useSingleLineSpacing ? `\n${content}\n` : `\n\n${content}\n\n`
             },
         })
