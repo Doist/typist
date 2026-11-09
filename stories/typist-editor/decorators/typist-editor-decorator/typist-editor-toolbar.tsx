@@ -65,7 +65,7 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
     const editorState = useSyncExternalStore(
         useCallback(
             function subscribeToEditorState(callback: () => void) {
-                let previousState = editor.state
+                const previous = { state: editor.state }
 
                 function handleTransaction() {
                     const { state } = editor
@@ -76,11 +76,11 @@ function TypistEditorToolbar({ editor }: TypistEditorToolbarProps) {
                     // for. To avoid re-rendering on transactions that can't change the buttons, only
                     // notify React when the document, selection, or stored marks actually change.
                     if (
-                        state.doc !== previousState.doc ||
-                        state.selection !== previousState.selection ||
-                        state.storedMarks !== previousState.storedMarks
+                        state.doc !== previous.state.doc ||
+                        state.selection !== previous.state.selection ||
+                        state.storedMarks !== previous.state.storedMarks
                     ) {
-                        previousState = state
+                        previous.state = state
                         callback()
                     }
                 }
