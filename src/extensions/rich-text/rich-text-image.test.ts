@@ -1,4 +1,31 @@
+import { CellSelection } from '@tiptap/pm/tables'
+
 import { createEditorWithCaretAfter } from '../../../test-utils/rich-text-editor'
+
+import type { Editor } from '@tiptap/core'
+
+/**
+ * A table with a heading row and a body row of two cells, with `Hello` and `world` as content.
+ */
+const TABLE_WITH_TWO_BODY_CELLS =
+    '<table><tr><th><p>Heading 1</p></th><th><p>Heading 2</p></th></tr><tr><td><p>Hello</p></td><td><p>world</p></td></tr></table>'
+
+/**
+ * Selects all body cells of the table in the editor, from the first to the last one.
+ */
+function selectAllBodyCells(editor: Editor): void {
+    const cellPositions: number[] = []
+
+    editor.state.doc.descendants((node, position) => {
+        if (node.type.name === 'tableCell') {
+            cellPositions.push(position)
+        }
+    })
+
+    editor.view.dispatch(
+        editor.state.tr.setSelection(CellSelection.create(editor.state.doc, cellPositions[0], cellPositions.at(-1))),
+    )
+}
 
 describe('Extension: RichTextImage', () => {
     describe('when inline images are enabled', () => {
@@ -89,6 +116,17 @@ describe('Extension: RichTextImage', () => {
             expect(editor.getHTML()).toContain('<td colspan="1" rowspan="1"><p>Hello world</p></td>')
         })
 
+        test('`insertImage` keeps the content of selected cells, placing the image in the last one', () => {
+            const editor = createEditorWithCaretAfter(TABLE_WITH_TWO_BODY_CELLS, 'Hello', { image: { inline: true } })
+            selectAllBodyCells(editor)
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(editor.getHTML()).toContain(
+                '<td colspan="1" rowspan="1"><p>Hello</p></td><td colspan="1" rowspan="1"><p>world<br><img src="image.png"><br></p></td>',
+            )
+        })
+
         test('`insertImage` with the `inline` option places the image within the text', () => {
             const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'Hello', { image: { inline: true } })
 
@@ -104,6 +142,17 @@ describe('Extension: RichTextImage', () => {
 
             expect(editor.commands.insertImage({ src: 'image.png' }, { inline: true })).toBe(false)
             expect(editor.getHTML()).toBe('<p>Hello world</p>')
+        })
+
+        test('`insertImage` keeps the content of selected cells', () => {
+            const editor = createEditorWithCaretAfter(TABLE_WITH_TWO_BODY_CELLS, 'Hello')
+            selectAllBodyCells(editor)
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(editor.getHTML()).toContain(
+                '<td colspan="1" rowspan="1"><p>Hello</p></td><td colspan="1" rowspan="1"><p>world</p></td>',
+            )
         })
     })
 })

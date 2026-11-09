@@ -1,5 +1,6 @@
 import { Image } from '@tiptap/extension-image'
 import { Plugin, PluginKey, Selection, TextSelection } from '@tiptap/pm/state'
+import { CellSelection } from '@tiptap/pm/tables'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 
 import type { NodeView } from '@tiptap/pm/view'
@@ -132,6 +133,15 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                 return ({ editor, state, tr, commands }) => {
                     const image = { type: nodeTypeName, attrs: attributes }
 
+                    // Collapse a selection of table cells to the end of the cell where it ends, as
+                    // replacing it would clear the content of every selected cell
+                    if (state.selection instanceof CellSelection) {
+                        const { $headCell } = state.selection
+                        const headCellEnd = $headCell.pos + ($headCell.nodeAfter?.nodeSize ?? 0) - 1
+
+                        tr.setSelection(TextSelection.near(tr.doc.resolve(headCellEnd), -1))
+                    }
+
                     // Inserting the image within the text requires inline images support
                     if (insertOptions?.inline) {
                         return options.inline ? commands.insertContent(image) : false
@@ -140,7 +150,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                     // Insert inline images on their own line, by wrapping them in a paragraph that
                     // splits the current block (or between hard breaks inside table cells)
                     if (options.inline) {
-                        const { $from, $to } = state.selection
+                        const { $from, $to } = tr.selection
                         const isAtBlockStart = $from.parentOffset === 0
                         const isAtBlockEnd = $to.parentOffset === $to.parent.content.size
                         const cellTypeName = $from.depth > 0 ? $from.node(-1).type.name : ''
