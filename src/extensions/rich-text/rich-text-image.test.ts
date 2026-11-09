@@ -73,6 +73,21 @@ describe('Extension: RichTextImage', () => {
             )
         })
 
+        test('`insertImage` places the image within the cell paragraph at the start of a cell', () => {
+            const editor = createEditorWithCaretAfter(
+                '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello world</p></td></tr></table>',
+                'Hello',
+                { selectText: true },
+            )
+            editor.commands.setTextSelection(editor.state.selection.from)
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(editor.getHTML()).toContain(
+                '<td colspan="1" rowspan="1"><p><img src="image.png"><br>Hello world</p></td>',
+            )
+        })
+
         test('`insertImage` adds a hard break below the image at the end of a cell', () => {
             const editor = createEditorWithCaretAfter(
                 '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello world</p></td></tr></table>',
