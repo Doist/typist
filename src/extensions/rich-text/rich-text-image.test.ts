@@ -51,6 +51,15 @@ describe('Extension: RichTextImage', () => {
             expect(editor.getHTML()).toBe('<p>Hello</p><p><img src="image.png"></p><p> world</p>')
         })
 
+        test('`insertImage` adds a blank paragraph below the image at the end of a paragraph', () => {
+            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'world')
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(editor.getHTML()).toBe('<p>Hello world</p><p><img src="image.png"></p><p></p>')
+            expect(editor.state.selection.from).toBe(editor.state.doc.content.size - 1)
+        })
+
         test('`insertImage` places the image between hard breaks within a single cell paragraph', () => {
             const editor = createEditorWithCaretAfter(
                 '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello world</p></td></tr></table>',
