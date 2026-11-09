@@ -147,7 +147,7 @@
         "react-use-event-hook": "0.9.6",
         "rehype-raw": "7.0.0",
         "remark-gfm": "4.0.1",
-        "rimraf": "6.1.3",
+        "rimraf": "6.1.4",
         "semantic-release": "25.0.9",
         "storybook": "10.6.5",
         "storybook-css-modules": "1.0.8",
