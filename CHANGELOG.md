@@ -1,3 +1,9 @@
+## [17.0.7](https://github.com/Doist/typist/compare/v17.0.6...v17.0.7) (2026-11-09)
+
+### Bug Fixes
+
+* **deps:** update dependency mdast-util-gfm-table to v2.0.1 ([#1575](https://github.com/Doist/typist/issues/1575)) ([3092de7](https://github.com/Doist/typist/commit/3092de79948559b6f5b6f02293aa482954300d65))
+
 ## [17.0.6](https://github.com/Doist/typist/compare/v17.0.5...v17.0.6) (2026-10-29)
 
 ### Bug Fixes
