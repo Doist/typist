@@ -148,8 +148,8 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
         unifiedProcessor.use(rehypeCodeBlock)
     }
 
-    // Configure the unified processor with a custom plugin to remove the wrapping paragraph from
-    // images and to remove all inline images based on inline images support in the editor schema
+    // Configure the unified processor with a custom plugin to move images out of their wrapping
+    // paragraph (splitting it around them) when the editor schema doesn't support inline images
     if (schema.nodes.paragraph && schema.nodes.image) {
         unifiedProcessor.use(rehypeImage, schema)
     }
