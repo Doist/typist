@@ -1,7 +1,7 @@
 import { remove } from 'unist-util-remove'
 import { SKIP, visit } from 'unist-util-visit'
 
-import { getHastTextContent, isHastElementNode } from '../../../helpers/unified'
+import { isHastElementNode } from '../../../helpers/unified'
 
 import type { Element, ElementContent, Node as HastNode, Parent as HastParent } from 'hast'
 import type { Transformer } from 'unified'
@@ -23,27 +23,30 @@ function rehypeImage(schema: Schema): Transformer {
 
     return (...[tree]: Parameters<Transformer>): ReturnType<Transformer> => {
         visit(tree, 'element', (node: HastNode, index: number, parent: HastParent) => {
-            if (!isHastElementNode(node, 'p') || !hasImageDescendant(node)) {
+            if (!isHastElementNode(node, 'p')) {
                 return
             }
 
-            const blocks: ElementContent[] = []
+            const paragraph = node
+            const blocks: Element[] = []
             let inlineContent: ElementContent[] = []
+            let hasImages = false
 
             // Keep the inline content collected so far in its own paragraph, unless it's blank
             // (e.g., whitespace or line breaks between images)
             function flushInlineContent() {
-                if (inlineContent.some((child) => getHastTextContent(child).trim() !== '')) {
-                    blocks.push({ ...node, children: inlineContent } as Element)
+                if (!inlineContent.every(isBlankHastNode)) {
+                    blocks.push({ ...paragraph, children: inlineContent })
                 }
 
                 inlineContent = []
             }
 
-            for (const child of node.children) {
+            for (const child of paragraph.children) {
                 if (isHastElementNode(child, 'img')) {
                     flushInlineContent()
                     blocks.push(child)
+                    hasImages = true
                     continue
                 }
 
@@ -56,14 +59,26 @@ function rehypeImage(schema: Schema): Transformer {
                         images.push(descendant)
                     }
                 })
+
+                if (images.length === 0) {
+                    inlineContent.push(child)
+                    continue
+                }
+
                 remove(child, (descendant) => isHastElementNode(descendant, 'img'))
 
-                inlineContent.push(child)
-
-                if (images.length > 0) {
-                    flushInlineContent()
-                    blocks.push(...images)
+                // Drop inline elements left blank without their images (e.g., image-only links)
+                if (!isBlankHastNode(child)) {
+                    inlineContent.push(child)
                 }
+
+                flushInlineContent()
+                blocks.push(...images)
+                hasImages = true
+            }
+
+            if (!hasImages) {
+                return
             }
 
             flushInlineContent()
@@ -78,16 +93,22 @@ function rehypeImage(schema: Schema): Transformer {
 }
 
 /**
- * Determines whether a given hast element contains an image element at any depth.
+ * Determines whether a given hast node is blank, i.e. it only holds whitespace or line breaks.
  *
- * @param node The hast element to check.
+ * @param node The hast node to check.
  *
- * @returns `true` if the element contains an image element, `false` otherwise.
+ * @returns `true` if the node is blank, `false` otherwise.
  */
-function hasImageDescendant(node: Element): boolean {
-    return node.children.some(
-        (child) => child.type === 'element' && (child.tagName === 'img' || hasImageDescendant(child)),
-    )
+function isBlankHastNode(node: ElementContent): boolean {
+    if (node.type === 'text' || node.type === 'raw') {
+        return node.value.trim() === ''
+    }
+
+    if (node.type === 'element') {
+        return node.children.every(isBlankHastNode)
+    }
+
+    return true
 }
 
 export { rehypeImage }

@@ -567,6 +567,18 @@ Answer: [Doist Frontend](channel://190200)`),
                 )
             })
 
+            test('images HTML output keeps raw HTML next to images', () => {
+                expect(htmlSerializer.serialize('![](image.png)<doist>')).toBe(
+                    '<img src="image.png" alt=""><p>&lt;doist></p>',
+                )
+            })
+
+            test('images HTML output drops links left empty without their images', () => {
+                expect(htmlSerializer.serialize('Hello [![](image.png)](https://doist.com) world')).toBe(
+                    '<p>Hello </p><img src="image.png" alt=""><p> world</p>',
+                )
+            })
+
             test('images HTML output is correct (inline mode)', () => {
                 const inlineHtmlSerializer = createHTMLSerializer(
                     getSchema([
