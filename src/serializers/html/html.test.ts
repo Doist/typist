@@ -579,6 +579,21 @@ Answer: [Doist Frontend](channel://190200)`),
                 )
             })
 
+            test('images HTML output drops line breaks around images', () => {
+                expect(htmlSerializer.serialize('Hello\n![](image.png)\nworld')).toBe(
+                    '<p>Hello</p><img src="image.png" alt=""><p>world</p>',
+                )
+            })
+
+            test('images HTML output keeps a leading paragraph in list items starting with an image', () => {
+                expect(htmlSerializer.serialize('- ![](image.png) after\n\n- next')).toBe(
+                    '<ul><li><p></p><img src="image.png" alt=""><p> after</p></li><li><p>next</p></li></ul>',
+                )
+                expect(htmlSerializer.serialize('- ![](image.png)\n- next')).toBe(
+                    '<ul><li><p></p><img src="image.png" alt=""></li><li>next</li></ul>',
+                )
+            })
+
             test('images HTML output is correct (inline mode)', () => {
                 const inlineHtmlSerializer = createHTMLSerializer(
                     getSchema([
@@ -617,7 +632,7 @@ Answer: [Doist Frontend](channel://190200)`),
 
             test('block elements HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_INDENTED_BLOCK_ELEMENTS))
-                    .toBe(`<ol><li>Blockquote:<blockquote><p>Dorothy followed her through many of the beautiful rooms in her castle.</p></blockquote></li><li>Image:<br><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"></li><li>Codeblock:<pre><code>&lt;html>
+                    .toBe(`<ol><li>Blockquote:<blockquote><p>Dorothy followed her through many of the beautiful rooms in her castle.</p></blockquote></li><li><p>Image:</p><img src="https://octodex.github.com/images/octobiwan.jpg" alt="Octobi Wan Catnobi"></li><li>Codeblock:<pre><code>&lt;html>
   &lt;head>
     &lt;title>Test&lt;/title>
   &lt;/head>
