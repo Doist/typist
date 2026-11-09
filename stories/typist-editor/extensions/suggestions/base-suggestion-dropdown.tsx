@@ -39,6 +39,7 @@ function BaseSuggestionDropdownItem({
         <Box
             as="li"
             id={`suggestion-${index}`}
+            // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
             role="option"
             tabIndex={-1}
             aria-selected={isSelected}
