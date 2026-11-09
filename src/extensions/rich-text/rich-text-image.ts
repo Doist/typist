@@ -133,18 +133,21 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                 return ({ editor, state, tr, commands }) => {
                     const image = { type: nodeTypeName, attrs: attributes }
 
+                    // Inserting the image within the text requires inline images support
+                    if (insertOptions?.inline && !options.inline) {
+                        return false
+                    }
+
                     // Collapse a selection of table cells to the end of the cell where it ends, as
                     // replacing it would clear the content of every selected cell
-                    if (state.selection instanceof CellSelection) {
-                        const { $headCell } = state.selection
-                        const headCellEnd = $headCell.pos + ($headCell.nodeAfter?.nodeSize ?? 0) - 1
+                    if (tr.selection instanceof CellSelection) {
+                        const headCellEnd = tr.doc.resolve(tr.selection.$headCell.pos + 1).end()
 
                         tr.setSelection(TextSelection.near(tr.doc.resolve(headCellEnd), -1))
                     }
 
-                    // Inserting the image within the text requires inline images support
                     if (insertOptions?.inline) {
-                        return options.inline ? commands.insertContent(image) : false
+                        return commands.insertContent(image)
                     }
 
                     // Insert inline images on their own line, by wrapping them in a paragraph that

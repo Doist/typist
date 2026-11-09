@@ -1,3 +1,4 @@
+import { findChildren } from '@tiptap/core'
 import { CellSelection } from '@tiptap/pm/tables'
 
 import { createEditorWithCaretAfter } from '../../../test-utils/rich-text-editor'
@@ -14,13 +15,7 @@ const TABLE_WITH_TWO_BODY_CELLS =
  * Selects all body cells of the table in the editor, from the first to the last one.
  */
 function selectAllBodyCells(editor: Editor): void {
-    const cellPositions: number[] = []
-
-    editor.state.doc.descendants((node, position) => {
-        if (node.type.name === 'tableCell') {
-            cellPositions.push(position)
-        }
-    })
+    const cellPositions = findChildren(editor.state.doc, (node) => node.type.name === 'tableCell').map(({ pos }) => pos)
 
     editor.view.dispatch(
         editor.state.tr.setSelection(CellSelection.create(editor.state.doc, cellPositions[0], cellPositions.at(-1))),
