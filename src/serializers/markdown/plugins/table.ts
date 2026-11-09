@@ -70,6 +70,42 @@ function isHeadingRow(row: Node, headerTags: string[]): boolean {
 }
 
 /**
+ * Checks if the given node is a line break or a whitespace-only text node.
+ *
+ * @param node The node to check.
+ *
+ * @returns `true` if the node is blank, `false` otherwise.
+ */
+function isBlankInlineNode(node: Node): boolean {
+    return node.nodeName === 'BR' || (node.nodeName === '#text' && !node.textContent?.trim())
+}
+
+/**
+ * Checks if the given node is at the start or end of the given table cell, that is, if it's only
+ * preceded or followed by line breaks or whitespace within the cell.
+ *
+ * @param node The node to check.
+ * @param cell The table cell element containing the node.
+ *
+ * @returns `true` if the node is at the start or end of the table cell, `false` otherwise.
+ */
+function isAtTableCellEdge(node: Node, cell: Element | null): boolean {
+    const isAtEdge = (direction: 'previousSibling' | 'nextSibling') => {
+        for (let current: Node | null = node; current && current !== cell; current = current.parentNode) {
+            for (let sibling = current[direction]; sibling; sibling = sibling[direction]) {
+                if (!isBlankInlineNode(sibling)) {
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    return isAtEdge('previousSibling') || isAtEdge('nextSibling')
+}
+
+/**
  * A Turndown plugin which adds rules for tables following the GitHub Flavored Markdown (GFM)
  * specification, based on the original third-party plugin. Unlike the original plugin, which keeps
  * tables without a heading row as raw HTML, this implementation adds an empty heading row instead,
@@ -168,8 +204,10 @@ function table(nodeTypes: TableNodeTypes): Turndown.Plugin {
                 filter(node) {
                     return node.nodeName === 'BR' && node.closest(cellSelector) !== null
                 },
-                replacement() {
-                    return '<br>'
+                replacement(_, node) {
+                    // Line breaks at the start or end of a cell don't add visible lines, so they
+                    // are dropped to keep them out of the Markdown
+                    return isAtTableCellEdge(node, node.closest(cellSelector)) ? '' : '<br>'
                 },
             })
         }

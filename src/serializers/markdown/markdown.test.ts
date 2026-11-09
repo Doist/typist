@@ -1033,6 +1033,18 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
                 )
             })
 
+            test('hard breaks at the start or end of table cells are dropped', () => {
+                expect(
+                    markdownSerializer.serialize(
+                        '<table><tr><th><p>Name</p></th></tr><tr><td><p><br>First line<br>Second line<br></p></td></tr></table>',
+                    ),
+                ).toBe(
+                    `| Name |
+| --- |
+| First line<br>Second line |`,
+                )
+            })
+
             test('literal `<br>` text within table cells is escaped', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_BR_TEXT)).toBe(
                     `| Tip |
