@@ -41,6 +41,14 @@
             },
         },
         {
+            // Story elements are rendered in Storybook only, so the perf rule's re-render concern
+            // about passing JSX as props doesn't apply there
+            "files": ["./stories/**/*.tsx"],
+            "rules": {
+                "react-perf/jsx-no-jsx-as-prop": "off",
+            },
+        },
+        {
             // Tests routinely pass inline arrays as props for assertions and setup; the perf
             // rule's referential-stability concern doesn't apply in a test environment
             "files": ["**/*.test.{ts,tsx}"],
