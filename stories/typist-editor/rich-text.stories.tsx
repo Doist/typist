@@ -8,6 +8,9 @@ import { action } from 'storybook/actions'
 import preview from '../../.storybook/preview'
 import { RichTextKit, TypistEditor } from '../../src'
 
+import landscapeDay from './assets/landscape-day.svg'
+import landscapeLake from './assets/landscape-lake.svg'
+import landscapeSunset from './assets/landscape-sunset.svg'
 import { DEFAULT_ARG_TYPES, DEFAULT_RICH_TEXT_KIT_OPTIONS, DEFAULT_STORY_ARGS } from './constants/defaults'
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { HashtagSuggestion } from './extensions/hashtag-suggestion'
@@ -29,6 +32,8 @@ const meta = preview.meta({
 
 const COMMON_STORY_EXTENSIONS: Extensions = [HashtagSuggestion, MentionSuggestion]
 
+const SAMPLE_IMAGE_URLS = [landscapeDay, landscapeSunset, landscapeLake]
+
 export const Default = meta.story({
     args: {
         ...DEFAULT_STORY_ARGS,
@@ -37,7 +42,10 @@ export const Default = meta.story({
     },
     decorators: [
         (Story, context) => {
+            const { inlineImages = false } = context.parameters as { inlineImages?: boolean }
+
             const typistEditorRef = useRef<TypistEditorRef>(null)
+            const sampleImageIndexRef = useRef(0)
 
             const [inlineAttachments, setInlineAttachments] = useState<{
                 [attachmentId: string]: {
@@ -140,13 +148,46 @@ export const Default = meta.story({
                     RichTextKit.configure({
                         ...DEFAULT_RICH_TEXT_KIT_OPTIONS,
                         image: {
+                            inline: inlineImages,
                             NodeViewComponent: RichTextImageWrapper,
                             onImageFilePaste: handleInlineFilePaste,
                         },
                     }),
                     ...COMMON_STORY_EXTENSIONS,
                 ],
-                [handleInlineFilePaste],
+                [inlineImages, handleInlineFilePaste],
+            )
+
+            const getNextSampleImageUrl = useCallback(function getNextSampleImageUrl() {
+                const sampleImageUrl = SAMPLE_IMAGE_URLS[sampleImageIndexRef.current % SAMPLE_IMAGE_URLS.length]
+
+                sampleImageIndexRef.current += 1
+
+                return sampleImageUrl
+            }, [])
+
+            const handleInsertImageClick = useCallback(
+                function handleInsertImageClick() {
+                    typistEditorRef.current
+                        ?.getEditor()
+                        .chain()
+                        .focus()
+                        .insertImage({ src: getNextSampleImageUrl() })
+                        .run()
+                },
+                [getNextSampleImageUrl],
+            )
+
+            const handleInsertImageWithinTextClick = useCallback(
+                function handleInsertImageWithinTextClick() {
+                    typistEditorRef.current
+                        ?.getEditor()
+                        .chain()
+                        .focus()
+                        .insertImage({ src: getNextSampleImageUrl() }, { inline: true })
+                        .run()
+                },
+                [getNextSampleImageUrl],
             )
 
             const storyArgs = useMemo(
@@ -163,6 +204,18 @@ export const Default = meta.story({
                     args={storyArgs}
                     withRichTextFeatures={true}
                     ref={typistEditorRef}
+                    bottomFunctions={
+                        inlineImages ? (
+                            <>
+                                <Button variant="secondary" onClick={handleInsertImageClick}>
+                                    Insert image
+                                </Button>
+                                <Button variant="secondary" onClick={handleInsertImageWithinTextClick}>
+                                    Insert image within text
+                                </Button>
+                            </>
+                        ) : undefined
+                    }
                 />
             )
         },
@@ -256,4 +309,13 @@ export const EventHandlers = meta.story({
             )
         },
     ],
+})
+
+export const InlineImages = Default.extend({
+    args: {
+        placeholder: 'A full rich-text editor with inline images support, be creative…',
+    },
+    parameters: {
+        inlineImages: true,
+    },
 })
