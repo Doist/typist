@@ -157,6 +157,16 @@ describe('Extension: RichTextImage', () => {
             expect(editor.getHTML()).toBe('<img src="image.png"><p>Hello world</p>')
         })
 
+        test('`insertImage` keeps the image when typing after inserting it into an empty paragraph', () => {
+            const editor = createEditorWithCaretAfter('<p>Hello</p><p></p><p>world</p>', 'Hello')
+            editor.commands.setTextSelection(editor.state.selection.from + 2)
+
+            editor.commands.insertImage({ src: 'image.png' })
+            editor.commands.insertContent('typed')
+
+            expect(editor.getHTML()).toBe('<p>Hello</p><img src="image.png"><p>typed</p><p>world</p>')
+        })
+
         test('`insertImage` keeps the content of selected cells', () => {
             const editor = createEditorWithCaretAfter(TABLE_WITH_TWO_BODY_CELLS, 'Hello')
             selectAllBodyCells(editor)
