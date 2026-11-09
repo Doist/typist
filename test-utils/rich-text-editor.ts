@@ -7,7 +7,7 @@ import type { RichTextKitOptions } from '../src/extensions/rich-text/rich-text-k
 /**
  * The options available to customize the editor created by `createEditorWithCaretAfter`.
  */
-type CreateEditorWithCaretAfterOptions = Partial<RichTextKitOptions> & {
+type CreateEditorWithCaretAfterOptions = Partial<Omit<RichTextKitOptions, 'code'>> & {
     /**
      * Selects the given text itself, instead of placing the caret right after it.
      */
