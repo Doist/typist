@@ -1,4 +1,3 @@
-import { remove } from 'unist-util-remove'
 import { SKIP, visit } from 'unist-util-visit'
 
 import { isHastElementNode } from '../../../helpers/unified'
@@ -71,38 +70,15 @@ function rehypeImage(schema: Schema): Transformer {
             }
 
             for (const child of paragraph.children) {
-                if (isHastElementNode(child, 'img')) {
-                    flushInlineContent()
-                    blocks.push(child)
-                    hasImages = true
-                    continue
-                }
-
-                const images: Element[] = []
-
-                // Images nested in inline elements (e.g., links) are moved after the element,
-                // since block images cannot be marked
-                visit(child, 'element', (descendant: HastNode) => {
-                    if (isHastElementNode(descendant, 'img')) {
-                        images.push(descendant)
+                for (const part of splitHastNodeAroundImages(child)) {
+                    if (isHastElementNode(part, 'img')) {
+                        flushInlineContent()
+                        blocks.push(part)
+                        hasImages = true
+                    } else {
+                        inlineContent.push(part)
                     }
-                })
-
-                if (images.length === 0) {
-                    inlineContent.push(child)
-                    continue
                 }
-
-                remove(child, (descendant) => isHastElementNode(descendant, 'img'))
-
-                // Drop inline elements left blank without their images (e.g., image-only links)
-                if (!isBlankHastNode(child)) {
-                    inlineContent.push(child)
-                }
-
-                flushInlineContent()
-                blocks.push(...images)
-                hasImages = true
             }
 
             if (!hasImages) {
@@ -131,6 +107,36 @@ function rehypeImage(schema: Schema): Transformer {
 
         return tree
     }
+}
+
+/**
+ * Splits a given hast node around the images within it, so that images nested in inline elements
+ * (e.g., links or bold text) can be moved out in place, with each inline element split in two.
+ *
+ * @param node The hast node to split.
+ *
+ * @returns The parts of the node, in order, with the images as separate parts.
+ */
+function splitHastNodeAroundImages(node: ElementContent): ElementContent[] {
+    if (node.type !== 'element' || node.tagName === 'img') {
+        return [node]
+    }
+
+    const parts: ElementContent[] = []
+    let children: ElementContent[] = []
+
+    for (const child of node.children) {
+        for (const part of splitHastNodeAroundImages(child)) {
+            if (isHastElementNode(part, 'img')) {
+                parts.push({ ...node, children }, part)
+                children = []
+            } else {
+                children.push(part)
+            }
+        }
+    }
+
+    return parts.length > 0 ? [...parts, { ...node, children }] : [node]
 }
 
 /**

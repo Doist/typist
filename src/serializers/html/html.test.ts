@@ -579,6 +579,12 @@ Answer: [Doist Frontend](channel://190200)`),
                 )
             })
 
+            test('images HTML output keeps images in place within formatted text', () => {
+                expect(htmlSerializer.serialize('**Hello ![](image.png) world**')).toBe(
+                    '<p><strong>Hello </strong></p><img src="image.png" alt=""><p><strong> world</strong></p>',
+                )
+            })
+
             test('images HTML output drops line breaks around images', () => {
                 expect(htmlSerializer.serialize('Hello\n![](image.png)\nworld')).toBe(
                     '<p>Hello</p><img src="image.png" alt=""><p>world</p>',
