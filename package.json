@@ -155,7 +155,7 @@
         "tsdown": "0.23.1",
         "type-fest": "5.10.0",
         "typescript": "7.0.2",
-        "vitest": "5.0.5"
+        "vitest": "5.1.0"
     },
     "peerDependencies": {
         "emoji-regex": "^10.2.1 || ^11.0.0",
