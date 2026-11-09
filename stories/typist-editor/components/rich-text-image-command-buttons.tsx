@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 
 import { Button } from '@doist/reactist'
 
@@ -17,20 +17,31 @@ type RichTextImageCommandButtonsProps = {
 function RichTextImageCommandButtons({ editorRef }: RichTextImageCommandButtonsProps) {
     const sampleImageIndexRef = useRef(0)
 
-    function insertSampleImage(options?: RichTextImageInsertOptions) {
-        const src = SAMPLE_IMAGE_URLS[sampleImageIndexRef.current % SAMPLE_IMAGE_URLS.length]
+    const insertSampleImage = useCallback(
+        (options?: RichTextImageInsertOptions) => {
+            const src = SAMPLE_IMAGE_URLS[sampleImageIndexRef.current % SAMPLE_IMAGE_URLS.length]
 
-        sampleImageIndexRef.current += 1
+            sampleImageIndexRef.current += 1
 
-        editorRef.current?.getEditor().chain().focus().insertImage({ src }, options).run()
-    }
+            editorRef.current?.getEditor().chain().focus().insertImage({ src }, options).run()
+        },
+        [editorRef],
+    )
+
+    const handleInsertImageClick = useCallback(() => {
+        insertSampleImage()
+    }, [insertSampleImage])
+
+    const handleInsertImageWithinTextClick = useCallback(() => {
+        insertSampleImage({ inline: true })
+    }, [insertSampleImage])
 
     return (
         <>
-            <Button variant="secondary" onClick={() => insertSampleImage()}>
+            <Button variant="secondary" onClick={handleInsertImageClick}>
                 Insert image
             </Button>
-            <Button variant="secondary" onClick={() => insertSampleImage({ inline: true })}>
+            <Button variant="secondary" onClick={handleInsertImageWithinTextClick}>
                 Insert image within text
             </Button>
         </>
