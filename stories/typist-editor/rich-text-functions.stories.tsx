@@ -31,7 +31,7 @@ export const Commands = meta.story({
                     Story={Story}
                     args={context.args}
                     withRichTextFeatures={true}
-                    bottomFunctions={<ExtraEditorCommandButtons typistEditorRef={typistEditorRef} />}
+                    bottomFunctions={<ExtraEditorCommandButtons editorRef={typistEditorRef} />}
                     ref={typistEditorRef}
                 />
             )
@@ -50,7 +50,7 @@ export const Helpers = meta.story({
                     Story={Story}
                     args={context.args}
                     withRichTextFeatures={true}
-                    bottomFunctions={<EditorRefHelperButtons typistEditorRef={typistEditorRef} />}
+                    bottomFunctions={<EditorRefHelperButtons editorRef={typistEditorRef} />}
                     ref={typistEditorRef}
                 />
             )

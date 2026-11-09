@@ -7,21 +7,21 @@ import { action } from 'storybook/actions'
 import type { TypistEditorRef } from '../../../src'
 
 type EditorRefHelperButtonsProps = {
-    typistEditorRef: React.RefObject<TypistEditorRef | null>
+    editorRef: React.RefObject<TypistEditorRef | null>
 }
 
-function EditorRefHelperButtons({ typistEditorRef }: EditorRefHelperButtonsProps) {
+function EditorRefHelperButtons({ editorRef }: EditorRefHelperButtonsProps) {
     const handleGetEditorClick = useCallback(() => {
-        action('getEditor')(typistEditorRef.current?.getEditor())
-    }, [])
+        action('getEditor')(editorRef.current?.getEditor())
+    }, [editorRef])
 
     const handleGetMarkdownClick = useCallback(() => {
-        action('getMarkdown')(typistEditorRef.current?.getMarkdown() || '<empty>')
-    }, [])
+        action('getMarkdown')(editorRef.current?.getMarkdown() || '<empty>')
+    }, [editorRef])
 
     const handleGetAllNodesAttributesByTypeClick = useCallback(() => {
-        action('getAllNodesAttributesByType')(typistEditorRef.current?.getAllNodesAttributesByType('mentionSuggestion'))
-    }, [])
+        action('getAllNodesAttributesByType')(editorRef.current?.getAllNodesAttributesByType('mentionSuggestion'))
+    }, [editorRef])
 
     return (
         <>

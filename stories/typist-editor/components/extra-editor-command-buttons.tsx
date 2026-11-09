@@ -9,33 +9,33 @@ import { MARKDOWN_PLACEHOLDER_LONG, MARKDOWN_PLACEHOLDER_SHORT } from '../consta
 import type { TypistEditorRef } from '../../../src'
 
 type ExtraEditorCommandButtonsProps = {
-    typistEditorRef: React.RefObject<TypistEditorRef | null>
+    editorRef: React.RefObject<TypistEditorRef | null>
 }
 
-function ExtraEditorCommandButtons({ typistEditorRef }: ExtraEditorCommandButtonsProps) {
+function ExtraEditorCommandButtons({ editorRef }: ExtraEditorCommandButtonsProps) {
     const handleCreateParagraphEndClick = useCallback(() => {
-        typistEditorRef.current?.getEditor().chain().focus().createParagraphEnd().run()
-    }, [])
+        editorRef.current?.getEditor().chain().focus().createParagraphEnd().run()
+    }, [editorRef])
 
     const handleExtendWordRangeClick = useCallback(() => {
-        typistEditorRef.current?.getEditor().chain().focus().extendWordRange().run()
-    }, [])
+        editorRef.current?.getEditor().chain().focus().extendWordRange().run()
+    }, [editorRef])
 
     const handleInsertMarkdownContentClick = useCallback(() => {
-        typistEditorRef.current?.getEditor().chain().focus().insertMarkdownContent(MARKDOWN_PLACEHOLDER_LONG).run()
-    }, [])
+        editorRef.current?.getEditor().chain().focus().insertMarkdownContent(MARKDOWN_PLACEHOLDER_LONG).run()
+    }, [editorRef])
 
     const handleInsertMarkdownContentAtClick = useCallback(() => {
-        typistEditorRef.current
+        editorRef.current
             ?.getEditor()
             .chain()
             .focus()
             .insertMarkdownContentAt(
-                Selection.atEnd(typistEditorRef.current?.getEditor().state.doc),
+                Selection.atEnd(editorRef.current?.getEditor().state.doc),
                 MARKDOWN_PLACEHOLDER_SHORT,
             )
             .run()
-    }, [])
+    }, [editorRef])
 
     return (
         <>

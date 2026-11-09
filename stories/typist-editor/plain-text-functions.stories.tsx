@@ -30,7 +30,7 @@ export const Commands = meta.story({
                 <TypistEditorDecorator
                     Story={Story}
                     args={context.args}
-                    bottomFunctions={<ExtraEditorCommandButtons typistEditorRef={typistEditorRef} />}
+                    bottomFunctions={<ExtraEditorCommandButtons editorRef={typistEditorRef} />}
                     ref={typistEditorRef}
                 />
             )
@@ -48,7 +48,7 @@ export const Helpers = meta.story({
                 <TypistEditorDecorator
                     Story={Story}
                     args={context.args}
-                    bottomFunctions={<EditorRefHelperButtons typistEditorRef={typistEditorRef} />}
+                    bottomFunctions={<EditorRefHelperButtons editorRef={typistEditorRef} />}
                     ref={typistEditorRef}
                 />
             )
