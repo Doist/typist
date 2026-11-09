@@ -36,8 +36,8 @@ type RichTextImageAttributes = {
  */
 type RichTextImageInsertOptions = {
     /**
-     * Inserts the image at the cursor position within the text, instead of on its own line. Requires
-     * the `inline` extension option to be enabled, otherwise the command returns `false`.
+     * Inserts the image at the cursor position within the text, instead of on its own line.
+     * Requires the `inline` extension option to be enabled, otherwise the command returns `false`.
      */
     inline?: boolean
 }
@@ -90,7 +90,8 @@ type RichTextImageOptions = {
     HTMLAttributes: Record<string, string>
 
     /**
-     * A React component to render inside the interactive node view.
+     * A React component to render inside the interactive node view. When `inline` is enabled, the
+     * component should render inline elements (e.g., `NodeViewWrapper` with `as="span"`).
      */
     NodeViewComponent?: React.ComponentType<ReactNodeViewProps>
 
