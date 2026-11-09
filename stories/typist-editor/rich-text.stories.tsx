@@ -8,7 +8,7 @@ import { action } from 'storybook/actions'
 import preview from '../../.storybook/preview'
 import { RichTextKit, TypistEditor } from '../../src'
 
-import { InlineImageButtons } from './components/inline-image-buttons'
+import { RichTextImageCommandButtons } from './components/rich-text-image-command-buttons'
 import { DEFAULT_ARG_TYPES, DEFAULT_RICH_TEXT_KIT_OPTIONS, DEFAULT_STORY_ARGS } from './constants/defaults'
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { HashtagSuggestion } from './extensions/hashtag-suggestion'
@@ -167,7 +167,9 @@ export const Default = meta.story({
                     args={storyArgs}
                     withRichTextFeatures={true}
                     ref={typistEditorRef}
-                    bottomFunctions={inlineImages ? <InlineImageButtons editorRef={typistEditorRef} /> : undefined}
+                    bottomFunctions={
+                        inlineImages ? <RichTextImageCommandButtons editorRef={typistEditorRef} /> : undefined
+                    }
                 />
             )
         },

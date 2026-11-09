@@ -10,11 +10,11 @@ import type { RichTextImageInsertOptions, TypistEditorRef } from '../../../src'
 
 const SAMPLE_IMAGE_URLS = [landscapeDay, landscapeSunset, landscapeLake]
 
-type InlineImageButtonsProps = {
+type RichTextImageCommandButtonsProps = {
     editorRef: React.RefObject<TypistEditorRef | null>
 }
 
-function InlineImageButtons({ editorRef }: InlineImageButtonsProps) {
+function RichTextImageCommandButtons({ editorRef }: RichTextImageCommandButtonsProps) {
     const sampleImageIndexRef = useRef(0)
 
     function insertSampleImage(options?: RichTextImageInsertOptions) {
@@ -37,4 +37,4 @@ function InlineImageButtons({ editorRef }: InlineImageButtonsProps) {
     )
 }
 
-export { InlineImageButtons }
+export { RichTextImageCommandButtons }
