@@ -130,7 +130,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         return {
             ...this.parent?.(),
             insertImage(attributes, insertOptions) {
-                return ({ editor, state, tr, commands }) => {
+                return ({ state, tr, commands }) => {
                     const image = { type: nodeTypeName, attrs: attributes }
 
                     // Inserting the image within the text requires inline images support
@@ -191,13 +191,13 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                         ])
                     }
 
-                    const selectionAtEnd = Selection.atEnd(editor.state.doc)
+                    const selectionAtEnd = Selection.atEnd(tr.doc)
 
                     // Insert block images directly, which the schema places on their own line
                     return commands.insertContent([
                         image,
                         // Insert a blank paragraph after the image when at the end of the document
-                        ...(editor.state.selection.to === selectionAtEnd.to ? [{ type: 'paragraph' }] : []),
+                        ...(tr.selection.to === selectionAtEnd.to ? [{ type: 'paragraph' }] : []),
                     ])
                 }
             },

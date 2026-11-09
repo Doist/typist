@@ -149,5 +149,15 @@ describe('Extension: RichTextImage', () => {
                 '<td colspan="1" rowspan="1"><p>Hello</p></td><td colspan="1" rowspan="1"><p>world</p></td>',
             )
         })
+
+        test('`insertImage` keeps the image when typing after inserting it below a table', () => {
+            const editor = createEditorWithCaretAfter(TABLE_WITH_TWO_BODY_CELLS, 'Hello')
+            selectAllBodyCells(editor)
+
+            editor.commands.insertImage({ src: 'image.png' })
+            editor.commands.insertContent('typed')
+
+            expect(editor.getHTML()).toContain('</table><img src="image.png"><p>typed</p>')
+        })
     })
 })
