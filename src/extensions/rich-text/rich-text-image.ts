@@ -202,7 +202,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         }
     },
     addNodeView() {
-        const { NodeViewComponent } = this.options
+        const { inline, NodeViewComponent } = this.options
 
         // Do not add a node view if component was not specified
         if (!NodeViewComponent) {
@@ -211,6 +211,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
 
         // Render the node view with the provided React component
         return ReactNodeViewRenderer(NodeViewComponent, {
+            as: inline ? 'span' : 'div',
             className: `Typist-${this.type.name}`,
         })
     },
