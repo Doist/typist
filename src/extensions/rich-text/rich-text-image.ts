@@ -154,7 +154,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                             return commands.insertContent([
                                 ...(isAtBlockStart ? [] : [{ type: 'hardBreak' }]),
                                 image,
-                                ...(isAtBlockEnd ? [] : [{ type: 'hardBreak' }]),
+                                { type: 'hardBreak' },
                             ])
                         }
 
