@@ -37,7 +37,7 @@ describe('Extension: RichTextImage', () => {
             const editor = createEditorWithCaretAfter(
                 '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello world</p></td></tr></table>',
                 'Hello',
-                { selectText: true },
+                { image: { inline: true }, selectText: true },
             )
             editor.commands.setTextSelection(editor.state.selection.from)
 
