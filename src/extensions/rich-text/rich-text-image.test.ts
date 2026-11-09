@@ -32,6 +32,15 @@ describe('Extension: RichTextImage', () => {
             expect(editor.getHTML()).toBe('<p>Hello</p><p><img src="image.png"></p><p> world</p>')
         })
 
+        test('`insertImage` places the image above the paragraph at the start of a paragraph', () => {
+            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'Hello', { image: { inline: true } })
+            editor.commands.setTextSelection(1)
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(editor.getHTML()).toBe('<p><img src="image.png"></p><p>Hello world</p>')
+        })
+
         test('`insertImage` adds a blank paragraph below the image at the end of a paragraph', () => {
             const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'world', { image: { inline: true } })
 
@@ -137,6 +146,15 @@ describe('Extension: RichTextImage', () => {
 
             expect(editor.commands.insertImage({ src: 'image.png' }, { inline: true })).toBe(false)
             expect(editor.getHTML()).toBe('<p>Hello world</p>')
+        })
+
+        test('`insertImage` places the image above the paragraph at the start of a paragraph', () => {
+            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'Hello')
+            editor.commands.setTextSelection(1)
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(editor.getHTML()).toBe('<img src="image.png"><p>Hello world</p>')
         })
 
         test('`insertImage` keeps the content of selected cells', () => {

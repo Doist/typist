@@ -150,17 +150,28 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                         return commands.insertContent(image)
                     }
 
+                    const { $from, $to, empty } = tr.selection
+                    const isAtBlockStart = $from.parentOffset === 0
+                    const isAtBlockEnd = $to.parentOffset === $to.parent.content.size
+                    const cellTypeName = $from.depth > 0 ? $from.node(-1).type.name : ''
+                    const isInTableCell = cellTypeName === 'tableCell' || cellTypeName === 'tableHeader'
+
+                    // Insert the image before the current block when the caret is at its start, as
+                    // splitting the block there would leave an empty block above the image
+                    if (empty && isAtBlockStart && $from.parent.isTextblock && !isInTableCell) {
+                        return commands.insertContentAt(
+                            $from.before(),
+                            options.inline ? { type: 'paragraph', content: [image] } : image,
+                            { updateSelection: false },
+                        )
+                    }
+
                     // Insert inline images on their own line, by wrapping them in a paragraph that
                     // splits the current block (or between hard breaks inside table cells)
                     if (options.inline) {
-                        const { $from, $to } = tr.selection
-                        const isAtBlockStart = $from.parentOffset === 0
-                        const isAtBlockEnd = $to.parentOffset === $to.parent.content.size
-                        const cellTypeName = $from.depth > 0 ? $from.node(-1).type.name : ''
-
                         // Table cells are restricted to a single paragraph, so the image is placed
                         // on its own line with hard breaks instead
-                        if (cellTypeName === 'tableCell' || cellTypeName === 'tableHeader') {
+                        if (isInTableCell) {
                             if (!state.schema.nodes.hardBreak) {
                                 return false
                             }
