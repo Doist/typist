@@ -32,6 +32,17 @@ type RichTextImageAttributes = {
     Pick<Partial<HTMLImageElement>, 'alt' | 'title'>
 
 /**
+ * The options available to customize the `insertImage` command.
+ */
+type RichTextImageInsertOptions = {
+    /**
+     * Inserts the image at the cursor position within the text, instead of on its own line. Requires
+     * the `inline` extension option to be enabled, otherwise the command returns `false`.
+     */
+    inline?: boolean
+}
+
+/**
  * Augment the official `@tiptap/core` module with extra commands, relevant for this extension, so
  * that the compiler knows about them.
  */
@@ -41,7 +52,7 @@ declare module '@tiptap/core' {
             /**
              * Inserts an image into the editor with the given attributes.
              */
-            insertImage: (attributes: RichTextImageAttributes) => ReturnType
+            insertImage: (attributes: RichTextImageAttributes, options?: RichTextImageInsertOptions) => ReturnType
 
             /**
              * Updates the attributes for an existing image in the editor.
@@ -65,6 +76,11 @@ type RichTextImageOptions = {
     /**
      * Renders the image node inline (e.g., <p><img src="doist.jpg"></p>). By default images are on
      * the same level as paragraphs.
+     *
+     * When enabled, images can be placed anywhere inline content is allowed (e.g., within text, or
+     * table cells), but the `insertImage` command still inserts images on their own line (within
+     * their own paragraph, or between hard breaks inside table cells), unless its `inline` option
+     * is set.
      */
     inline: boolean
 
@@ -107,19 +123,53 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         }
     },
     addCommands() {
-        const { name: nodeTypeName } = this
+        const { name: nodeTypeName, options } = this
 
         return {
             ...this.parent?.(),
-            insertImage(attributes) {
-                return ({ editor, commands }) => {
+            insertImage(attributes, insertOptions) {
+                return ({ editor, state, commands }) => {
+                    const image = { type: nodeTypeName, attrs: attributes }
+
+                    // Inserting the image within the text requires inline images support
+                    if (insertOptions?.inline) {
+                        return options.inline ? commands.insertContent(image) : false
+                    }
+
+                    // Insert inline images on their own line, by wrapping them in a paragraph that
+                    // splits the current block (or between hard breaks inside table cells)
+                    if (options.inline) {
+                        const { $from, $to } = state.selection
+                        const isAtBlockStart = $from.parentOffset === 0
+                        const isAtBlockEnd = $to.parentOffset === $to.parent.content.size
+                        const cellTypeName = $from.depth > 0 ? $from.node(-1).type.name : ''
+
+                        // Table cells are restricted to a single paragraph, so the image is placed
+                        // on its own line with hard breaks instead
+                        if (cellTypeName === 'tableCell' || cellTypeName === 'tableHeader') {
+                            if (!state.schema.nodes.hardBreak) {
+                                return false
+                            }
+
+                            return commands.insertContent([
+                                ...(isAtBlockStart ? [] : [{ type: 'hardBreak' }]),
+                                image,
+                                ...(isAtBlockEnd ? [] : [{ type: 'hardBreak' }]),
+                            ])
+                        }
+
+                        return commands.insertContent([
+                            { type: 'paragraph', content: [image] },
+                            // Insert a blank paragraph after the image when at the end of a block
+                            ...(isAtBlockEnd ? [{ type: 'paragraph' }] : []),
+                        ])
+                    }
+
                     const selectionAtEnd = Selection.atEnd(editor.state.doc)
 
+                    // Insert block images directly, which the schema places on their own line
                     return commands.insertContent([
-                        {
-                            type: nodeTypeName,
-                            attrs: attributes,
-                        },
+                        image,
                         // Insert a blank paragraph after the image when at the end of the document
                         ...(editor.state.selection.to === selectionAtEnd.to ? [{ type: 'paragraph' }] : []),
                     ])
@@ -161,7 +211,6 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
 
         // Render the node view with the provided React component
         return ReactNodeViewRenderer(NodeViewComponent, {
-            as: 'div',
             className: `Typist-${this.type.name}`,
         })
     },
@@ -206,4 +255,4 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
 
 export { RichTextImage }
 
-export type { RichTextImageAttributes, RichTextImageOptions }
+export type { RichTextImageAttributes, RichTextImageInsertOptions, RichTextImageOptions }
