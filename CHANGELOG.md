@@ -1,3 +1,9 @@
+## [17.0.8](https://github.com/Doist/typist/compare/v17.0.7...v17.0.8) (2026-11-09)
+
+### Bug Fixes
+
+* **deps:** update dependency turndown to v7.2.5 ([#1587](https://github.com/Doist/typist/issues/1587)) ([cb2b967](https://github.com/Doist/typist/commit/cb2b96736425350669d4894a267dc3d919ee5a27))
+
 ## [17.0.7](https://github.com/Doist/typist/compare/v17.0.6...v17.0.7) (2026-11-09)
 
 ### Bug Fixes
