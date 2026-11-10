@@ -1,3 +1,9 @@
+## [17.1.0](https://github.com/Doist/typist/compare/v17.0.8...v17.1.0) (2026-11-10)
+
+### Features
+
+* support inline images in the rich-text editor ([#1591](https://github.com/Doist/typist/issues/1591)) ([e7a6fd3](https://github.com/Doist/typist/commit/e7a6fd369d426b80e5a3d484495f45059f836785))
+
 ## [17.0.8](https://github.com/Doist/typist/compare/v17.0.7...v17.0.8) (2026-11-09)
 
 ### Bug Fixes
