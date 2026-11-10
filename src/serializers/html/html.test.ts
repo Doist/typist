@@ -898,6 +898,14 @@ See the section on [\`code\`](#code).</p>`)
                     '<ul data-type="taskList"><li data-type="taskItem" data-checked="false">First item</li><li data-type="taskItem" data-checked="true">Second item</li><li data-type="taskItem" data-checked="true">Third item</li><li data-type="taskItem" data-checked="false">Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="true">First item</li><li data-type="taskItem" data-checked="false">Second item</li><li data-type="taskItem" data-checked="false">Third item</li><li data-type="taskItem" data-checked="true">Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="true">First item</li><li data-type="taskItem" data-checked="false">Second item</li><li data-type="taskItem" data-checked="true">Third item</li><li data-type="taskItem" data-checked="false">Fourth item</li></ul><hr><ul><li>First item</li><li>Second item</li><li>Third item<ul data-type="taskList"><li data-type="taskItem" data-checked="false">Indented item</li><li data-type="taskItem" data-checked="false">Indented item</li></ul></li><li>Fourth item</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="false">1968. A great year!</li><li data-type="taskItem" data-checked="true">I think 1969 was second best.</li></ul><hr><ul data-type="taskList"><li data-type="taskItem" data-checked="false">This is the first list item.</li><li data-type="taskItem" data-checked="false">Here\'s the second list item.<br>I need to add another paragraph below the second list item.</li><li data-type="taskItem" data-checked="false">And here\'s the third list item.</li></ul>',
                 )
             })
+
+            test('task lists with images HTML output is correct', () => {
+                const htmlSerializer = createHTMLSerializer(getSchema([RichTextKit, TaskList, TaskItem]))
+
+                expect(htmlSerializer.serialize('- [x] Done ![](image.png)\n- [ ] Pending')).toBe(
+                    '<ul data-type="taskList"><li data-type="taskItem" data-checked="true"><p>Done</p><img src="image.png" alt=""></li><li data-type="taskItem" data-checked="false">Pending</li></ul>',
+                )
+            })
         })
 
         describe('with the default `table` extension', () => {

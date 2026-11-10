@@ -148,6 +148,12 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
         unifiedProcessor.use(rehypeCodeBlock)
     }
 
+    // Configure the unified processor with a custom plugin to add support Tiptap task lists, before
+    // images are moved out of list items, since task items are detected by their leading text
+    if (schema.nodes.taskList && schema.nodes.taskItem) {
+        unifiedProcessor.use(rehypeTaskList)
+    }
+
     // Configure the unified processor with a custom plugin to move images out of their wrapping
     // paragraph (splitting it around them) when the editor schema doesn't support inline images
     if (schema.nodes.paragraph && schema.nodes.image) {
@@ -158,11 +164,6 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     // table cells into actual hard break elements
     if (schema.nodes.table && schema.nodes.hardBreak) {
         unifiedProcessor.use(rehypeTable)
-    }
-
-    // Configure the unified processor with a custom plugin to add support Tiptap task lists
-    if (schema.nodes.taskList && schema.nodes.taskItem) {
-        unifiedProcessor.use(rehypeTaskList)
     }
 
     // Configure the unified processor with a custom plugin to add support for suggestions nodes
