@@ -124,6 +124,25 @@ describe('Extension: RichTextImage', () => {
             expect(editor.getHTML()).toBe('<img src="image.png">')
         })
 
+        test('`insertImage` at the start of a paragraph places the image above it', () => {
+            const editor = createEditor('<p>First</p><p>Second</p>')
+            editor.commands.setTextSelection(getTextPosition(editor, 'Second'))
+
+            editor.commands.insertImage({ src: 'image.png' })
+            editor.commands.insertContent('Typed ')
+
+            expect(editor.getHTML()).toBe('<p>First</p><img src="image.png"><p>Typed Second</p>')
+        })
+
+        test('`insertImage` at the start of a list item keeps its first paragraph', () => {
+            const editor = createEditor('<ul><li><p>Item</p></li></ul>')
+            editor.commands.setTextSelection(getTextPosition(editor, 'Item'))
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(editor.getHTML()).toBe('<ul><li><p></p><img src="image.png"><p>Item</p></li></ul>')
+        })
+
         test('`insertImage` within a table places the image after the table', () => {
             const editor = createEditor(`${TABLE}<p>After</p>`)
             editor.commands.setTextSelection(getTextPosition(editor, 'C'))

@@ -176,6 +176,20 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                         return true
                     }
 
+                    const { $from, empty } = tr.selection
+                    const isAtTextblockStart = empty && $from.parent.isTextblock && $from.parentOffset === 0
+
+                    // Insert block images before the block when the caret is at its start, instead of
+                    // splitting it, so that no empty block is left above the image (unless the schema
+                    // requires that block to come first, e.g., in list items)
+                    if (
+                        !options.inline &&
+                        isAtTextblockStart &&
+                        $from.node(-1).canReplaceWith($from.index(-1), $from.index(-1), imageType)
+                    ) {
+                        return commands.insertContentAt($from.before(), image, { updateSelection: false })
+                    }
+
                     const selectionAtEnd = Selection.atEnd(editor.state.doc)
 
                     const isInserted = commands.insertContent([
@@ -186,8 +200,8 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                             : []),
                     ])
 
-                    // Move the caret below block images left selected after inserting them (e.g.,
-                    // in an empty block, or at the end of one), so that typing doesn't replace them
+                    // Move the caret below block images left selected after inserting them (e.g., at
+                    // the end of a block, or in an empty list item), so typing doesn't replace them
                     if (
                         dispatch &&
                         isInserted &&
