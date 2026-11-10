@@ -102,6 +102,20 @@ describe('Extension: RichTextImage', () => {
             )
         })
 
+        test('`insertImage` reuses existing hard breaks next to the image within a cell', () => {
+            const editor = createEditorWithCaretAfter(
+                '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello<br>world</p></td></tr></table>',
+                'Hello',
+            )
+
+            editor.commands.insertImage({ src: 'image.png' })
+            editor.commands.insertContent('typed ')
+
+            expect(editor.getHTML()).toContain(
+                '<td colspan="1" rowspan="1"><p>Hello<br><img src="image.png"><br>typed world</p></td>',
+            )
+        })
+
         test('`insertImage` fails without changing a cell when hard breaks are disabled', () => {
             const editor = createEditorWithCaretAfter(
                 '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello world</p></td></tr></table>',
