@@ -8,6 +8,7 @@ import { action } from 'storybook/actions'
 import preview from '../../.storybook/preview'
 import { RichTextKit, TypistEditor } from '../../src'
 
+import { RichTextImageCommandButtons } from './components/rich-text-image-command-buttons'
 import { DEFAULT_ARG_TYPES, DEFAULT_RICH_TEXT_KIT_OPTIONS, DEFAULT_STORY_ARGS } from './constants/defaults'
 import { TypistEditorDecorator } from './decorators/typist-editor-decorator/typist-editor-decorator'
 import { HashtagSuggestion } from './extensions/hashtag-suggestion'
@@ -37,6 +38,8 @@ export const Default = meta.story({
     },
     decorators: [
         (Story, context) => {
+            const { inlineImages = false } = context.parameters as { inlineImages?: boolean }
+
             const typistEditorRef = useRef<TypistEditorRef>(null)
 
             const [inlineAttachments, setInlineAttachments] = useState<{
@@ -140,13 +143,14 @@ export const Default = meta.story({
                     RichTextKit.configure({
                         ...DEFAULT_RICH_TEXT_KIT_OPTIONS,
                         image: {
+                            inline: inlineImages,
                             NodeViewComponent: RichTextImageWrapper,
                             onImageFilePaste: handleInlineFilePaste,
                         },
                     }),
                     ...COMMON_STORY_EXTENSIONS,
                 ],
-                [handleInlineFilePaste],
+                [inlineImages, handleInlineFilePaste],
             )
 
             const storyArgs = useMemo(
@@ -163,6 +167,9 @@ export const Default = meta.story({
                     args={storyArgs}
                     withRichTextFeatures={true}
                     ref={typistEditorRef}
+                    bottomFunctions={
+                        inlineImages ? <RichTextImageCommandButtons editorRef={typistEditorRef} /> : undefined
+                    }
                 />
             )
         },
@@ -256,4 +263,13 @@ export const EventHandlers = meta.story({
             )
         },
     ],
+})
+
+export const InlineImages = Default.extend({
+    args: {
+        placeholder: 'A full rich-text editor with inline images support, be creative…',
+    },
+    parameters: {
+        inlineImages: true,
+    },
 })
