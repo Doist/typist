@@ -199,8 +199,9 @@ const htmlSerializerInstanceById: HTMLSerializerInstanceById = {}
 function getHTMLSerializerInstance(schema: Schema) {
     const schemaId = computeSchemaId(schema)
     const triggerCharsId = computeSuggestionTriggerCharsId(schema)
+    const inlineImagesId = String(Boolean(schema.nodes.image?.spec.inline))
 
-    const id = [schemaId, triggerCharsId].join('|')
+    const id = [schemaId, triggerCharsId, inlineImagesId].join('|')
 
     if (!htmlSerializerInstanceById[id]) {
         htmlSerializerInstanceById[id] = createHTMLSerializer(schema)

@@ -282,6 +282,20 @@ describe('HTML Serializer', () => {
             })
         })
 
+        describe('when two editor schemas differ only by inline images support', () => {
+            test('`getHTMLSerializerInstance` returns different instances and outputs', () => {
+                const htmlSerializerA = getHTMLSerializerInstance(getSchema([RichTextKit]))
+                const htmlSerializerB = getHTMLSerializerInstance(
+                    getSchema([RichTextKit.configure({ image: { inline: true } })]),
+                )
+
+                expect(htmlSerializerA).not.toBe(htmlSerializerB)
+                expect(htmlSerializerA.serialize('Hello ![](image.png) world')).not.toBe(
+                    htmlSerializerB.serialize('Hello ![](image.png) world'),
+                )
+            })
+        })
+
         describe('when two editor schemas differ only by suggestion `triggerChar`', () => {
             test('`getHTMLSerializerInstance` returns different instances and outputs', () => {
                 const htmlSerializerA = getHTMLSerializerInstance(
