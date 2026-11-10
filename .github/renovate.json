@@ -35,6 +35,11 @@
             "allowedVersions": "<=0.23.1"
         },
         {
+            "description": "Keep devEngines.runtime as a minimum Node.js version instead of pinning it.",
+            "matchDepTypes": ["devEngines.runtime"],
+            "rangeStrategy": "auto"
+        },
+        {
             "matchPackageNames": ["/eslint/"],
             "enabled": false
         }
