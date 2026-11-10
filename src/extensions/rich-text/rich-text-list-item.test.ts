@@ -1,24 +1,13 @@
-import { Editor } from '@tiptap/core'
+import { createRichTextEditor, getTextPosition } from '../../../test-utils/rich-text-editor'
 
-import { getTextPosition } from '../../../test-utils/rich-text-editor'
-
-import { RichTextKit } from './rich-text-kit'
+import type { Editor } from '@tiptap/core'
 
 /**
  * Creates a rich-text editor with the given initial content, and places the caret at the end of
  * the first occurrence of the given text within the document.
- *
- * The `Code` extension is disabled because `prosemirror-codemark` (which it registers) loads a
- * second CJS copy of `prosemirror-state` in the Vitest environment, crashing `Editor`
- * instantiation with "Adding different instances of a keyed plugin"; it has no bearing on the
- * list behavior under test.
  */
 function createEditorWithCaretAfter(content: string, text: string): Editor {
-    const editor = new Editor({
-        extensions: [RichTextKit.configure({ code: false })],
-        content,
-    })
-    onTestFinished(() => editor.destroy())
+    const editor = createRichTextEditor(content)
 
     editor.commands.setTextSelection(getTextPosition(editor, text) + text.length)
 

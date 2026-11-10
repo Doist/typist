@@ -1,24 +1,10 @@
-import { Editor } from '@tiptap/core'
 import { CellSelection } from '@tiptap/pm/tables'
 
-import { getTextPosition } from '../../../test-utils/rich-text-editor'
+import { createRichTextEditor, getTextPosition } from '../../../test-utils/rich-text-editor'
 
-import { RichTextKit } from './rich-text-kit'
-
-import type { RichTextKitOptions } from './rich-text-kit'
+import type { Editor } from '@tiptap/core'
 
 const TABLE = '<table><tr><th><p>A</p></th><th><p>B</p></th></tr><tr><td><p>C</p></td><td><p>D</p></td></tr></table>'
-
-function createEditor(content: string, options: Partial<RichTextKitOptions> = {}) {
-    // `Code` is disabled because it crashes `Editor` instantiation in the Vitest environment
-    const editor = new Editor({
-        extensions: [RichTextKit.configure({ ...options, code: false })],
-        content,
-    })
-    onTestFinished(() => editor.destroy())
-
-    return editor
-}
 
 function selectCells(editor: Editor, anchorText: string, headText: string) {
     const { doc } = editor.state
@@ -37,7 +23,7 @@ describe('Extension: RichTextImage', () => {
         { inline: false, html: '<p>Hello</p><img src="image.png"><p></p>' },
         { inline: true, html: '<p>Hello<img src="image.png"></p>' },
     ])('`insertImage` at the end of the document with `inline: $inline`', ({ inline, html }) => {
-        const editor = createEditor('<p>Hello</p>', { image: { inline } })
+        const editor = createRichTextEditor('<p>Hello</p>', { image: { inline } })
 
         editor.commands.focus('end')
         editor.commands.insertImage({ src: 'image.png' })
@@ -47,7 +33,7 @@ describe('Extension: RichTextImage', () => {
 
     describe('when inline images are enabled', () => {
         test('`insertImage` with table cells selected places the image after the last cell content', () => {
-            const editor = createEditor(TABLE, { image: { inline: true } })
+            const editor = createRichTextEditor(TABLE, { image: { inline: true } })
             selectCells(editor, 'C', 'D')
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -58,7 +44,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` with table cells selected backwards places the image after the head cell content', () => {
-            const editor = createEditor(TABLE, { image: { inline: true } })
+            const editor = createRichTextEditor(TABLE, { image: { inline: true } })
             selectCells(editor, 'D', 'C')
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -68,7 +54,7 @@ describe('Extension: RichTextImage', () => {
             )
         })
         test('`insertImage` with table cells selected can be checked without changing the document', () => {
-            const editor = createEditor(TABLE, { image: { inline: true } })
+            const editor = createRichTextEditor(TABLE, { image: { inline: true } })
             selectCells(editor, 'C', 'D')
             const html = editor.getHTML()
 
@@ -79,7 +65,7 @@ describe('Extension: RichTextImage', () => {
 
     describe('when inline images are disabled', () => {
         test('`insertImage` in an empty paragraph keeps the caret below the image', () => {
-            const editor = createEditor('<p>First</p><p></p><p>Next</p>')
+            const editor = createRichTextEditor('<p>First</p><p></p><p>Next</p>')
             editor.commands.setTextSelection(getTextPosition(editor, 'First') + 'First'.length + 2)
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -89,7 +75,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` at the end of a paragraph keeps the caret below the image', () => {
-            const editor = createEditor('<p>First</p><p>Next</p>')
+            const editor = createRichTextEditor('<p>First</p><p>Next</p>')
             editor.commands.setTextSelection(getTextPosition(editor, 'First') + 'First'.length)
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -99,7 +85,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` in an empty list item paragraph keeps the caret below the image', () => {
-            const editor = createEditor('<ul><li><p>First</p></li><li><p></p></li></ul><p>Next</p>')
+            const editor = createRichTextEditor('<ul><li><p>First</p></li><li><p></p></li></ul><p>Next</p>')
             editor.commands.setTextSelection(getTextPosition(editor, 'First') + 'First'.length + 4)
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -111,7 +97,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` in an empty single-line document inserts the image', () => {
-            const editor = createEditor('<p></p>', { document: { multiline: false } })
+            const editor = createRichTextEditor('<p></p>', { document: { multiline: false } })
             editor.commands.focus('end')
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -120,7 +106,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` at the start of a paragraph places the image above it', () => {
-            const editor = createEditor('<p>First</p><p>Second</p>')
+            const editor = createRichTextEditor('<p>First</p><p>Second</p>')
             editor.commands.setTextSelection(getTextPosition(editor, 'Second'))
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -130,7 +116,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` at the start of a list item keeps its first paragraph', () => {
-            const editor = createEditor('<ul><li><p>Item</p></li></ul>')
+            const editor = createRichTextEditor('<ul><li><p>Item</p></li></ul>')
             editor.commands.setTextSelection(getTextPosition(editor, 'Item'))
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -139,7 +125,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` within a table places the image after the table', () => {
-            const editor = createEditor(`${TABLE}<p>After</p>`)
+            const editor = createRichTextEditor(`${TABLE}<p>After</p>`)
             editor.commands.setTextSelection(getTextPosition(editor, 'C'))
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -151,7 +137,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` within a table keeps consecutive images in order', () => {
-            const editor = createEditor(`${TABLE}<p>After</p>`)
+            const editor = createRichTextEditor(`${TABLE}<p>After</p>`)
             editor.commands.setTextSelection(getTextPosition(editor, 'C'))
 
             editor.commands.insertImage({ src: 'first.png' })
@@ -163,7 +149,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` with a selection from a table into the next block keeps the image', () => {
-            const editor = createEditor(`${TABLE}<p>After</p>`)
+            const editor = createRichTextEditor(`${TABLE}<p>After</p>`)
             editor.commands.setTextSelection({
                 from: getTextPosition(editor, 'D'),
                 to: getTextPosition(editor, 'After') + 2,
@@ -178,7 +164,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` within a table inserts a single image when checked first', () => {
-            const editor = createEditor(`${TABLE}<p>After</p>`)
+            const editor = createRichTextEditor(`${TABLE}<p>After</p>`)
             editor.commands.setTextSelection(getTextPosition(editor, 'C'))
 
             editor
@@ -193,7 +179,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` with table cells selected keeps their content', () => {
-            const editor = createEditor(TABLE)
+            const editor = createRichTextEditor(TABLE)
             selectCells(editor, 'C', 'D')
 
             editor.commands.insertImage({ src: 'image.png' })
