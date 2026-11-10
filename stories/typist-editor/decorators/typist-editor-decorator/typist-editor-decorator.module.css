@@ -125,6 +125,10 @@ div + .editorContainer {
     margin: 0;
 }
 
+:global(div[data-typist-editor] :is(ul, ol) li p ~ p) {
+    display: block;
+}
+
 :global(div[data-typist-editor] p + hr) {
     margin-top: 8px;
 }
@@ -141,16 +145,18 @@ div + .editorContainer {
     display: block;
 }
 
-:global(div[data-typist-editor] > p > :is(img)) {
+:global(div[data-typist-editor] :is(p, p > a) > :is(img)) {
     display: inline-block;
+    vertical-align: middle;
 }
 
 :global(div[data-typist-editor] > :is(.Typist-image)) {
     display: flex;
 }
 
-:global(div[data-typist-editor] > p > :is(.Typist-image)) {
+:global(div[data-typist-editor] :is(p, p > a) > :is(.Typist-image)) {
     display: inline-flex;
+    vertical-align: middle;
 }
 
 :global(div[data-typist-editor] > :is(img)),
@@ -160,8 +166,8 @@ div + .editorContainer {
 
 :global(div[data-typist-editor] > :is(img)),
 :global(div[data-typist-editor] > :is(.Typist-image)),
-:global(div[data-typist-editor] > p > :is(img)),
-:global(div[data-typist-editor] > p > :is(.Typist-image)) {
+:global(div[data-typist-editor] :is(p, p > a) > :is(img)),
+:global(div[data-typist-editor] :is(p, p > a) > :is(.Typist-image)) {
     border-radius: var(--typist-editor-media-border-radius);
     max-width: 480px;
     width: fit-content;
@@ -169,8 +175,8 @@ div + .editorContainer {
 
 :global(div[data-typist-editor] > :is(img).ProseMirror-selectednode),
 :global(div[data-typist-editor] > :is(.Typist-image).ProseMirror-selectednode),
-:global(div[data-typist-editor] > p > :is(img).ProseMirror-selectednode),
-:global(div[data-typist-editor] > p > :is(.Typist-image).ProseMirror-selectednode) {
+:global(div[data-typist-editor] :is(p, p > a) > :is(img).ProseMirror-selectednode),
+:global(div[data-typist-editor] :is(p, p > a) > :is(.Typist-image).ProseMirror-selectednode) {
     outline: 2px solid var(--storybook-theme-colorSecondary);
 }
 

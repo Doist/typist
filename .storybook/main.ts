@@ -23,6 +23,7 @@ export default defineMain({
         return mergeConfig(config, {
             build: {
                 assetsDir: '.',
+                assetsInlineLimit: 0,
                 sourcemap: false,
             },
         })

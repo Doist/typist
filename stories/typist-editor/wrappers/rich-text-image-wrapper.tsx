@@ -35,9 +35,15 @@ function RichTextImageWrapper({ extension, node }: NodeViewProps) {
     )
 
     return (
-        <NodeViewWrapper data-drag-handle="true" className={styles.richTextImageWrapper}>
+        <NodeViewWrapper
+            as={node.isInline ? 'span' : 'div'}
+            data-drag-handle="true"
+            className={styles.richTextImageWrapper}
+        >
             <img {...imageAttributes} className={imageClasses} alt={alt} title={title} src={src} />
-            {isAttachmentUploading ? <Box className={styles.progressOverlay} style={progressOverlayStyle} /> : null}
+            {isAttachmentUploading ? (
+                <Box as="span" className={styles.progressOverlay} style={progressOverlayStyle} />
+            ) : null}
         </NodeViewWrapper>
     )
 }
