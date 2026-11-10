@@ -67,6 +67,7 @@ describe('Extension: RichTextImage', () => {
             const editor = createEditorWithCaretAfter(
                 '<table><tr><th><p>Heading</p></th></tr><tr><td><p>Hello<br>world</p></td></tr></table>',
                 'Hello',
+                { image: { inline: true } },
             )
 
             editor.commands.insertImage({ src: 'image.png' })
