@@ -156,9 +156,15 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                     const cellTypeName = $from.depth > 0 ? $from.node(-1).type.name : ''
                     const isInTableCell = cellTypeName === 'tableCell' || cellTypeName === 'tableHeader'
 
-                    // Insert the image before the current block when the caret is at its start, as
-                    // splitting the block there would leave an empty block above the image
-                    if (empty && isAtBlockStart && $from.parent.isTextblock && !isInTableCell) {
+                    const blockType = options.inline ? state.schema.nodes.paragraph : state.schema.nodes[nodeTypeName]
+                    const canInsertBeforeBlock =
+                        $from.parent.isTextblock &&
+                        $from.node(-1).canReplaceWith($from.index(-1), $from.index(-1), blockType)
+
+                    // Insert the image before the current block when the caret is at its start (and
+                    // the image is allowed there), as splitting the block there would leave an
+                    // empty block above the image
+                    if (empty && isAtBlockStart && canInsertBeforeBlock) {
                         return commands.insertContentAt(
                             $from.before(),
                             options.inline ? { type: 'paragraph', content: [image] } : image,

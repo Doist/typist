@@ -41,6 +41,18 @@ describe('Extension: RichTextImage', () => {
             expect(editor.getHTML()).toBe('<p><img src="image.png"></p><p>Hello world</p>')
         })
 
+        test('`insertImage` places the image within the paragraph at the start of a single-line document', () => {
+            const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'Hello', {
+                document: { multiline: false },
+                image: { inline: true },
+            })
+            editor.commands.setTextSelection(1)
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(editor.getHTML()).toBe('<p><img src="image.png">Hello world</p>')
+        })
+
         test('`insertImage` adds a blank paragraph below the image at the end of a paragraph', () => {
             const editor = createEditorWithCaretAfter('<p>Hello world</p>', 'world', { image: { inline: true } })
 
