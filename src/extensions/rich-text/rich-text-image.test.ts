@@ -78,6 +78,52 @@ describe('Extension: RichTextImage', () => {
     })
 
     describe('when inline images are disabled', () => {
+        test('`insertImage` in an empty paragraph keeps the caret below the image', () => {
+            const editor = createEditor('<p>First</p><p></p><p>Next</p>')
+            editor.commands.setTextSelection(getTextPosition(editor, 'First') + 'First'.length + 2)
+
+            editor.commands.insertImage({ src: 'image.png' })
+            editor.commands.insertContent('Typed')
+
+            expect(editor.getHTML()).toBe('<p>First</p><img src="image.png"><p>Typed</p><p>Next</p>')
+        })
+
+        test('`insertImage` at the end of a paragraph keeps the caret below the image', () => {
+            const editor = createEditor('<p>First</p><p>Next</p>')
+            editor.commands.setTextSelection(getTextPosition(editor, 'First') + 'First'.length)
+
+            editor.commands.insertImage({ src: 'image.png' })
+            editor.commands.insertContent('Typed')
+
+            expect(editor.getHTML()).toBe('<p>First</p><img src="image.png"><p>Typed</p><p>Next</p>')
+        })
+
+        test('`insertImage` in an empty list item paragraph keeps the caret below the image', () => {
+            const editor = createEditor('<ul><li><p>First</p></li><li><p></p></li></ul><p>Next</p>')
+            editor.commands.setTextSelection(getTextPosition(editor, 'First') + 'First'.length + 4)
+
+            editor.commands.insertImage({ src: 'image.png' })
+            editor.commands.insertContent('Typed')
+
+            expect(editor.getHTML()).toBe(
+                '<ul><li><p>First</p></li><li><p></p><img src="image.png"><p>Typed</p></li></ul><p>Next</p>',
+            )
+        })
+
+        test('`insertImage` in an empty single-line document inserts the image', () => {
+            // `Code` is disabled because it crashes `Editor` instantiation in the Vitest environment
+            const editor = new Editor({
+                extensions: [RichTextKit.configure({ code: false, document: { multiline: false } })],
+                content: '<p></p>',
+            })
+            onTestFinished(() => editor.destroy())
+            editor.commands.focus('end')
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(editor.getHTML()).toBe('<img src="image.png">')
+        })
+
         test('`insertImage` within a table places the image after the table', () => {
             const editor = createEditor(`${TABLE}<p>After</p>`)
             editor.commands.setTextSelection(getTextPosition(editor, 'C'))

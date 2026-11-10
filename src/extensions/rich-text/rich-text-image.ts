@@ -1,6 +1,6 @@
 import { findParentNode } from '@tiptap/core'
 import { Image } from '@tiptap/extension-image'
-import { Plugin, PluginKey, Selection, TextSelection } from '@tiptap/pm/state'
+import { NodeSelection, Plugin, PluginKey, Selection, TextSelection } from '@tiptap/pm/state'
 import { CellSelection } from '@tiptap/pm/tables'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 
@@ -178,13 +178,27 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
 
                     const selectionAtEnd = Selection.atEnd(editor.state.doc)
 
-                    return commands.insertContent([
+                    const isInserted = commands.insertContent([
                         image,
                         // Insert a blank paragraph after block images when at the end of the document
                         ...(!options.inline && editor.state.selection.to === selectionAtEnd.to
                             ? [{ type: 'paragraph' }]
                             : []),
                     ])
+
+                    // Move the caret below block images left selected after inserting them (e.g.,
+                    // in an empty block, or at the end of one), so that typing doesn't replace them
+                    if (
+                        dispatch &&
+                        isInserted &&
+                        !options.inline &&
+                        tr.selection instanceof NodeSelection &&
+                        tr.selection.node.type.name === nodeTypeName
+                    ) {
+                        placeCaretAfter(tr, tr.selection.to)
+                    }
+
+                    return isInserted
                 }
             },
             updateImage(attributes) {
