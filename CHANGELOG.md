@@ -1,3 +1,9 @@
+## [17.1.1](https://github.com/Doist/typist/compare/v17.1.0...v17.1.1) (2026-11-10)
+
+### Bug Fixes
+
+* stop insertImage from splitting tables or losing images to typing ([#1592](https://github.com/Doist/typist/issues/1592)) ([8ac981c](https://github.com/Doist/typist/commit/8ac981c786e60b2638de98691027aaf5688b10b4))
+
 ## [17.1.0](https://github.com/Doist/typist/compare/v17.0.8...v17.1.0) (2026-11-10)
 
 ### Features
