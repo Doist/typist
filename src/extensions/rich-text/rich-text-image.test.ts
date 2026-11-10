@@ -67,6 +67,14 @@ describe('Extension: RichTextImage', () => {
                 `<table><tbody><tr><th><p>A</p></th><th><p>B</p></th></tr><tr><td><p>C<img src="image.png"></p></td><td><p>D</p></td></tr></tbody></table>`,
             )
         })
+        test('`insertImage` with table cells selected can be checked without changing the document', () => {
+            const editor = createEditor(TABLE, { image: { inline: true } })
+            selectCells(editor, 'C', 'D')
+            const html = editor.getHTML()
+
+            expect(editor.can().insertImage({ src: 'image.png' })).toBe(true)
+            expect(editor.getHTML()).toBe(html)
+        })
     })
 
     describe('when inline images are disabled', () => {
