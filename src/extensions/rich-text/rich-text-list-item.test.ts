@@ -1,5 +1,7 @@
 import { Editor } from '@tiptap/core'
 
+import { getTextPosition } from '../../../test-utils/rich-text-editor'
+
 import { RichTextKit } from './rich-text-kit'
 
 /**
@@ -18,18 +20,7 @@ function createEditorWithCaretAfter(content: string, text: string): Editor {
     })
     onTestFinished(() => editor.destroy())
 
-    let caretPosition: number | null = null
-    editor.state.doc.descendants((node, position) => {
-        if (caretPosition === null && node.isText && node.text?.includes(text)) {
-            caretPosition = position + node.text.indexOf(text) + text.length
-        }
-    })
-
-    if (caretPosition === null) {
-        throw new Error(`Text "${text}" was not found in the document`)
-    }
-
-    editor.commands.setTextSelection(caretPosition)
+    editor.commands.setTextSelection(getTextPosition(editor, text) + text.length)
 
     return editor
 }

@@ -1,6 +1,8 @@
 import { Editor } from '@tiptap/core'
 import { CellSelection } from '@tiptap/pm/tables'
 
+import { getTextPosition } from '../../../test-utils/rich-text-editor'
+
 import { RichTextKit } from './rich-text-kit'
 
 const TABLE = '<table><tr><th><p>A</p></th><th><p>B</p></th></tr><tr><td><p>C</p></td><td><p>D</p></td></tr></table>'
@@ -14,18 +16,6 @@ function createEditor(content: string, inline = false) {
     onTestFinished(() => editor.destroy())
 
     return editor
-}
-
-function getTextPosition(editor: Editor, text: string) {
-    let textPosition = -1
-
-    editor.state.doc.descendants((node, position) => {
-        if (textPosition < 0 && node.isText && node.text?.includes(text)) {
-            textPosition = position + node.text.indexOf(text)
-        }
-    })
-
-    return textPosition
 }
 
 function selectCells(editor: Editor, anchorText: string, headText: string) {
