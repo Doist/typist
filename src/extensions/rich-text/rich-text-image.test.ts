@@ -5,12 +5,14 @@ import { getTextPosition } from '../../../test-utils/rich-text-editor'
 
 import { RichTextKit } from './rich-text-kit'
 
+import type { RichTextKitOptions } from './rich-text-kit'
+
 const TABLE = '<table><tr><th><p>A</p></th><th><p>B</p></th></tr><tr><td><p>C</p></td><td><p>D</p></td></tr></table>'
 
-function createEditor(content: string, inline = false) {
+function createEditor(content: string, options: Partial<RichTextKitOptions> = {}) {
     // `Code` is disabled because it crashes `Editor` instantiation in the Vitest environment
     const editor = new Editor({
-        extensions: [RichTextKit.configure({ code: false, image: { inline } })],
+        extensions: [RichTextKit.configure({ ...options, code: false })],
         content,
     })
     onTestFinished(() => editor.destroy())
@@ -35,7 +37,7 @@ describe('Extension: RichTextImage', () => {
         { inline: false, html: '<p>Hello</p><img src="image.png"><p></p>' },
         { inline: true, html: '<p>Hello<img src="image.png"></p>' },
     ])('`insertImage` at the end of the document with `inline: $inline`', ({ inline, html }) => {
-        const editor = createEditor('<p>Hello</p>', inline)
+        const editor = createEditor('<p>Hello</p>', { image: { inline } })
 
         editor.commands.focus('end')
         editor.commands.insertImage({ src: 'image.png' })
@@ -45,7 +47,7 @@ describe('Extension: RichTextImage', () => {
 
     describe('when inline images are enabled', () => {
         test('`insertImage` with table cells selected places the image after the last cell content', () => {
-            const editor = createEditor(TABLE, true)
+            const editor = createEditor(TABLE, { image: { inline: true } })
             selectCells(editor, 'C', 'D')
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -56,7 +58,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` with table cells selected backwards places the image after the head cell content', () => {
-            const editor = createEditor(TABLE, true)
+            const editor = createEditor(TABLE, { image: { inline: true } })
             selectCells(editor, 'D', 'C')
 
             editor.commands.insertImage({ src: 'image.png' })
@@ -101,12 +103,7 @@ describe('Extension: RichTextImage', () => {
         })
 
         test('`insertImage` in an empty single-line document inserts the image', () => {
-            // `Code` is disabled because it crashes `Editor` instantiation in the Vitest environment
-            const editor = new Editor({
-                extensions: [RichTextKit.configure({ code: false, document: { multiline: false } })],
-                content: '<p></p>',
-            })
-            onTestFinished(() => editor.destroy())
+            const editor = createEditor('<p></p>', { document: { multiline: false } })
             editor.commands.focus('end')
 
             editor.commands.insertImage({ src: 'image.png' })
