@@ -1,6 +1,7 @@
 import { findParentNode } from '@tiptap/core'
 import { Image } from '@tiptap/extension-image'
 import { Plugin, PluginKey, Selection, TextSelection } from '@tiptap/pm/state'
+import { CellSelection } from '@tiptap/pm/tables'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 
 import type { Transaction } from '@tiptap/pm/state'
@@ -149,6 +150,16 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                 return ({ editor, tr, dispatch, commands }) => {
                     const image = { type: nodeTypeName, attrs: attributes }
                     const imageType = tr.doc.type.schema.nodes[nodeTypeName]
+
+                    // Collapse a selection of table cells to the end of the cell where it ends, so
+                    // that inserting the image doesn't replace the content of the selected cells
+                    if (dispatch && tr.selection instanceof CellSelection) {
+                        const { $headCell } = tr.selection
+                        const headCellEnd = $headCell.pos + ($headCell.nodeAfter?.nodeSize ?? 0) - 1
+
+                        tr.setSelection(Selection.near(tr.doc.resolve(headCellEnd), -1))
+                    }
+
                     const table = findParentNode((node) => node.type.name === 'table')(tr.selection)
 
                     // Insert block images after the table, instead of splitting it at the caret,

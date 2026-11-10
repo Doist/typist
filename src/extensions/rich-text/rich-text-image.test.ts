@@ -28,6 +28,14 @@ function getTextPosition(editor: Editor, text: string) {
     return textPosition
 }
 
+function selectCells(editor: Editor, anchorText: string, headText: string) {
+    const { doc } = editor.state
+    const $anchor = doc.resolve(getTextPosition(editor, anchorText))
+    const $head = doc.resolve(getTextPosition(editor, headText))
+
+    editor.view.dispatch(editor.state.tr.setSelection(CellSelection.create(doc, $anchor.before(-1), $head.before(-1))))
+}
+
 function getHTMLWithoutTableAttributes(editor: Editor) {
     return editor.getHTML().replace(/<colgroup>.*?<\/colgroup>| style="[^"]*"| colspan="1" rowspan="1"/g, '')
 }
@@ -43,6 +51,30 @@ describe('Extension: RichTextImage', () => {
         editor.commands.insertImage({ src: 'image.png' })
 
         expect(editor.getHTML()).toBe(html)
+    })
+
+    describe('when inline images are enabled', () => {
+        test('`insertImage` with table cells selected places the image after the last cell content', () => {
+            const editor = createEditor(TABLE, true)
+            selectCells(editor, 'C', 'D')
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(getHTMLWithoutTableAttributes(editor)).toBe(
+                `<table><tbody><tr><th><p>A</p></th><th><p>B</p></th></tr><tr><td><p>C</p></td><td><p>D<img src="image.png"></p></td></tr></tbody></table>`,
+            )
+        })
+
+        test('`insertImage` with table cells selected backwards places the image after the head cell content', () => {
+            const editor = createEditor(TABLE, true)
+            selectCells(editor, 'D', 'C')
+
+            editor.commands.insertImage({ src: 'image.png' })
+
+            expect(getHTMLWithoutTableAttributes(editor)).toBe(
+                `<table><tbody><tr><th><p>A</p></th><th><p>B</p></th></tr><tr><td><p>C<img src="image.png"></p></td><td><p>D</p></td></tr></tbody></table>`,
+            )
+        })
     })
 
     describe('when inline images are disabled', () => {
@@ -102,13 +134,7 @@ describe('Extension: RichTextImage', () => {
 
         test('`insertImage` with table cells selected keeps their content', () => {
             const editor = createEditor(TABLE)
-            const $cellC = editor.state.doc.resolve(getTextPosition(editor, 'C'))
-            const $cellD = editor.state.doc.resolve(getTextPosition(editor, 'D'))
-            editor.view.dispatch(
-                editor.state.tr.setSelection(
-                    CellSelection.create(editor.state.doc, $cellC.before(-1), $cellD.before(-1)),
-                ),
-            )
+            selectCells(editor, 'C', 'D')
 
             editor.commands.insertImage({ src: 'image.png' })
 
