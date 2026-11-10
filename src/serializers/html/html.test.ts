@@ -583,6 +583,9 @@ Answer: [Doist Frontend](channel://190200)`),
                 expect(htmlSerializer.serialize('**Hello ![](image.png) world**')).toBe(
                     '<p><strong>Hello </strong></p><img src="image.png" alt=""><p><strong> world</strong></p>',
                 )
+                expect(htmlSerializer.serialize('**Hello ![](image.png)\nworld**')).toBe(
+                    '<p><strong>Hello </strong></p><img src="image.png" alt=""><p><strong>world</strong></p>',
+                )
             })
 
             test('images HTML output drops line breaks around images', () => {

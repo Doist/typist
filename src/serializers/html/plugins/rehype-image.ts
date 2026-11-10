@@ -128,7 +128,9 @@ function splitHastNodeAroundImages(node: ElementContent): ElementContent[] {
     for (const child of node.children) {
         for (const part of splitHastNodeAroundImages(child)) {
             if (isHastElementNode(part, 'img')) {
-                parts.push({ ...node, children }, part)
+                // Drop the whitespace and line breaks around each image, which would otherwise be
+                // left at the edges of the split inline element
+                parts.push({ ...node, children: trimBlankHastNodes(children, { start: parts.length > 0 }) }, part)
                 children = []
             } else {
                 children.push(part)
@@ -136,7 +138,7 @@ function splitHastNodeAroundImages(node: ElementContent): ElementContent[] {
         }
     }
 
-    return parts.length > 0 ? [...parts, { ...node, children }] : [node]
+    return parts.length > 0 ? [...parts, { ...node, children: trimBlankHastNodes(children, { end: false }) }] : [node]
 }
 
 /**
@@ -206,19 +208,29 @@ function wrapListItemInlineContent(listItem: Element): void {
  * inline content.
  *
  * @param content The inline content to trim.
+ * @param edges Which edges of the inline content to trim (both by default).
+ * @param edges.start Whether to trim the blank nodes at the start of the inline content.
+ * @param edges.end Whether to trim the blank nodes at the end of the inline content.
  *
  * @returns The inline content without leading and trailing blank nodes.
  */
-function trimBlankHastNodes(content: ElementContent[]): ElementContent[] {
+function trimBlankHastNodes(
+    content: ElementContent[],
+    { start: trimStart = true, end: trimEnd = true }: { start?: boolean; end?: boolean } = {},
+): ElementContent[] {
     let start = 0
     let end = content.length
 
-    while (start < end && isBlankHastNode(content[start])) {
-        start += 1
+    if (trimStart) {
+        while (start < end && isBlankHastNode(content[start])) {
+            start += 1
+        }
     }
 
-    while (end > start && isBlankHastNode(content[end - 1])) {
-        end -= 1
+    if (trimEnd) {
+        while (end > start && isBlankHastNode(content[end - 1])) {
+            end -= 1
+        }
     }
 
     return content.slice(start, end)
