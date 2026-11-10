@@ -65,6 +65,9 @@ type RichTextImageOptions = {
     /**
      * Renders the image node inline (e.g., <p><img src="doist.jpg"></p>). By default images are on
      * the same level as paragraphs.
+     *
+     * When enabled, images can be placed anywhere inline content is allowed (e.g., within text, or
+     * table cells), and the `insertImage` command inserts them at the caret.
      */
     inline: boolean
 
@@ -74,7 +77,8 @@ type RichTextImageOptions = {
     HTMLAttributes: Record<string, string>
 
     /**
-     * A React component to render inside the interactive node view.
+     * A React component to render inside the interactive node view. When `inline` is enabled, the
+     * component should render inline elements (e.g., `NodeViewWrapper` with `as="span"`).
      */
     NodeViewComponent?: React.ComponentType<ReactNodeViewProps>
 
@@ -107,7 +111,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         }
     },
     addCommands() {
-        const { name: nodeTypeName } = this
+        const { name: nodeTypeName, options } = this
 
         return {
             ...this.parent?.(),
@@ -120,8 +124,10 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                             type: nodeTypeName,
                             attrs: attributes,
                         },
-                        // Insert a blank paragraph after the image when at the end of the document
-                        ...(editor.state.selection.to === selectionAtEnd.to ? [{ type: 'paragraph' }] : []),
+                        // Insert a blank paragraph after block images when at the end of the document
+                        ...(!options.inline && editor.state.selection.to === selectionAtEnd.to
+                            ? [{ type: 'paragraph' }]
+                            : []),
                     ])
                 }
             },
@@ -152,7 +158,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         }
     },
     addNodeView() {
-        const { NodeViewComponent } = this.options
+        const { inline, NodeViewComponent } = this.options
 
         // Do not add a node view if component was not specified
         if (!NodeViewComponent) {
@@ -161,7 +167,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
 
         // Render the node view with the provided React component
         return ReactNodeViewRenderer(NodeViewComponent, {
-            as: 'div',
+            as: inline ? 'span' : 'div',
             className: `Typist-${this.type.name}`,
         })
     },
