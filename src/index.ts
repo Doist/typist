@@ -17,7 +17,11 @@ export * from './extensions/core/extra-editor-commands/commands/extend-word-rang
 export * from './extensions/core/extra-editor-commands/commands/insert-markdown-content'
 export * from './extensions/core/extra-editor-commands/commands/insert-markdown-content-at'
 export { PlainTextKit } from './extensions/plain-text/plain-text-kit'
-export type { RichTextImageAttributes, RichTextImageOptions } from './extensions/rich-text/rich-text-image'
+export type {
+    RichTextImageAttributes,
+    RichTextImageInsertOptions,
+    RichTextImageOptions,
+} from './extensions/rich-text/rich-text-image'
 export { RichTextKit } from './extensions/rich-text/rich-text-kit'
 export type {
     SuggestionExtensionResult,

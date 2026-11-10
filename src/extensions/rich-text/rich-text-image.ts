@@ -1,5 +1,5 @@
 import { Image } from '@tiptap/extension-image'
-import { Plugin, PluginKey, Selection } from '@tiptap/pm/state'
+import { Plugin, PluginKey, Selection, TextSelection } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 
 import type { NodeView } from '@tiptap/pm/view'
@@ -32,6 +32,17 @@ type RichTextImageAttributes = {
     Pick<Partial<HTMLImageElement>, 'alt' | 'title'>
 
 /**
+ * The options available to customize the `insertImage` command.
+ */
+type RichTextImageInsertOptions = {
+    /**
+     * Inserts the image at the cursor position within the text, instead of on its own line.
+     * Requires the `inline` extension option to be enabled, otherwise the command returns `false`.
+     */
+    inline?: boolean
+}
+
+/**
  * Augment the official `@tiptap/core` module with extra commands, relevant for this extension, so
  * that the compiler knows about them.
  */
@@ -41,7 +52,7 @@ declare module '@tiptap/core' {
             /**
              * Inserts an image into the editor with the given attributes.
              */
-            insertImage: (attributes: RichTextImageAttributes) => ReturnType
+            insertImage: (attributes: RichTextImageAttributes, options?: RichTextImageInsertOptions) => ReturnType
 
             /**
              * Updates the attributes for an existing image in the editor.
@@ -65,6 +76,11 @@ type RichTextImageOptions = {
     /**
      * Renders the image node inline (e.g., <p><img src="doist.jpg"></p>). By default images are on
      * the same level as paragraphs.
+     *
+     * When enabled, images can be placed anywhere inline content is allowed (e.g., within text, or
+     * table cells), but the `insertImage` command still inserts images on their own line (within
+     * their own paragraph, or between hard breaks inside table cells), unless its `inline` option
+     * is set.
      */
     inline: boolean
 
@@ -74,7 +90,8 @@ type RichTextImageOptions = {
     HTMLAttributes: Record<string, string>
 
     /**
-     * A React component to render inside the interactive node view.
+     * A React component to render inside the interactive node view. When `inline` is enabled, the
+     * component should render inline elements (e.g., `NodeViewWrapper` with `as="span"`).
      */
     NodeViewComponent?: React.ComponentType<ReactNodeViewProps>
 
@@ -107,19 +124,71 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         }
     },
     addCommands() {
-        const { name: nodeTypeName } = this
+        const { name: nodeTypeName, options } = this
 
         return {
             ...this.parent?.(),
-            insertImage(attributes) {
-                return ({ editor, commands }) => {
+            insertImage(attributes, insertOptions) {
+                return ({ editor, state, tr, commands }) => {
+                    const image = { type: nodeTypeName, attrs: attributes }
+
+                    // Inserting the image within the text requires inline images support
+                    if (insertOptions?.inline) {
+                        return options.inline ? commands.insertContent(image) : false
+                    }
+
+                    // Insert inline images on their own line, by wrapping them in a paragraph that
+                    // splits the current block (or between hard breaks inside table cells), unless
+                    // the selection isn't within text (e.g., selected cells) or there's no paragraph
+                    if (options.inline) {
+                        const { $from, $to } = state.selection
+
+                        if (!$from.parent.isTextblock || !$to.parent.isTextblock || !state.schema.nodes.paragraph) {
+                            return commands.insertContent(image)
+                        }
+
+                        const isAtBlockStart = $from.parentOffset === 0
+                        const isAtBlockEnd = $to.parentOffset === $to.parent.content.size
+                        const cellTypeName = $from.depth > 0 ? $from.node(-1).type.name : ''
+
+                        // Table cells are restricted to a single paragraph, so the image is placed
+                        // on its own line with hard breaks instead
+                        if (cellTypeName === 'tableCell' || cellTypeName === 'tableHeader') {
+                            if (!state.schema.nodes.hardBreak) {
+                                return false
+                            }
+
+                            const isAfterHardBreak = isAtBlockStart || $from.nodeBefore?.type.name === 'hardBreak'
+                            const isBeforeHardBreak = $to.nodeAfter?.type.name === 'hardBreak'
+
+                            // Hard breaks are only added where the image isn't already next to one
+                            const isInserted = commands.insertContent([
+                                ...(isAfterHardBreak ? [] : [{ type: 'hardBreak' }]),
+                                image,
+                                ...(isBeforeHardBreak ? [] : [{ type: 'hardBreak' }]),
+                            ])
+
+                            // Move the caret past an existing hard break after the image, so that it
+                            // always lands on the line below the image
+                            if (isInserted && isBeforeHardBreak) {
+                                tr.setSelection(TextSelection.create(tr.doc, tr.selection.to + 1))
+                            }
+
+                            return isInserted
+                        }
+
+                        return commands.insertContent([
+                            { type: 'paragraph', content: [image] },
+                            // Insert a blank paragraph after the image when at the end of a block
+                            ...(isAtBlockEnd ? [{ type: 'paragraph' }] : []),
+                        ])
+                    }
+
                     const selectionAtEnd = Selection.atEnd(editor.state.doc)
 
+                    // Insert block images directly, which the schema places on their own line
                     return commands.insertContent([
-                        {
-                            type: nodeTypeName,
-                            attrs: attributes,
-                        },
+                        image,
                         // Insert a blank paragraph after the image when at the end of the document
                         ...(editor.state.selection.to === selectionAtEnd.to ? [{ type: 'paragraph' }] : []),
                     ])
@@ -152,7 +221,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         }
     },
     addNodeView() {
-        const { NodeViewComponent } = this.options
+        const { inline, NodeViewComponent } = this.options
 
         // Do not add a node view if component was not specified
         if (!NodeViewComponent) {
@@ -161,7 +230,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
 
         // Render the node view with the provided React component
         return ReactNodeViewRenderer(NodeViewComponent, {
-            as: 'div',
+            as: inline ? 'span' : 'div',
             className: `Typist-${this.type.name}`,
         })
     },
@@ -206,4 +275,4 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
 
 export { RichTextImage }
 
-export type { RichTextImageAttributes, RichTextImageOptions }
+export type { RichTextImageAttributes, RichTextImageInsertOptions, RichTextImageOptions }

@@ -70,6 +70,48 @@ function isHeadingRow(row: Node, headerTags: string[]): boolean {
 }
 
 /**
+ * Checks if the given node is a whitespace-only text node.
+ *
+ * @param node The node to check.
+ *
+ * @returns `true` if the node is a whitespace-only text node, `false` otherwise.
+ */
+function isWhitespaceTextNode(node: Node | null): boolean {
+    return node?.nodeName === '#text' && !node.textContent?.trim()
+}
+
+/**
+ * Checks if the given line break directly follows an image at the end of the given table cell,
+ * that is, the line break that `insertImage` adds after an image inserted at the end of a cell.
+ *
+ * @param node The line break node to check.
+ * @param cell The table cell element containing the line break.
+ *
+ * @returns `true` if the line break follows an image at the end of the cell, `false` otherwise.
+ */
+function isTrailingImageLineBreak(node: Node, cell: Element | null): boolean {
+    let previousSibling = node.previousSibling
+
+    while (isWhitespaceTextNode(previousSibling)) {
+        previousSibling = previousSibling?.previousSibling ?? null
+    }
+
+    if (previousSibling?.nodeName !== 'IMG') {
+        return false
+    }
+
+    for (let current: Node | null = node; current && current !== cell; current = current.parentNode) {
+        for (let nextSibling = current.nextSibling; nextSibling; nextSibling = nextSibling.nextSibling) {
+            if (!isWhitespaceTextNode(nextSibling)) {
+                return false
+            }
+        }
+    }
+
+    return true
+}
+
+/**
  * A Turndown plugin which adds rules for tables following the GitHub Flavored Markdown (GFM)
  * specification, based on the original third-party plugin. Unlike the original plugin, which keeps
  * tables without a heading row as raw HTML, this implementation adds an empty heading row instead,
@@ -168,8 +210,10 @@ function table(nodeTypes: TableNodeTypes): Turndown.Plugin {
                 filter(node) {
                     return node.nodeName === 'BR' && node.closest(cellSelector) !== null
                 },
-                replacement() {
-                    return '<br>'
+                replacement(_, node) {
+                    // The line break after an image at the end of a cell only moves the caret
+                    // below the image while editing, so it's dropped to keep it out of the Markdown
+                    return isTrailingImageLineBreak(node, node.closest(cellSelector)) ? '' : '<br>'
                 },
             })
         }

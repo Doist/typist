@@ -1033,6 +1033,19 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
                 )
             })
 
+            test('hard breaks after images at the end of table cells are dropped', () => {
+                expect(
+                    markdownSerializer.serialize(
+                        '<table><tr><th><p>Name</p></th></tr><tr><td><p><br>First line<br><img src="image.png"><br></p></td></tr><tr><td><p>Second line<br><br></p></td></tr></table>',
+                    ),
+                ).toBe(
+                    `| Name |
+| --- |
+| <br>First line<br>![](image.png) |
+| Second line<br><br> |`,
+                )
+            })
+
             test('literal `<br>` text within table cells is escaped', () => {
                 expect(markdownSerializer.serialize(HTML_INPUT_TABLES_WITH_BR_TEXT)).toBe(
                     `| Tip |
