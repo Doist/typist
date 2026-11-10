@@ -70,39 +70,45 @@ function isHeadingRow(row: Node, headerTags: string[]): boolean {
 }
 
 /**
- * Checks if the given node is a line break or a whitespace-only text node.
+ * Checks if the given node is a whitespace-only text node.
  *
  * @param node The node to check.
  *
- * @returns `true` if the node is blank, `false` otherwise.
+ * @returns `true` if the node is a whitespace-only text node, `false` otherwise.
  */
-function isBlankInlineNode(node: Node): boolean {
-    return node.nodeName === 'BR' || (node.nodeName === '#text' && !node.textContent?.trim())
+function isWhitespaceTextNode(node: Node | null): boolean {
+    return node?.nodeName === '#text' && !node.textContent?.trim()
 }
 
 /**
- * Checks if the given node is at the start or end of the given table cell, that is, if it's only
- * preceded or followed by line breaks or whitespace within the cell.
+ * Checks if the given line break directly follows an image at the end of the given table cell,
+ * that is, the line break that `insertImage` adds after an image inserted at the end of a cell.
  *
- * @param node The node to check.
- * @param cell The table cell element containing the node.
+ * @param node The line break node to check.
+ * @param cell The table cell element containing the line break.
  *
- * @returns `true` if the node is at the start or end of the table cell, `false` otherwise.
+ * @returns `true` if the line break follows an image at the end of the cell, `false` otherwise.
  */
-function isAtTableCellEdge(node: Node, cell: Element | null): boolean {
-    const isAtEdge = (direction: 'previousSibling' | 'nextSibling') => {
-        for (let current: Node | null = node; current && current !== cell; current = current.parentNode) {
-            for (let sibling = current[direction]; sibling; sibling = sibling[direction]) {
-                if (!isBlankInlineNode(sibling)) {
-                    return false
-                }
-            }
-        }
+function isTrailingImageLineBreak(node: Node, cell: Element | null): boolean {
+    let previousSibling = node.previousSibling
 
-        return true
+    while (isWhitespaceTextNode(previousSibling)) {
+        previousSibling = previousSibling?.previousSibling ?? null
     }
 
-    return isAtEdge('previousSibling') || isAtEdge('nextSibling')
+    if (previousSibling?.nodeName !== 'IMG') {
+        return false
+    }
+
+    for (let current: Node | null = node; current && current !== cell; current = current.parentNode) {
+        for (let nextSibling = current.nextSibling; nextSibling; nextSibling = nextSibling.nextSibling) {
+            if (!isWhitespaceTextNode(nextSibling)) {
+                return false
+            }
+        }
+    }
+
+    return true
 }
 
 /**
@@ -205,9 +211,9 @@ function table(nodeTypes: TableNodeTypes): Turndown.Plugin {
                     return node.nodeName === 'BR' && node.closest(cellSelector) !== null
                 },
                 replacement(_, node) {
-                    // Line breaks at the start or end of a cell don't add visible lines, so they
-                    // are dropped to keep them out of the Markdown
-                    return isAtTableCellEdge(node, node.closest(cellSelector)) ? '' : '<br>'
+                    // The line break after an image at the end of a cell only moves the caret
+                    // below the image while editing, so it's dropped to keep it out of the Markdown
+                    return isTrailingImageLineBreak(node, node.closest(cellSelector)) ? '' : '<br>'
                 },
             })
         }

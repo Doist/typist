@@ -1033,15 +1033,16 @@ Octobi Wan Catnobi: ![](https://octodex.github.com/images/octobiwan.jpg) - These
                 )
             })
 
-            test('hard breaks at the start or end of table cells are dropped', () => {
+            test('hard breaks after images at the end of table cells are dropped', () => {
                 expect(
                     markdownSerializer.serialize(
-                        '<table><tr><th><p>Name</p></th></tr><tr><td><p><br>First line<br>Second line<br></p></td></tr></table>',
+                        '<table><tr><th><p>Name</p></th></tr><tr><td><p><br>First line<br><img src="image.png"><br></p></td></tr><tr><td><p>Second line<br><br></p></td></tr></table>',
                     ),
                 ).toBe(
                     `| Name |
 | --- |
-| First line<br>Second line |`,
+| <br>First line<br>![](image.png) |
+| Second line<br><br> |`,
                 )
             })
 
