@@ -129,7 +129,7 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         return {
             ...this.parent?.(),
             insertImage(attributes, insertOptions) {
-                return ({ editor, state, commands }) => {
+                return ({ editor, state, tr, commands }) => {
                     const image = { type: nodeTypeName, attrs: attributes }
 
                     // Inserting the image within the text requires inline images support
@@ -155,21 +155,20 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
                             const isAfterHardBreak = isAtBlockStart || $from.nodeBefore?.type.name === 'hardBreak'
                             const isBeforeHardBreak = $to.nodeAfter?.type.name === 'hardBreak'
 
-                            // Hard breaks are only added where the image isn't already next to one,
-                            // and the caret is moved past an existing hard break after the image, so
-                            // that it always lands on the line below the image
-                            return (
-                                commands.insertContent([
-                                    ...(isAfterHardBreak ? [] : [{ type: 'hardBreak' }]),
-                                    image,
-                                    ...(isBeforeHardBreak ? [] : [{ type: 'hardBreak' }]),
-                                ]) &&
-                                (!isBeforeHardBreak ||
-                                    commands.command(({ tr }) => {
-                                        tr.setSelection(TextSelection.create(tr.doc, tr.selection.to + 1))
-                                        return true
-                                    }))
-                            )
+                            // Hard breaks are only added where the image isn't already next to one
+                            const isInserted = commands.insertContent([
+                                ...(isAfterHardBreak ? [] : [{ type: 'hardBreak' }]),
+                                image,
+                                ...(isBeforeHardBreak ? [] : [{ type: 'hardBreak' }]),
+                            ])
+
+                            // Move the caret past an existing hard break after the image, so that it
+                            // always lands on the line below the image
+                            if (isInserted && isBeforeHardBreak) {
+                                tr.setSelection(TextSelection.create(tr.doc, tr.selection.to + 1))
+                            }
+
+                            return isInserted
                         }
 
                         return commands.insertContent([
