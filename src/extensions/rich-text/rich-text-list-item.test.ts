@@ -1,38 +1,6 @@
-import { Editor } from '@tiptap/core'
+import { createEditorWithCaretAfter } from '../../../test-utils/rich-text-editor'
 
-import { RichTextKit } from './rich-text-kit'
-
-/**
- * Creates a rich-text editor with the given initial content, and places the caret at the end of
- * the first occurrence of the given text within the document.
- *
- * The `Code` extension is disabled because `prosemirror-codemark` (which it registers) loads a
- * second CJS copy of `prosemirror-state` in the Vitest environment, crashing `Editor`
- * instantiation with "Adding different instances of a keyed plugin"; it has no bearing on the
- * list behavior under test.
- */
-function createEditorWithCaretAfter(content: string, text: string): Editor {
-    const editor = new Editor({
-        extensions: [RichTextKit.configure({ code: false })],
-        content,
-    })
-    onTestFinished(() => editor.destroy())
-
-    let caretPosition: number | null = null
-    editor.state.doc.descendants((node, position) => {
-        if (caretPosition === null && node.isText && node.text?.includes(text)) {
-            caretPosition = position + node.text.indexOf(text) + text.length
-        }
-    })
-
-    if (caretPosition === null) {
-        throw new Error(`Text "${text}" was not found in the document`)
-    }
-
-    editor.commands.setTextSelection(caretPosition)
-
-    return editor
-}
+import type { Editor } from '@tiptap/core'
 
 /**
  * Simulates a `Shift-Tab` key press through the editor's keymap handlers (the same code path a
