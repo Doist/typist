@@ -11,9 +11,9 @@ The extensions created by the factory function do not render a dropdown componen
 To help typing a TypeScript code base, you may find the `SuggestionRendererProps` and `SuggestionRendererRef` types useful to define the types of both the dropdown component and `ReactRenderer` (i.e. `let reactRenderer: ReactRenderer<SuggestionRendererRef>`).
 
 ```tsx
-import { createSuggestionExtension, TypistEditor, RichTextKit } from '@doist/typist'
+import { createSuggestionExtension, TypistEditor, RichTextKit } from '@todoist/typist'
 
-import type { SuggestionExtensionResult } from '@doist/typist'
+import type { SuggestionExtensionResult } from '@todoist/typist'
 
 type MentionUser = {
     id: string

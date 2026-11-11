@@ -75,11 +75,11 @@ jobs:
               run: |
                   npm run build
 
-            # The Node.js environment is prepared based on the `.npmrc` file in the repo, which
-            # configures Doist scoped packages to use the public npm registry with OIDC
-            # authentication for the initial `semantic-release` publish, after which we remove the
-            # Doist registry configuration, and prepare the Node.js environment for the GitHub
-            # Packages registry, providing a predictable release workflow for both registries.
+            # `semantic-release` publishes to the public npm registry with OIDC authentication. The
+            # repo's `.npmrc` only overrides the registry for the `@doist` scope (for dependencies),
+            # so the `@todoist` scope resolves to the public npm registry here. Afterwards, the
+            # Node.js environment is prepared for the GitHub Packages registry, which maps the
+            # `@todoist` scope to it, providing a predictable release workflow for both registries.
             - name: Publish package to public npm registry
               id: semantic-release
               run: |
@@ -91,11 +91,6 @@ jobs:
                   GIT_COMMITTER_EMAIL: doistbot@users.noreply.github.com
                   GIT_COMMITTER_NAME: Doist Bot
 
-            - name: Remove Doist registry configuration from `.npmrc`
-              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
-              run: |
-                  npm config delete @doist:registry --location=project
-
             - name: Prepare Node.js environment for GitHub Packages registry
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               uses: actions/setup-node@v6
@@ -103,7 +98,7 @@ jobs:
                   cache: npm
                   node-version-file: .node-version
                   registry-url: https://npm.pkg.github.com/
-                  scope: '@doist'
+                  scope: '@todoist'
 
             - name: Determine npm dist-tag for GitHub Packages
               id: dist-tag

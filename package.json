@@ -1,5 +1,5 @@
 {
-    "name": "@doist/typist",
+    "name": "@todoist/typist",
     "description": "The mighty Tiptap-based rich-text editor React component that powers Doist products.",
     "version": "17.1.2",
     "license": "MIT",

@@ -4,7 +4,7 @@ export const theme = create({
     base: 'light',
 
     // Brand
-    brandTitle: '@doist/typist',
+    brandTitle: '@todoist/typist',
     brandImage: './logo.png',
 
     // UI
