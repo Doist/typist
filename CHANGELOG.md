@@ -1,3 +1,9 @@
+## [17.1.2](https://github.com/todoist/typist/compare/v17.1.1...v17.1.2) (2026-11-11)
+
+### Bug Fixes
+
+* **ci:** use the todoist GitHub org after the rename ([#1597](https://github.com/todoist/typist/issues/1597)) ([af19fe7](https://github.com/todoist/typist/commit/af19fe76dcc60024497161b3b97bac23c651596c))
+
 ## [17.1.1](https://github.com/Doist/typist/compare/v17.1.0...v17.1.1) (2026-11-10)
 
 ### Bug Fixes
