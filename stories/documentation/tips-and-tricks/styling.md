@@ -1,6 +1,6 @@
 # Styling
 
-A conscious decision was made to not provide any base stylesheet, and instead give the consumer total flexibility in the look and feel of the rendered output. This might also avoid the need to overwrite built-in styles, making things easier to handle and maintain. Also note that most of the styles outlined below are implemented in this very Storybook, and can be inspected [here](https://github.com/doist/typist/blob/main/stories/typist-editor/decorators/typist-editor-decorator/typist-editor-decorator.module.css).
+A conscious decision was made to not provide any base stylesheet, and instead give the consumer total flexibility in the look and feel of the rendered output. This might also avoid the need to overwrite built-in styles, making things easier to handle and maintain. Also note that most of the styles outlined below are implemented in this very Storybook, and can be inspected [here](https://github.com/todoist/typist/blob/main/stories/typist-editor/decorators/typist-editor-decorator/typist-editor-decorator.module.css).
 
 ## Markup Structure
 

@@ -1,28 +1,28 @@
 <div align="center">
     <h1>
         <picture>
-            <source media="(prefers-color-scheme: dark)" srcSet="https://github.com/Doist/typist/blob/main/.github/assets/logo-dark.png?raw=true" />
-            <img src="https://github.com/Doist/typist/blob/main/.github/assets/logo-light.png?raw=true" />
+            <source media="(prefers-color-scheme: dark)" srcSet="https://github.com/todoist/typist/blob/main/.github/assets/logo-dark.png?raw=true" />
+            <img src="https://github.com/todoist/typist/blob/main/.github/assets/logo-light.png?raw=true" />
         </picture>
     </h1>
 </div>
 
-Typist is the mighty [Tiptap](https://tiptap.dev/)-based rich-text editor React component that powers Doist products, which can also be used for displaying content in a read-only fashion. Typist also supports a plain-text mode, and comes with HTML/Markdown serializers.
+Typist is the mighty [Tiptap](https://tiptap.dev/)-based rich-text editor React component that powers Todoist products, which can also be used for displaying content in a read-only fashion. Typist also supports a plain-text mode, and comes with HTML/Markdown serializers.
 
 > **Note**
 >
-> This project is not attempting to be an all-purpose rich-text editor. Whilst everyone is welcome to fork or use this package in their own products, development decisions are centered around Doist product requirements.
+> This project is not attempting to be an all-purpose rich-text editor. Whilst everyone is welcome to fork or use this package in their own products, development decisions are centered around Todoist product requirements.
 
 <div align="center">
 
-[![GitHub: CI Validation](https://github.com/Doist/typist/actions/workflows/check-ci-validation.yml/badge.svg?branch=main)](https://github.com/Doist/typist/actions/workflows/check-ci-validation.yml?query=branch%3Amain)
+[![GitHub: CI Validation](https://github.com/todoist/typist/actions/workflows/check-ci-validation.yml/badge.svg?branch=main)](https://github.com/todoist/typist/actions/workflows/check-ci-validation.yml?query=branch%3Amain)
 [![npm Version](https://img.shields.io/npm/v/@doist/typist)](https://www.npmjs.com/package/@doist/typist)
 [![npm Bundle Size (minified)](https://img.shields.io/bundlephobia/min/@doist/typist)](https://bundlephobia.com/package/@doist/typist)
 [![npm Downloads (monthly)](https://img.shields.io/npm/dm/@doist/typist?color=blue)](https://npmtrends.com/@doist/typist)
 
 [![semantic-release: Conventional Commits](https://img.shields.io/badge/semantic--release-Conventional%20Commits-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
-[![License: MIT](https://img.shields.io/github/license/doist/typist)](LICENSE.md)
+[![License: MIT](https://img.shields.io/github/license/todoist/typist)](LICENSE.md)
 
 </div>
 

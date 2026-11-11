@@ -1,6 +1,6 @@
 # Serializers
 
-Unfortunately, Tiptap doesn't support Markdown as an input or output format, and while support for Markdown was considered, the Tiptap team decided against it (more information [here](https://tiptap.dev/guide/output#not-an-option-markdown)). However, at Doist, Markdown is a must, and that's why we implemented both an HTML and Markdown serializer to convert between both formats.
+Unfortunately, Tiptap doesn't support Markdown as an input or output format, and while support for Markdown was considered, the Tiptap team decided against it (more information [here](https://tiptap.dev/guide/output#not-an-option-markdown)). However, at Todoist, Markdown is a must, and that's why we implemented both an HTML and Markdown serializer to convert between both formats.
 
 Although the serializers are mostly meant to be used internally by the `TypistEditor` component and/or internal extensions, it's sometimes useful to have access to the same serializers externally for custom extensions. With that in mind, the `create*Serializer` and `get*Serializer` methods are publicly exported for both the HTML and Markdown serializers.
 

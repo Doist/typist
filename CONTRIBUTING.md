@@ -4,11 +4,11 @@ The following is a set of guidelines for contributing to Typist. Please spend se
 
 ## Code of Conduct
 
-Doist has adopted the [Contributor Covenant](https://www.contributor-covenant.org/) as its Code of Conduct, and we expect contributors to Typist to adhere to it. Please read [the full text](https://github.com/doist/typist/blob/main/CODE_OF_CONDUCT.md) so that you can understand what actions will and will not be tolerated.
+Todoist has adopted the [Contributor Covenant](https://www.contributor-covenant.org/) as its Code of Conduct, and we expect contributors to Typist to adhere to it. Please read [the full text](https://github.com/todoist/typist/blob/main/CODE_OF_CONDUCT.md) so that you can understand what actions will and will not be tolerated.
 
 ## Open Development
 
-All work on Typist happens directly on [GitHub](https://github.com/Doist/typist). Both core team members and external contributors send pull requests that go through the same review process.
+All work on Typist happens directly on [GitHub](https://github.com/todoist/typist). Both core team members and external contributors send pull requests that go through the same review process.
 
 ## Semantic Versioning
 
@@ -18,13 +18,13 @@ Every significant change is documented in the [CHANGELOG.md](CHANGELOG.md) file.
 
 ## Branch Organization
 
-Submit all changes directly to the [main](https://github.com/doist/typist/tree/main) branch. We do our best to keep `main` in good shape, with all tests passing.
+Submit all changes directly to the [main](https://github.com/todoist/typist/tree/main) branch. We do our best to keep `main` in good shape, with all tests passing.
 
 For pre-release testing, the `next` branch is used to publish pre-release versions to npm before promoting to stable. See [Release Process](#release-process-core-team-only) for details.
 
 ## Proposing a Change
 
-If you intend to change the public API, or make any non-trivial changes to the implementation, we recommend opening a [GitHub Discussion](https://github.com/doist/typist/discussions) with the core team first. Although we welcome all contributions, this lets us reach an agreement on your proposal before you put significant effort into something that might not fit Doist product requirements.
+If you intend to change the public API, or make any non-trivial changes to the implementation, we recommend opening a [GitHub Discussion](https://github.com/todoist/typist/discussions) with the core team first. Although we welcome all contributions, this lets us reach an agreement on your proposal before you put significant effort into something that might not fit Todoist product requirements.
 
 ## Your First Pull Request
 
@@ -38,7 +38,7 @@ If you decide to fix an issue, please be sure to check the comment thread in cas
 
 Before you can contribute to the codebase, you will need to fork the Typist repository, and the following steps will help you hit the ground running:
 
-1. Fork the repository (click the <kbd>Fork</kbd> button at the top right of [this page](https://github.com/doist/typist));
+1. Fork the repository (click the <kbd>Fork</kbd> button at the top right of [this page](https://github.com/todoist/typist));
 
 2. Clone your fork locally;
 
@@ -53,7 +53,7 @@ cd typist
 
 After cloning Typist and installing all dependencies, several commands are at your disposal:
 
-- `npm run build`: Builds the `@doist/typist` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/Doist/packages?repo_name=typist);
+- `npm run build`: Builds the `@doist/typist` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/todoist/packages?repo_name=typist);
 - `npm run check`: Validates code quality with Oxlint, formatting with Oxfmt, and types with TypeScript;
 - `npm run clean`: Removes temporary directories used for multiple caches;
 - `npm run storybook:build`: Builds Storybook as a static Web application;
@@ -90,7 +90,7 @@ Pull requests are actively monitored, and only need the approval of one or more 
 
 Before submitting a pull request, please take the following into consideration:
 
-- Fork [the repository](https://github.com/doist/typist) and create your branch from `main`;
+- Fork [the repository](https://github.com/todoist/typist) and create your branch from `main`;
 - Follow the [Commit Message Guidelines](#commit-message-guidelines) below;
 - Add tests for code that should be tested (like bug fixes);
 - Ensure the test suite passes with flying colours;

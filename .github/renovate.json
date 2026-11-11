@@ -1,5 +1,5 @@
 {
-    "extends": ["github>doist/renovate-config:frontend-base"],
+    "extends": ["github>todoist/renovate-config:frontend-base"],
     "packageRules": [
         {
             "groupName": "tiptap packages",
