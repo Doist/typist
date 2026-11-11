@@ -5,7 +5,7 @@ Typist editor supports two modes, rich-text (WYSIWYG) and plain-text, both with 
 ## Rich-text Editor
 
 ```tsx
-import { TypistEditor, RichTextKit } from '@doist/typist'
+import { TypistEditor, RichTextKit } from '@todoist/typist'
 
 function TypistEditorContainer({ content }) {
     return (
@@ -21,7 +21,7 @@ function TypistEditorContainer({ content }) {
 ## Plain-text Editor
 
 ```tsx
-import { TypistEditor, PlainTextKit } from '@doist/typist'
+import { TypistEditor, PlainTextKit } from '@todoist/typist'
 
 function PlainTextEditorContainer({ content }) {
     return (

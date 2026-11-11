@@ -5,7 +5,7 @@
 The `<TypistEditor>` component tries to keep its internal state as stable as possible without triggering unnecessary re-renders, however, it's still not immune to re-renders from the parent component. If you measured performance and found this to be a problem, you may consider wrapping the `<TypistEditor>` component with `React.memo`:
 
 ```tsx
-import { TypistEditor, PlainTextKit } from '@doist/typist'
+import { TypistEditor, PlainTextKit } from '@todoist/typist'
 
 const MemoizedTypistEditor = React.memo(TypistEditor)
 

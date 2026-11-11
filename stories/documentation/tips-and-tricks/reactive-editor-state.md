@@ -17,7 +17,7 @@ A formatting toolbar that appears when the user selects text. Its buttons only c
 ```tsx
 import { useSyncExternalStore } from 'react'
 
-import { isActive } from '@doist/typist'
+import { isActive } from '@todoist/typist'
 
 function FormattingToolbar({ editor }) {
     const editorState = useSyncExternalStore(
@@ -51,7 +51,7 @@ A formatting toolbar that's always visible, for example above a comment field, h
 ```tsx
 import { useSyncExternalStore } from 'react'
 
-import { isActive } from '@doist/typist'
+import { isActive } from '@todoist/typist'
 
 function FixedFormattingToolbar({ editor }) {
     const editorState = useSyncExternalStore(

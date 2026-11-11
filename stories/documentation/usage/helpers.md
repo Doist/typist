@@ -9,9 +9,9 @@ Passing down a `ref` to the `TypistEditor` component gives us access to some hel
 ```tsx
 import { useCallback, useRef } from 'react'
 
-import { TypistEditor, RichTextKit } from '@doist/typist'
+import { TypistEditor, RichTextKit } from '@todoist/typist'
 
-import type { TypistEditorRef } from '@doist/typist'
+import type { TypistEditorRef } from '@todoist/typist'
 
 function TypistEditorContainer({ content }) {
     const typistEditorRef = useRef<TypistEditorRef>(null)
