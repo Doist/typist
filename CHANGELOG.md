@@ -1,3 +1,13 @@
+## [18.0.0](https://github.com/todoist/typist/compare/v17.1.2...v18.0.0) (2026-11-11)
+
+### ⚠ BREAKING CHANGES
+
+* publish as @todoist/typist (#1598)
+
+### Features
+
+* publish as @todoist/typist ([#1598](https://github.com/todoist/typist/issues/1598)) ([9b5257c](https://github.com/todoist/typist/commit/9b5257cd64903667a8bf0731ddded4d3fa7ca277))
+
 ## [17.1.2](https://github.com/todoist/typist/compare/v17.1.1...v17.1.2) (2026-11-11)
 
 ### Bug Fixes
