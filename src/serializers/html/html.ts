@@ -133,7 +133,7 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
     unifiedProcessor
         .use(remarkRehype, {
             // Persist raw HTML (disables support for custom elements/tags)
-            // ref: https://github.com/Doist/Issues/issues/5689
+            // ref: https://github.com/todoist/Issues/issues/5689
             allowDangerousHtml: true,
         })
         // This must come before all rehype plugins that transform the HTML output
